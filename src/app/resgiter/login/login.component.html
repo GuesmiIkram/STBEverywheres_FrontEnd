@@ -1,0 +1,65 @@
+<div class="auth-container">
+    <div class="auth-card">
+      <!-- Onglets pour basculer entre connexion et inscription -->
+      <div class="auth-tabs">
+        <button class="tab-btn" [class.active]="activeTab === 'login'" (click)="activeTab = 'login'">Se connecter</button>
+        <button class="tab-btn" [class.active]="activeTab === 'register'" (click)="activeTab = 'register'">S'inscrire</button>
+      </div>
+  
+      <!-- Formulaire de connexion -->
+      <div *ngIf="activeTab === 'login'" class="auth-form">
+        <h1 class="auth-title">Se connecter</h1>
+        <p class="auth-subtitle">Veuillez saisir votre email et mot de passe pour vous connecter</p>
+  
+        <form (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="email">Email :</label>
+            <div class="input-container">
+              <div class="input-icon">@</div>
+              <input type="email" id="email" [(ngModel)]="loginForm.email" name="email" required />
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <label for="password">Mot de passe</label>
+            <input type="password" id="password" [(ngModel)]="loginForm.password" name="password" required />
+          </div>
+  
+          <button type="submit" class="auth-button">Se connecter</button>
+        </form>
+      </div>
+  
+      <!-- Formulaire d'inscription -->
+      <div *ngIf="activeTab === 'register'" class="auth-form">
+        <h1 class="auth-title">S'inscrire</h1>
+        <p class="auth-subtitle">Créez un compte pour accéder à nos services</p>
+  
+        <form (ngSubmit)="onRegister()">
+          <div class="form-group">
+            <label for="reg-email">Email</label>
+            <div class="input-container">
+              <div class="input-icon">@</div>
+              <input type="email" id="reg-email" name="email" [(ngModel)]="registerForm.email" required>
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <label for="reg-username">Nom d'utilisateur</label>
+            <input type="text" id="reg-username" name="username" [(ngModel)]="registerForm.username" required>
+          </div>
+  
+          <div class="form-group">
+            <label for="reg-password">Mot de passe</label>
+            <input type="password" id="reg-password" name="password" [(ngModel)]="registerForm.password" required>
+          </div>
+  
+          <div class="form-group">
+            <label for="reg-confirm-password">Confirmer le mot de passe</label>
+            <input type="password" id="reg-confirm-password" name="confirmPassword" [(ngModel)]="registerForm.confirmPassword" required>
+          </div>
+  
+          <button type="submit" class="auth-button">S'inscrire</button>
+        </form>
+      </div>
+    </div>
+  </div>
