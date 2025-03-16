@@ -15,16 +15,9 @@
 
             <div class="card">
                 <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-
-                    <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-                    <h2>Kevin Anderson</h2>
-                    <h3>Web Designer</h3>
-                    <div class="social-links mt-2">
-                        <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-                        <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-                        <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-                        <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
-                    </div>
+                    <img [src]="'http://localhost:5260/Images/' + client?.photoClient" alt="Profile" class="rounded-circle" />
+                    <h2>{{ client?.nom }}{{ client?.prenom }}</h2>
+                    <h3>{{ client?.situationProfessionnelle }}</h3>
                 </div>
             </div>
 
@@ -46,11 +39,11 @@
                             <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit
                                 Profile</button>
                         </li>
-
+<!-- 
                         <li class="nav-item">
                             <button class="nav-link" data-bs-toggle="tab"
                                 data-bs-target="#profile-settings">Settings</button>
-                        </li>
+                        </li-->
 
                         <li class="nav-item">
                             <button class="nav-link" data-bs-toggle="tab"
@@ -61,177 +54,248 @@
                     <div class="tab-content pt-2">
 
                         <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                            <h5 class="card-title">About</h5>
-                            <p class="small fst-italic">Sunt est soluta temporibus accusantium neque nam maiores cumque
-                                temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae
-                                quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</p>
+                            
+            
+                                <h5 class="card-title">Détails Profile</h5>
 
-                            <h5 class="card-title">Profile Details</h5>
-
-                            <div class="row">
-                                <div class="col-lg-3 col-md-4 label ">Full Name</div>
-                                <div class="col-lg-9 col-md-8">Kevin Anderson</div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-3 col-md-4 label">Company</div>
-                                <div class="col-lg-9 col-md-8">Lueilwitz, Wisoky and Leuschke</div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-3 col-md-4 label">Job</div>
-                                <div class="col-lg-9 col-md-8">Web Designer</div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-3 col-md-4 label">Country</div>
-                                <div class="col-lg-9 col-md-8">USA</div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-3 col-md-4 label">Address</div>
-                                <div class="col-lg-9 col-md-8">A108 Adam Street, New York, NY 535022</div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-3 col-md-4 label">Phone</div>
-                                <div class="col-lg-9 col-md-8">(436) 486-3538 x29071</div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-3 col-md-4 label">Email</div>
-                                <div class="col-lg-9 col-md-8">k.anderson@example.com</div>
-                            </div>
-
-                        </div>
-
+                                <div class="row">
+                                  <div class="col-lg-3 col-md-4 label">Nom</div>
+                                  <div class="col-lg-9 col-md-8">{{ client?.nom || 'Non spécifié' }}</div>
+                                </div>
+                                
+                                <div class="row">
+                                  <div class="col-lg-3 col-md-4 label">Prénom</div>
+                                  <div class="col-lg-9 col-md-8">{{ client?.prenom || 'Non spécifié' }}</div>
+                                </div>
+                                
+                                <div class="row">
+                                  <div class="col-lg-3 col-md-4 label">Date de Naissance</div>
+                                  <div class="col-lg-9 col-md-8">{{ client?.dateNaissance | date: 'dd/MM/yyyy' || 'Non spécifié' }}</div>
+                                </div>
+                                
+                                <div class="row">
+                                  <div class="col-lg-3 col-md-4 label">Téléphone</div>
+                                  <div class="col-lg-9 col-md-8">{{ client?.telephone || 'Non spécifié' }}</div>
+                                </div>
+                                
+                                <div class="row">
+                                  <div class="col-lg-3 col-md-4 label">Email</div>
+                                  <div class="col-lg-9 col-md-8">{{ client?.email || 'Non spécifié' }}</div>
+                                </div>
+                                
+                                <div class="row">
+                                  <div class="col-lg-3 col-md-4 label">Adresse</div>
+                                  <div class="col-lg-9 col-md-8">{{ client?.adresse || 'Non spécifié' }}</div>
+                                </div>
+                                
+                                <div class="row">
+                                  <div class="col-lg-3 col-md-4 label">Civilité</div>
+                                  <div class="col-lg-9 col-md-8">{{ client?.civilite || 'Non spécifié' }}</div>
+                                </div>
+                                
+                                <div class="row">
+                                  <div class="col-lg-3 col-md-4 label">Nationalité</div>
+                                  <div class="col-lg-9 col-md-8">{{ client?.nationalite || 'Non spécifié' }}</div>
+                                </div>
+                                
+                                <div class="row">
+                                  <div class="col-lg-3 col-md-4 label">État Civil</div>
+                                  <div class="col-lg-9 col-md-8">{{ client?.etatCivil || 'Non spécifié' }}</div>
+                                </div>
+                                
+                                <div class="row">
+                                  <div class="col-lg-3 col-md-4 label">Résidence</div>
+                                  <div class="col-lg-9 col-md-8">{{ client?.residence || 'Non spécifié' }}</div>
+                                </div>
+                                
+                                <div class="row">
+                                  <div class="col-lg-3 col-md-4 label">Numéro CIN</div>
+                                  <div class="col-lg-9 col-md-8">{{ client?.numCIN || 'Non spécifié' }}</div>
+                                </div>
+                                
+                                <div class="row">
+                                  <div class="col-lg-3 col-md-4 label">Date de Délivrance CIN</div>
+                                  <div class="col-lg-9 col-md-8">{{ client?.dateDelivranceCIN | date: 'dd/MM/yyyy' || 'Non spécifié' }}</div>
+                                </div>
+                                
+                                <div class="row">
+                                  <div class="col-lg-3 col-md-4 label">Date d'Expiration CIN</div>
+                                  <div class="col-lg-9 col-md-8">{{ client?.dateExpirationCIN | date: 'dd/MM/yyyy' || 'Non spécifié' }}</div>
+                                </div>
+                                
+                                <div class="row">
+                                  <div class="col-lg-3 col-md-4 label">Lieu de Délivrance CIN</div>
+                                  <div class="col-lg-9 col-md-8">{{ client?.lieuDelivranceCIN || 'Non spécifié' }}</div>
+                                </div>
+                                 
+                                <div class="row">
+                                  <div class="col-lg-3 col-md-4 label">Sexe</div>
+                                  <div class="col-lg-9 col-md-8">{{ client?.genre || 'Non spécifié' }}</div>
+                                </div>
+                                
+                                <div class="row">
+                                  <div class="col-lg-3 col-md-4 label">Profession</div>
+                                  <div class="col-lg-9 col-md-8">{{ client?.profession || 'Non spécifié' }}</div>
+                                </div>
+                                
+                                <div class="row">
+                                  <div class="col-lg-3 col-md-4 label">Situation Professionnelle</div>
+                                  <div class="col-lg-9 col-md-8">{{ client?.situationProfessionnelle || 'Non spécifié' }}</div>
+                                </div>
+                                
+                                <div class="row">
+                                  <div class="col-lg-3 col-md-4 label">Niveau d'Éducation</div>
+                                  <div class="col-lg-9 col-md-8">{{ client?.niveauEducation || 'Non spécifié' }}</div>
+                                </div>
+                                
+                                <div class="row">
+                                  <div class="col-lg-3 col-md-4 label">Nombre d'Enfants</div>
+                                  <div class="col-lg-9 col-md-8">{{ client?.nombreEnfants || 'Non spécifié' }}</div>
+                                </div>
+                                
+                                <div class="row">
+                                  <div class="col-lg-3 col-md-4 label">Revenu Mensuel</div>
+                                  <div class="col-lg-9 col-md-8">{{ client?.revenuMensuel || 'Non spécifié' }}</div>
+                                </div>
+                                
+                                <div class="row">
+                                  <div class="col-lg-3 col-md-4 label">Pays de Naissance</div>
+                                  <div class="col-lg-9 col-md-8">{{ client?.paysNaissance || 'Non spécifié' }}</div>
+                                </div>
+                                
+                                <div class="row">
+                                  <div class="col-lg-3 col-md-4 label">Nom de la Mère</div>
+                                  <div class="col-lg-9 col-md-8">{{ client?.nomMere || 'Non spécifié' }}</div>
+                                </div>
+                                
+                                <div class="row">
+                                  <div class="col-lg-3 col-md-4 label">Nom du Père</div>
+                                  <div class="col-lg-9 col-md-8">{{ client?.nomPere || 'Non spécifié' }}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Télécharger la fiche KYC</div>
+                                    <div class="col-lg-9 col-md-8">
+                                      <button class="btn btn-primary" (click)="downloadKYC()">Télécharger</button>
+                                    </div>
+                                  </div>
+                           </div>
+                           
                         <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
 
                             <!-- Profile Edit Form -->
-                            <form>
-                                <div class="row mb-3">
-                                    <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile
-                                        Image</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <img src="assets/img/profile-img.jpg" alt="Profile">
-                                        <div class="pt-2">
-                                            <a href="#" class="btn btn-primary btn-sm"
-                                                title="Upload new profile image"><i class="bi bi-upload"></i></a>
-                                            <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i
-                                                    class="bi bi-trash"></i></a>
+                            
+                                
+
+                                <form (ngSubmit)="onSubmit()">
+                                    <div class="row mb-3">
+                                        <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Photo de profil</label>
+                                        <div class="col-md-8 col-lg-9">
+                                          <!-- Afficher la photo actuelle -->
+                                          <img [src]="client?.photoClient ? 'http://localhost:5260/Images/' + client.photoClient : 'assets/img/default-profile.png'" alt="Profile"  style="width: 100px; height: 100px;">
+                                          <div class="pt-2">
+                                            <!-- Bouton pour télécharger une nouvelle photo -->
+                                            <input type="file" id="profileImage" (change)="onFileSelected($event)" style="display: none;">
+                                            <label for="profileImage" class="btn btn-primary btn-sm" title="Upload new profile image">
+                                              <i class="bi bi-upload"></i> Changer la photo
+                                            </label>
+                                            <!-- Bouton pour supprimer la photo -->
+                                            <button class="btn btn-danger btn-sm" (click)="removeProfileImage()" title="Remove my profile image">
+                                              <i class="bi bi-trash"></i> Supprimer
+                                            </button>
+                                          </div>
                                         </div>
+                                      </div>
+                                    <!-- Téléphone -->
+                                    <div class="row mb-3">
+                                      <label for="phone" class="col-md-4 col-lg-3 col-form-label">Téléphone</label>
+                                      <div class="col-md-8 col-lg-9">
+                                        <input name="phone" type="text" class="form-control" id="phone" [(ngModel)]="client.telephone">
+                                      </div>
                                     </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Full Name</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <input name="fullName" type="text" class="form-control" id="fullName"
-                                            value="Kevin Anderson">
+                                  
+                                    <!-- Email -->
+                                    <div class="row mb-3">
+                                      <label for="email" class="col-md-4 col-lg-3 col-form-label">Email</label>
+                                      <div class="col-md-8 col-lg-9">
+                                        <input name="email" type="email" class="form-control" id="email" [(ngModel)]="client.email">
+                                      </div>
                                     </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <label for="about" class="col-md-4 col-lg-3 col-form-label">About</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <textarea name="about" class="form-control" id="about"
-                                            style="height: 100px">Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</textarea>
+                                  
+                                    <!-- Adresse -->
+                                    <div class="row mb-3">
+                                      <label for="address" class="col-md-4 col-lg-3 col-form-label">Adresse</label>
+                                      <div class="col-md-8 col-lg-9">
+                                        <input name="address" type="text" class="form-control" id="address" [(ngModel)]="client.adresse">
+                                      </div>
                                     </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <label for="company" class="col-md-4 col-lg-3 col-form-label">Company</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <input name="company" type="text" class="form-control" id="company"
-                                            value="Lueilwitz, Wisoky and Leuschke">
+                                  
+                                    <!-- Civilité -->
+                                    <div class="row mb-3">
+                                      <label for="civilite" class="col-md-4 col-lg-3 col-form-label">Civilité</label>
+                                      <div class="col-md-8 col-lg-9">
+                                        <input name="civilite" type="text" class="form-control" id="civilite" [(ngModel)]="client.civilite">
+                                      </div>
                                     </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <label for="Job" class="col-md-4 col-lg-3 col-form-label">Job</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <input name="job" type="text" class="form-control" id="Job"
-                                            value="Web Designer">
+                                  
+                                    <!-- État Civil -->
+                                    <div class="row mb-3">
+                                      <label for="etatCivil" class="col-md-4 col-lg-3 col-form-label">État Civil</label>
+                                      <div class="col-md-8 col-lg-9">
+                                        <input name="etatCivil" type="text" class="form-control" id="etatCivil" [(ngModel)]="client.etatCivil">
+                                      </div>
                                     </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <label for="Country" class="col-md-4 col-lg-3 col-form-label">Country</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <input name="country" type="text" class="form-control" id="Country" value="USA">
+                                  
+                                    <!-- Résidence -->
+                                    <div class="row mb-3">
+                                      <label for="residence" class="col-md-4 col-lg-3 col-form-label">Résidence</label>
+                                      <div class="col-md-8 col-lg-9">
+                                        <input name="residence" type="text" class="form-control" id="residence" [(ngModel)]="client.residence">
+                                      </div>
                                     </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <label for="Address" class="col-md-4 col-lg-3 col-form-label">Address</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <input name="address" type="text" class="form-control" id="Address"
-                                            value="A108 Adam Street, New York, NY 535022">
+                                  
+                                    <!-- Profession -->
+                                    <div class="row mb-3">
+                                      <label for="profession" class="col-md-4 col-lg-3 col-form-label">Profession</label>
+                                      <div class="col-md-8 col-lg-9">
+                                        <input name="profession" type="text" class="form-control" id="profession" [(ngModel)]="client.profession">
+                                      </div>
                                     </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Phone</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <input name="phone" type="text" class="form-control" id="Phone"
-                                            value="(436) 486-3538 x29071">
+                                  
+                                    <!-- Situation Professionnelle -->
+                                    <div class="row mb-3">
+                                      <label for="situationProfessionnelle" class="col-md-4 col-lg-3 col-form-label">Situation Professionnelle</label>
+                                      <div class="col-md-8 col-lg-9">
+                                        <input name="situationProfessionnelle" type="text" class="form-control" id="situationProfessionnelle" [(ngModel)]="client.situationProfessionnelle">
+                                      </div>
                                     </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <input name="email" type="email" class="form-control" id="Email"
-                                            value="k.anderson@example.com">
+                                  
+                                    <!-- Nombre d'Enfants -->
+                                    <div class="row mb-3">
+                                      <label for="nombreEnfants" class="col-md-4 col-lg-3 col-form-label">Nombre d'Enfants</label>
+                                      <div class="col-md-8 col-lg-9">
+                                        <input name="nombreEnfants" type="number" class="form-control" id="nombreEnfants" [(ngModel)]="client.nombreEnfants">
+                                      </div>
                                     </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <label for="Twitter" class="col-md-4 col-lg-3 col-form-label">Twitter
-                                        Profile</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <input name="twitter" type="text" class="form-control" id="Twitter"
-                                            value="https://twitter.com/#">
+                                  
+                                    <!-- Revenu Mensuel -->
+                                    <div class="row mb-3">
+                                      <label for="revenuMensuel" class="col-md-4 col-lg-3 col-form-label">Revenu Mensuel</label>
+                                      <div class="col-md-8 col-lg-9">
+                                        <input name="revenuMensuel" type="number" class="form-control" id="revenuMensuel" [(ngModel)]="client.revenuMensuel">
+                                      </div>
                                     </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <label for="Facebook" class="col-md-4 col-lg-3 col-form-label">Facebook
-                                        Profile</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <input name="facebook" type="text" class="form-control" id="Facebook"
-                                            value="https://facebook.com/#">
+                                  
+                                    <!-- Bouton de soumission -->
+                                    <div class="text-center">
+                                      <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
                                     </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <label for="Instagram" class="col-md-4 col-lg-3 col-form-label">Instagram
-                                        Profile</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <input name="instagram" type="text" class="form-control" id="Instagram"
-                                            value="https://instagram.com/#">
-                                    </div>
-                                </div>
-
-                                <div class="row mb-3">
-                                    <label for="Linkedin" class="col-md-4 col-lg-3 col-form-label">Linkedin
-                                        Profile</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <input name="linkedin" type="text" class="form-control" id="Linkedin"
-                                            value="https://linkedin.com/#">
-                                    </div>
-                                </div>
-
-                                <div class="text-center">
-                                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                                </div>
-                            </form><!-- End Profile Edit Form -->
+                                  </form>
 
                         </div>
 
                         <div class="tab-pane fade pt-3" id="profile-settings">
 
-                            <!-- Settings Form -->
+                            <!-- Settings Form 
                             <form>
 
                                 <div class="row mb-3">
@@ -269,47 +333,69 @@
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-primary">Save Changes</button>
                                 </div>
-                            </form><!-- End settings Form -->
+                            </form> End settings Form -->
 
                         </div>
-
                         <div class="tab-pane fade pt-3" id="profile-change-password">
                             <!-- Change Password Form -->
-                            <form>
-
-                                <div class="row mb-3">
-                                    <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current
-                                        Password</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <input name="password" type="password" class="form-control"
-                                            id="currentPassword">
-                                    </div>
+                            <form (ngSubmit)="onChangePassword()">
+                              <div class="row mb-3">
+                                <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Mot de passe actuel</label>
+                                <div class="col-md-8 col-lg-9">
+                                  <input
+                                    name="currentPassword"
+                                    type="password"
+                                    class="form-control"
+                                    id="currentPassword"
+                                    [(ngModel)]="changePasswordData.currentPassword"
+                                    required
+                                    (blur)="validateField('currentPassword')"
+                                  />
+                                  <div *ngIf="currentPasswordError" class="error-message">Le champ mot de passe actuel est obligatoire.</div>
                                 </div>
-
-                                <div class="row mb-3">
-                                    <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New
-                                        Password</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <input name="newpassword" type="password" class="form-control" id="newPassword">
-                                    </div>
+                              </div>
+                          
+                              <div class="row mb-3">
+                                <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">Nouveau mot de passe</label>
+                                <div class="col-md-8 col-lg-9">
+                                  <input
+                                    name="newPassword"
+                                    type="password"
+                                    class="form-control"
+                                    id="newPassword"
+                                    [(ngModel)]="changePasswordData.newPassword"
+                                    required
+                                    (blur)="validateField('newPassword')"
+                                    (input)="checkPasswords()"
+                                  />
+                                  <div *ngIf="newPasswordError" class="error-message">Le champ nouveau mot de passe est obligatoire.</div>
                                 </div>
-
-                                <div class="row mb-3">
-                                    <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New
-                                        Password</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <input name="renewpassword" type="password" class="form-control"
-                                            id="renewPassword">
-                                    </div>
+                              </div>
+                          
+                              <div class="row mb-3">
+                                <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Confirmer le mot de passe</label>
+                                <div class="col-md-8 col-lg-9">
+                                  <input
+                                    name="confirmNewPassword"
+                                    type="password"
+                                    class="form-control"
+                                    id="renewPassword"
+                                    [(ngModel)]="changePasswordData.confirmNewPassword"
+                                    required
+                                    (input)="checkPasswords()"
+                                    (blur)="validateField('confirmNewPassword')"
+                                    [ngClass]="{'input-error': passwordMismatch}"
+                                  />
+                                  <div *ngIf="passwordMismatch" class="error-message">Les mots de passe ne correspondent pas.</div>
+                                  <div *ngIf="confirmNewPasswordError" class="error-message">Le champ confirmer le mot de passe est obligatoire.</div>
                                 </div>
-
-                                <div class="text-center">
-                                    <button type="submit" class="btn btn-primary">Change Password</button>
-                                </div>
+                              </div>
+                          
+                              <div class="text-center">
+                                <button type="submit" class="btn btn-primary" [disabled]="passwordMismatch || isFormInvalid()">Changer le mot de passe</button>
+                              </div>
                             </form><!-- End Change Password Form -->
-
-                        </div>
-
+                          </div>
                     </div><!-- End Bordered Tabs -->
 
                 </div>
