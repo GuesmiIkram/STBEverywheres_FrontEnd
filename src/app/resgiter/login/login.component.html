@@ -13,53 +13,108 @@
   
         <form (ngSubmit)="onSubmit()">
           <div class="form-group">
-            <label for="email">Email :</label>
-            <div class="input-container">
-              <div class="input-icon">@</div>
-              <input type="email" id="email" [(ngModel)]="loginForm.email" name="email" required />
-            </div>
-          </div>
-  
-          <div class="form-group">
-            <label for="password">Mot de passe</label>
-            <input type="password" id="password" [(ngModel)]="loginForm.password" name="password" required />
-          </div>
-  
+            <div class="form-group">
+                <label for="email">Email :</label>
+                <div class="input-container">
+                  <div class="input-icon">@</div>
+                  <input
+                    type="email"
+                    id="email"
+                    [(ngModel)]="loginForm.email"
+                    name="email"
+                    required
+                    (blur)="validateField('email')" 
+                  />
+                </div>
+                <div *ngIf="emailError" class="error-message">Le champ email est obligatoire.</div>
+              </div>
+              
+              <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <input
+                  type="password"
+                  id="password"
+                  [(ngModel)]="loginForm.password"
+                  name="password"
+                  required
+                  (blur)="validateField('password')" 
+                />
+                <div *ngIf="passwordError" class="error-message">Le champ mot de passe est obligatoire.</div>
+              </div>
+         </div>
           <button type="submit" class="auth-button">Se connecter</button>
         </form>
       </div>
   
-      <!-- Formulaire d'inscription -->
       <div *ngIf="activeTab === 'register'" class="auth-form">
         <h1 class="auth-title">S'inscrire</h1>
         <p class="auth-subtitle">Créez un compte pour accéder à nos services</p>
-  
+      
         <form (ngSubmit)="onRegister()">
+        
+          <div class="form-group">
+            <label for="reg-rib">RIB Compte</label>
+            <input
+              type="text"
+              id="reg-rib"
+              name="rib"
+              [(ngModel)]="registerForm.rib"
+              required
+              (blur)="validateField('rib')" 
+            />
+            <div *ngIf="ribError" class="error-message">Le champ RIB est obligatoire.</div>
+          </div>
+          
           <div class="form-group">
             <label for="reg-email">Email</label>
             <div class="input-container">
               <div class="input-icon">@</div>
-              <input type="email" id="reg-email" name="email" [(ngModel)]="registerForm.email" required>
+              <input
+                type="email"
+                id="reg-email"
+                name="email"
+                [(ngModel)]="registerForm.email"
+                required
+                (blur)="validateField('registerEmail')" 
+              />
             </div>
+            <div *ngIf="registerEmailError" class="error-message">Le champ email est obligatoire.</div>
           </div>
-  
-          <div class="form-group">
-            <label for="reg-username">Nom d'utilisateur</label>
-            <input type="text" id="reg-username" name="username" [(ngModel)]="registerForm.username" required>
-          </div>
-  
+          
           <div class="form-group">
             <label for="reg-password">Mot de passe</label>
-            <input type="password" id="reg-password" name="password" [(ngModel)]="registerForm.password" required>
+            <input
+              type="password"
+              id="reg-password"
+              name="password"
+              [(ngModel)]="registerForm.password"
+              required
+              (blur)="validateField('registerPassword')" 
+              (input)="checkPasswords()"
+            />
+            <div *ngIf="registerPasswordError" class="error-message">Le champ mot de passe est obligatoire.</div>
           </div>
-  
+          
           <div class="form-group">
             <label for="reg-confirm-password">Confirmer le mot de passe</label>
-            <input type="password" id="reg-confirm-password" name="confirmPassword" [(ngModel)]="registerForm.confirmPassword" required>
+            <input
+              type="password"
+              id="reg-confirm-password"
+              name="confirmPassword"
+              [(ngModel)]="registerForm.confirmPassword"
+              required
+              (input)="checkPasswords()"
+              (blur)="validateField('confirmPassword')" 
+              [ngClass]="{'input-error': passwordMismatch}"
+            />
+            <div *ngIf="passwordMismatch" class="error-message">
+              Les mots de passe ne correspondent pas.
+            </div>
+            <div *ngIf="confirmPasswordError" class="error-message">Le champ confirmer le mot de passe est obligatoire.</div>
+      
           </div>
-  
-          <button type="submit" class="auth-button">S'inscrire</button>
+          <button type="submit" class="auth-button" [disabled]="passwordMismatch">S'inscrire</button>
         </form>
       </div>
-    </div>
+  </div>
   </div>
