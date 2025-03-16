@@ -28,6 +28,36 @@ export class AuthService {
         })
       );
   }
+  register(registerData: { rib: string, email: string, password: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, registerData).pipe(
+      tap(() => {
+        console.log('Inscription réussie.');
+      }),
+      catchError((error) => {
+        console.error('Erreur lors de l\'inscription :', error);
+  
+        // Extraire le message d'erreur du backend
+        const errorMessage = error.error?.message || 'Erreur lors de l\'inscription';
+  
+        // Renvoyer l'erreur avec le message du backend
+        return throwError(() => ({ message: errorMessage }));
+      })
+    );
+  }
+  changePassword(currentPassword: string, newPassword: string, confirmNewPassword: string): Observable<any> {
+    const changePasswordData = { currentPassword, newPassword, confirmNewPassword };
+    return this.http.post(`${this.apiUrl}/change-password`, changePasswordData, {
+      withCredentials: true 
+    }).pipe(
+      tap(() => {
+        console.log('Mot de passe changé avec succès.');
+      }),
+      catchError((error) => {
+        console.error('Erreur lors du changement de mot de passe :', error);
+        return throwError(() => new Error('Erreur lors du changement de mot de passe'));
+      })
+    );
+  }
 
 
   getTokens(): Observable<any> {
