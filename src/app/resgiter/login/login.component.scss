@@ -89,6 +89,17 @@ $icon-background: #e9eef6;
     font-weight: 500;
     color: $text-color;
   }
+ .error-message {
+    color: #ff4d4f; // Couleur rouge pour le message d'erreur
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  
+  // Champ invalide
+  .input-error {
+    border-color: #ff4d4f; // Bordure rouge pour les champs invalides
+  }
+  
 }
 
 .input-container {
@@ -164,4 +175,7 @@ input {
   .auth-subtitle {
     font-size: 13px;
   }
+
+  // Message d'erreur
+
 }

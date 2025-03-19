@@ -1,7 +1,7 @@
     <!-- ======= Sidebar ======= -->
-  
 
-        <ul class="sidebar-nav" id="sidebar-nav">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
 
             <li class="nav-item">
                 <a class="nav-link" routerLink="/home" >
@@ -9,6 +9,32 @@
                     <span>Dashboard</span>
                 </a>
             </li><!-- End Dashboard Nav -->
+
+
+
+            <li class="nav-heading mt-4">Ma Banque</li>
+
+
+            <li class="nav-item ">
+                <a class="nav-link collapsed"  (click)="ShowHideCollapse('beneficiaire-nav')" data-bs-target="#beneficiaire-nav" data-bs-toggle="collapse"  >
+                    <i class="ri-user-add-line"></i><span>Ma banque</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="beneficiaire-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a routerLink="/home/beneficiaire"  routerLinkActive="active"   [routerLinkActiveOptions]="{exact: true}">
+                            <i class="bi bi-circle"></i><span>RIB/IBAN</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a routerLink="/home/beneficiaire/ajouter-beneficiaire"  routerLinkActive="active" >
+                            <i class="bi bi-circle"></i><span>Extrait du compte</span>
+                        </a>
+                    </li>
+                    <!-- End banque Page Nav -->
+  </ul>
+
+
+
 
 
            <li class="nav-heading mt-4">Paiement</li>
@@ -77,16 +103,17 @@
                     <i class="ri-send-plane-fill"></i><span>Virements</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
                 <ul id="virements-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+
                     <li>
-                        <a routerLink="/home/virement" routerLinkActive="active"   [routerLinkActiveOptions]="{exact: true}">
-                            <i class="bi bi-circle"></i><span>Consulter</span>
+                      <a routerLink="/home/virement/create-virement-masse" routerLinkActive="active" >
+                            <i class="bi bi-circle"></i><span>Initer Virement de masse</span>
                         </a>
                     </li>
                     <li>
-                        <a routerLink="/home/virement/create-virement" routerLinkActive="active" >
-                            <i class="bi bi-circle"></i><span>Initer</span>
-                        </a>
-                    </li>
+                      <a routerLink="/home/virement/create-virement" routerLinkActive="active" >
+                          <i class="bi bi-circle"></i><span>Initer Virement Unitaire</span>
+                      </a>
+                  </li>
                     <li>
                         <a routerLink="/home/virement/valider-virement" routerLinkActive="active"  >
                             <i class="bi bi-circle"></i><span>Valider</span>
@@ -106,6 +133,6 @@
             </li><!-- End Profile Page Nav -->
 
 
-        </ul>
+
 
   <!-- End Sidebar-->

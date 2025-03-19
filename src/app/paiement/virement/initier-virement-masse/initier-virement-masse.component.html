@@ -1,0 +1,9 @@
+<!-- Formulaire de téléchargement du fichier -->
+<form [formGroup]="virementForm" (ngSubmit)="onSubmit()">
+  <div class="form-group">
+    <label for="file">Télécharger le fichier de virement en masse :</label>
+    <input type="file" id="file" formControlName="fichier" (change)="onFileChange($event)" required />
+  </div>
+
+  <button type="submit" class="btn btn-primary">Envoyer</button>
+</form>

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { BreadcrumbService } from 'xng-breadcrumb';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,6 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'DigiCorpV1';
+  constructor(private breadcrumbService: BreadcrumbService) {}
+
 }
