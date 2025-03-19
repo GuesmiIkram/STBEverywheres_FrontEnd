@@ -6,8 +6,11 @@ import { VirementDetailsComponent } from './virement-details/virement-details.co
 import { VirementRoutingModule } from './virement-routing.module';
 import { InitierVirementComponent } from './initier-virement/initier-virement.component';
 import { ValiderVirementComponent } from './valider-virement/valider-virement.component';
+import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
+import { InitierVirementMasseComponent} from './initier-virement-masse/initier-virement-masse.component';
 
-
+import { VirementService } from './virement.service';
 
 @NgModule({
   declarations: [
@@ -16,10 +19,15 @@ import { ValiderVirementComponent } from './valider-virement/valider-virement.co
     VirementDetailsComponent,
     InitierVirementComponent,
     ValiderVirementComponent,
+    InitierVirementMasseComponent
+
   ],
   imports: [
     CommonModule,
-    VirementRoutingModule
-  ]
+    VirementRoutingModule,
+    HttpClientModule,
+    ReactiveFormsModule
+  ],
+  providers: [VirementService]
 })
 export class VirementModule { }

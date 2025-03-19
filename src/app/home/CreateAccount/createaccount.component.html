@@ -1,0 +1,19 @@
+<div class="form-container">
+  <h3>Créer un nouveau compte</h3>
+
+  <!-- Sélection du type de compte -->
+  <label for="typeCompte">Type de compte :</label>
+  <select id="typeCompte" [(ngModel)]="compteDto.type">
+    <option value="courant">Compte Courant</option>
+    <option value="epargne">Compte Épargne</option>
+    <option value="epargne">Compte Cheque </option>
+  </select>
+
+  <!-- Bouton pour créer le compte -->
+  <button type="button" class="btn-create-account" (click)="createCompte()">
+    Ajouter un compte
+  </button>
+
+  <!-- Message d'erreur -->
+  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+</div>

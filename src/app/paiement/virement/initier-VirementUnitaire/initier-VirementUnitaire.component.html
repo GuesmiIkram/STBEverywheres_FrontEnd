@@ -7,7 +7,23 @@
 </head>
 <body>
     <div class="container">
-
+        <header class="header">
+            <div class="logo">
+                <img src="/placeholder.svg?height=40&width=120" alt="Digi Corp Logo">
+                <h1>Digi Corp</h1>
+            </div>
+            <div class="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="user-info">
+                <span class="user-name">FCLKAHLOUN@STBCLIENTB2C.ONMICROSOFT.COM</span>
+                <div class="user-avatar">
+                    <img src="/placeholder.svg?height=32&width=32" alt="User Avatar">
+                </div>
+            </div>
+        </header>
 
         <div class="content">
             <div class="breadcrumb">
@@ -19,46 +35,39 @@
             <div class="form-container">
                 <h2 class="form-title">Initiation virement unitaire</h2>
 
-                <form [formGroup]="virementForm" class="transfer-form">
+                <form class="transfer-form">
                     <!-- Donneur d'ordre section -->
                     <div class="form-section">
                         <h3 class="section-title">(Donneur d'ordre)</h3>
 
                         <div class="form-row">
-                          <div class="form-group">
-                            <label for="compte">Choisir un compte <span class="required">*</span></label>
-                            <select id="compte" class="form-control" formControlName="compteEmetteur" required>
-                              <option value="">Sélectionner un compte</option>
-                              <option *ngFor="let compte of comptes" [value]="compte.rib">
-                                {{ compte.type }} - {{ compte.rib }}
-                              </option>
-                            </select>
-                          </div>
+                            <div class="form-group">
+                                <label for="compte">Choisir un compte <span class="required">*</span></label>
+                                <select id="compte" class="form-control" required>
+                                    <option value="">Choisir compte</option>
+                                    <option value="compte1">Compte 1</option>
+                                    <option value="compte2">Compte 2</option>
+                                </select>
+                            </div>
                         </div>
 
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="montant">Montant <span class="required">*</span></label>
-                                <input type="number" id="montant" formControlName="montant"  class="form-control" required>
+                                <input type="number" id="montant" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label for="motif">Motif <span class="required">*</span></label>
-                                <input type="text" id="motif" formControlName="motif"  class="form-control" required>
+                                <input type="text" id="motif" class="form-control" required>
                             </div>
                         </div>
-                        <div>
-                          <label for="description">Description :</label>
-                          <input type="text" id="description" formControlName="description"
-                          class="form-control" required>
-                        </div>
 
-
-                       <!-- <div class="form-row">
+                        <div class="form-row">
                             <div class="form-group full-width">
                                 <label for="montant-dinar">Montant en dinar</label>
                                 <input type="text" id="montant-dinar" class="form-control" readonly>
                             </div>
-                        </div> -->
+                        </div>
                     </div>
 
                     <!-- Bénéficiaire section -->
@@ -67,28 +76,26 @@
 
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="nom-beneficiaire">Nom & prénom  <span class="required">*</span></label>
-                                <input type="text" id="nom-beneficiaire" formControlName="nomBeneficiaire" class="form-control" required>
+                                <label for="nom-beneficiaire">Nom & prénom / Raison social <span class="required">*</span></label>
+                                <input type="text" id="nom-beneficiaire" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label for="rib-beneficiaire">RIB Bénéficiaire <span class="required">*</span></label>
-                                <input type="text" id="rib-beneficiaire" formControlName="ribBeneficiaire"  class="form-control" required>
+                                <input type="text" id="rib-beneficiaire" class="form-control" required>
                             </div>
                         </div>
 
-                        <!--<div class="form-row">
+                        <div class="form-row">
                             <div class="form-group">
                                 <button type="button" class="btn btn-primary">
                                     <span class="icon">+</span> Joindre ordre de virement
                                 </button>
                             </div>
-                        </div> -->
+                        </div>
                     </div>
 
                     <div class="form-actions">
-                       <!-- <button type="submit" class="btn btn-submit">Enregistrer</button> -->
-                        <button type="button" (click)="effectuerVirement()" class="btn btn-submit">Enregistrer</button>
-
+                        <button type="submit" class="btn btn-submit">Enregistrer</button>
                     </div>
                 </form>
             </div>

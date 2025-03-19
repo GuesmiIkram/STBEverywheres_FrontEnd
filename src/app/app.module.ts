@@ -12,6 +12,9 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from './services/auth.service';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthInterceptor } from './Interceptors/auth.interceptor';
+
+import { BreadcrumbModule } from 'xng-breadcrumb';
+import { RouterModule } from '@angular/router';
 import { AccueilComponent } from './accueil/accueil.component';
 
 
@@ -27,10 +30,12 @@ import { AccueilComponent } from './accueil/accueil.component';
     BrowserAnimationsModule,
     HttpClientModule,
     NgxSpinnerModule, FormsModule,
+    BreadcrumbModule,
+    AppRoutingModule,
   ],
   providers: [
     //CookieService,
-    AuthService, 
+    AuthService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

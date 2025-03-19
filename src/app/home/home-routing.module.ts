@@ -6,7 +6,7 @@ import { HomeComponent } from './home.component';
 const routes: Routes = [
   {path:'', component: HomeComponent ,
         children: [
-            { path: '', component: DashboardComponent, data: { breadcrumb: 'Dashboard' }},
+           { path: '', component: DashboardComponent, data: { breadcrumb: 'Dashboard' }},
             { path: 'dashboard', component: DashboardComponent, data: { breadcrumb: 'Dashboard' }},
             { path: 'virement', loadChildren: () => import('./../paiement/virement/virement.module').then(mod => mod.VirementModule), data: { breadcrumb: 'Virement' } },
             { path: 'carte', loadChildren: () => import('./../paiement/carte/carte.module').then(mod => mod.CarteModule), data: { breadcrumb: 'Carte' } },
