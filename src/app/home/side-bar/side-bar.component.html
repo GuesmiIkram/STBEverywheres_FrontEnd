@@ -77,12 +77,13 @@
                 <ul id="cartes-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
                         <a routerLink="/home/carte" routerLinkActive="active"   [routerLinkActiveOptions]="{exact: true}">
-                            <i class="bi bi-circle"></i><span>Consulter</span>
+                            <i class="bi bi-circle"></i><span>Mes Cartes</span>
                         </a>
                     </li>
+                    <ul id="cartes-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav"></ul>
                     <li>
-                        <a routerLink="/home/carte/delivrer-carte" routerLinkActive="active" >
-                            <i class="bi bi-circle"></i><span>Delivrer</span>
+                        <a routerLink="/home/carte/Demander-Carte" routerLinkActive="active"   [routerLinkActiveOptions]="{exact: true}">
+                            <i class="bi bi-circle"></i><span>Demander une Carte</span>
                         </a>
                     </li>
                     <!-- <li>
@@ -90,11 +91,7 @@
                             <i class="bi bi-circle"></i><span>Demande</span>
                         </a>
                     </li> -->
-                    <li>
-                        <a routerLink="/home/carte/4" routerLinkActive="active" >
-                            <i class="bi bi-circle"></i><span>Désactiver </span>
-                        </a>
-                    </li>
+                   
                 </ul>
             </li><!-- End Forms Nav -->
 
