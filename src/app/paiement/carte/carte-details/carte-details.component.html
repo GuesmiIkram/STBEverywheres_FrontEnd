@@ -1,1 +1,122 @@
-<p>carte-details works!</p>
+<main class="container">
+    <div class="breadcrumb">
+      <a href="#">Accueil</a> &gt; 
+      <a href="#">Mes Cartes</a> &gt; 
+      <span>Détails de la Carte</span>
+    </div>
+  
+    <h1>Détails de la Carte</h1>
+  
+    <div class="card-details-container" *ngIf="carte">
+      <div class="card-visual">
+        <div class="image-container">
+          <div class="card-preview">
+            <div class="card-chip"></div>
+            <div class="card-logo">
+              <div class="bank-name">BANQUE</div>
+            </div>
+            <div class="card-number">
+              {{ formatNumeroCarte(carte.numCarte) }}
+            </div>
+            <div class="card-info">
+              <div class="card-holder">
+                <span>TITULAIRE</span>
+                <strong>JOHN DOE</strong>
+              </div>
+              <div class="card-expiry">
+                <span>EXPIRE</span>
+                <strong>{{ carte.dateExpiration | date:'MM/yy' }}</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card-actions">
+          <!--button class="btn btn-primary"><i class="fas fa-lock"></i> Bloquer la carte</button>
+          <button class="btn btn-outline"><i class="fas fa-sync-alt"></i> Demander un renouvellement</button-->
+          <button *ngIf="shouldShowBlockButton(carte.statut)" class="btn btn-primary" (click)="blockCarte(carte.numCarte)"><i class="fas fa-lock"></i>
+            Blocker cette carte
+          </button>
+          <button *ngIf="shouldShowDeblockButton(carte.statut)" class="btn btn-primary" (click)="deblockCarte(carte.numCarte)"><i class="fas fa-lock"></i>
+            Débloquer cette carte
+          </button>
+        </div>
+      </div>
+  
+      <div class="card-info-details">
+        <div class="info-section">
+          <h2>Informations générales</h2>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">Numéro de carte</span>
+              <span class="info-value">{{ formatNumeroCarte(carte.numCarte) }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Type de carte</span>
+              <span class="info-value">{{ carte.typeCarte }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Catégorie</span>
+              <span class="info-value">International</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Nature</span>
+              <span class="info-value">{{ carte.nature }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Statut</span>
+              <span class="info-value status-active">{{ carte.statut }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Référence demande</span>
+              <span class="info-value">#{{ carte.iddemande }}</span>
+            </div>
+          </div>
+        </div>
+  
+        <div class="info-section">
+          <h2>Dates importantes</h2>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">Date de création</span>
+              <span class="info-value">{{ carte.dateCreation | date:'dd/MM/yyyy' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Date d'expiration</span>
+              <span class="info-value">{{ carte.dateExpiration | date:'dd/MM/yyyy' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Date de récupération</span>
+              <span class="info-value">{{ carte.dateRecuperation | date:'dd/MM/yyyy' }}</span>
+            </div>
+          </div>
+        </div>
+  
+        <div class="info-section">
+          <h2>Informations financières</h2>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">RIB associé</span>
+              <span class="info-value">{{ carte.rib }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Solde disponible</span>
+              <span class="info-value">{{ carte.solde | currency:'TND':'symbol':'1.2-2' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Plafond TPE</span>
+              <span class="info-value">{{ carte.plafondTPE | currency:'TND':'symbol':'1.2-2' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Plafond DAP</span>
+              <span class="info-value">{{ carte.plafondDAP | currency:'TND':'symbol':'1.2-2' }}</span>
+            </div>
+          </div>
+        </div>
+  
+        
+      </div>
+    </div>
+  </main>
+  
+  

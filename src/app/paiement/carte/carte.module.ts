@@ -5,6 +5,7 @@ import { CarteItemComponent } from './carte-item/carte-item.component';
 import { CarteDetailsComponent } from './carte-details/carte-details.component';
 import { CarteComponent } from './carte.component';
 import { DelivrerCarteComponent } from './delivrer-carte/delivrer-carte.component';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -17,7 +18,8 @@ import { DelivrerCarteComponent } from './delivrer-carte/delivrer-carte.componen
   ],
   imports: [
     CommonModule,
-    CarteRoutingModule
+    CarteRoutingModule,
+    FormsModule
   ]
 })
 export class CarteModule { }

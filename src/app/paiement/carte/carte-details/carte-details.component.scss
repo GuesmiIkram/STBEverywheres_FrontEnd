@@ -1,0 +1,279 @@
+/* Variables */
+$primary-color: #068bd4;
+$primary-hover: #0579b8;
+$secondary-color: #f8f9fa;
+$text-color: #333;
+$text-light: #6c757d;
+$border-color: #dee2e6;
+$success-color: #28a745;
+$danger-color: #dc3545;
+$warning-color: #ffc107;
+$card-bg: #fff;
+$body-bg: #f5f5f5;
+$border-radius: 4px;
+$box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+$transition: all 0.3s ease;
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  margin: 20px 0;
+  color: $text-light;
+  font-size: 14px;
+  
+  a {
+    color: $text-light;
+    text-decoration: none;
+    transition: $transition;
+    
+    &:hover {
+      color: $primary-color;
+    }
+  }
+}
+
+/* Main Content */
+main {
+  padding: 20px 0 60px;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 30px;
+  color: $text-color;
+}
+
+h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: $text-color;
+}
+
+/* Card Details Container */
+.card-details-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 30px;
+  margin-bottom: 40px;
+  
+  @media (max-width: 992px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Card Visual */
+.card-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.image-container {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-preview {
+  background: linear-gradient(135deg, $primary-color, #0056b3);
+  height: 220px;
+  border-radius: 12px;
+  padding: 20px;
+  color: white;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-chip {
+  width: 40px;
+  height: 30px;
+  background-color: #ffd700;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 20px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+  }
+}
+
+.card-logo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.bank-name {
+  font-weight: bold;
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+.card-number {
+  font-size: 18px;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.card-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  
+  .card-holder, .card-expiry {
+    display: flex;
+    flex-direction: column;
+    
+    span {
+      font-size: 10px;
+      opacity: 0.8;
+      margin-bottom: 2px;
+    }
+    
+    strong {
+      font-size: 14px;
+    }
+  }
+}
+
+.card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Card Info Details */
+.card-info-details {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.info-section {
+  background-color: $card-bg;
+  border-radius: $border-radius;
+  padding: 20px;
+  box-shadow: $box-shadow;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.info-label {
+  font-size: 14px;
+  color: $text-light;
+}
+
+.info-value {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.status-active {
+  color: $success-color;
+}
+
+.secure-value {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hidden-value {
+  letter-spacing: 2px;
+}
+
+.btn-reveal {
+  background: none;
+  border: none;
+  color: $primary-color;
+  cursor: pointer;
+  font-size: 16px;
+  
+  &:hover {
+    color: $primary-hover;
+  }
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  border: none;
+  border-radius: $border-radius;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: $transition;
+  width: 100%;
+  
+  i {
+    margin-right: 5px;
+  }
+}
+
+.btn-primary {
+  background-color: $primary-color;
+  color: white;
+  
+  &:hover {
+    background-color: $primary-hover;
+  }
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: $primary-color;
+  border: 1px solid $primary-color;
+  
+  &:hover {
+    background-color: $primary-color;
+    color: white;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .btn {
+    width: 100%;
+  }
+}
+

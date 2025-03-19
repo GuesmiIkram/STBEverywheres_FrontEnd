@@ -1,0 +1,135 @@
+// Variables
+$primary-color: #068bd4;
+$primary-hover: #0579b8;
+$background-color: #f5f5f5;
+$card-bg: #f8f8f8;
+$text-color: #333;
+$border-radius: 4px;
+$box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+$spacing: 16px;
+
+// Reset & Base Styles
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  color: $text-color;
+  background-color: white;
+  line-height: 1.6;
+}
+
+// Container
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $spacing * 2;
+}
+
+// Typography
+h1 {
+  font-size: 28px;
+  font-weight: 500;
+  margin-bottom: $spacing * 2;
+  color: $text-color;
+}
+
+h2 {
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+}
+
+// Cards Grid
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: $spacing * 1.5;
+  
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+// Card Component
+.card {
+  background-color: $card-bg;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+  padding: $spacing;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  .card-image {
+    position: relative; // Nécessaire pour positionner .card-number
+    height: 180px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: $spacing;
+    
+    img {
+      max-width: 300px;
+      max-height: 180px;
+      box-shadow: $box-shadow;
+    }
+  
+    .card-number {
+      position: absolute; // Position absolue par rapport à .card-image
+      bottom: 10px; // Ajustez la position verticale
+      left: 50%; // Centre horizontalement
+      transform: translateX(-50%); // Centre parfaitement
+      background-color: rgba(0, 0, 0, 0.7); // Fond semi-transparent
+      color: white; // Couleur du texte
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
+  
+  .card-title {
+    margin-bottom: $spacing * 1.5;
+    height: 64px;
+    display: flex;
+    align-items: center;
+   
+  }
+  
+  .card-actions {
+    display: flex;
+    gap: $spacing / 2;
+    width: 100%;
+    margin-top: auto;
+  }
+}
+
+// Buttons
+.btn {
+  display: inline-block;
+  padding: $spacing / 2 $spacing;
+  border: none;
+  border-radius: $border-radius;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+  flex: 1;
+  
+  &.btn-primary {
+    background-color: $primary-color;
+    color: white;
+    
+    &:hover {
+      background-color: $primary-hover;
+    }
+  }
+}

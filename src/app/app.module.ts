@@ -12,12 +12,14 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from './services/auth.service';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthInterceptor } from './Interceptors/auth.interceptor';
+import { AccueilComponent } from './accueil/accueil.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
+    AccueilComponent,
   ],
   imports: [
     BrowserModule,
