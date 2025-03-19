@@ -1,7 +1,40 @@
 
-<div class="row">
+<!--div class="row">
     <div class="col-3" routerLink="/home/carte/delivrer-carte"  > 
         <button type="button" class="btn btn-info"><i class="bi bi-plus-circle"></i></button> Ajouter
     </div>
     <div class="col-9"></div>
-</div>
+</div-->
+
+<div class="container">
+    <h1>Cartes Bancaires STB</h1>
+  
+    <div class="cards-grid">
+      <!-- Boucle sur les cartes pour les afficher dynamiquement -->
+      <div class="card" *ngFor="let carte of cartes">
+        <div class="card-image">
+          <img [src]="getCarteImage(carte.nomCarte)" [alt]="carte.nomCarte" />
+        </div>
+        <div class="card-number">
+            {{ formatNumeroCarte(carte.numCarte) }}
+        </div>
+        <h2 class="card-title">{{ carte.nomCarte }}</h2>
+        <div class="card-actions">
+            <button class="btn btn-primary" (click)="voirDetails(carte.numCarte)">Détails</button>
+        
+            <button *ngIf="shouldShowBlockButton(carte.statut)" class="btn btn-primary" (click)="blockCarte(carte.numCarte)">
+              Blocker cette carte
+            </button>
+            
+            <button *ngIf="shouldShowDeblockButton(carte.statut)" class="btn btn-primary" (click)="deblockCarte(carte.numCarte)">
+              Débloquer cette carte
+            </button>
+        </div>
+      </div>
+  
+      <!-- Message si aucune carte n'est trouvée -->
+      <div *ngIf="cartes.length === 0" class="no-cards-message">
+        <p>Aucune carte trouvée pour ce client.</p>
+      </div>
+    </div>
+  </div>

@@ -9,10 +9,9 @@ import { DelivrerCarteComponent } from './delivrer-carte/delivrer-carte.componen
 
 const routes: Routes = [
   { path: '', component: CarteComponent },
-  { path: ':id', component: CarteDetailsComponent, data: { breadcrumb: { alias: 'Details' } } },
-  { path: 'delivrer-carte', component: DelivrerCarteComponent, data: { breadcrumb: { alias: 'Délivrer' } } },
-]
-
+  { path: 'Demander-Carte', component: DelivrerCarteComponent, data: { breadcrumb: { alias: 'Délivrer' } } },
+  { path: ':numCarte', component: CarteDetailsComponent, data: { breadcrumb: { alias: 'Details' } } },
+];
 @NgModule({
   declarations: [],
   imports: [
