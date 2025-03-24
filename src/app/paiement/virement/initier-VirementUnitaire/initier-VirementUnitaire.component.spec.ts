@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InitierVirementComponent } from './initier-virement.component';
+import { InitierVirementUnitaireComponent } from './initier-VirementUnitaire.component';
 
 describe('InitierVirementComponent', () => {
-  let component: InitierVirementComponent;
-  let fixture: ComponentFixture<InitierVirementComponent>;
+  let component: InitierVirementUnitaireComponent;
+  let fixture: ComponentFixture<InitierVirementUnitaireComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InitierVirementComponent ]
+      declarations: [ InitierVirementUnitaireComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InitierVirementComponent);
+    fixture = TestBed.createComponent(InitierVirementUnitaireComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

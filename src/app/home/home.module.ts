@@ -8,6 +8,7 @@ import { CoreModule } from '../core/core.module';
 import { HomeRoutingModule } from './home-routing.module';
 import { PaiementRoutingModule } from '../paiement/paiement-routing.module';
 
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { PaiementRoutingModule } from '../paiement/paiement-routing.module';
     CoreModule,
     HomeRoutingModule,
     PaiementModule,
+    FormsModule,
 
   ],
   exports: [

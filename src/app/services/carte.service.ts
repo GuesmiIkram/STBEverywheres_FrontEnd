@@ -11,8 +11,8 @@ import { DemandeCarte } from '../Models/DemandeCarte';
   providedIn: 'root',
 })
 export class CarteService {
-  private apiUrl = 'http://localhost:5132/api/carte'; // URL du backend
-
+ // private apiUrl = 'http://localhost:5132/api/carte'; // URL du backend
+private apiUrl ='http://localhost:5000/api/carte';
   constructor(private http: HttpClient) {}
 
   getCartesByClientId(): Observable<CarteDTO[]> {
@@ -41,7 +41,7 @@ export class CarteService {
    createDemandeCarte(demandeCarte: DemandeCarte): Observable<any> {
     return this.http.post(`${this.apiUrl}/demande`, demandeCarte);
   }
-  
+
   createDemandeCartePrepayee(demande: DemandeCarte): Observable<any> {
     return this.http.post('/api/demande-carte-prepayee', demande);
   }

@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ValiderVirementComponent } from './valider-virement.component';
+import { CreateaccountComponent  } from './createaccount.component';
 
-describe('ValiderVirementComponent', () => {
-  let component: ValiderVirementComponent;
-  let fixture: ComponentFixture<ValiderVirementComponent>;
+describe('DashboardComponent', () => {
+  let component: CreateaccountComponent ;
+  let fixture: ComponentFixture<CreateaccountComponent >;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ValiderVirementComponent ]
+      declarations: [ CreateaccountComponent  ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ValiderVirementComponent);
+    fixture = TestBed.createComponent(CreateaccountComponent );
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

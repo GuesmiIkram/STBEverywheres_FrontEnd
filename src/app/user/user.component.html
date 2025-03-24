@@ -16,8 +16,8 @@
             <div class="card">
                 <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
                     <img [src]="'http://localhost:5260/Images/' + client?.photoClient" alt="Profile" class="rounded-circle" />
-                    <h2>{{ client?.nom }}{{ client?.prenom }}</h2>
-                    <h3>{{ client?.situationProfessionnelle }}</h3>
+                    <h2>{{ client.nom }}{{ client.prenom }}</h2>
+                    <h3>{{ client.situationProfessionnelle }}</h3>
                 </div>
             </div>
 
@@ -39,11 +39,7 @@
                             <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit
                                 Profile</button>
                         </li>
-<!-- 
-                        <li class="nav-item">
-                            <button class="nav-link" data-bs-toggle="tab"
-                                data-bs-target="#profile-settings">Settings</button>
-                        </li-->
+
 
                         <li class="nav-item">
                             <button class="nav-link" data-bs-toggle="tab"
@@ -54,123 +50,123 @@
                     <div class="tab-content pt-2">
 
                         <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                            
-            
+
+
                                 <h5 class="card-title">Détails Profile</h5>
 
                                 <div class="row">
                                   <div class="col-lg-3 col-md-4 label">Nom</div>
-                                  <div class="col-lg-9 col-md-8">{{ client?.nom || 'Non spécifié' }}</div>
+                                  <div class="col-lg-9 col-md-8">{{ client.nom || 'Non spécifié' }}</div>
                                 </div>
-                                
+
                                 <div class="row">
                                   <div class="col-lg-3 col-md-4 label">Prénom</div>
-                                  <div class="col-lg-9 col-md-8">{{ client?.prenom || 'Non spécifié' }}</div>
+                                  <div class="col-lg-9 col-md-8">{{ client.prenom || 'Non spécifié' }}</div>
                                 </div>
-                                
+
                                 <div class="row">
                                   <div class="col-lg-3 col-md-4 label">Date de Naissance</div>
-                                  <div class="col-lg-9 col-md-8">{{ client?.dateNaissance | date: 'dd/MM/yyyy' || 'Non spécifié' }}</div>
+                                  <div class="col-lg-9 col-md-8">{{ client.dateNaissance | date: 'dd/MM/yyyy' || 'Non spécifié' }}</div>
                                 </div>
-                                
+
                                 <div class="row">
                                   <div class="col-lg-3 col-md-4 label">Téléphone</div>
-                                  <div class="col-lg-9 col-md-8">{{ client?.telephone || 'Non spécifié' }}</div>
+                                  <div class="col-lg-9 col-md-8">{{ client.telephone || 'Non spécifié' }}</div>
                                 </div>
-                                
+
                                 <div class="row">
                                   <div class="col-lg-3 col-md-4 label">Email</div>
-                                  <div class="col-lg-9 col-md-8">{{ client?.email || 'Non spécifié' }}</div>
+                                  <div class="col-lg-9 col-md-8">{{ client.email || 'Non spécifié' }}</div>
                                 </div>
-                                
+
                                 <div class="row">
                                   <div class="col-lg-3 col-md-4 label">Adresse</div>
-                                  <div class="col-lg-9 col-md-8">{{ client?.adresse || 'Non spécifié' }}</div>
+                                  <div class="col-lg-9 col-md-8">{{ client.adresse || 'Non spécifié' }}</div>
                                 </div>
-                                
+
                                 <div class="row">
                                   <div class="col-lg-3 col-md-4 label">Civilité</div>
-                                  <div class="col-lg-9 col-md-8">{{ client?.civilite || 'Non spécifié' }}</div>
+                                  <div class="col-lg-9 col-md-8">{{ client.civilite || 'Non spécifié' }}</div>
                                 </div>
-                                
+
                                 <div class="row">
                                   <div class="col-lg-3 col-md-4 label">Nationalité</div>
-                                  <div class="col-lg-9 col-md-8">{{ client?.nationalite || 'Non spécifié' }}</div>
+                                  <div class="col-lg-9 col-md-8">{{ client.nationalite || 'Non spécifié' }}</div>
                                 </div>
-                                
+
                                 <div class="row">
                                   <div class="col-lg-3 col-md-4 label">État Civil</div>
-                                  <div class="col-lg-9 col-md-8">{{ client?.etatCivil || 'Non spécifié' }}</div>
+                                  <div class="col-lg-9 col-md-8">{{ client.etatCivil || 'Non spécifié' }}</div>
                                 </div>
-                                
+
                                 <div class="row">
                                   <div class="col-lg-3 col-md-4 label">Résidence</div>
-                                  <div class="col-lg-9 col-md-8">{{ client?.residence || 'Non spécifié' }}</div>
+                                  <div class="col-lg-9 col-md-8">{{ client.residence || 'Non spécifié' }}</div>
                                 </div>
-                                
+
                                 <div class="row">
                                   <div class="col-lg-3 col-md-4 label">Numéro CIN</div>
-                                  <div class="col-lg-9 col-md-8">{{ client?.numCIN || 'Non spécifié' }}</div>
+                                  <div class="col-lg-9 col-md-8">{{ client.numCIN || 'Non spécifié' }}</div>
                                 </div>
-                                
+
                                 <div class="row">
                                   <div class="col-lg-3 col-md-4 label">Date de Délivrance CIN</div>
-                                  <div class="col-lg-9 col-md-8">{{ client?.dateDelivranceCIN | date: 'dd/MM/yyyy' || 'Non spécifié' }}</div>
+                                  <div class="col-lg-9 col-md-8">{{ client.dateDelivranceCIN | date: 'dd/MM/yyyy' || 'Non spécifié' }}</div>
                                 </div>
-                                
+
                                 <div class="row">
                                   <div class="col-lg-3 col-md-4 label">Date d'Expiration CIN</div>
-                                  <div class="col-lg-9 col-md-8">{{ client?.dateExpirationCIN | date: 'dd/MM/yyyy' || 'Non spécifié' }}</div>
+                                  <div class="col-lg-9 col-md-8">{{ client.dateExpirationCIN | date: 'dd/MM/yyyy' || 'Non spécifié' }}</div>
                                 </div>
-                                
+
                                 <div class="row">
                                   <div class="col-lg-3 col-md-4 label">Lieu de Délivrance CIN</div>
-                                  <div class="col-lg-9 col-md-8">{{ client?.lieuDelivranceCIN || 'Non spécifié' }}</div>
+                                  <div class="col-lg-9 col-md-8">{{ client.lieuDelivranceCIN || 'Non spécifié' }}</div>
                                 </div>
-                                 
+
                                 <div class="row">
                                   <div class="col-lg-3 col-md-4 label">Sexe</div>
-                                  <div class="col-lg-9 col-md-8">{{ client?.genre || 'Non spécifié' }}</div>
+                                  <div class="col-lg-9 col-md-8">{{ client.genre || 'Non spécifié' }}</div>
                                 </div>
-                                
+
                                 <div class="row">
                                   <div class="col-lg-3 col-md-4 label">Profession</div>
-                                  <div class="col-lg-9 col-md-8">{{ client?.profession || 'Non spécifié' }}</div>
+                                  <div class="col-lg-9 col-md-8">{{ client.profession || 'Non spécifié' }}</div>
                                 </div>
-                                
+
                                 <div class="row">
                                   <div class="col-lg-3 col-md-4 label">Situation Professionnelle</div>
-                                  <div class="col-lg-9 col-md-8">{{ client?.situationProfessionnelle || 'Non spécifié' }}</div>
+                                  <div class="col-lg-9 col-md-8">{{ client.situationProfessionnelle || 'Non spécifié' }}</div>
                                 </div>
-                                
+
                                 <div class="row">
                                   <div class="col-lg-3 col-md-4 label">Niveau d'Éducation</div>
-                                  <div class="col-lg-9 col-md-8">{{ client?.niveauEducation || 'Non spécifié' }}</div>
+                                  <div class="col-lg-9 col-md-8">{{ client.niveauEducation || 'Non spécifié' }}</div>
                                 </div>
-                                
+
                                 <div class="row">
                                   <div class="col-lg-3 col-md-4 label">Nombre d'Enfants</div>
-                                  <div class="col-lg-9 col-md-8">{{ client?.nombreEnfants || 'Non spécifié' }}</div>
+                                  <div class="col-lg-9 col-md-8">{{ client.nombreEnfants || 'Non spécifié' }}</div>
                                 </div>
-                                
+
                                 <div class="row">
                                   <div class="col-lg-3 col-md-4 label">Revenu Mensuel</div>
-                                  <div class="col-lg-9 col-md-8">{{ client?.revenuMensuel || 'Non spécifié' }}</div>
+                                  <div class="col-lg-9 col-md-8">{{ client.revenuMensuel || 'Non spécifié' }}</div>
                                 </div>
-                                
+
                                 <div class="row">
                                   <div class="col-lg-3 col-md-4 label">Pays de Naissance</div>
-                                  <div class="col-lg-9 col-md-8">{{ client?.paysNaissance || 'Non spécifié' }}</div>
+                                  <div class="col-lg-9 col-md-8">{{ client.paysNaissance || 'Non spécifié' }}</div>
                                 </div>
-                                
+
                                 <div class="row">
                                   <div class="col-lg-3 col-md-4 label">Nom de la Mère</div>
-                                  <div class="col-lg-9 col-md-8">{{ client?.nomMere || 'Non spécifié' }}</div>
+                                  <div class="col-lg-9 col-md-8">{{ client.nomMere || 'Non spécifié' }}</div>
                                 </div>
-                                
+
                                 <div class="row">
                                   <div class="col-lg-3 col-md-4 label">Nom du Père</div>
-                                  <div class="col-lg-9 col-md-8">{{ client?.nomPere || 'Non spécifié' }}</div>
+                                  <div class="col-lg-9 col-md-8">{{ client.nomPere || 'Non spécifié' }}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label">Télécharger la fiche KYC</div>
@@ -179,12 +175,12 @@
                                     </div>
                                   </div>
                            </div>
-                           
+
                         <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
 
                             <!-- Profile Edit Form -->
-                            
-                                
+
+
 
                                 <form (ngSubmit)="onSubmit()">
                                     <div class="row mb-3">
@@ -212,7 +208,7 @@
                                         <input name="phone" type="text" class="form-control" id="phone" [(ngModel)]="client.telephone">
                                       </div>
                                     </div>
-                                  
+
                                     <!-- Email -->
                                     <div class="row mb-3">
                                       <label for="email" class="col-md-4 col-lg-3 col-form-label">Email</label>
@@ -220,7 +216,7 @@
                                         <input name="email" type="email" class="form-control" id="email" [(ngModel)]="client.email">
                                       </div>
                                     </div>
-                                  
+
                                     <!-- Adresse -->
                                     <div class="row mb-3">
                                       <label for="address" class="col-md-4 col-lg-3 col-form-label">Adresse</label>
@@ -228,7 +224,7 @@
                                         <input name="address" type="text" class="form-control" id="address" [(ngModel)]="client.adresse">
                                       </div>
                                     </div>
-                                  
+
                                     <!-- Civilité -->
                                     <div class="row mb-3">
                                       <label for="civilite" class="col-md-4 col-lg-3 col-form-label">Civilité</label>
@@ -236,7 +232,7 @@
                                         <input name="civilite" type="text" class="form-control" id="civilite" [(ngModel)]="client.civilite">
                                       </div>
                                     </div>
-                                  
+
                                     <!-- État Civil -->
                                     <div class="row mb-3">
                                       <label for="etatCivil" class="col-md-4 col-lg-3 col-form-label">État Civil</label>
@@ -244,7 +240,7 @@
                                         <input name="etatCivil" type="text" class="form-control" id="etatCivil" [(ngModel)]="client.etatCivil">
                                       </div>
                                     </div>
-                                  
+
                                     <!-- Résidence -->
                                     <div class="row mb-3">
                                       <label for="residence" class="col-md-4 col-lg-3 col-form-label">Résidence</label>
@@ -252,7 +248,7 @@
                                         <input name="residence" type="text" class="form-control" id="residence" [(ngModel)]="client.residence">
                                       </div>
                                     </div>
-                                  
+
                                     <!-- Profession -->
                                     <div class="row mb-3">
                                       <label for="profession" class="col-md-4 col-lg-3 col-form-label">Profession</label>
@@ -260,7 +256,7 @@
                                         <input name="profession" type="text" class="form-control" id="profession" [(ngModel)]="client.profession">
                                       </div>
                                     </div>
-                                  
+
                                     <!-- Situation Professionnelle -->
                                     <div class="row mb-3">
                                       <label for="situationProfessionnelle" class="col-md-4 col-lg-3 col-form-label">Situation Professionnelle</label>
@@ -268,7 +264,7 @@
                                         <input name="situationProfessionnelle" type="text" class="form-control" id="situationProfessionnelle" [(ngModel)]="client.situationProfessionnelle">
                                       </div>
                                     </div>
-                                  
+
                                     <!-- Nombre d'Enfants -->
                                     <div class="row mb-3">
                                       <label for="nombreEnfants" class="col-md-4 col-lg-3 col-form-label">Nombre d'Enfants</label>
@@ -276,7 +272,7 @@
                                         <input name="nombreEnfants" type="number" class="form-control" id="nombreEnfants" [(ngModel)]="client.nombreEnfants">
                                       </div>
                                     </div>
-                                  
+
                                     <!-- Revenu Mensuel -->
                                     <div class="row mb-3">
                                       <label for="revenuMensuel" class="col-md-4 col-lg-3 col-form-label">Revenu Mensuel</label>
@@ -284,7 +280,7 @@
                                         <input name="revenuMensuel" type="number" class="form-control" id="revenuMensuel" [(ngModel)]="client.revenuMensuel">
                                       </div>
                                     </div>
-                                  
+
                                     <!-- Bouton de soumission -->
                                     <div class="text-center">
                                       <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
@@ -295,45 +291,7 @@
 
                         <div class="tab-pane fade pt-3" id="profile-settings">
 
-                            <!-- Settings Form 
-                            <form>
 
-                                <div class="row mb-3">
-                                    <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Email
-                                        Notifications</label>
-                                    <div class="col-md-8 col-lg-9">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="changesMade" checked>
-                                            <label class="form-check-label" for="changesMade">
-                                                Changes made to your account
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="newProducts" checked>
-                                            <label class="form-check-label" for="newProducts">
-                                                Information on new products and services
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="proOffers">
-                                            <label class="form-check-label" for="proOffers">
-                                                Marketing and promo offers
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="securityNotify" checked
-                                                disabled>
-                                            <label class="form-check-label" for="securityNotify">
-                                                Security alerts
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="text-center">
-                                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                                </div>
-                            </form> End settings Form -->
 
                         </div>
                         <div class="tab-pane fade pt-3" id="profile-change-password">
@@ -354,7 +312,7 @@
                                   <div *ngIf="currentPasswordError" class="error-message">Le champ mot de passe actuel est obligatoire.</div>
                                 </div>
                               </div>
-                          
+
                               <div class="row mb-3">
                                 <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">Nouveau mot de passe</label>
                                 <div class="col-md-8 col-lg-9">
@@ -371,7 +329,7 @@
                                   <div *ngIf="newPasswordError" class="error-message">Le champ nouveau mot de passe est obligatoire.</div>
                                 </div>
                               </div>
-                          
+
                               <div class="row mb-3">
                                 <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Confirmer le mot de passe</label>
                                 <div class="col-md-8 col-lg-9">
@@ -390,7 +348,7 @@
                                   <div *ngIf="confirmNewPasswordError" class="error-message">Le champ confirmer le mot de passe est obligatoire.</div>
                                 </div>
                               </div>
-                          
+
                               <div class="text-center">
                                 <button type="submit" class="btn btn-primary" [disabled]="passwordMismatch || isFormInvalid()">Changer le mot de passe</button>
                               </div>

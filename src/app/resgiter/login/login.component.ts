@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
@@ -72,11 +73,11 @@ export class LoginComponent implements OnInit {
     // Réinitialiser les messages d'erreur
     this.emailError = this.loginForm.email === '';
     this.passwordError = this.loginForm.password === '';
-  
+
     if (this.emailError || this.passwordError) {
       return; // Ne pas soumettre le formulaire si des champs sont vides
     }
-  
+
     console.log('Tentative de connexion avec email :', this.loginForm.email);
     this.authService.login(this.loginForm.email, this.loginForm.password).subscribe({
       next: () => {
@@ -87,7 +88,7 @@ export class LoginComponent implements OnInit {
           },
           error: (err) => {
             console.error('Erreur lors de la récupération des tokens :', err);
-  
+
             // Afficher une alerte en cas d'erreur
             Swal.fire({
               icon: 'error',
@@ -99,7 +100,7 @@ export class LoginComponent implements OnInit {
       },
       error: (err) => {
         console.error('Erreur lors de la connexion :', err);
-  
+
         // Extraire le message d'erreur en fonction de la structure de l'erreur
         let errorMessage = 'Erreur lors de la connexion';
         if (err.error && err.error.message) {
@@ -109,7 +110,7 @@ export class LoginComponent implements OnInit {
         } else if (err.error && typeof err.error === 'string') {
           errorMessage = err.error; // Si l'erreur est une chaîne de caractères dans err.error
         }
-  
+
         // Afficher l'alerte avec le message d'erreur
         Swal.fire({
           icon: 'error',
@@ -127,18 +128,18 @@ export class LoginComponent implements OnInit {
     this.registerEmailError = this.registerForm.email === '';
     this.registerPasswordError = this.registerForm.password === '';
     this.confirmPasswordError = this.registerForm.confirmPassword === '';
-  
+
     if (this.ribError || this.registerEmailError || this.registerPasswordError || this.confirmPasswordError || this.passwordMismatch) {
       return; // Ne pas soumettre le formulaire si des champs sont vides ou si les mots de passe ne correspondent pas
     }
-  
+
     // Préparer les données pour l'inscription
     const registerData = {
       rib: this.registerForm.rib,
       email: this.registerForm.email,
       password: this.registerForm.password
     };
-  
+
     // Appeler la méthode d'inscription du service AuthService
     this.authService.register(registerData).subscribe({
       next: () => {
@@ -155,7 +156,7 @@ export class LoginComponent implements OnInit {
       },
       error: (err) => {
         console.error('Erreur lors de l\'inscription :', err);
-  
+
         // Extraire le message d'erreur en fonction de la structure de l'erreur
         let errorMessage = 'Erreur lors de l\'inscription';
         if (err.error && err.error.message) {
@@ -165,7 +166,7 @@ export class LoginComponent implements OnInit {
         } else if (err.error && typeof err.error === 'string') {
           errorMessage = err.error; // Si l'erreur est une chaîne de caractères dans err.error
         }
-  
+
         // Afficher l'alerte avec le message d'erreur
         Swal.fire({
           icon: 'error',
@@ -175,5 +176,5 @@ export class LoginComponent implements OnInit {
       }
     });
   }
- 
+
 }
