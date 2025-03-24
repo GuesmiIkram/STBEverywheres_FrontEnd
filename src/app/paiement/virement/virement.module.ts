@@ -1,15 +1,18 @@
-import { VirementComponent } from './virement.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { VirementItemComponent } from './virement-item/virement-item.component';
-import { VirementDetailsComponent } from './virement-details/virement-details.component';
-import { VirementRoutingModule } from './virement-routing.module';
-import { InitierVirementComponent } from './initier-virement/initier-virement.component';
-import { ValiderVirementComponent } from './valider-virement/valider-virement.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
-import { InitierVirementMasseComponent} from './initier-virement-masse/initier-virement-masse.component';
+import { RouterModule } from '@angular/router';
 
+import { VirementComponent } from './virement.component';
+import { VirementItemComponent } from './virement-item/virement-item.component';
+import { VirementDetailsComponent } from './virement-details/virement-details.component';
+
+import { InitierVirementUnitaireAutreBenefComponent } from './initier-virement-unitaire-autre-benef/initier-virement-unitaire-autre-benef.component';
+import { InitierVirementUnitaireMesComptesComponent } from './initier-virement-unitaire-mescomptes/initier-virement-unitaire-mesComptes.component';
+
+import { InitierVirementMasseComponent } from './initier-virement-masse/initier-virement-masse.component';
+import { VirementRoutingModule } from './virement-routing.module';
 import { VirementService } from './virement.service';
 
 @NgModule({
@@ -17,16 +20,16 @@ import { VirementService } from './virement.service';
     VirementComponent,
     VirementItemComponent,
     VirementDetailsComponent,
-    InitierVirementComponent,
-    ValiderVirementComponent,
+    InitierVirementUnitaireAutreBenefComponent,
+    InitierVirementUnitaireMesComptesComponent,
     InitierVirementMasseComponent
-
   ],
   imports: [
     CommonModule,
-    VirementRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule,
+    VirementRoutingModule
   ],
   providers: [VirementService]
 })

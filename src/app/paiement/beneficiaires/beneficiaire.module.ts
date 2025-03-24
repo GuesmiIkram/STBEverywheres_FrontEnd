@@ -6,6 +6,7 @@ import { BeneficiairesComponent } from './beneficiaires.component';
 import { BeneficiaireRoutingModule } from './beneficiaire-routing.module';
 import { AddBeneficiaireComponent } from './add-beneficiaire/add-beneficiaire.component';
 
+import { FormsModule } from '@angular/forms'; // Import FormsModule
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { AddBeneficiaireComponent } from './add-beneficiaire/add-beneficiaire.co
   ],
   imports: [
     CommonModule,
-    BeneficiaireRoutingModule
+    BeneficiaireRoutingModule,
+    FormsModule
   ]
 })
 export class BeneficiaireModule { }

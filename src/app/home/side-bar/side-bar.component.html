@@ -91,33 +91,48 @@
                             <i class="bi bi-circle"></i><span>Demande</span>
                         </a>
                     </li> -->
-                   
+
                 </ul>
             </li><!-- End Forms Nav -->
 
             <li class="nav-item">
-                <a class="nav-link collapsed" (click)="ShowHideCollapse('virements-nav')" data-bs-target="#virements-nav" data-bs-toggle="collapse"  >
-                    <i class="ri-send-plane-fill"></i><span>Virements</span><i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="virements-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-
-                    <li>
-                      <a routerLink="/home/virement/create-virement-masse" routerLinkActive="active" >
-                            <i class="bi bi-circle"></i><span>Initer Virement de masse</span>
-                        </a>
-                    </li>
-                    <li>
-                      <a routerLink="/home/virement/create-virement" routerLinkActive="active" >
-                          <i class="bi bi-circle"></i><span>Initer Virement Unitaire</span>
+              <a class="nav-link collapsed" (click)="ShowHideCollapse('virements-nav')" data-bs-target="#virements-nav" data-bs-toggle="collapse">
+                  <i class="ri-send-plane-fill"></i><span>Virements</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="virements-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                  <li>
+                      <a routerLink="/home/virement/create-virement-masse" routerLinkActive="active">
+                          <i class="bi bi-circle"></i><span>Initier Virement de masse</span>
                       </a>
                   </li>
-                    <li>
-                        <a routerLink="/home/virement/valider-virement" routerLinkActive="active"  >
-                            <i class="bi bi-circle"></i><span>Valider</span>
-                        </a>
-                    </li>
-                </ul>
-            </li><!-- End Forms Nav -->
+
+                  <!-- Initier Virement Unitaire avec sous-menu -->
+                  <li>
+                      <a class="nav-link collapsed" (click)="ShowHideCollapse('virement-unitaire-nav')" data-bs-target="#virement-unitaire-nav" data-bs-toggle="collapse">
+                          <i class="bi bi-circle"></i><span>Initier Virement Unitaire</span><i class="bi bi-chevron-down ms-auto"></i>
+                      </a>
+                      <ul id="virement-unitaire-nav" class="nav-content collapse">
+                          <li>
+                              <a routerLink="/home/virement/virement-unitaire-AutreBeneiciaire" routerLinkActive="active">
+                                  <i class="bi bi-dot"></i><span>Vers d'autres bénéficiaires</span>
+                              </a>
+                          </li>
+                          <li>
+                              <a routerLink="/home/virement/virement-unitaire-mescomptes" routerLinkActive="active">
+                                  <i class="bi bi-dot"></i><span>Vers mes comptes</span>
+                              </a>
+                          </li>
+                      </ul>
+                  </li>
+
+                  <li>
+                      <a routerLink="/home/virement/valider-virement" routerLinkActive="active">
+                          <i class="bi bi-circle"></i><span>Valider</span>
+                      </a>
+                  </li>
+              </ul>
+          </li>
+          <!-- End Forms Nav -->
 
 
             <li class="nav-heading">Pages</li>

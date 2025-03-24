@@ -8,8 +8,9 @@ import { AddBeneficiaireComponent } from './add-beneficiaire/add-beneficiaire.co
 
 const routes: Routes = [
   { path: '', component: BeneficiairesComponent },
-  { path: ':id', component: BeneficiaireDetailsComponent, data: { breadcrumb: { alias: 'Ajouter' } } },
   { path: 'ajouter-beneficiaire', component: AddBeneficiaireComponent, data: { breadcrumb: { alias: 'Details' } } },
+
+  { path: ':id', component: BeneficiaireDetailsComponent, data: { breadcrumb: { alias: 'Ajouter' } } },
 ]
 
 @NgModule({

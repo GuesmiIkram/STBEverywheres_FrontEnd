@@ -4,108 +4,251 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mes Comptes</title>
+
 </head>
-
-<div class="pagetitle">
-  <h1>Consultation Compte</h1>
-  <nav>
-      <ol class="breadcrumb">
+<div>
+  <div class="page-container">
+    <div class="pagetitle">
+      <h1>Consultation Compte</h1>
+      <nav>
+        <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="dashboard.component.html">Home</a></li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
 
-      </ol>
-  </nav>
-</div><!-- End Page Title -->
-<body>
-  <div class="container">
-    <div class="card">
-      <div class="card-header">
-        <h2 class="card-title">Mes Comptes</h2>
-        <div class="btn-container">
-          <button type="button" class="btn-create-account"   (click)="toggleCreateAccountForm()">
-            <i class="bi bi-plus-circle"></i>
-          </button>
-          <span>Ajouter un compte supplémentaire</span>
+    <div class="container">
+      <div class="card main-card">
+        <div class="card-header">
+          <h2 class="card-title">Mes Comptes</h2>
+          <div class="btn-container">
+            <button type="button" class="btn btn-primary btn-add-account" (click)="toggleCreateAccountForm()">
+              <i class="bi bi-plus-circle me-2"></i>
+              Ajouter un compte
+            </button>
+          </div>
         </div>
 
-<!-- Affichage conditionnel du formulaire de création de compte -->
-<div class="form-container" *ngIf="showCreateAccountForm">
-  <h3>Créer un nouveau compte</h3>
-
-  <!-- Sélection du type de compte -->
-  <label for="typeCompte">Type de compte :</label>
-  <select id="typeCompte" [(ngModel)]="compteDto.type">
-    <option value="courant">Compte Courant</option>
-    <option value="epargne"   >Compte Épargne</option>
-    <option value="cheque">Compte Chèque</option>
-  </select>
-
-  <!-- Bouton pour créer le compte -->
-  <button type="button" class="btn-create-account" (click)="createCompte()">
-Ajouter  </button>
-
-  <!-- Message d'erreur -->
-  <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
-</div>
-
-
-
-      </div>
-      <div class="card-content">
-        <form id="deliveryForm">
-          <div class="form-grid">
-            <div class="form-group search-group">
-              <label for="cardNumber">RIB Compte</label>
-              <div class="search-container">
-                <input type="text" id="cardNumber" name="cardNumber" [(ngModel)]="rib" placeholder="Saisir un RIB">
-                <button type="button" class="btn-search" (click)="searchCompteByRib()">Rechercher</button>
+        <!-- Formulaire de recherche -->
+        <div class="card-content">
+          <div class="search-section">
+            <div class="search-container">
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input type="text" class="form-control" [(ngModel)]="rib" placeholder="Saisir un RIB">
+                <button type="button" class="btn btn-search" (click)="searchCompteByRib()">Rechercher</button>
               </div>
+              <div *ngIf="errorMessage" class="alert alert-danger">
+  {{ errorMessage }}
+</div>
             </div>
+          </div>
 
-            <div class="form-row">
-              <!-- Contenu de form-row ici -->
-              <div class="comptes-container">
-                  <div *ngFor="let compte of comptes" class="compte-card" (click)="openModal(compte.rib)">
+          <!-- Affichage conditionnel du formulaire de création de compte -->
+          <div class="form-container"
+          *ngIf="showCreateAccountForm">
+            <div class="create-account-form">
+              <h3>Créer un nouveau compte</h3>
+              <div class="form-group">
+                <label for="typeCompte">Type de compte</label>
+                <select id="typeCompte" class="form-select" [(ngModel)]="compteDto.type">
+                  <option value="courant">Compte Courant</option>
+                  <option value="epargne">Compte Épargne</option>
+                  <option value="cheque">Compte Chèque</option>
+                </select>
+              </div>
+              <div class="form-actions">
+                <button type="button" class="btn btn-secondary" (click)="toggleCreateAccountForm()">Annuler</button>
+                <button type="button" class="btn btn-primary" (click)="createCompte()">Créer le compte</button>
+              </div>
+              <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+            </div>
+          </div>
 
-                  <div class="compte-info">
-                    <h3>{{ compte.type.toUpperCase() }}</h3>
-                    <p>{{ compte.rib.toUpperCase() }}</p>
-                  </div>
-                  <div class="compte-solde">
-                    <span class="solde">{{ compte.solde | number:'1.3-3' }}</span> TND
-                  </div>
-                  <!-- Bouton Clôturer -->
-      <button type="button" class="btn-cloturer" (click)="cloturerCompte(compte.rib);$event.stopPropagation()">Clôturer</button>
+          <!-- Liste des comptes -->
+          <div class="comptes-container">
+            <div *ngFor="let compte of comptes" class="compte-card" (click)="openModal(compte.rib)">
+              <div class="compte-header">
+                <h3>{{ compte.type.toUpperCase() }}</h3>
+                <div class="compte-status" [ngClass]="{'active': compte.statut === 'Actif'}">
+                  {{ compte.statut }}
                 </div>
               </div>
-
-              <!-- Bouton pour ajouter un compte
-              <button class="btn-create-account" >Créer un compte supplémentaire</button> -->
-
-
-            </div> <!-- Ajout de la fermeture de form-row -->
-
-          </div> <!-- Fermeture de form-grid -->
-        </form>
+              <div class="compte-body">
+                <div class="rib-container">
+                  <span class="rib-label">RIB</span>
+                  <span class="rib-value">{{ compte.rib }}</span>
+                </div>
+                <div class="solde-container">
+                  <span class="solde-value">{{ compte.solde | number:'1.3-3' }}</span>
+                  <span class="currency">TND</span>
+                </div>
+              </div>
+              <div class="compte-actions">
+                <button type="button" class="btn btn-outline-primary btn-historique"  (click)="openHistoriqueModal(compte.rib); $event.stopPropagation()">
+                  <i class="bi bi-clock-history"></i> Historique
+                </button>
+                <button type="button" class="btn btn-outline-danger btn-cloturer" (click)="cloturerCompte(compte.rib); $event.stopPropagation()">
+                  <i class="bi bi-x-circle"></i> Clôturer
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
 
-<!-- Modal pour afficher les détails du compte -->
-<div *ngIf="selectedCompte" class="modal">
-  <div class="modal-content">
-    <span class="close" (click)="closeModal()">&times;</span>
-    <h2>Détails du compte</h2>
-    <p><strong>Type :</strong> {{ selectedCompte.type.toUpperCase() }}</p>
-    <p><strong>RIB :</strong> {{ selectedCompte.rib }}</p>
-    <p><strong>Solde :</strong> {{ selectedCompte.solde | number:'1.3-3' }} TND</p>
-    <p>Montant Max Autorisé par Jour : {{ selectedCompte?.montantMaxAutoriseParJour }}</p>
-<p>Nombre d’Opérations Autorisées par Jour : {{ selectedCompte?.nbrOperationsAutoriseesParJour }}</p>
-<p>Date de Création : {{ selectedCompte?.dateCreation | date:'yyyy-MM-dd' }}</p>
 
+  <!-- Modal pour afficher l historique de virement  -->
+
+  <div *ngIf="showHistoriqueModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Historique des virements</h2>
+        <button class="close-button" (click)="closeHistoriqueModal()" aria-label="Fermer">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="filter-buttons">
+          <button type="button" class="btn btn-filter" (click)="filterHistorique('all')">Tous</button>
+          <button type="button" class="btn btn-filter" (click)="filterHistorique('sent')">Virements émis</button>
+          <button type="button" class="btn btn-filter" (click)="filterHistorique('received')">Virements reçus</button>
+        </div>
+
+        <!-- Affichage des erreurs -->
+        <div *ngIf="historiqueErrorMessage" class="alert alert-danger">
+          {{ historiqueErrorMessage }}
+        </div>
+
+        <div *ngIf="historiqueVirements">
+          <!-- Virements émis -->
+          <div *ngIf="filter === 'sent'">
+            <h3 *ngIf="historiqueVirements.virementsEnvoyes.length > 0">Virements émis</h3>
+            <div *ngIf="historiqueVirements.virementsEnvoyes.length === 0" class="no-virements">
+              Aucun virement émis pour ce compte.
+            </div>
+            <div *ngFor="let virement of historiqueVirements.virementsEnvoyes" class="virement-card">
+              <div class="virement-date">{{ virement.date | date:'yyyy-MM-dd' }}</div>
+              <div class="virement-montant">{{ virement.montant }} TND</div>
+              <div class="virement-motif">{{ virement.motif }}</div>
+              <div class="virement-rib">RIB Récepteur: {{ virement.riB_Recepteur }}</div>
+            </div>
+          </div>
+      <!-- Virements reçus -->
+      <div *ngIf="filter === 'received'">
+        <h3 *ngIf="historiqueVirements.virementsRecus.length > 0">Virements reçus</h3>
+        <div *ngIf="historiqueVirements.virementsRecus.length === 0" class="no-virements">
+          Aucun virement reçu pour ce compte.
+        </div>
+        <div *ngFor="let virement of historiqueVirements.virementsRecus" class="virement-card">
+          <div class="virement-date">{{ virement.date | date:'yyyy-MM-dd' }}</div>
+          <div class="virement-montant">{{ virement.montant }} TND</div>
+          <div class="virement-motif">{{ virement.motif }}</div>
+          <div class="virement-rib">RIB Émetteur: {{ virement.riB_Emetteur }}</div>
+        </div>
+      </div>
+
+        <!-- Tous les virements -->
+        <div *ngIf="filter === 'all'">
+          <h3 *ngIf="historiqueVirements.virementsEnvoyes.length > 0"></h3>
+          <div *ngFor="let virement of historiqueVirements.virementsEnvoyes" class="virement-card">
+            <div class="virement-date">{{ virement.date | date:'yyyy-MM-dd' }}</div>
+            <div class="virement-montant">{{ virement.montant }} TND</div>
+            <div class="virement-motif">{{ virement.motif }}</div>
+            <div class="virement-rib">RIB Récepteur: {{ virement.riB_Recepteur }}</div>
+          </div>
+
+          <h3 *ngIf="historiqueVirements.virementsRecus.length > 0"></h3>
+          <div *ngFor="let virement of historiqueVirements.virementsRecus" class="virement-card">
+            <div class="virement-date">{{ virement.date | date:'yyyy-MM-dd' }}</div>
+            <div class="virement-montant">{{ virement.montant }} TND</div>
+            <div class="virement-motif">{{ virement.motif }}</div>
+            <div class="virement-rib">RIB Émetteur: {{ virement.riB_Emetteur }}</div>
+          </div>
+
+          <div *ngIf="historiqueVirements.virementsEnvoyes.length === 0 && historiqueVirements.virementsRecus.length === 0" class="no-virements">
+            Aucun virement trouvé pour ce compte.
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!historiqueVirements && !historiqueErrorMessage" class="no-virements">
+        Aucun virement trouvé.
+      </div>
+    </div>
   </div>
 </div>
 
+</div>
 
-</body>
+
+
+
+  <!-- Modal pour afficher les détails du compte -->
+  <div *ngIf="selectedCompte" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Détails du compte</h2>
+        <button class="close-button" (click)="closeModal()" aria-label="Fermer">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <!-- Informations générales -->
+      <div class="info-card">
+        <h3>Informations générales</h3>
+        <div class="info-table">
+          <div class="info-row">
+            <div class="info-col">
+              <div class="info-label">RIB</div>
+              <div class="info-value">{{ selectedCompte.rib }}</div>
+            </div>
+            <div class="info-col">
+              <div class="info-label">Type</div>
+              <div class="info-value">{{ selectedCompte.type.toUpperCase() }}</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-col">
+              <div class="info-label">Statut</div>
+              <div class="info-value status-active">{{ selectedCompte.statut }}</div>
+            </div>
+            <div class="info-col">
+              <div class="info-label">Date de Création</div>
+              <div class="info-value">{{ selectedCompte.dateCreation | date:'yyyy-MM-dd' }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Informations financières -->
+      <div class="info-card">
+        <h3>Informations financières</h3>
+        <div class="info-table">
+          <div class="info-row">
+            <div class="info-col">
+              <div class="info-label">Solde</div>
+              <div class="info-value solde-value">{{ selectedCompte.solde | number:'1.3-3' }} TND</div>
+            </div>
+            <div class="info-col">
+              <div class="info-label">Montant maximum autorisé par jour</div>
+              <div class="info-value">{{ selectedCompte.montantMaxAutoriseParJour }} TND</div>
+            </div>
+          </div>
+          <div class="info-row">
+            <div class="info-col">
+              <div class="info-label">Nombre d'opérations autorisées par jour</div>
+              <div class="info-value">{{ selectedCompte.nbrOperationsAutoriseesParJour || 'Illimité' }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </html>
+

@@ -7,5 +7,5 @@ export enum NomCarte {
     MastercardGold = 'MastercardGold',
     MastercardWorld = 'MastercardWorld',
     CarteCIB = 'CarteCIB',
-    Epargne='Epargne'
+    Épargne='Épargne'
   }
