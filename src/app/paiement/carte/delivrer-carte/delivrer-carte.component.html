@@ -1,16 +1,16 @@
 <main class="main-content">
     <!-- Breadcrumb -->
     <div class="breadcrumb">
-      <a href="#">Home</a> / 
-      <a href="#">Cartes</a> / 
+      <a href="#">Home</a> /
+      <a href="#">Cartes</a> /
       <span>Demande Carte</span>
     </div>
-  
+
     <!-- Form Content -->
     <form (ngSubmit)="onSubmit()" class="transfer-form">
       <div class="form-section">
         <h3 class="section-header">Demande de Carte</h3>
-  
+
         <div class="form-group">
           <label for="typePaiement">Type de Carte <span class="required">*</span></label>
           <select id="typePaiement" [(ngModel)]="isPostpayee" name="typePaiement" (change)="onTypeCarteChange()" required>
@@ -18,44 +18,44 @@
             <option [ngValue]="false">Prépayée</option>
           </select>
         </div>
-  
+
         <div class="form-group" *ngIf="isPostpayee">
           <label for="numCompte">Numéro de Compte <span class="required">*</span></label>
-          <input type="text" id="numCompte" [(ngModel)]="demandeCarteDTO.numCompte" name="numCompte" required>
+          <input type="text" id="numCompte" [(ngModel)]="demandeCarteDTO.NumCompte" name="numCompte" required>
         </div>
-  
+
         <div class="form-group">
           <label for="nomCarte">Nom de la Carte <span class="required">*</span></label>
-          <select id="nomCarte" [(ngModel)]="demandeCarteDTO.nomCarte" name="nomCarte" required>
+          <select id="nomCarte" [(ngModel)]="demandeCarteDTO.NomCarte" name="nomCarte" required>
             <option value="" disabled selected>Sélectionner un type de carte</option>
             <option *ngFor="let nom of nomCarteOptions" [value]="nom">{{ nom }}</option>
           </select>
         </div>
-  
+
         <div class="form-group">
           <label for="typeCarte">Type de Carte <span class="required">*</span></label>
-          <select id="typeCarte" [(ngModel)]="demandeCarteDTO.typeCarte" name="typeCarte" required>
+          <select id="typeCarte" [(ngModel)]="demandeCarteDTO.TypeCarte" name="typeCarte" required>
             <option value="" disabled selected>Sélectionner un type</option>
             <option *ngFor="let type of typeCarteOptions" [value]="type">{{ type }}</option>
           </select>
         </div>
-  
+
         <div class="form-group">
           <label for="cin">CIN <span class="required">*</span></label>
-          <input type="text" id="cin" [(ngModel)]="demandeCarteDTO.cin" name="cin" required>
+          <input type="text" id="cin" [(ngModel)]="demandeCarteDTO.CIN" name="cin" required>
         </div>
-  
+
         <div class="form-group">
           <label for="email">Email <span class="required">*</span></label>
-          <input type="email" id="email" [(ngModel)]="demandeCarteDTO.email" name="email" required>
+          <input type="email" id="email" [(ngModel)]="demandeCarteDTO.Email" name="email" required>
         </div>
-  
+
         <div class="form-group">
           <label for="numTel">Numéro de Téléphone <span class="required">*</span></label>
-          <input type="text" id="numTel" [(ngModel)]="demandeCarteDTO.numTel" name="numTel" required>
+          <input type="text" id="numTel" [(ngModel)]="demandeCarteDTO.NumTel" name="numTel" required>
         </div>
       </div>
-  
+
       <div class="form-actions">
         <button type="submit" class="btn-submit">Demander une Carte</button>
       </div>

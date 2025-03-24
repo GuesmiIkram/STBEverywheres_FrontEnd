@@ -8,8 +8,8 @@ import { Client } from '../Models/Client';
   providedIn: 'root',
 })
 export class ClientService {
-  private apiUrl = 'http://localhost:5260/api/client'; // URL du backend
-
+  //private apiUrl = 'http://localhost:5260/api/client'; // URL du backend
+  private apiUrl ='http://localhost:5260/api/client';
   constructor(private http: HttpClient) {}
 
   // Récupérer les infos du client

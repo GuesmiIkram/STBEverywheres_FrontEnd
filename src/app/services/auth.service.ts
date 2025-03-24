@@ -7,8 +7,8 @@ import { Observable, catchError, throwError, tap, map, of } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:5260/api/Auth';
-
+  //private apiUrl = 'http://localhost:5260/api/Auth';
+private apiUrl ='http://localhost:5000/api/auth';
   constructor(
     private http: HttpClient,
     private router: Router
@@ -35,10 +35,10 @@ export class AuthService {
       }),
       catchError((error) => {
         console.error('Erreur lors de l\'inscription :', error);
-  
+
         // Extraire le message d'erreur du backend
         const errorMessage = error.error?.message || 'Erreur lors de l\'inscription';
-  
+
         // Renvoyer l'erreur avec le message du backend
         return throwError(() => ({ message: errorMessage }));
       })
@@ -47,7 +47,7 @@ export class AuthService {
   changePassword(currentPassword: string, newPassword: string, confirmNewPassword: string): Observable<any> {
     const changePasswordData = { currentPassword, newPassword, confirmNewPassword };
     return this.http.post(`${this.apiUrl}/change-password`, changePasswordData, {
-      withCredentials: true 
+      withCredentials: true
     }).pipe(
       tap(() => {
         console.log('Mot de passe changé avec succès.');
@@ -88,16 +88,16 @@ export class AuthService {
       })
     );
   }
-  
-  
 
- 
+
+
+
   isLoggedIn(): Observable<boolean> {
     const accessToken = localStorage.getItem('AccessToken');
-    return of(!!accessToken); 
+    return of(!!accessToken);
   }
 
-  
+
   logout(): void {
     localStorage.removeItem('AccessToken');
     localStorage.removeItem('RefreshToken');

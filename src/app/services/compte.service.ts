@@ -13,8 +13,8 @@ export class CompteService {
 
   private http = inject(HttpClient);
   //private apiUrl =environment.apiURL+'/api/CompteApi';
-  private apiUrl = 'http://localhost:5185/api/CompteApi'; // URL du backend
-
+  //private apiUrl = 'http://localhost:5185/api/CompteApi'; // URL du backend
+  private apiUrl = 'http://localhost:5000/api/compte';
   /*public getComptesByCin(): Observable<Compte[]> {
     const token = localStorage.getItem('token'); // Récupérer le token stocké
     const headers = new HttpHeaders({
@@ -44,5 +44,7 @@ export class CompteService {
   cloturerCompte(rib: string): Observable<any> {
     return this.http.put(`${this.apiUrl}/Cloturer/${rib}`, {});
   }
+
+
 
 }

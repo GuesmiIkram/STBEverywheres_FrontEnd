@@ -10,8 +10,10 @@ import { throwError } from 'rxjs';
 })
 export class VirementService {
 
-  private apiUrl = 'http://localhost:5185/api/VirementApi';
-  private apiCompteUrl = 'http://localhost:5185/api/CompteApi';
+  //private apiUrl = 'http://localhost:5185/api/VirementApi';
+  private apiUrl ='http://localhost:5000/api/virement';
+  //private apiCompteUrl = 'http://localhost:5185/api/CompteApi';
+  private apiCompteUrl = 'http://localhost:5000/api/compte';
 
   constructor(private http: HttpClient) { }
 
@@ -41,6 +43,12 @@ export class VirementService {
 
     return this.http.post(`${this.apiUrl}/VirementDeMasse`, formData);
 
+    }
+
+
+    getHistoriqueVirements(rib: string, filter: string) {
+
+      return this.http.get(`${this.apiUrl}/historiqueVirements/${rib}?filter=${filter}`);
     }
 
 }
