@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { VirementComponent } from './virement.component';
-import { InitierVirementUnitaireMesComptesComponent } from './initier-virement-unitaire-mescomptes/initier-virement-unitaire-mesComptes.component';
+import { InitierVirementUnitaireMesComptesComponent } from './initier-virement-unitaire-mescomptes/initier-virement-unitaire-mescomptes.component';
 import { InitierVirementUnitaireAutreBenefComponent } from './initier-virement-unitaire-autre-benef/initier-virement-unitaire-autre-benef.component';
 import { InitierVirementMasseComponent } from './initier-virement-masse/initier-virement-masse.component';
 import { VirementDetailsComponent } from './virement-details/virement-details.component';
