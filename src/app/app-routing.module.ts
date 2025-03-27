@@ -1,17 +1,22 @@
 import { HomeComponent } from './home/home.component';
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+
 import { LoginComponent } from './resgiter/login/login.component';
 import { UserComponent } from './user/user.component';
 import { VirementComponent } from './paiement/virement/virement.component';
 
 
 import { AccueilComponent } from './accueil/accueil.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+
+import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {path:'', component: LoginComponent, data: {breadcrumb: 'Login'}},
 
  {path:'accueil', component: AccueilComponent },
+ { path: 'reset-password', component: ResetPasswordComponent },
+
   {path:'home', loadChildren:()=> import('./home/home.module').then(mod => mod.HomeModule), data: {breadcrumb: 'Home'} },
   // {path:'test-error', component: TestErrorComponent, data: {breadcrumb: 'Test  Errors'}},
   // {path:'server-error', component: ServerErrorComponent, data: {breadcrumb: 'Server  Errors'}},

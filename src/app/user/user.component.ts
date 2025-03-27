@@ -222,7 +222,7 @@ export class UserComponent implements OnInit {
     }
   }
 
-  onChangePassword() {
+ /* onChangePassword() {
     // Vérifier que les nouveaux mots de passe correspondent
     if (this.changePasswordData.newPassword !== this.changePasswordData.confirmNewPassword) {
       alert('Les nouveaux mots de passe ne correspondent pas.');
@@ -242,5 +242,5 @@ export class UserComponent implements OnInit {
         console.error('Erreur lors du changement de mot de passe', err);
         alert('Une erreur s\'est produite lors du changement de mot de passe.');
       }
-    });}
+    });}*/
 }
