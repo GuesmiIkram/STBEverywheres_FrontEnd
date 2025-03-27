@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InitierVirementUnitaireMesComptesComponent } from './initier-virement-unitaire-mesComptes.component';
+import { InitierVirementUnitaireMesComptesComponent } from './initier-virement-unitaire-mescomptes.component';
 
 describe('InitierVirementUnitaireMesComptesComponent', () => {
   let component: InitierVirementUnitaireMesComptesComponent;

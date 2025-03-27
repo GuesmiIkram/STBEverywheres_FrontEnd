@@ -1,6 +1,7 @@
+// add-beneficiaire.component.ts
 import { Component, OnInit } from '@angular/core';
-import { BeneficiaireService } from 'src/app/services/beneficiaire.service'; // Importez le service
-import Swal from 'sweetalert2'; // Importez SweetAlert2
+import { BeneficiaireService } from 'src/app/services/beneficiaire.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-add-beneficiaire',
@@ -8,35 +9,51 @@ import Swal from 'sweetalert2'; // Importez SweetAlert2
   styleUrls: ['./add-beneficiaire.component.scss']
 })
 export class AddBeneficiaireComponent implements OnInit {
-  /*beneficiaryType: string = 'PersonnePhisique'; // Type de bénéficiaire par défaut
+  beneficiaryType: string = 'PersonnePhisique'; // Correction de l'orthographe
   Nom: string = '';
   Prenom: string = '';
   RaisonSociale: string = '';
   Email: string = '';
   Telephone: string = '';
-  RibCompte: string = '';*/
+  RibCompte: string = '';
 
-  constructor(private beneficiaireService: BeneficiaireService) { } // Injectez le service
-
-  ngOnInit(): void {
+  constructor(private beneficiaireService: BeneficiaireService) {
+    console.log('AddBeneficiaireComponent - Constructeur appelé');
   }
 
-  /*onSubmit(): void {
-    // Validation des champs obligatoires
-    if (this.beneficiaryType === 'PersonnePhysique' && (!this.Nom || !this.Prenom)) {
-      Swal.fire('Erreur', 'Veuillez remplir les champs Nom et Prénom.', 'error'); // SweetAlert2 pour l'erreur
+  ngOnInit(): void {
+    console.log('AddBeneficiaireComponent - ngOnInit appelé');
+  }
+
+  onSubmit(): void {
+    console.log('AddBeneficiaireComponent - onSubmit appelé');
+    console.log('Type de bénéficiaire:', this.beneficiaryType);
+    console.log('Valeurs du formulaire:', {
+      Nom: this.Nom,
+      Prenom: this.Prenom,
+      RaisonSociale: this.RaisonSociale,
+      Email: this.Email,
+      Telephone: this.Telephone,
+      RibCompte: this.RibCompte
+    });
+
+    // Correction de l'orthographe ici aussi
+    if (this.beneficiaryType === 'PersonnePhisique' && (!this.Nom || !this.Prenom)) {
+      console.error('Erreur de validation: Nom et Prénom requis pour PersonnePhisique');
+      Swal.fire('Erreur', 'Veuillez remplir les champs Nom et Prénom.', 'error');
       return;
     }
     if (this.beneficiaryType === 'PersonneMorale' && !this.RaisonSociale) {
-      Swal.fire('Erreur', 'Veuillez remplir le champ Raison sociale.', 'error'); // SweetAlert2 pour l'erreur
+      console.error('Erreur de validation: RaisonSociale requise pour PersonneMorale');
+      Swal.fire('Erreur', 'Veuillez remplir le champ Raison sociale.', 'error');
       return;
     }
     if (!this.RibCompte) {
-      Swal.fire('Erreur', 'Veuillez remplir le champ RIB.', 'error'); // SweetAlert2 pour l'erreur
+      console.error('Erreur de validation: RIB requis');
+      Swal.fire('Erreur', 'Veuillez remplir le champ RIB.', 'error');
       return;
     }
 
-    // Préparer les données à envoyer
     const data = {
       Type: this.beneficiaryType,
       Nom: this.Nom,
@@ -44,32 +61,46 @@ export class AddBeneficiaireComponent implements OnInit {
       RaisonSociale: this.RaisonSociale,
       Email: this.Email,
       Telephone: this.Telephone,
-      RibCompte: this.RibCompte,
+      RIBCompte: this.RibCompte, // Attention à la casse, doit correspondre au DTO
     };
-    console.log('donnee',data);
-    // Envoyer les données au serveur
+
+    console.log('Données à envoyer au service:', data);
+
     this.beneficiaireService.CreateBeneficiaire(data).subscribe(
       (response) => {
-        // Succès : afficher une alerte SweetAlert2
+        console.log('Réponse du service:', response);
         Swal.fire('Succès', 'Bénéficiaire ajouté avec succès !', 'success');
-        // Réinitialiser le formulaire après succès
         this.resetForm();
       },
       (error) => {
-        // Erreur : afficher une alerte SweetAlert2
+        console.error('Erreur lors de l\'appel au service:', error);
+        console.error('Détails de l\'erreur:', {
+          status: error.status,
+          message: error.message,
+          error: error.error
+        });
         Swal.fire('Erreur', 'Une erreur est survenue lors de l\'ajout du bénéficiaire.', 'error');
       }
     );
   }
 
-  // Méthode pour réinitialiser le formulaire
   resetForm(): void {
-    this.beneficiaryType = 'personne-physique';
+    console.log('Réinitialisation du formulaire');
+    this.beneficiaryType = 'PersonnePhisique'; // Correction ici aussi
     this.Nom = '';
     this.Prenom = '';
     this.RaisonSociale = '';
     this.Email = '';
     this.Telephone = '';
     this.RibCompte = '';
-  }*/
+    console.log('Formulaire réinitialisé:', {
+      beneficiaryType: this.beneficiaryType,
+      Nom: this.Nom,
+      Prenom: this.Prenom,
+      RaisonSociale: this.RaisonSociale,
+      Email: this.Email,
+      Telephone: this.Telephone,
+      RibCompte: this.RibCompte
+    });
+  }
 }

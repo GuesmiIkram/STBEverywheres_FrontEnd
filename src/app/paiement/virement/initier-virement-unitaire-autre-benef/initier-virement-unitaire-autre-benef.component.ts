@@ -14,6 +14,7 @@ export class InitierVirementUnitaireAutreBenefComponent implements OnInit {
   comptes: Compte[] = [];
   virementForm: FormGroup;
   soldeCompteSelectionne: number | null = null; // stocker le solde de compte emetteur
+  beneficiaireType: string = 'new';  // Valeur par défaut
   constructor(private virementService: VirementService, private fb: FormBuilder) {
     this.virementForm = this.fb.group({
       compteEmetteur: ['', Validators.required],

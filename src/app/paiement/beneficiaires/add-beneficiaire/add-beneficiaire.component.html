@@ -1,4 +1,4 @@
-<!--  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
@@ -24,9 +24,9 @@
                 <option value="personne-physique">Personne physique</option>
                 <option value="personne-morale">Personne morale</option>
               </select>
-            </div> -->
+            </div>
 
-            <!-- Champs pour Personne Physique
+            <!-- Champs pour Personne Physique -->
             <div *ngIf="beneficiaryType === 'personne-physique'">
               <div class="form-group">
                 <label for="nom" class="form-label required">Nom</label>
@@ -37,9 +37,9 @@
                 <label for="prenom" class="form-label required">Prénom</label>
                 <input type="text" id="Prenom" class="form-control" [(ngModel)]="Prenom" name="prenom" required>
               </div>
-            </div>-->
+            </div>
 
-            <!-- Champ pour Personne Morale
+            <!-- Champ pour Personne Morale -->
             <div *ngIf="beneficiaryType === 'personne-morale'">
               <div class="form-group">
                 <label for="raison-sociale" class="form-label required">Raison sociale</label>
@@ -84,4 +84,4 @@
     </div>
 </body>
 </html>
--->
+
