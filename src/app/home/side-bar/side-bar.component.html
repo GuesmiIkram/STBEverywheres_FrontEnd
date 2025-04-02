@@ -21,20 +21,28 @@
                 </a>
                 <ul id="beneficiaire-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
-                        <a routerLink="/home/beneficiaire"  routerLinkActive="active"   [routerLinkActiveOptions]="{exact: true}">
+                        <a routerLink="/home"  routerLinkActive="active"   [routerLinkActiveOptions]="{exact: true}">
                             <i class="bi bi-circle"></i><span>RIB/IBAN</span>
                         </a>
                     </li>
                     <li>
+
+                        <a routerLink="/home"  routerLinkActive="active"   [routerLinkActiveOptions]="{exact: true}" >
+
                         <a routerLink="/home/TF"  routerLinkActive="active"   [routerLinkActiveOptions]="{exact: true}">
                             <i class="bi bi-circle"></i><span>Compte TF Banque</span>
                         </a>
                     </li>
                     <li>
                         <a routerLink="/home/beneficiaire/ajouter-beneficiaire"  routerLinkActive="active" >
-                            <i class="bi bi-circle"></i><span>Extrait du compte</span>
+              <i class="bi bi-circle"></i><span>Extrait du compte</span>
                         </a>
                     </li>
+                    <li>
+                      <a routerLink="/home/decouvert/"  routerLinkActive="active"   [routerLinkActiveOptions]="{exact: true}" >
+                          <i class="bi bi-circle"></i><span>Découvert Autorisé</span>
+                      </a>
+                  </li>
                     <!-- End banque Page Nav -->
   </ul>
 

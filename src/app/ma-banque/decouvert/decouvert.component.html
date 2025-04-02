@@ -1,0 +1,125 @@
+<div class="container">
+  <!-- Onglets de navigation -->
+  <h2 class="form-title">Découvert autorisé</h2>
+  <div class="tabs">
+    <button [class.active]="activeTab === 'demande'" (click)="changeTab('demande')">
+      Initiation demande modification Découvert
+    </button>
+    <button [class.active]="activeTab === 'suivi'" (click)="changeTab('suivi')">
+      Suivi demandes de modification découvert
+    </button>
+  </div>
+
+  <!-- Messages d'erreur/succès -->
+  <div *ngIf="errorMessage" class="alert error-message">
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <div *ngIf="successMessage" class="alert success-message">
+    <p>{{ successMessage }}</p>
+  </div>
+
+  <!-- Formulaire de demande -->
+  <div *ngIf="activeTab === 'demande'" class="tab-content">
+    <h2>Demande de modification de découvert</h2>
+
+    <form [formGroup]="demandeForm" class="demande-form">
+      <!-- Sélection du compte -->
+      <div class="form-group">
+        <label for="rib">Sélectionnez un compte :</label>
+        <select id="rib" formControlName="rib" (change)="onCompteSelected()">
+          <option value="">-- Sélectionnez un compte --</option>
+          <option *ngFor="let compte of comptes" [value]="compte.rib">
+            {{ compte.type }} - {{ compte.rib }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Affichage du découvert actuel -->
+      <div class="current-overdraft form-group">
+        <h3 *ngIf="decouvertAutorise !== null">
+          Découvert autorisé actuel : {{ decouvertAutorise }} TND
+        </h3>
+      </div>
+
+      <!-- Champ pour le nouveau montant -->
+      <div class="form-group">
+        <label for="montantDemande">Nouveau montant de découvert souhaité:</label>
+        <input
+          type="number"
+          id="montantDemande"
+          formControlName="montantDemande"
+          placeholder="Entrez le montant en TND"
+          (input)="onMontantInputChange()"
+          required>
+      </div>
+
+      <!-- Slider pour sélectionner le montant -->
+       <!--  [max]="1000000"Grande valeur pour simuler lillimité -->
+      <div class="form-group">
+        <label for="montantSlider">Sélectionner le montant :</label>
+        <input
+          type="range"
+          id="montantSlider"
+          [min]="0"
+          [max]="1000000"
+          [step]="50"
+          [value]="demandeForm.get('montantDemande')?.value || 0"
+          (input)="onSliderChange($event)">
+        <span>{{ demandeForm.get('montantDemande')?.value || 0 }} TND</span>
+      </div>
+
+      <!-- Message d'alerte si le montant choisi est égal au découvert actuel -->
+<div *ngIf="alertSameAmount" class="alert error-message">
+  <p>{{ alertSymbol }} Ce montant correspond à votre découvert autorisé actuel.</p>
+</div>
+
+
+      <!-- Bouton de soumission -->
+      <div class="form-group">
+        <button
+          type="button"
+          class="submit-btn"
+          (click)="demandeModificationDecouvert()"
+          [disabled]="!demandeForm.valid">
+          Envoyer la demande
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- Suivi des demandes -->
+<div *ngIf="activeTab === 'suivi'" class="tab-content">
+  <h2>Suivi des demandes de modification</h2>
+
+  <div *ngIf="demandes.length === 0" class="no-demands">
+    <p>Aucune demande trouvée.</p>
+  </div>
+
+  <div *ngIf="demandesParMois.length > 0" class="demands-container">
+    <div *ngFor="let group of demandesParMois" class="demande-group">
+      <h3>{{ group.mois | titlecase }} {{ group.annee }}</h3>
+      <ul>
+        <li *ngFor="let demande of group.demandes" class="demande-item">
+          <div class="demande-card">
+            <div class="demande-header">
+              <span class="date">{{ demande.dateDemande | date:'dd' }}</span>
+              <span class="mois">{{ demande.dateDemande | date:'MMM' | uppercase }}</span>
+            </div>
+            <div class="demande-content">
+              <h4>RIB : {{ demande.ribCompte }}</h4>
+              <p class="montant">Découvert demandé : {{ demande.decouvertDemande }} TND</p>
+              <!-- <p class="demande-date">Date de demande : {{ demande.dateDemande | date:'dd/MM/yyyy' }}</p> -->
+            </div>
+            <span class="statut {{getStatusClass(demande.statutDemande)}}">
+              {{getFormattedStatus(demande.statutDemande)}}
+            </span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+  </div>
+

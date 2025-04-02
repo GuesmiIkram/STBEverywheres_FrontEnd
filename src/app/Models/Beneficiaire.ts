@@ -1,12 +1,11 @@
 import { Client } from "./Client";
 
 export interface Beneficiaire {
-  RibCompte: string;
-  Prenom: string;
-  client: Client | null;
-  Nom: string;
-Email: string;
-Telephone: string;
-Type: string;
-
+  id?: number; // Généré côté serveur
+  ribCompte: string; // Obligatoire
+  prenom: string; // Obligatoire
+  nom: string; // Obligatoire
+  Email?: string | null; // Optionnel
+  Telephone?: string | null; // Optionnel
+  client?: Client | null; // Optionnel
 }

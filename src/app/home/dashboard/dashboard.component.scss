@@ -559,6 +559,7 @@ body {
 }
 .modal {
   position: fixed;
+  display: flex;
   z-index: 1050;
   left: 0;
   top: 0;
@@ -567,7 +568,6 @@ body {
   overflow: auto;
   /*
   background-color: rgba(0, 0, 0, 0.5); */
-  display: flex;
   align-items: center;
   justify-content: center;
 }
@@ -575,22 +575,11 @@ body {
   max-height: 60vh; /* Limite la hauteur à 60% de la hauteur de la vue */
   overflow-y: auto; /* Active le défilement vertical */
   padding: 16px; /* Ajoute un peu d'espace intérieur */
+  flex-grow: 1;
+
 }
 /* Modal */
-.modal {
-  position: fixed;
-  z-index: 1050;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  /*
-  background-color: rgba(0, 0, 0, 0.5); */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+
 
 .modal-content {
   /*
@@ -602,6 +591,8 @@ body {
   position: relative;
   animation: modalFadeIn 0.3s ease-out;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 @keyframes modalFadeIn {
@@ -616,7 +607,9 @@ body {
 }
 
 .modal-header {
-  display: flex;
+  //display: flex;
+  position: sticky;
+  top: 0;
   justify-content: space-between;
   align-items: center;
   padding: 20px 25px;
@@ -626,6 +619,8 @@ body {
 
 .modal-header h2 {
   margin: 0;
+  position: sticky;
+  top: 0;
   color: #012970;
   font-size: 20px;
   font-weight: 600;

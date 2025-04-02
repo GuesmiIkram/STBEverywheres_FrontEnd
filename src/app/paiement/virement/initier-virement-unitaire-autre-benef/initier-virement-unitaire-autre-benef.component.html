@@ -23,19 +23,19 @@
                         <h3 class="section-title">(Donneur d'ordre)</h3>
 
                         <div class="form-row">
-                          <div class="form-group">
-                            <label for="compte">Choisir un compte <span class="required">*</span></label>
-                            <select id="compte" class="form-control" formControlName="compteEmetteur" required>
-                              <option value="">Sélectionner un compte</option>
-                              <option *ngFor="let compte of comptes" [value]="compte.rib">
-                                {{ compte.type }} - {{ compte.rib }}
-                              </option>
-                            </select>
-                             <!-- Afficher le solde du compte sélectionné -->
-                            <div *ngIf="soldeCompteSelectionne !== null" class="solde-compte">
-                              <strong>Solde disponible :</strong> {{ soldeCompteSelectionne }} TND
+                            <div class="form-group">
+                                <label for="compte">Choisir un compte <span class="required">*</span></label>
+                                <select id="compte" class="form-control" formControlName="compteEmetteur" required>
+                                    <option value="">Sélectionner un compte</option>
+                                    <option *ngFor="let compte of comptes" [value]="compte.rib">
+                                        {{ compte.type }} - {{ compte.rib }}
+                                    </option>
+                                </select>
+                                <!-- Afficher le solde du compte sélectionné -->
+                                <div *ngIf="soldeCompteSelectionne !== null" class="solde-compte">
+                                    <strong>Solde disponible :</strong> {{ soldeCompteSelectionne }} TND
+                                </div>
                             </div>
-                          </div>
                         </div>
 
                         <div class="form-row">
@@ -50,8 +50,8 @@
                         </div>
 
                         <div>
-                          <label for="description">Description <span class="required">*</span></label>
-                          <input type="text" id="description" formControlName="description" class="form-control" required>
+                            <label for="description">Description <span class="required">*</span></label>
+                            <input type="text" id="description" formControlName="description" class="form-control" required>
                         </div>
                     </div>
 
@@ -59,36 +59,22 @@
                     <div class="form-section">
                         <h3 class="section-title">(Bénéficiaire)</h3>
 
-                        <!-- Ajout des checkbox pour le choix du type de bénéficiaire -->
                         <div class="form-row">
-                          <div class="form-group">
-                              <label class="checkbox-container">
-                                  <input type="radio" name="beneficiaireType" [(ngModel)]="beneficiaireType" value="exist" [ngModelOptions]="{standalone: true}">
-                                  Bénéficiaire existant
-                              </label>
-                              <label class="checkbox-container">
-                                  <input type="radio" name="beneficiaireType" [(ngModel)]="beneficiaireType" value="new" checked [ngModelOptions]="{standalone: true}">
-                                  Nouveau bénéficiaire
-                              </label>
-                          </div>
-                        </div>
+                            <div class="form-group">
+                                <label for="beneficiaire">Choisir un bénéficiaire <span class="required">*</span></label>
+                                <select id="beneficiaire" class="form-control" formControlName="idBeneficiaire" required>
+                                    <option value="">Sélectionner un bénéficiaire</option>
+                                    <option *ngFor="let beneficiaire of beneficiaires" [value]="beneficiaire.id">
+                                        {{ beneficiaire.nom }} {{ beneficiaire.prenom }} - {{ beneficiaire.ribCompte }}
+                                    </option>
+                                </select>
+                                <div class="ajouter-beneficiaire-container">
+                                  <button type="button" class="ajouter-beneficiaire" (click)="openAddBeneficiaireModal()">
+                                      <span class="plus-icon"></span> Ajouter un bénéficiaire
+                                  </button>
+                              </div>
 
-                        <!-- Afficher "hello" pour bénéficiaire existant -->
-                        <div *ngIf="beneficiaireType === 'exist'">
-                            hello
-                        </div>
 
-                        <!-- Afficher les champs pour nouveau bénéficiaire -->
-                        <div *ngIf="beneficiaireType === 'new'">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="nom-beneficiaire">Nom & prénom <span class="required">*</span></label>
-                                    <input type="text" id="nom-beneficiaire" formControlName="nomBeneficiaire" class="form-control" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="rib-beneficiaire">RIB Bénéficiaire <span class="required">*</span></label>
-                                    <input type="text" id="rib-beneficiaire" formControlName="ribBeneficiaire" class="form-control" required>
-                                </div>
                             </div>
                         </div>
                     </div>

@@ -1,9 +1,96 @@
-<!-- Formulaire de téléchargement du fichier -->
-<form [formGroup]="virementForm" (ngSubmit)="onSubmit()">
-  <div class="form-group">
-    <label for="file">Télécharger le fichier de virement en masse :</label>
-    <input type="file" id="file" formControlName="fichier" (change)="onFileChange($event)" required />
-  </div>
 
-  <button type="submit" class="btn btn-primary">Envoyer</button>
-</form>
+<!-- Formulaire de virement en masse -->
+<div *ngIf="methodeVirement === 'form'">
+  <form [formGroup]="virementForm" (ngSubmit)="onSubmit()">
+    <h2 class="form-title">Initiation virement de masse</h2>
+    <!-- Choix de la méthode -->
+<div>
+  <label>
+    <input type="radio" name="methodeVirement" value="form" [(ngModel)]="methodeVirement" (change)="onMethodChange('form')" />
+    Virement par formulaire
+  </label>
+
+  <label>
+    <input type="radio" name="methodeVirement" value="file" [(ngModel)]="methodeVirement" (change)="onMethodChange('file')" />
+    Virement par fichier
+  </label>
+</div>
+
+    <div>
+      <label for="ribEmetteur">RIB Émetteur:</label>
+      <select formControlName="ribEmetteur" required>
+        <option *ngFor="let compte of comptes" [value]="compte.rib">
+          {{ compte.rib }} - {{ compte.type }}
+        </option>
+      </select>
+
+      <!-- Afficher le solde du compte sélectionné -->
+      <div *ngIf="soldeCompteSelectionne !== null" class="solde-compte">
+        <strong>Solde disponible :</strong> {{ soldeCompteSelectionne }} TND
+      </div>
+    </div>
+
+    <div>
+      <label for="motif">Motif:</label>
+      <input type="text" formControlName="motif" required />
+    </div>
+
+    <div>
+      <label for="description">Description:</label>
+      <input type="text" formControlName="description" required />
+    </div>
+
+    <div formArrayName="beneficiaires">
+      <div *ngFor="let benef of beneficiairesFormArray.controls; let i = index" [formGroupName]="i">
+        <label>Bénéficiaire {{ i + 1 }}</label>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="beneficiaire">Choisir un bénéficiaire <span class="required">*</span></label>
+            <select formControlName="idBeneficiaire" class="form-control" required>
+              <option value="">Sélectionner un bénéficiaire</option>
+              <option *ngFor="let beneficiaire of beneficiaires" [value]="beneficiaire.id">
+                {{ beneficiaire.nom }} {{ beneficiaire.prenom }} - {{ beneficiaire.ribCompte }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="ajouter-beneficiaire-container">
+          <button type="button" class="ajouter-beneficiaire" (click)="openAddBeneficiaireModal()">
+              <span class="plus-icon"></span> Ajouter un bénéficiaire
+          </button>
+      </div>
+        <input type="number" formControlName="montant" placeholder="Montant" required />
+
+        <!-- Bouton "− Supprimer" (Désactivé si un seul bénéficiaire) -->
+        <button type="button" (click)="supprimerBeneficiaire(i)" *ngIf="beneficiairesFormArray.length > 1">− Supprimer</button>
+      </div>
+    </div>
+
+    <button type="button" (click)="ajouterBeneficiaire()">+ Ajouter un bénéficiaire</button>
+
+    <button type="submit">Envoyer le virement</button>
+  </form>
+</div>
+
+<!-- Téléversement de fichier -->
+<div *ngIf="methodeVirement === 'file'">
+  <form (ngSubmit)="onSubmit()">
+    <h2 class="form-title">Initiation virement de masse</h2>
+    <!-- Choix de la méthode -->
+<div>
+  <label>
+    <input type="radio" name="methodeVirement" value="form" [(ngModel)]="methodeVirement" (change)="onMethodChange('form')" />
+    Virement par formulaire
+  </label>
+
+  <label>
+    <input type="radio" name="methodeVirement" value="file" [(ngModel)]="methodeVirement" (change)="onMethodChange('file')" />
+    Virement par fichier
+  </label>
+</div>
+    <label for="file">Sélectionner un fichier :</label>
+    <input type="file" (change)="onFileChange($event)" required />
+
+    <button type="submit">Envoyer le fichier</button>
+  </form>
+</div>

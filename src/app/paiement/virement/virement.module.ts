@@ -15,6 +15,9 @@ import { InitierVirementUnitaireMesComptesComponent } from './initier-virement-u
 import { InitierVirementMasseComponent } from './initier-virement-masse/initier-virement-masse.component';
 import { VirementRoutingModule } from './virement-routing.module';
 import { VirementService } from './virement.service';
+//import { BeneficiaireService } from './beneficiaire.service';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 
 @NgModule({
   declarations: [
@@ -31,6 +34,7 @@ import { VirementService } from './virement.service';
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
+    NgbModule,
     VirementRoutingModule
   ],
   providers: [VirementService]

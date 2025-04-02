@@ -188,14 +188,37 @@
 
 
 
-  <!-- Modal pour afficher les détails du compte -->
-  <div *ngIf="selectedCompte" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Détails du compte</h2>
-        <button class="close-button" (click)="closeModal()" aria-label="Fermer">
-          <i class="bi bi-x-lg"></i>
-        </button>
+
+  <!-- Modal pour afficher les détails du compte - Version corrigée -->
+<div *ngIf="selectedCompte" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Détails du compte</h2>
+      <button class="close-button" (click)="closeModal()" aria-label="Fermer">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Identité Bancaire -->
+      <div class="info-card">
+        <h3>Identité Bancaire</h3>
+        <div class="info-table">
+          <div class="info-row">
+            <div class="info-col">
+              <div class="info-label">RIB</div>
+              <div class="info-value">{{ selectedCompte.rib }}</div>
+            </div>
+            <div class="info-col">
+              <div class="info-label">IBAN</div>
+              <div class="info-value">{{ selectedCompte.iban }}</div>
+            </div>
+            <div class="info-col">
+              <div class="info-label">BIC</div>
+              <div class="info-value">STBKTNTT</div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Informations générales -->
@@ -204,19 +227,15 @@
         <div class="info-table">
           <div class="info-row">
             <div class="info-col">
-              <div class="info-label">RIB</div>
-              <div class="info-value">{{ selectedCompte.rib }}</div>
-            </div>
-            <div class="info-col">
               <div class="info-label">Type</div>
               <div class="info-value">{{ selectedCompte.type.toUpperCase() }}</div>
             </div>
-          </div>
-          <div class="info-row">
             <div class="info-col">
               <div class="info-label">Statut</div>
               <div class="info-value status-active">{{ selectedCompte.statut }}</div>
             </div>
+          </div>
+          <div class="info-row">
             <div class="info-col">
               <div class="info-label">Date de Création</div>
               <div class="info-value">{{ selectedCompte.dateCreation | date:'yyyy-MM-dd' }}</div>
@@ -235,6 +254,11 @@
               <div class="info-value solde-value">{{ selectedCompte.solde | number:'1.3-3' }} TND</div>
             </div>
             <div class="info-col">
+              <div class="info-label">Découvert autorisé</div>
+              <div class="info-value solde-value">{{ selectedCompte.decouvertAutorise
+                | number:'1.3-3' }} TND</div>
+            </div>
+            <div class="info-col">
               <div class="info-label">Montant maximum autorisé par jour</div>
               <div class="info-value">{{ selectedCompte.montantMaxAutoriseParJour }} TND</div>
             </div>
@@ -249,6 +273,5 @@
       </div>
     </div>
   </div>
-
+</div>
 </html>
-

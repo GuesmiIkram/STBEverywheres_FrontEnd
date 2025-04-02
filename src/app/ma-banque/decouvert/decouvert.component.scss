@@ -1,0 +1,409 @@
+// Variables
+$primary-color: #3366cc;
+$border-color: #e0e0e0;
+$background-color: #ffffff;
+$text-color: #333333;
+$light-gray: #f5f5f5;
+$required-color: #ff0000;
+$secondary-color: #4299e1;
+$error-color: #d9534f;
+$success-color: #5cb85c;
+$status-pending: #f0ad4e;
+$status-approved: #5cb85c;
+$status-rejected: #d9534f;
+
+// Styles généraux
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: $background-color;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  font-family: 'Roboto', Arial, sans-serif;
+  color: $text-color;
+}
+
+// Style pour le titre principal
+.form-title {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: $primary-color;
+  text-align: center;
+  position: relative;
+  padding-bottom: 15px;
+  font-weight: 500;
+
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background-color: $secondary-color;
+  }
+}
+
+// Style pour les onglets (comme les boutons radio dans l'image)
+.tabs {
+  display: flex;
+  justify-content: center;
+  background-color: $light-gray;
+  padding: 15px;
+  border-radius: 6px;
+  margin: 25px 0;
+  border-bottom: 1px solid rgba($primary-color, 0.2);
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    margin: 0 15px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    background: none;
+    border: none;
+    font-size: 14px;
+    color: $text-color;
+
+    // Simuler un bouton radio
+    &:before {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #a0aec0;
+      border-radius: 50%;
+      margin-right: 10px;
+      transition: all 0.2s ease;
+    }
+
+    &:hover {
+      background-color: rgba($primary-color, 0.05);
+    }
+
+    &.active {
+      font-weight: 600;
+      color: $primary-color;
+      background-color: rgba($primary-color, 0.1);
+
+      &:before {
+        border-color: $primary-color;
+        border-width: 6px;
+        background-color: white;
+      }
+    }
+  }
+}
+
+// Style pour les messages d'erreur/succès
+.error-message, .success-message {
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+
+  p {
+    margin: 0;
+    font-size: 14px;
+  }
+}
+
+.error-message {
+  background-color: rgba($error-color, 0.1);
+  border: 1px solid rgba($error-color, 0.3);
+  color: $error-color;
+}
+
+.success-message {
+  background-color: rgba($success-color, 0.1);
+  border: 1px solid rgba($success-color, 0.3);
+  color: $success-color;
+}
+
+// Style pour le contenu des onglets
+.tab-content {
+  padding: 20px 0;
+
+  h2 {
+    color: $primary-color;
+    font-weight: 500;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+  }
+}
+
+// Style pour les groupes de formulaire
+.form-group {
+  margin-bottom: 20px;
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: $text-color;
+    font-weight: 500;
+  }
+
+  select, input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid $border-color;
+    border-radius: 4px;
+    font-size: 14px;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+    }
+  }
+
+  button {
+    padding: 10px 16px;
+    border: 1px solid $primary-color;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    background-color: transparent;
+    color: $primary-color;
+    margin-top: 10px;
+
+    &:hover {
+      background-color: rgba($primary-color, 0.1);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// Style pour l'affichage du découvert actuel
+.current-overdraft {
+  background-color: $light-gray;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 5px;
+  margin-bottom: 20px;
+
+  h3 {
+    font-size: 14px;
+    margin: 0;
+    font-weight: 500;
+
+    strong {
+      color: $primary-color;
+    }
+  }
+}
+
+// Style pour le bouton d'envoi de la demande
+.form-group:last-child button {
+  background-color: $primary-color;
+  color: white;
+  float: right;
+  padding: 12px 24px;
+  border: none;
+
+  &:hover {
+    background-color: darken($primary-color, 10%);
+  }
+
+  &:disabled {
+    background-color: lighten($primary-color, 20%);
+  }
+}
+
+// Style pour les groupes de demandes
+.demande-group {
+  margin-bottom: 30px;
+
+  h3 {
+    font-size: 16px;
+    color: $text-color;
+    margin-bottom: 10px;
+    font-weight: 500;
+    border-bottom: 1px solid $border-color;
+    padding-bottom: 5px;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+}
+
+// Style pour les éléments de demande
+.demande-item {
+  padding: 12px;
+  border: 1px solid $border-color;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  background-color: $light-gray;
+  position: relative;
+  border-left: 3px solid $primary-color;
+}
+
+// Style pour les informations de demande
+.demande-info {
+  font-size: 14px;
+
+  .label {
+    font-weight: 500;
+    color: $text-color;
+  }
+
+  .status-en_attente {
+    color: $status-pending;
+    font-weight: 500;
+  }
+
+  .status-approuvée, .status-acceptée {
+    color: $status-approved;
+    font-weight: 500;
+  }
+
+  .status-rejetée {
+    color: $status-rejected;
+    font-weight: 500;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .tabs {
+    flex-direction: column;
+
+    button {
+      margin: 5px 0;
+    }
+  }
+
+  .form-group button {
+    width: 100%;
+  }
+
+  .form-group:last-child button {
+    float: none;
+    width: 100%;
+  }
+}
+
+
+
+
+.date-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+
+
+/* liste des demandes  */
+.demande-card {
+  display: flex;
+  position: relative; /* Nécessaire pour le positionnement absolu du statut */
+  padding: 0;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+  min-height: 90px;
+}
+
+.statut {
+  position: absolute;
+  right: 25px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.statut-acceptee {
+  color: #28a745; /* Vert */
+  background-color: rgba(40, 167, 69, 0.1);
+}
+
+.statut-refusee {
+  color: #dc3545; /* Rouge */
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+.statut-en-attente {
+  color: #ffc107; /* Jaune/Orange */
+  background-color: rgba(255, 193, 7, 0.1);
+}
+
+.demande-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  background: #f5f5f5;
+  padding: 10px 5px;
+  border-radius: 6px 0 0 6px;
+  font-weight: bold;
+}
+
+/* ... autres styles existants ... */
+
+
+
+.date {
+  font-size: 1.8rem; /* Plus gros comme dans l'image */
+  color: #3366cc;
+  line-height: 1;
+}
+
+.mois {
+  font-size: 0.8rem;
+  color: #666;
+  text-transform: uppercase;
+  margin: 3px 0 5px 0;
+}
+
+
+
+.demande-content {
+  flex-grow: 1;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+
+
+
+.demande-content h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.montant {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #3366cc;
+  margin: 5px 0;
+}
+
+.demande-date {
+  font-size: 0.9rem;
+  color: #666;
+}
