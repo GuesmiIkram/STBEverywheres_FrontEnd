@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STB Bank - Pack Student</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+<body>
+
+  <section class="hero">
+    <div class="container hero__container">
+      <div class="hero__content">
+        <h1 class="hero__title">Nos Packs</h1>
+        <p class="hero__subtitle">La solution bancaire adaptée à votre situation</p>
+        <p class="hero__text">
+          Que vous soyez étudiant en France ou jeune professionnel, nous avons le pack qui correspond à vos besoins.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="offers">
+    <div class="container">
+      <h2 class="section-title">Choisissez votre pack</h2>
+      <div class="offers__grid">
+        <div class="offer-card" data-pack="student">
+          <div class="offer-card__image">
+            <img src="assets/img/packStudent.jpg" alt="Pack Student">
+            <div class="offer-card__badge">Pack Student</div>
+          </div>
+          <div class="offer-card__content">
+            <h3 class="offer-card__title">Pack Student TF Bank</h3>
+            <ul class="offer-card__features">
+              <li><i class="fas fa-check"></i> Carte bancaire internationale</li>
+              <li><i class="fas fa-check"></i> Transferts à tarifs préférentiels</li>
+              <li><i class="fas fa-check"></i> Assistance dédiée 24/7</li>
+              <li><i class="fas fa-check"></i> Frais de tenue de compte réduits</li>
+            </ul>
+            <button 
+            class="btn btn--secondary select-pack" 
+            (click)="selectPackStudent()">
+            Sélectionner ce pack
+          </button>
+          </div>
+        </div>
+        
+        <div class="offer-card" data-pack="elyssa">
+          <div class="offer-card__image">
+            <img src="assets/img/Elyssa.jpg" alt="Pack Elyssa">
+            <div class="offer-card__badge">Pack Elyssa</div>
+          </div>
+          <div class="offer-card__content">
+            <h3 class="offer-card__title">Pack Elyssa TF Bank</h3>
+            <ul class="offer-card__features">
+              <li><i class="fas fa-check"></i> Carte bancaire premium</li>
+              <li><i class="fas fa-check"></i> Assurance santé incluse</li>
+              <li><i class="fas fa-check"></i> Accès à des événements exclusifs</li>
+              <li><i class="fas fa-check"></i> Conseiller personnel dédié</li>
+            </ul>
+            <button 
+            class="btn btn--secondary select-pack" 
+            (click)="selectPackElyssa()">
+            Sélectionner ce pack
+          </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const packButtons = document.querySelectorAll('.select-pack');
+      const uploadButtons = document.querySelectorAll('.btn--upload');
+      
+      packButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const packCard = this.closest('.offer-card');
+          const packType = packCard.dataset.pack;
+          
+          // Masquer tous les formulaires
+          document.querySelectorAll('.pack-form').forEach(form => {
+            form.style.display = 'none';
+          });
+          
+          // Afficher le formulaire correspondant
+          document.getElementById(`${packType}-form`).style.display = 'block';
+          
+          // Faire défiler jusqu'au formulaire
+          document.getElementById(`${packType}-form`).scrollIntoView({
+            behavior: 'smooth'
+          });
+        });
+      });
+      
+      // Gestion des uploads de fichiers
+      uploadButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.preventDefault();
+          const uploadField = this.closest('.upload-field');
+          const fileInput = document.createElement('input');
+          fileInput.type = 'file';
+          
+          fileInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+              const fileName = this.files[0].name;
+              uploadField.querySelector('.upload-field__text').textContent = fileName;
+              
+              // Changer le statut
+              const statusElement = uploadField.parentElement.querySelector('.upload-status');
+              statusElement.textContent = 'Rattaché';
+              statusElement.classList.remove('upload-status--pending');
+              statusElement.classList.add('upload-status--success');
+            }
+          });
+          
+          fileInput.click();
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>

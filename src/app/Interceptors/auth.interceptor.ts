@@ -4,39 +4,34 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpErrorResponse
+  HttpResponse,
+  HttpErrorResponse,
 } from '@angular/common/http';
-import { Observable, catchError, switchMap, throwError } from 'rxjs';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
-import { Router } from '@angular/router';
+
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  private isRefreshing = false;
+  constructor(private authService: AuthService) {}
 
-  constructor(private authService: AuthService, private router: Router) {}
-// Dans votre intercepteur
-private addToken(request: HttpRequest<any>, token: string): HttpRequest<any> {
-  return request.clone({
-    setHeaders: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json' // Ajoutez ceci si nécessaire
-    }
-  });
-}
-
+  // Dans votre intercepteur (auth.interceptor.ts)
 intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-  // Ne pas ajouter le token pour les routes d'authentification
+  // Ne pas modifier les requêtes d'authentification
   if (req.url.includes('/login') || req.url.includes('/refresh')) {
     return next.handle(req);
   }
 
   const token = this.authService.getAccessToken();
-  
-  if (token) {
-    const authReq = this.addToken(req, token);
-    console.log('Request headers with token:', authReq.headers); // Vérifiez ici
-    return next.handle(authReq);
-  }
+  if (!token) return next.handle(req);
 
-  return next.handle(req);
+  // Clone la requête en ajoutant les headers nécessaires
+  let authReq = req.clone({
+    setHeaders: {
+      Authorization: `Bearer ${token}`,
+      // Header optionnel pour les requêtes FormData
+      ...(req.body instanceof FormData && { 'Accept': 'application/json' })
+    }
+  });
+
+  return next.handle(authReq);
 }}

@@ -15,7 +15,7 @@
 
             <div class="card">
                 <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-                    <img [src]="'http://localhost:5260/Images/' + client?.photoClient" alt="Profile" class="rounded-circle" />
+                  <img [src]="client?.photoClient ? 'http://localhost:5260/Images/' + client.photoClient : 'assets/img/default.png'" alt="Profile"  class="rounded-circle">
                     <h2>{{ client.nom }}{{ client.prenom }}</h2>
                     <h3>{{ client.situationProfessionnelle }}</h3>
                 </div>
@@ -187,7 +187,7 @@
                                         <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Photo de profil</label>
                                         <div class="col-md-8 col-lg-9">
                                           <!-- Afficher la photo actuelle -->
-                                          <img [src]="client?.photoClient ? 'http://localhost:5260/Images/' + client.photoClient : 'assets/img/default-profile.png'" alt="Profile"  style="width: 100px; height: 100px;">
+                                          <img [src]="client?.photoClient ? 'http://localhost:5260/Images/' + client.photoClient : 'assets/img/default.png'" alt="Profile"  style="width: 100px; height: 100px;">
                                           <div class="pt-2">
                                             <!-- Bouton pour télécharger une nouvelle photo -->
                                             <input type="file" id="profileImage" (change)="onFileSelected($event)" style="display: none;">
@@ -205,15 +205,50 @@
                                     <div class="row mb-3">
                                       <label for="phone" class="col-md-4 col-lg-3 col-form-label">Téléphone</label>
                                       <div class="col-md-8 col-lg-9">
-                                        <input name="phone" type="text" class="form-control" id="phone" [(ngModel)]="client.telephone">
+                                        <input name="phone" type="text" class="form-control" id="phone" 
+                                               [(ngModel)]="client.telephone" 
+                                               #phone="ngModel"
+                                               pattern="[0-9]{8}"
+                                               required
+                                               maxlength="8"
+                                               minlength="8">
+                                        
+                                        <!-- Messages d'erreur -->
+                                        <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="text-danger">
+                                          <div *ngIf="phone.errors?.['required']">
+                                            Le numéro de téléphone est obligatoire
+                                          </div>
+                                          <div *ngIf="phone.errors?.['pattern'] || phone.errors?.['minlength'] || phone.errors?.['maxlength']">
+                                            Le numéro doit contenir exactement 8 chiffres
+                                          </div>
+                                        </div>
                                       </div>
                                     </div>
 
-                                    <!-- Email -->
                                     <div class="row mb-3">
                                       <label for="email" class="col-md-4 col-lg-3 col-form-label">Email</label>
                                       <div class="col-md-8 col-lg-9">
-                                        <input name="email" type="email" class="form-control" id="email" [(ngModel)]="client.email">
+                                        <input 
+                                          name="email" 
+                                          type="email" 
+                                          class="form-control" 
+                                          id="email" 
+                                          [(ngModel)]="client.email"
+                                          #email="ngModel"
+                                          required
+                                          pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}"
+                                          email
+                                        >
+                                        
+                                        <!-- Messages d'erreur -->
+                                        <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger">
+                                          <div *ngIf="email.errors?.['required']">
+                                            L'adresse email est obligatoire
+                                          </div>
+                                          <div *ngIf="email.errors?.['pattern'] || email.errors?.['email']">
+                                            Veuillez entrer une adresse email valide (ex: exemple@domaine.com)
+                                          </div>
+                                        </div>
                                       </div>
                                     </div>
 
@@ -225,14 +260,7 @@
                                       </div>
                                     </div>
 
-                                    <!-- Civilité -->
-                                    <div class="row mb-3">
-                                      <label for="civilite" class="col-md-4 col-lg-3 col-form-label">Civilité</label>
-                                      <div class="col-md-8 col-lg-9">
-                                        <input name="civilite" type="text" class="form-control" id="civilite" [(ngModel)]="client.civilite">
-                                      </div>
-                                    </div>
-
+                                
                                     <!-- État Civil -->
                                     <div class="row mb-3">
                                       <label for="etatCivil" class="col-md-4 col-lg-3 col-form-label">État Civil</label>
@@ -266,18 +294,59 @@
                                     </div>
 
                                     <!-- Nombre d'Enfants -->
-                                    <div class="row mb-3">
-                                      <label for="nombreEnfants" class="col-md-4 col-lg-3 col-form-label">Nombre d'Enfants</label>
-                                      <div class="col-md-8 col-lg-9">
-                                        <input name="nombreEnfants" type="number" class="form-control" id="nombreEnfants" [(ngModel)]="client.nombreEnfants">
+                                  
+                                      <div class="row mb-3">
+                                        <label for="nombreEnfants" class="col-md-4 col-lg-3 col-form-label">Nombre d'Enfants</label>
+                                        <div class="col-md-8 col-lg-9">
+                                          <input 
+                                            name="nombreEnfants" 
+                                            type="number" 
+                                            class="form-control" 
+                                            id="nombreEnfants" 
+                                            [(ngModel)]="client.nombreEnfants"
+                                            #nombreEnfants="ngModel"
+                                            min="0"
+                                            max="20"
+                                            required
+                                          >
+                                          
+                                          <!-- Messages d'erreur -->
+                                          <div *ngIf="nombreEnfants.invalid && (nombreEnfants.dirty || nombreEnfants.touched)" class="text-danger">
+                                            <div *ngIf="nombreEnfants.errors?.['required']">
+                                              Ce champ est obligatoire
+                                            </div>
+                                            <div *ngIf="nombreEnfants.errors?.['min']">
+                                              Le nombre ne peut pas être négatif
+                                            </div>
+                                            <div *ngIf="nombreEnfants.errors?.['max']">
+                                              Le nombre d'enfants ne peut pas dépasser 20
+                                            </div>
+                                          </div>
+                                        </div>
                                       </div>
-                                    </div>
+                                    
 
                                     <!-- Revenu Mensuel -->
                                     <div class="row mb-3">
                                       <label for="revenuMensuel" class="col-md-4 col-lg-3 col-form-label">Revenu Mensuel</label>
                                       <div class="col-md-8 col-lg-9">
-                                        <input name="revenuMensuel" type="number" class="form-control" id="revenuMensuel" [(ngModel)]="client.revenuMensuel">
+                                        <input 
+                                          name="revenuMensuel" 
+                                          type="number" 
+                                          class="form-control" 
+                                          id="revenuMensuel" 
+                                          [(ngModel)]="client.revenuMensuel"
+                                          #revenuMensuel="ngModel"
+                                          min="0"
+                                          [pattern]="positiveNumberPattern"
+                                        >
+                                        
+                                        <!-- Messages d'erreur -->
+                                        <div *ngIf="revenuMensuel.invalid && (revenuMensuel.dirty || revenuMensuel.touched)" class="text-danger">
+                                          <div *ngIf="revenuMensuel.errors?.['min'] || revenuMensuel.errors?.['pattern']">
+                                            Le revenu ne peut pas être négatif
+                                          </div>
+                                        </div>
                                       </div>
                                     </div>
 
@@ -296,7 +365,7 @@
                         </div>
                         <div class="tab-pane fade pt-3" id="profile-change-password">
                             <!-- Change Password Form -->
-                            <!--form (ngSubmit)="onChangePassword()">
+                            <form (ngSubmit)="onChangePassword()">
                               <div class="row mb-3">
                                 <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Mot de passe actuel</label>
                                 <div class="col-md-8 col-lg-9">
@@ -350,9 +419,11 @@
                               </div>
 
                               <div class="text-center">
-                                <button type="submit" class="btn btn-primary" [disabled]="passwordMismatch || isFormInvalid()">Changer le mot de passe</button>
+                                <button type="submit" class="btn btn-primary" [disabled]="passwordMismatch || isFormInvalid()">
+                                  Changer le mot de passe
+                                </button>
                               </div>
-                            </form--><!-- End Change Password Form -->
+                            </form><!-- End Change Password Form -->
                           </div>
                     </div><!-- End Bordered Tabs -->
 
