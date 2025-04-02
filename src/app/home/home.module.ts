@@ -7,6 +7,8 @@ import { SideBarComponent } from './side-bar/side-bar.component';
 import { CoreModule } from '../core/core.module';
 import { HomeRoutingModule } from './home-routing.module';
 import { PaiementRoutingModule } from '../paiement/paiement-routing.module';
+import { MaBanqueRoutingModule } from '../ma-banque/ma-banque-routing.module';
+import { MaBanqueModule } from './../ma-banque/ma-banque.module';
 
 import { FormsModule } from '@angular/forms';
 
@@ -22,6 +24,7 @@ import { FormsModule } from '@angular/forms';
     CoreModule,
     HomeRoutingModule,
     PaiementModule,
+    MaBanqueModule,
     FormsModule,
 
   ],

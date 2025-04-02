@@ -1,8 +1,6 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatDialogModule } from '@angular/material/dialog'; // Changé depuis MatDialog
-import { ForgotPasswordComponent } from 'src/app/forgot-password/forgot-password.component';
 import { AuthService } from 'src/app/services/auth.service';
 import Swal from 'sweetalert2';
 import { ClientService } from 'src/app/services/client.service';
@@ -41,7 +39,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
 
   ) { }
-  
+
   openForgotPasswordDialog(): void {
     Swal.fire({
       title: 'Mot de passe oublié',
@@ -60,18 +58,18 @@ export class LoginComponent implements OnInit {
       preConfirm: () => {
         const email = (Swal.getPopup()?.querySelector('#swal-email') as HTMLInputElement)?.value;
         const errorEl = Swal.getPopup()?.querySelector('#swal-error');
-        
+
         // Validation simple
         if (!email) {
           if (errorEl) errorEl.innerHTML = 'L\'email est requis';
           return false;
         }
-        
+
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
           if (errorEl) errorEl.innerHTML = 'Veuillez entrer un email valide';
           return false;
         }
-        
+
         return { email: email };
       },
       allowOutsideClick: () => !Swal.isLoading()
@@ -135,21 +133,21 @@ export class LoginComponent implements OnInit {
       Swal.fire('Erreur', 'Veuillez remplir tous les champs', 'error');
       return;
     }
-  
-   
-    
+
+
+
     this.authService.login(this.loginForm.email, this.loginForm.password).subscribe({
       next: () => {
-       
+
         this.router.navigate(['/home']);
       },
       error: (err) => {
-      
+
         Swal.fire('Erreur', err.message || 'Erreur lors de la connexion', 'error');
       }
     });
   }
-        
+
   // Méthode pour soumettre le formulaire d'inscription
   onRegister(): void {
     // Réinitialiser les messages d'erreur

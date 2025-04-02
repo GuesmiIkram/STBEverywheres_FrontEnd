@@ -6,37 +6,49 @@ import {
   HttpEvent,
   HttpErrorResponse
 } from '@angular/common/http';
-import { Observable, catchError, switchMap, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
+
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   private isRefreshing = false;
 
   constructor(private authService: AuthService, private router: Router) {}
-// Dans votre intercepteur
-private addToken(request: HttpRequest<any>, token: string): HttpRequest<any> {
-  return request.clone({
-    setHeaders: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json' // Ajoutez ceci si nécessaire
+
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    // 1. Ne pas modifier les requêtes d'authentification
+    if (req.url.includes('/login') || req.url.includes('/refresh')) {
+      return next.handle(req);
     }
-  });
-}
 
-intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-  // Ne pas ajouter le token pour les routes d'authentification
-  if (req.url.includes('/login') || req.url.includes('/refresh')) {
-    return next.handle(req);
-  }
+    const token = this.authService.getAccessToken();
 
-  const token = this.authService.getAccessToken();
-  
-  if (token) {
-    const authReq = this.addToken(req, token);
-    console.log('Request headers with token:', authReq.headers); // Vérifiez ici
+    // 2. Si pas de token, on laisse passer la requête
+    /*if (!token) {
+      return next.handle(req);
+    }*/
+
+    // 3. Gestion spéciale pour FormData
+    if (req.body instanceof FormData) {
+      const authReq = req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`
+          // Content-Type sera géré automatiquement
+        }
+      });
+      console.log('FormData request with token:', authReq.headers);
+      return next.handle(authReq);
+    }
+
+    // 4. Pour toutes les autres requêtes (JSON)
+    const authReq = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log('JSON request with token:', authReq.headers);
     return next.handle(authReq);
   }
-
-  return next.handle(req);
-}}
+}

@@ -12,7 +12,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from './services/auth.service';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthInterceptor } from './Interceptors/auth.interceptor';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { BreadcrumbModule } from 'xng-breadcrumb';
 import { RouterModule } from '@angular/router';
 import { AccueilComponent } from './accueil/accueil.component';
@@ -37,10 +36,9 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     BreadcrumbModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    
-    MatDialogModule, // Correctement importé maintenant
-    // Ajouté
-   
+
+
+
 
   ],
   providers: [

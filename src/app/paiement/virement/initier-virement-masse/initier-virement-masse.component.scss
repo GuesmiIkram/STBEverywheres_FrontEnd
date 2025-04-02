@@ -1,0 +1,424 @@
+// Variables
+$primary-color: #3366cc;
+$border-color: #e0e0e0;
+$background-color: #ffffff;
+$text-color: #333333;
+$light-gray: #f5f5f5;
+$required-color: #ff0000;
+$secondary-color: #4299e1; // Bleu plus clair pour les accents
+
+// Styles généraux
+div {
+  margin-bottom: 20px;
+  font-family: 'Roboto', Arial, sans-serif;
+}
+
+form {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: $background-color;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+// Style pour les titres et chemins de navigation
+h1, h2 {
+  color: $primary-color;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+// Chemin de navigation
+.navigation-path {
+  color: $primary-color;
+  font-size: 14px;
+  margin-bottom: 20px;
+
+  a {
+    color: $primary-color;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// Style pour les labels
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: $text-color;
+  font-weight: 500;
+
+  .required {
+    color: $required-color;
+  }
+}
+
+// Style pour les inputs et selects
+input[type="text"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid $border-color;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-bottom: 15px;
+
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
+    box-shadow: 0 0 0 2px rgba(51, 102, 204, 0.2);
+  }
+}
+
+// Style amélioré pour les boutons radio et leur conteneur
+form > div:nth-child(2) {
+  display: flex;
+  justify-content: center;
+  //background-color: #f0f5ff;
+  background-color: $light-gray;
+
+  padding: 15px;
+  border-radius: 6px;
+  margin: 25px 0;
+  border-bottom: 1px solid rgba($primary-color, 0.2);
+
+  label {
+    display: inline-flex;
+    align-items: center;
+    margin: 0 15px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+
+    &:hover {
+      background-color: rgba($primary-color, 0.05);
+    }
+
+    input[type="radio"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #a0aec0;
+      border-radius: 50%;
+      margin-right: 10px;
+      position: relative;
+      transition: all 0.2s ease;
+
+      &:checked {
+        border-color: $primary-color;
+        border-width: 6px;
+        background-color: white;
+      }
+
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba($primary-color, 0.3);
+      }
+    }
+
+    &:has(input[type="radio"]:checked) {
+      font-weight: 600;
+      color: $primary-color;
+      background-color: rgba($primary-color, 0.1);
+    }
+  }
+}
+
+// Style pour les sections
+div[formArrayName="beneficiaires"] {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid $border-color;
+
+  > div {
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: $light-gray;
+    border-radius: 4px;
+
+    label {
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+  }
+}
+
+// Style pour les boutons
+button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+
+  &[type="submit"] {
+    background-color: $primary-color;
+    color: white;
+    float: right;
+    padding: 12px 24px;
+    margin-top: 30px;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+  }
+
+  &[type="button"] {
+    background-color: transparent;
+    color: $primary-color;
+    border: 1px solid $primary-color;
+    margin-right: 10px;
+
+    &:hover {
+      background-color: rgba(51, 102, 204, 0.1);
+    }
+  }
+}
+
+// Style pour le bouton "Ajouter un bénéficiaire"
+button[type="button"]:nth-of-type(1) {
+  margin-bottom: 20px;
+  display: inline-flex;
+  align-items: center;
+  background-color: white;
+  border: 1px solid $primary-color;
+  color: $primary-color;
+  padding: 10px 16px;
+  border-radius: 4px;
+  font-weight: 500;
+
+  &:before {
+    //content: '+';
+    margin-right: 8px;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  &:hover {
+    background-color: rgba($primary-color, 0.05);
+  }
+}
+
+// Style pour le bouton "Supprimer"
+button[type="button"]:contains("− Supprimer") {
+  color: #d32f2f;
+  border-color: #d32f2f;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 6px 12px;
+  font-size: 12px;
+
+  &:hover {
+    background-color: rgba(211, 47, 47, 0.1);
+  }
+}
+
+// Style pour l'affichage du solde
+.solde-compte {
+  background-color: $light-gray;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 5px;
+  font-size: 14px;
+
+  strong {
+    color: $primary-color;
+  }
+}
+
+// Style pour les séparateurs
+hr, .separator {
+  border: 0;
+  height: 1px;
+  background-color: $border-color;
+  margin: 30px 0;
+}
+
+// Style pour les sections (donneur d'ordre, bénéficiaire)
+.section-title {
+  font-size: 16px;
+  color: $text-color;
+  margin: 20px 0 15px;
+  font-weight: 500;
+}
+
+// Style pour les lignes de formulaire
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -10px;
+
+  .form-group {
+    flex: 1;
+    padding: 0 10px;
+    min-width: 250px;
+  }
+}
+
+.form-title {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: $primary-color;
+  text-align: center;
+  position: relative;
+  padding-bottom: 15px;
+
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background-color: $secondary-color;
+  }
+}
+
+// Style pour l'upload de fichier
+input[type="file"] {
+  width: 100%;
+  padding: 30px 15px;
+  border: 2px dashed $border-color;
+  border-radius: 8px;
+  background-color: $light-gray;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+
+  &:hover {
+    border-color: $secondary-color;
+    background-color: rgba($secondary-color, 0.05);
+  }
+
+  &:before {
+    content: 'Glissez votre fichier ici ou cliquez pour sélectionner';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: $text-color;
+    font-weight: 500;
+    pointer-events: none;
+  }
+}
+
+// Ajout de style pour les bénéficiaires
+div[formArrayName="beneficiaires"] > div {
+  position: relative;
+  border-left: 3px solid $primary-color;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .form-row .form-group {
+    flex: 0 0 100%;
+    margin-bottom: 15px;
+  }
+
+  button[type="submit"] {
+    width: 100%;
+    float: none;
+    margin-top: 20px;
+  }
+
+  form > div:nth-child(2) {
+    flex-direction: column;
+
+    label {
+      margin: 5px 0;
+    }
+  }
+}
+.ajouter-beneficiaire-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 5px;
+}
+
+.ajouter-beneficiaire {
+  display: flex;
+  align-items: center;
+  color: $primary-color;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+
+.plus-icon {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  position: relative;
+  margin-right: 5px;
+}
+
+.plus-icon::before,
+.plus-icon::after {
+  content: "";
+  position: absolute;
+  background-color: $primary-color; /* Couleur du + */
+}
+
+.plus-icon::before {
+  width: 10px;
+  height: 2px;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+.plus-icon::after {
+  width: 2px;
+  height: 10px;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+//style de bouton de fermeture de modale
+/* Style du bouton de fermeture de la modale */
+.close-modal-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  border: none;
+  background: #dc3545;  // Fond rouge classique
+  color: white;         // Texte blanc
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  // Ombre discrète pour un meilleur contraste
+
+  // Au survol, on change la couleur de fond et de texte, et l'on applique une animation de transformation
+  &:hover {
+    background-color: #c82333;  // Un rouge plus foncé au survol
+    color: white;               // Le texte reste blanc
+    transform: scale(1.1);      // Agrandissement léger du bouton au survol
+  }
+
+  &:focus {
+    outline: none;  // Enlève le contour par défaut lorsque le bouton est cliqué
+  }
+}
