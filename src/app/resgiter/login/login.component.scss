@@ -1,13 +1,24 @@
 // Variables
-$primary-color: #4a90e2;
-$background-color: #f5f7fa;
-$card-background: #ffffff;
-$text-color: #333;
-$input-border: #e1e5eb;
-$input-focus: #4a90e2;
-$icon-background: #e9eef6;
+$primary-blue: #1e3a8a;
+$secondary-teal: #0f766e;
+$accent-yellow: #f59e0b;
+$text-dark: #1e293b;
+$text-gray: #64748b;
+$background-color: #f1f5f9;
+$white: #ffffff;
+$error-color: #ef4444;
+$gradient: linear-gradient(90deg, $primary-blue 0%, $secondary-teal 100%);
 
 // Styles généraux
+body {
+  font-family: 'Roboto', 'Segoe UI', sans-serif;
+  background-color: $background-color;
+  color: $text-dark;
+  line-height: 1.5;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231e3a8a' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+// Container d'authentification
 .auth-container {
   display: flex;
   justify-content: center;
@@ -17,61 +28,60 @@ $icon-background: #e9eef6;
   padding: 20px;
 }
 
+// Carte d'authentification
 .auth-card {
   width: 100%;
   max-width: 450px;
-  background-color: $card-background;
-  border-radius: 8px;
+  background-color: $white;
+  border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  padding: 30px;
+  overflow: hidden;
+}
+
+// En-tête avec logo
+.auth-header {
+  background: $gradient;
+  padding: 20px;
+  text-align: center;
+  
+  img {
+    height: 80px;
+    width: auto;
+  }
 }
 
 // Onglets
 .auth-tabs {
   display: flex;
-  margin-bottom: 20px;
-  border-bottom: 1px solid $input-border;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .tab-btn {
   flex: 1;
   background: none;
   border: none;
-  padding: 12px;
+  padding: 15px;
   font-size: 16px;
   font-weight: 500;
-  color: $text-color;
+  color: $text-gray;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: color 0.3s ease;
   
   &.active {
-    color: $primary-color;
-    border-bottom: 2px solid $primary-color;
+    color: $text-dark;
+    font-weight: 600;
+    border-bottom: 3px solid $accent-yellow;
   }
   
   &:hover:not(.active) {
-    color: darken($text-color, 15%);
+    color: darken($text-gray, 15%);
   }
-}
-
-// Titres et textes
-.auth-title {
-  font-size: 24px;
-  font-weight: 600;
-  color: $text-color;
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-.auth-subtitle {
-  font-size: 14px;
-  color: lighten($text-color, 20%);
-  margin-bottom: 30px;
-  text-align: center;
 }
 
 // Formulaire
 .auth-form {
+  padding: 20px 30px 30px;
+  
   form {
     display: flex;
     flex-direction: column;
@@ -79,6 +89,23 @@ $icon-background: #e9eef6;
   }
 }
 
+// Titres et textes
+.auth-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: $text-dark;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.auth-subtitle {
+  font-size: 14px;
+  color: $text-gray;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+// Groupes de formulaire
 .form-group {
   display: flex;
   flex-direction: column;
@@ -87,21 +114,29 @@ $icon-background: #e9eef6;
   label {
     font-size: 14px;
     font-weight: 500;
-    color: $text-color;
+    color: $text-dark;
+    display: flex;
+    align-items: center;
+    
+    &:after {
+      content: '*';
+      color: $accent-yellow;
+      margin-left: 4px;
+    }
   }
- .error-message {
-    color: #ff4d4f; // Couleur rouge pour le message d'erreur
+  
+  .error-message {
+    color: $error-color;
     font-size: 12px;
     margin-top: 5px;
   }
   
-  // Champ invalide
   .input-error {
-    border-color: #ff4d4f; // Bordure rouge pour les champs invalides
+    border-color: $error-color;
   }
-  
 }
 
+// Conteneur d'input avec icône
 .input-container {
   display: flex;
   width: 100%;
@@ -112,11 +147,11 @@ $icon-background: #e9eef6;
     justify-content: center;
     width: 40px;
     height: 40px;
-    background-color: $icon-background;
-    border: 1px solid $input-border;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
     border-right: none;
     border-radius: 4px 0 0 4px;
-    color: $primary-color;
+    color: $text-gray;
   }
   
   input {
@@ -125,57 +160,69 @@ $icon-background: #e9eef6;
   }
 }
 
+// Inputs
 input {
   height: 40px;
   padding: 0 12px;
-  border: 1px solid $input-border;
+  border: 1px solid #e2e8f0;
   border-radius: 4px;
   font-size: 14px;
   transition: border-color 0.3s ease;
   
   &:focus {
     outline: none;
-    border-color: $input-focus;
-    box-shadow: 0 0 0 2px rgba($input-focus, 0.2);
+    border-color: $secondary-teal;
   }
 }
 
 // Bouton
 .auth-button {
   height: 44px;
-  background-color: $primary-color;
+  background: $gradient;
   color: white;
   border: none;
   border-radius: 4px;
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: opacity 0.3s ease;
   margin-top: 10px;
   
   &:hover {
-    background-color: darken($primary-color, 10%);
+    opacity: 0.9;
   }
   
-  &:active {
-    background-color: darken($primary-color, 15%);
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+// Lien mot de passe oublié
+.forgot-password-link {
+  text-align: center;
+  margin-top: 15px;
+  
+  a {
+    color: $secondary-teal;
+    font-size: 14px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    cursor: pointer;
+    
+    &:hover {
+      color: $primary-blue;
+    }
   }
 }
 
 // Responsive
 @media (max-width: 480px) {
   .auth-card {
+    max-width: 100%;
+  }
+  
+  .auth-form {
     padding: 20px;
   }
-  
-  .auth-title {
-    font-size: 20px;
-  }
-  
-  .auth-subtitle {
-    font-size: 13px;
-  }
-
-  // Message d'erreur
-
 }

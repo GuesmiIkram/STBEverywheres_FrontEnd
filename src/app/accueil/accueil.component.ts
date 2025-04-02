@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-accueil',
@@ -6,7 +6,20 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./accueil.component.scss']
 })
 export class AccueilComponent implements OnInit {
-  // Define the services array
+  @ViewChild('authSection') authSection!: ElementRef;
+
+  scrollToAuth(tab: 'login' | 'register'): void {
+    // Scroll vers la section d'authentification
+    this.authSection.nativeElement.scrollIntoView({ behavior: 'smooth' });
+    
+    // Changement d'onglet (si nécessaire)
+    setTimeout(() => {
+      const authComponent = this.authSection.nativeElement.querySelector('app-auth');
+      if (authComponent) {
+        authComponent.activeTab = tab;
+      }
+    }, 500);
+  }
   services = [
     { name: 'Service 1', icon: 'service1.png' },
     { name: 'Service 2', icon: 'service2.png' },

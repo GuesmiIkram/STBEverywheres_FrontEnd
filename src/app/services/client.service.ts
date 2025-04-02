@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { Client } from '../Models/Client';
+import { AuthService } from './auth.service';
  // Importation du modèle
 
 @Injectable({
@@ -11,12 +12,62 @@ export class ClientService {
   
   //private apiUrl = 'http://localhost:5260/api/client'; // URL du backend
   private apiUrl ='http://localhost:5000/api/client';
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private authService :AuthService) {}
 
   // Récupérer les infos du client
   getClientInfo(): Observable<Client> {
     return this.http.get<Client>(`${this.apiUrl}/me`);
   }
+// Modifiez votre service pour ajouter des headers spécifiques
+uploadStudentDocuments(files: FormData): Observable<any> {
+  // Création des headers avec HttpHeaders
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${this.authService.getAccessToken()}`,
+    'Accept': 'application/json'
+    // Ne pas ajouter 'Content-Type' - sera défini automatiquement par le navigateur
+  });
+
+  return this.http.post(`${this.apiUrl}/upload-documents`, files, {
+    headers: headers,
+    reportProgress: true,  // Active le suivi de progression
+    observe: 'events'     // Permet de recevoir tous les événements HTTP
+  }).pipe(
+    catchError(error => {
+      console.error('Erreur lors de l\'upload:', {
+        status: error.status,
+        message: error.message,
+        url: error.url,
+        headers: error.headers
+      });
+      return throwError(() => error);
+    })
+  );
+}
+
+uploadElyssaDocuments(files: FormData): Observable<any> {
+  // Création des headers avec HttpHeaders
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${this.authService.getAccessToken()}`,
+    'Accept': 'application/json'
+    // Ne pas ajouter 'Content-Type' - sera défini automatiquement par le navigateur
+  });
+
+  return this.http.post(`${this.apiUrl}/upload-documents-elyssa`, files, {
+    headers: headers,
+    reportProgress: true,  // Active le suivi de progression
+    observe: 'events'     // Permet de recevoir tous les événements HTTP
+  }).pipe(
+    catchError(error => {
+      console.error('Erreur lors de l\'upload:', {
+        status: error.status,
+        message: error.message,
+        url: error.url,
+        headers: error.headers
+      });
+      return throwError(() => error);
+    })
+  );
+}
 
   // Mettre à jour les infos du client
   updateClientInfo(client: Client): Observable<Client> {
@@ -25,9 +76,7 @@ export class ClientService {
   downloadKYC(): Observable<Blob> {
     return this.http.get(`${this.apiUrl}/kyc/download`, { responseType: 'blob' });
   }
-  uploadProfileImage(clientId: number, formData: FormData): Observable<any> {
-    return this.http.post(`${this.apiUrl}/upload-profile-image`, formData);
-  }
+
   register(registerData: { rib: string, email: string, password: string }): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, registerData).pipe(
       tap(() => {
@@ -44,8 +93,51 @@ export class ClientService {
       })
     );
   }
+ // Dans votre service
+ uploadProfileImage(file: File): Observable<{fileName: string}> {
+  const formData = new FormData();
+  formData.append('file', file, file.name);
+
+  return this.http.post<{fileName: string}>(
+    `${this.apiUrl}/upload-profile-image`,
+    formData,
+    {
+      headers: {
+        'Authorization': `Bearer ${this.authService.getAccessToken()}`
+      }
+    }
+  );
+}
+
+
   // Supprimer la photo de profil
   removeProfileImage(clientId: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/remove-profile-image`);
   }
+ 
+  // Méthode pour demander l'envoi du code OTP
+  requestPasswordChangeOTP(): Observable<any> {
+    return this.http.post(`${this.apiUrl}/request-password-change-otp`, {}).pipe(
+      catchError(error => throwError(() => error))
+    );
+  }
+
+  changePasswordWithOTP(data: {
+    currentPassword: string,
+    newPassword: string,
+    confirmNewPassword: string,
+    otpCode: string
+  }): Observable<any> {
+    const payload = {
+      CurrentPassword: data.currentPassword,
+      NewPassword: data.newPassword,
+      ConfirmNewPassword: data.confirmNewPassword,
+      OTPCode: data.otpCode
+    };
+
+    return this.http.post(`${this.apiUrl}/change-password-with-otp`, payload).pipe(
+      catchError(error => throwError(() => error))
+    );
+  }
 }
+

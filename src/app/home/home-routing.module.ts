@@ -3,10 +3,18 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HomeComponent } from './home.component';
 import { DecouvertComponent } from './../ma-banque/decouvert/decouvert.component';
+import { TFBankComponent } from '../tf-bank/tf-bank.component';
+import { PackStudentComponent } from '../pack-student/pack-student.component';
+import { PackElyssaComponent } from '../pack-elyssa/pack-elyssa.component';
+
 const routes: Routes = [
   {path:'', component: HomeComponent ,
         children: [
+          { path: 'PackStudent', component: PackStudentComponent, data: { breadcrumb: 'PackStudent' }},
            { path: '', component: DashboardComponent, data: { breadcrumb: 'Dashboard' }},
+           { path: 'PackElyssa', component: PackElyssaComponent, data: { breadcrumb: 'PackElyssa' }},
+           { path: 'TF', component: TFBankComponent, data: { breadcrumb: 'TFBank' }},
+           
             { path: 'dashboard', component: DashboardComponent, data: { breadcrumb: 'Dashboard' }},
             { path: 'virement', loadChildren: () => import('./../paiement/virement/virement.module').then(mod => mod.VirementModule), data: { breadcrumb: 'Virement' } },
             { path: 'carte', loadChildren: () => import('./../paiement/carte/carte.module').then(mod => mod.CarteModule), data: { breadcrumb: 'Carte' } },
@@ -15,6 +23,7 @@ const routes: Routes = [
             { path: 'decouvert', component: DecouvertComponent, data: { breadcrumb: 'Découvert' } },
 
             { path: '**', redirectTo: '', pathMatch: 'full' }
+            
         ],
     },
 

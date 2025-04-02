@@ -1,6 +1,8 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MatDialogModule } from '@angular/material/dialog'; // Changé depuis MatDialog
+
 import { AuthService } from 'src/app/services/auth.service';
 import Swal from 'sweetalert2';
 import { ClientService } from 'src/app/services/client.service';
@@ -45,16 +47,53 @@ export class LoginComponent implements OnInit {
       title: 'Mot de passe oublié',
       html: `
         <div class="forgot-password-swal">
-          <p>Entrez votre adresse email pour recevoir un lien de réinitialisation</p>
-          <input type="email" id="swal-email" class="swal2-input" placeholder="Email">
-          <div id="swal-error" class="text-danger" style="min-height: 20px; margin-top: -10px; margin-bottom: 10px;"></div>
+          <p style="color: #64748b; font-size: 14px; text-align: center; margin-bottom: 20px; font-weight: 400; line-height: 1.5;">
+            Entrez votre adresse email pour recevoir un lien de réinitialisation
+          </p>
+          <input 
+            type="email" 
+            id="swal-email" 
+            class="swal2-input" 
+            placeholder="Email"
+            style="height: 40px; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0 12px; font-size: 14px; width: 100%; margin: 0; box-shadow: none;"
+          >
+          <div 
+            id="swal-error" 
+            class="text-danger" 
+            style="color: #ef4444; font-size: 12px; text-align: left; font-weight: 500; min-height: 20px; margin-top: 5px; margin-bottom: 10px;"
+          ></div>
         </div>
       `,
       width: '400px',
       showConfirmButton: true,
       confirmButtonText: 'Envoyer',
       showCloseButton: true,
-      showLoaderOnConfirm: true, // Affiche un loader pendant l'appel API
+      showLoaderOnConfirm: true,
+      
+      // Styles personnalisés pour SweetAlert
+      customClass: {
+        popup: 'lstb-popup',
+        title: 'lstb-title',
+        confirmButton: 'lstb-confirm-button',
+        closeButton: 'lstb-close-button',
+        loader: 'lstb-loader'
+      },
+      
+      // Styles CSS injectés
+      backdrop: `
+        rgba(0,0,0,0.4)
+        url()
+        center
+        no-repeat
+      `,
+      
+      // Styles pour les boutons
+      buttonsStyling: true,
+      confirmButtonColor: '#1e3a8a',
+      
+      // Styles pour le loader
+      loaderHtml: '',
+      
       preConfirm: () => {
         const email = (Swal.getPopup()?.querySelector('#swal-email') as HTMLInputElement)?.value;
         const errorEl = Swal.getPopup()?.querySelector('#swal-error');
@@ -72,7 +111,48 @@ export class LoginComponent implements OnInit {
 
         return { email: email };
       },
-      allowOutsideClick: () => !Swal.isLoading()
+      allowOutsideClick: () => !Swal.isLoading(),
+      
+      // Injecter des styles CSS personnalisés
+      didOpen: () => {
+        // Injecter des styles CSS personnalisés dans le document
+        const style = document.createElement('style');
+        style.textContent = `
+          .lstb-popup {
+            border-radius: 12px;
+            font-family: 'Roboto', 'Segoe UI', sans-serif;
+          }
+          .lstb-title {
+            color: #1e293b;
+            font-size: 20px;
+            font-weight: 600;
+          }
+          .lstb-confirm-button {
+            background: linear-gradient(90deg, #1e3a8a 0%, #0f766e 100%) !important;
+            border-radius: 6px !important;
+            font-weight: 500 !important;
+            padding: 10px 24px !important;
+            box-shadow: none !important;
+          }
+          .lstb-confirm-button:hover {
+            opacity: 0.9 !important;
+          }
+          .lstb-close-button {
+            color: #64748b !important;
+          }
+          .lstb-close-button:hover {
+            color: #1e293b !important;
+          }
+          .swal2-input:focus {
+            border-color: #0f766e !important;
+            box-shadow: none !important;
+          }
+          .swal2-loader {
+            border-color: #1e3a8a transparent #1e3a8a transparent !important;
+          }
+        `;
+        document.head.appendChild(style);
+      }
     }).then((result) => {
       if (result.isConfirmed && result.value) {
         this.authService.forgotPassword(result.value.email).subscribe({
@@ -81,7 +161,13 @@ export class LoginComponent implements OnInit {
               icon: 'success',
               title: 'Email envoyé!',
               text: 'Un lien de réinitialisation a été envoyé à votre adresse email',
-              confirmButtonText: 'OK'
+              confirmButtonText: 'OK',
+              customClass: {
+                popup: 'lstb-popup',
+                title: 'lstb-title',
+                confirmButton: 'lstb-confirm-button'
+              },
+              confirmButtonColor: '#1e3a8a'
             });
           },
           error: (err) => {
@@ -89,7 +175,13 @@ export class LoginComponent implements OnInit {
               icon: 'error',
               title: 'Erreur',
               text: err.message || 'Une erreur est survenue lors de l\'envoi',
-              confirmButtonText: 'OK'
+              confirmButtonText: 'OK',
+              customClass: {
+                popup: 'lstb-popup',
+                title: 'lstb-title',
+                confirmButton: 'lstb-confirm-button'
+              },
+              confirmButtonColor: '#ef4444'
             });
           }
         });

@@ -91,20 +91,5 @@ export class AuthService {
   isLoggedIn(): boolean {
     return !!this.getAccessToken();
   }
-  register(registerData: { rib: string, email: string, password: string }): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, registerData).pipe(
-      tap(() => {
-        console.log('Inscription réussie.');
-      }),
-      catchError((error) => {
-        console.error('Erreur lors de l\'inscription :', error);
-
-        // Extraire le message d'erreur du backend
-        const errorMessage = error.error?.message || 'Erreur lors de l\'inscription';
-
-        // Renvoyer l'erreur avec le message du backend
-        return throwError(() => ({ message: errorMessage }));
-      })
-    );
-  }
+ 
 }
