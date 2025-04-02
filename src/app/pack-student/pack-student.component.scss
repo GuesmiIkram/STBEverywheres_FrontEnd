@@ -1,0 +1,476 @@
+// Variables de couleurs
+$primary: #5983f5;
+$primary-dark: #4180f5;
+$secondary: #012970;
+$text-muted: #899bbd;
+$light-bg: #f6f9ff;
+$white: #ffffff;
+$border-color: #e0e0e0;
+
+// Mixins
+@mixin transition($property: all, $duration: 0.3s, $timing: ease) {
+  transition: $property $duration $timing;
+}
+
+@mixin box-shadow($shadow...) {
+  box-shadow: $shadow;
+}
+
+@mixin gradient-bg($start-color, $end-color) {
+  background: linear-gradient(135deg, $start-color 0%, $end-color 100%);
+}
+
+// Reset et styles de base
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: $secondary;
+  background-color: $light-bg;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+// Boutons
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  @include transition;
+  
+  &--primary {
+    background-color: $primary;
+    color: $white;
+    
+    &:hover {
+      background-color: $primary-dark;
+    }
+  }
+  
+  &--secondary {
+    background-color: transparent;
+    color: $primary;
+    border: 2px solid $primary;
+    
+    &:hover {
+      background-color: $primary;
+      color: $white;
+    }
+  }
+  
+  &--upload {
+    background-color: $white;
+    color: $primary;
+    border: 1px solid $primary;
+    font-size: 14px;
+    padding: 8px 15px;
+    
+    &:hover {
+      background-color: $primary;
+      color: $white;
+    }
+  }
+  
+  &--large {
+    padding: 12px 30px;
+    font-size: 16px;
+  }
+  
+  &--outline {
+    background-color: transparent;
+    color: $primary;
+    border: 2px solid $primary;
+    
+    &:hover {
+      background-color: $primary;
+      color: $white;
+    }
+  }
+}
+
+// Section Hero
+.hero {
+  background-color:$primary;
+  color: $white;
+  padding: 80px 0;
+  
+  &__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  &__content {
+    max-width: 700px;
+    text-align: center;
+  }
+  
+  &__title {
+    font-size: 42px;
+    font-weight: 700;
+    margin-bottom: 15px;
+  }
+  
+  &__subtitle {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: rgba($white, 0.9);
+  }
+  
+  &__text {
+    font-size: 18px;
+    color: rgba($white, 0.8);
+  }
+}
+
+// Section Offres
+.offers {
+  padding: 80px 0;
+  
+  .section-title {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 700;
+    color: $secondary;
+    margin-bottom: 50px;
+    position: relative;
+    
+    &:after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: -15px;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background-color: $primary;
+    }
+  }
+  
+  &__grid {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 30px;
+    
+    @media (max-width: 768px) {
+      flex-direction: column;
+    }
+  }
+}
+
+// Cartes d'offres
+.offer-card {
+  flex: 1;
+  background-color: $white;
+  border-radius: 10px;
+  overflow: hidden;
+  @include box-shadow(0 5px 25px rgba(0, 0, 0, 0.1));
+  @include transition;
+  
+  &:hover {
+    transform: translateY(-5px);
+    @include box-shadow(0 10px 35px rgba(0, 0, 0, 0.15));
+  }
+  
+  &__image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      @include transition;
+    }
+  }
+  
+  &__badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background-color: $primary;
+    color: $white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  &__content {
+    padding: 25px;
+  }
+  
+  &__title {
+    font-size: 22px;
+    font-weight: 700;
+    color: $secondary;
+    margin-bottom: 20px;
+  }
+  
+  &__features {
+    list-style: none;
+    margin-bottom: 25px;
+    
+    li {
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+      
+      i {
+        color: $primary;
+        margin-right: 10px;
+        font-size: 16px;
+        margin-top: 3px;
+      }
+    }
+  }
+}
+
+// Section Documents
+.documents {
+  padding: 80px 0;
+  background-color: $white;
+  
+  .section-title {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 700;
+    color: $secondary;
+    margin-bottom: 15px;
+  }
+  
+  .section-subtitle {
+    text-align: center;
+    font-size: 18px;
+    color: $text-muted;
+    margin-bottom: 50px;
+  }
+  
+  &__list {
+    max-width: 800px;
+    margin: 0 auto 40px;
+  }
+  
+  &__actions {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    
+    @media (max-width: 576px) {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+}
+
+// Éléments de document
+.document-item {
+  display: flex;
+  align-items: flex-start;
+  background-color: $light-bg;
+  border-radius: 10px;
+  padding: 25px;
+  margin-bottom: 20px;
+  
+  &__number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: $primary;
+    color: $white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-size: 18px;
+    margin-right: 20px;
+    flex-shrink: 0;
+  }
+  
+  &__content {
+    flex: 1;
+  }
+  
+  &__title {
+    font-size: 18px;
+    font-weight: 600;
+    color: $secondary;
+    margin-bottom: 15px;
+    
+    .required {
+      color: #e74c3c;
+    }
+  }
+  
+  &__upload {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    @media (max-width: 576px) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+  }
+}
+
+// Champ d'upload
+.upload-field {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  
+  &__text {
+    margin-left: 15px;
+    color: $text-muted;
+    font-size: 14px;
+  }
+}
+
+// Statut d'upload
+.upload-status {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  
+  &--pending {
+    background-color: rgba(#f39c12, 0.15);
+    color: #f39c12;
+  }
+  
+  &--success {
+    background-color: rgba(#2ecc71, 0.15);
+    color: #2ecc71;
+  }
+}
+
+// Animation pour le formulaire (maintenant visible par défaut)
+.pack-form {
+  opacity: 1;
+  transform: translateY(0);
+  @include transition(all, 0.5s, ease-out);
+}
+
+// Responsive
+@media (max-width: 992px) {
+  .hero {
+    padding: 60px 0;
+    
+    &__title {
+      font-size: 36px;
+    }
+    
+    &__subtitle {
+      font-size: 20px;
+    }
+  }
+  
+  .offers, .documents {
+    padding: 60px 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 50px 0;
+    
+    &__title {
+      font-size: 32px;
+    }
+    
+    &__subtitle {
+      font-size: 18px;
+    }
+    
+    &__text {
+      font-size: 16px;
+    }
+  }
+  
+  .section-title {
+    font-size: 28px;
+  }
+  
+  .document-item {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero {
+    padding: 40px 0;
+    
+    &__title {
+      font-size: 28px;
+    }
+  }
+  
+  .section-title {
+    font-size: 24px;
+  }
+  
+  .document-item {
+    flex-direction: column;
+    
+    &__number {
+      margin-bottom: 15px;
+    }
+  }
+  
+  .btn--large {
+    width: 100%;
+  }
+}
+.agency-selection {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: $light-bg;
+    border-radius: 8px;
+    
+    &__title {
+      font-size: 1.1em;
+      margin-bottom: 15px;
+      color: $secondary;
+      font-weight: 600;
+    }
+    
+    &__dropdown {
+      width: 100%;
+      padding: 10px 15px;
+      border: 1px solid $border-color;
+      border-radius: 5px;
+      background-color: $white;
+      font-size: 1em;
+      color: $secondary;
+      @include transition;
+      
+      &:focus {
+        outline: none;
+        border-color: $primary;
+        @include box-shadow(0 0 0 3px rgba($primary, 0.2));
+      }
+    }
+  }
+  
+  // Adaptation de l'espacement
+  .document-item:last-of-type {
+    margin-bottom: 30px;
+  }

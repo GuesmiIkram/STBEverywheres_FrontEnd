@@ -18,6 +18,9 @@ import { RouterModule } from '@angular/router';
 import { AccueilComponent } from './accueil/accueil.component';
 
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { TFBankComponent } from './tf-bank/tf-bank.component';
+import { PackStudentComponent } from './pack-student/pack-student.component';
+import { PackElyssaComponent } from './pack-elyssa/pack-elyssa.component';
 
 
 @NgModule({
@@ -27,7 +30,9 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     AccueilComponent,
 
     ResetPasswordComponent,
-  ],
+      TFBankComponent,
+      PackStudentComponent,
+      PackElyssaComponent,  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -37,6 +42,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     BreadcrumbModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    
     
     MatDialogModule, // Correctement importé maintenant
     // Ajouté

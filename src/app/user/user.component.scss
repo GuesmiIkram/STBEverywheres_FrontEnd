@@ -1,11 +1,618 @@
+// Variables pour un design bancaire premium LSTB
+$lstb-primary: #012970;       // Bleu profond
+$lstb-secondary: #5983f5;     // Vert-bleu
+$lstb-accent: #fbbf24;        // Or/Jaune pour accent
+$lstb-dark: #1e293b;          // Presque noir
+$lstb-light: #f8fafc;         // Blanc cassé
+$lstb-gray: #64748b;          // Gris neutre
+$lstb-light-gray: #e2e8f0;    // Gris clair
+$lstb-success: #10b981;       // Vert
+$lstb-danger: #ef4444;        // Rouge
+$lstb-gradient: linear-gradient(135deg, $lstb-primary, $lstb-secondary);
+$primary: #5983f5;
+$primary-dark: #4180f5;
+$secondary: #012970;
+$text-muted: #899bbd;
+$light-bg: #f6f9ff;
+$white: #ffffff;
+$border-color: #e0e0e0;
+// Typographie premium
+$font-primary: 'Montserrat', sans-serif;
+$font-secondary: 'Playfair Display', serif;
+
+// Mixins utiles
+@mixin card-shadow {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05), 0 5px 10px rgba(0, 0, 0, 0.02);
+}
+
+@mixin premium-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@mixin gold-accent {
+  background: linear-gradient(to right, $lstb-accent, darken($lstb-accent, 10%));
+}
+
+// Styles globaux
+body {
+  font-family: $font-primary;
+  background-color: $lstb-light;
+  color: $lstb-dark;
+  line-height: 1.6;
+}
+
+// En-tête de page
+.pagetitle {
+  margin-bottom: 2.5rem;
+  position: relative;
+  
+  h1 {
+    font-family: $font-secondary;
+    color: $lstb-primary;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.5px;
+    
+    &:after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 4px;
+      margin-top: 0.5rem;
+      @include gold-accent;
+      border-radius: 2px;
+    }
+  }
+  
+  .breadcrumb {
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    font-size: 0.875rem;
+    
+    .breadcrumb-item {
+      color: $lstb-gray;
+      font-weight: 500;
+      
+      a {
+        color: $lstb-secondary;
+        text-decoration: none;
+        @include premium-transition;
+        position: relative;
+        
+        &:after {
+          content: '';
+          position: absolute;
+          bottom: -2px;
+          left: 0;
+          width: 0;
+          height: 2px;
+          @include gold-accent;
+          @include premium-transition;
+        }
+        
+        &:hover {
+          color: $lstb-primary;
+          
+          &:after {
+            width: 100%;
+          }
+        }
+      }
+      
+      &.active {
+        color: $lstb-dark;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+// Section profile
+.section.profile {
+  .row {
+    margin-bottom: 2rem;
+  }
+  
+  // Cartes
+  .card {
+    border: none;
+    border-radius: 16px;
+    @include card-shadow;
+    @include premium-transition;
+    margin-bottom: 2rem;
+    background-color: white;
+    overflow: hidden;
+    position: relative;
+    
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba($lstb-primary, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      @include gold-accent;
+      opacity: 0;
+      @include premium-transition;
+    }
+    
+    &:hover:before {
+      opacity: 1;
+    }
+    
+    .card-body {
+      padding: 2rem;
+    }
+  }
+  
+  // Carte de profil
+  .profile-card {
+    text-align: center;
+    padding-top: 2.5rem !important;
+    
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100px;
+      background: $lstb-gradient;
+      z-index: 0;
+    }
+    
+    img {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: 5px solid white;
+      object-fit: cover;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 1;
+    }
+    
+    h2 {
+      font-family: $font-secondary;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: $lstb-primary;
+      margin-bottom: 0.5rem;
+    }
+    
+    h3 {
+      font-size: 1rem;
+      color: $lstb-gray;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+    }
+  }
+  
+  // Onglets
+  .nav-tabs {
+    border: none;
+    background-color: $lstb-light;
+    border-radius: 12px;
+    padding: 0.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    
+    .nav-item {
+      flex: 1;
+      text-align: center;
+      margin: 0 0.25rem;
+      
+      &:first-child {
+        margin-left: 0;
+      }
+      
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+    
+    .nav-link {
+      border: none;
+      color: $lstb-gray;
+      font-weight: 600;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      @include premium-transition;
+      width: 100%;
+      
+      &:hover {
+        color: $lstb-primary;
+        background-color: rgba($lstb-primary, 0.05);
+      }
+      
+      &.active {
+        color: white;
+        background: $lstb-gradient;
+        box-shadow: 0 4px 10px rgba($lstb-primary, 0.3);
+      }
+    }
+  }
+  
+  // Contenu des onglets
+  .tab-content {
+    padding-top: 1rem;
+    
+    .card-title {
+      font-family: $font-secondary;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: $lstb-primary;
+      margin-bottom: 1.75rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid $lstb-light-gray;
+      position: relative;
+      
+      &:after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 80px;
+        height: 3px;
+        @include gold-accent;
+        border-radius: 2px;
+      }
+    }
+    
+    // Détails du profil
+    .profile-overview {
+      .row {
+        margin-bottom: 1.25rem;
+        padding-bottom: 1.25rem;
+        border-bottom: 1px solid rgba($lstb-light-gray, 0.7);
+        @include premium-transition;
+        
+        &:hover {
+          background-color: rgba($lstb-light, 0.5);
+        }
+        
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+      
+      .label {
+        font-weight: 600;
+        color: $lstb-gray;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      
+      .col-lg-9 {
+        color: $lstb-dark;
+        font-weight: 500;
+        font-size: 1rem;
+      }
+    }
+    
+    // Formulaire d'édition
+    .profile-edit {
+      form {
+        .row {
+          margin-bottom: 1.5rem;
+        }
+        
+        .col-form-label {
+          font-weight: 600;
+          color: $lstb-gray;
+          font-size: 0.875rem;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+        
+        .form-control {
+          border-radius: 10px;
+          border: 2px solid $lstb-light-gray;
+          padding: 0.75rem 1rem;
+          font-size: 0.95rem;
+          @include premium-transition;
+          background-color: $lstb-light;
+          
+          &:focus {
+            border-color: $lstb-secondary;
+            box-shadow: 0 0 0 3px rgba($lstb-secondary, 0.15);
+            background-color: white;
+          }
+          
+          &.is-invalid {
+            border-color: $lstb-danger;
+            background-color: rgba($lstb-danger, 0.02);
+          }
+        }
+        
+        .text-danger {
+          font-size: 0.8rem;
+          margin-top: 0.5rem;
+          font-weight: 500;
+        }
+        
+        // Section photo de profil
+        #profileImage {
+          & + div {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+          }
+        }
+        
+        .btn {
+          border-radius: 10px;
+          font-weight: 600;
+          padding: 0.75rem 1.5rem;
+          @include premium-transition;
+          letter-spacing: 0.3px;
+          
+          &.btn-primary {
+            background: $lstb-gradient;
+            border: none;
+            box-shadow: 0 4px 10px rgba($lstb-primary, 0.2);
+            
+            &:hover {
+              transform: translateY(-2px);
+              box-shadow: 0 6px 15px rgba($lstb-primary, 0.3);
+            }
+            
+            &:active {
+              transform: translateY(0);
+            }
+          }
+          
+          &.btn-danger {
+            background-color: $lstb-danger;
+            border: none;
+            box-shadow: 0 4px 10px rgba($lstb-danger, 0.2);
+            
+            &:hover {
+              background-color: darken($lstb-danger, 5%);
+              transform: translateY(-2px);
+              box-shadow: 0 6px 15px rgba($lstb-danger, 0.3);
+            }
+          }
+          
+          &.btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            border-radius: 8px;
+          }
+          
+          .bi {
+            margin-right: 0.5rem;
+          }
+        }
+      }
+    }
+    
+    // Changement de mot de passe
+    .profile-change-password {
+      form {
+        max-width: 550px;
+        margin: 0 auto;
+        padding: 1rem;
+        background-color: $lstb-light;
+        border-radius: 12px;
+      }
+    }
+  }
+  
+  // Bouton de téléchargement KYC
+  .btn-primary {
+    background: $lstb-gradient;
+    border: none;
+    box-shadow: 0 4px 10px rgba($lstb-primary, 0.2);
+    border-radius: 10px;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    @include premium-transition;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba($lstb-primary, 0.3);
+    }
+    
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
+
+// Messages d'erreur
 .error-message {
-    color: #ff4d4f; // Couleur rouge pour le message d'erreur
-    font-size: 12px;
-    margin-top: 5px;
+  color: $lstb-danger;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  
+  &:before {
+    content: '⚠️';
+    margin-right: 0.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+// Champ invalide
+.input-error {
+  border-color: $lstb-danger !important;
+  background-color: rgba($lstb-danger, 0.02) !important;
+  
+  &:focus {
+    box-shadow: 0 0 0 3px rgba($lstb-danger, 0.15) !important;
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.tab-pane {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.profile-overview .row {
+  animation: slideIn 0.3s ease-out;
+  animation-fill-mode: both;
+  
+  @for $i from 1 through 20 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 0.05}s;
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 992px) {
+  .profile-card {
+    margin-bottom: 2rem;
   }
   
-  // Champ invalide
-  .input-error {
-    border-color: #ff4d4f; // Bordure rouge pour les champs invalides
+  .nav-tabs .nav-link {
+    padding: 0.6rem 0.75rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .pagetitle h1 {
+    font-size: 1.75rem;
   }
   
+  .profile-card img {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .card-body {
+    padding: 1.5rem !important;
+  }
+  
+  .nav-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 0.5rem;
+    
+    .nav-item {
+      flex: 0 0 auto;
+      width: auto;
+      margin: 0 0.25rem;
+    }
+    
+    .nav-link {
+      white-space: nowrap;
+      padding: 0.6rem 1rem;
+    }
+  }
+  
+  .profile-overview .row {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+  .btn {
+    padding: 0.6rem 1.25rem !important;
+  }
+}
+
+// Effets spéciaux pour LSTB
+.lstb-brand {
+  position: relative;
+  display: inline-block;
+  font-family: $font-secondary;
+  font-weight: 700;
+  color: $lstb-primary;
+  
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    @include gold-accent;
+  }
+}
+
+// Ajout d'un badge premium pour les clients VIP
+.premium-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: linear-gradient(135deg, #f59e0b, #b45309);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  z-index: 10;
+  
+  &:before {
+    content: '★';
+    margin-right: 0.25rem;
+  }
+}
+
+// Ajout d'un effet de carte bancaire pour certains éléments
+.banking-card-effect {
+  background: linear-gradient(135deg, $lstb-primary, darken($lstb-primary, 15%));
+  border-radius: 16px;
+  padding: 1.5rem;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  
+  &:before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+    opacity: 0.5;
+  }
+  
+  h3 {
+    color: white !important;
+    font-weight: 600 !important;
+  }
+}
+
+// Ajout d'un style pour les informations importantes
+.important-info {
+  background-color: rgba($lstb-accent, 0.1);
+  border-left: 4px solid $lstb-accent;
+  padding: 1rem;
+  border-radius: 0 8px 8px 0;
+  margin: 1rem 0;
+  
+  strong {
+    color: darken($lstb-accent, 15%);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+}

@@ -1,0 +1,174 @@
+<section id="student-form" class="documents pack-form">
+    <div class="container">
+      <h2 class="section-title">Demande Pack Elyssa :</h2>
+      
+      <form (ngSubmit)="submitDocuments(documentForm)" #documentForm="ngForm">
+        <div class="documents__list">
+          <!-- Document 1 -->
+          <div class="document-item">
+            <div class="document-item__number">1</div>
+            <div class="document-item__content">
+              <h3 class="document-item__title">Passeport en cours de validité <span class="required">* (obligatoire)</span></h3>
+              <div class="document-item__upload">
+                <div class="upload-field">
+                  <input type="file" id="file1" (change)="onFileSelected($event, 0)" accept=".pdf,.jpg,.jpeg,.png" style="display: none;" required>
+                  <button type="button" class="btn btn--upload" (click)="triggerFileInput('file1')">
+                    Choisir un fichier
+                  </button>
+                  <span class="upload-field__text">
+                    {{ selectedFiles[0]?.name || 'Aucun fichier choisi' }}
+                  </span>
+                </div>
+                <span class="upload-status" [ngClass]="{
+                  'upload-status--pending': !selectedFiles[0],
+                  'upload-status--success': selectedFiles[0]
+                }">
+                  {{ selectedFiles[0] ? 'Rattaché' : 'Non rattaché' }}
+                </span>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Document 2 -->
+          <div class="document-item">
+            <div class="document-item__number">2</div>
+            <div class="document-item__content">
+              <h3 class="document-item__title">Visa de long séjour - type D et d'une durée d'un an (mention « salarié en mission » ou « passeport talent »)</h3>
+              <div class="document-item__upload">
+                <div class="upload-field">
+                  <input type="file" id="file2" (change)="onFileSelected($event, 1)" accept=".pdf,.jpg,.jpeg,.png" style="display: none;">
+                  <button type="button" class="btn btn--upload" (click)="triggerFileInput('file2')">
+                    Choisir un fichier
+                  </button>
+                  <span class="upload-field__text">
+                    {{ selectedFiles[1]?.name || 'Aucun fichier choisi' }}
+                  </span>
+                </div>
+                <span class="upload-status" [ngClass]="{
+                  'upload-status--pending': !selectedFiles[1],
+                  'upload-status--success': selectedFiles[1]
+                }">
+                  {{ selectedFiles[1] ? 'Rattaché' : 'Non rattaché' }}
+                </span>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Document 3 -->
+          <div class="document-item">
+            <div class="document-item__number">3</div>
+            <div class="document-item__content">
+              <h3 class="document-item__title">Justificatif de la validation de l'enregistrement de votre demande de Visa de long séjour auprès de l'autorité concernée (À délivrer au plus tard un mois après l'ouverture du compte)</h3>
+              <div class="document-item__upload">
+                <div class="upload-field">
+                  <input type="file" id="file3" (change)="onFileSelected($event, 2)" accept=".pdf,.jpg,.jpeg,.png" style="display: none;">
+                  <button type="button" class="btn btn--upload" (click)="triggerFileInput('file3')">
+                    Choisir un fichier
+                  </button>
+                  <span class="upload-field__text">
+                    {{ selectedFiles[2]?.name || 'Aucun fichier choisi' }}
+                  </span>
+                </div>
+                <span class="upload-status" [ngClass]="{
+                  'upload-status--pending': !selectedFiles[2],
+                  'upload-status--success': selectedFiles[2]
+                }">
+                  {{ selectedFiles[2] ? 'Rattaché' : 'Non rattaché' }}
+                </span>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Document 4 -->
+          <div class="document-item">
+            <div class="document-item__number">4</div>
+            <div class="document-item__content">
+              <h3 class="document-item__title">Justificatif de domicile en France récent (datant de moins de 3 mois) <span class="required">* (obligatoire)</span></h3>
+              <div class="document-item__upload">
+                <div class="upload-field">
+                  <input type="file" id="file4" (change)="onFileSelected($event, 3)" accept=".pdf,.jpg,.jpeg,.png" style="display: none;" required>
+                  <button type="button" class="btn btn--upload" (click)="triggerFileInput('file4')">
+                    Choisir un fichier
+                  </button>
+                  <span class="upload-field__text">
+                    {{ selectedFiles[3]?.name || 'Aucun fichier choisi' }}
+                  </span>
+                </div>
+                <span class="upload-status" [ngClass]="{
+                  'upload-status--pending': !selectedFiles[3],
+                  'upload-status--success': selectedFiles[3]
+                }">
+                  {{ selectedFiles[3] ? 'Rattaché' : 'Non rattaché' }}
+                </span>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Document 5 -->
+          <div class="document-item">
+            <div class="document-item__number">5</div>
+            <div class="document-item__content">
+              <h3 class="document-item__title">Contrat de travail à durée indéterminée (CDI) au sein d'une société basée en France. <span class="required">* (obligatoire)</span></h3>
+              <div class="document-item__upload">
+                <div class="upload-field">
+                  <input type="file" id="file5" (change)="onFileSelected($event, 4)" accept=".pdf,.jpg,.jpeg,.png" style="display: none;" required>
+                  <button type="button" class="btn btn--upload" (click)="triggerFileInput('file5')">
+                    Choisir un fichier
+                  </button>
+                  <span class="upload-field__text">
+                    {{ selectedFiles[4]?.name || 'Aucun fichier choisi' }}
+                  </span>
+                </div>
+                <span class="upload-status" [ngClass]="{
+                  'upload-status--pending': !selectedFiles[4],
+                  'upload-status--success': selectedFiles[4]
+                }">
+                  {{ selectedFiles[4] ? 'Rattaché' : 'Non rattaché' }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Document 6 -->
+          <div class="document-item">
+            <div class="document-item__number">6</div>
+            <div class="document-item__content">
+              <h3 class="document-item__title">Certificat de retenue d'impôt sur le revenu <span class="required">* (obligatoire)</span></h3>
+              <div class="document-item__upload">
+                <div class="upload-field">
+                  <input type="file" id="file6" (change)="onFileSelected($event, 5)" accept=".pdf,.jpg,.jpeg,.png" style="display: none;" required>
+                  <button type="button" class="btn btn--upload" (click)="triggerFileInput('file6')">
+                    Choisir un fichier
+                  </button>
+                  <span class="upload-field__text">
+                    {{ selectedFiles[5]?.name || 'Aucun fichier choisi' }}
+                  </span>
+                </div>
+                <span class="upload-status" [ngClass]="{
+                  'upload-status--pending': !selectedFiles[5],
+                  'upload-status--success': selectedFiles[5]
+                }">
+                  {{ selectedFiles[5] ? 'Rattaché' : 'Non rattaché' }}
+                </span>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Choix Agence -->
+          <div class="agency-selection">
+            <h3 class="agency-selection__title">Choix Agence:</h3>
+            <select class="agency-selection__dropdown" [(ngModel)]="selectedAgency" name="agency" required>
+              <option value="">Sélectionnez une agence</option>
+              <option value="Agence Paris Centre">Agence Paris Centre</option>
+              <option value="Agence Lyon Part-Dieu">Agence Lyon Part-Dieu</option>
+              <option value="Agence Toulouse Capitole">Agence Toulouse Capitole</option>
+            </select>
+          </div>
+        </div>
+  
+        <button type="submit" class="btn btn--primary btn--submit" [disabled]="isSubmitting">
+          {{ isSubmitting ? 'Envoi en cours...' : 'Envoyer la Demande' }}
+        </button>
+      </form>
+    </div>
+  </section>
