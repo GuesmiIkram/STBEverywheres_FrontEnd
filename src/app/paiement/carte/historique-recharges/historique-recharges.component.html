@@ -1,0 +1,132 @@
+<div class="container mt-4">
+    <h2 class="mb-4">Historique des recharges</h2>
+  
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="text-center">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Chargement...</span>
+      </div>
+      <p>Chargement de l'historique...</p>
+    </div>
+  
+    <!-- Error State -->
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+      <button class="btn btn-sm btn-outline-danger ms-2" (click)="loadHistoriques()">Réessayer</button>
+    </div>
+  
+    <!-- Content -->
+    <div *ngIf="!isLoading && !errorMessage">
+      <!-- Search Filter -->
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <div class="input-group">
+            <button class="btn" type="button">
+              <i class="fas fa-search"></i>
+            </button>
+            <input type="text" class="form-control" placeholder="Rechercher par numéro de carte..." 
+                   [(ngModel)]="searchTerm" (input)="applyFilter()">
+          </div>
+        </div>
+        <div class="col-md-6 text-end">
+          <div class="btn-group">
+            <button class="btn" [class.active]="itemsPerPage === 10" 
+                    (click)="changeItemsPerPage(10)">10</button>
+            <button class="btn" [class.active]="itemsPerPage === 25" 
+                    (click)="changeItemsPerPage(25)">25</button>
+            <button class="btn" [class.active]="itemsPerPage === 50" 
+                    (click)="changeItemsPerPage(50)">50</button>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Historique Table -->
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead class="table-light">
+            <tr>
+              <th>Date/Heure</th>
+              <th>Type</th>
+              <th>Carte Émettrice</th>
+              <th>Carte Destinataire</th>
+              <th class="text-end">Montant (TND)</th>
+              <th class="text-end">Frais (TND)</th>
+              <th class="text-end">Total (TND)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let hist of paginatedHistoriques">
+              <td>{{ formatDate(hist.dateRecharge) }}</td>
+              <td>
+                <span [ngClass]="{
+                  'badge bg-danger': isDebit(hist),
+                  'badge bg-success': !isDebit(hist)
+                }">
+                  {{ isDebit(hist) ? 'Débit' : 'Crédit' }}
+                </span>
+              </td>
+              <td>
+                <small class="text-muted">{{ hist.carteEmetteurNum }}</small>
+              </td>
+              <td>
+                <small class="text-muted">{{ hist.carteRecepteurNum }}</small>
+              </td>
+              <td class="text-end">{{ hist.montant | number:'1.2-2' }}</td>
+              <td class="text-end">{{ hist.frais | number:'1.2-2' }}</td>
+              <td class="text-end fw-bold" 
+                  [ngClass]="{'text-danger': isDebit(hist), 'text-success': !isDebit(hist)}">
+                {{ isDebit(hist) ? '-' : '+' }}{{ (hist.montant + (isDebit(hist) ? hist.frais : 0)) | number:'1.2-2' }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+      <!-- No Results -->
+      <div *ngIf="filteredHistoriques.length === 0" class="alert alert-info">
+        Aucune recharge trouvée
+      </div>
+  
+      <!-- Pagination -->
+      <div *ngIf="filteredHistoriques.length > 0" class="d-flex justify-content-between align-items-center mt-3">
+        <div>
+          Affichage de {{ (currentPage - 1) * itemsPerPage + 1 }} à 
+          {{ Math.min(currentPage * itemsPerPage, filteredHistoriques.length) }}
+          sur {{ filteredHistoriques.length }} recharges
+        </div>
+        <div class="btn-group">
+          <!-- Previous button -->
+          <button *ngIf="currentPage > 1" class="btn nav-btn" (click)="pageChanged(currentPage - 1)">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          
+          <!-- First page -->
+          <button *ngIf="currentPage > 3" class="btn" (click)="pageChanged(1)">1</button>
+          
+          <!-- Ellipsis if needed -->
+          <div *ngIf="currentPage > 4" class="pagination-ellipsis">...</div>
+          
+          <!-- Pages around current -->
+          <ng-container *ngFor="let page of getVisiblePages()">
+            <button class="btn" [class.active]="page === currentPage" (click)="pageChanged(page)">
+              {{ page }}
+            </button>
+          </ng-container>
+          
+          <!-- Ellipsis if needed -->
+          <div *ngIf="currentPage < getTotalPages() - 3" class="pagination-ellipsis">...</div>
+          
+          <!-- Last page -->
+          <button *ngIf="currentPage < getTotalPages() - 2" class="btn" (click)="pageChanged(getTotalPages())">
+            {{ getTotalPages() }}
+          </button>
+          
+          <!-- Next button -->
+          <button *ngIf="currentPage < getTotalPages()" class="btn nav-btn" (click)="pageChanged(currentPage + 1)">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

@@ -4,7 +4,7 @@ import { TypeCarte } from "../enums/type-carte.enum";
 export  interface DemandeCarte{
     NumCompte: string;
     NomCarte: NomCarte;
-    TypeCarte: TypeCarte;
+    TypeCarte?: TypeCarte;
     CIN: string;
     Email: string;
     NumTel: string;

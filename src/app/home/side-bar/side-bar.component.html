@@ -28,7 +28,7 @@
                     <li>
 
                         <a routerLink="/home"  routerLinkActive="active"   [routerLinkActiveOptions]="{exact: true}" >
-
+                        </a>
                         <a routerLink="/home/TF"  routerLinkActive="active"   [routerLinkActiveOptions]="{exact: true}">
                             <i class="bi bi-circle"></i><span>Compte TF Banque</span>
                         </a>
@@ -73,11 +73,7 @@
                             <i class="bi bi-circle"></i><span>Mettre à jour</span>
                         </a>
                     </li>
-                     <li>
-                        <a routerLink="/home/PackStudent">
-                            <i class="bi bi-circle"></i><span>Supprimer</span>
-                        </a>
-                    </li> 
+                    
 
                 </ul>
             </li><!-- End Components Nav -->
@@ -99,11 +95,34 @@
                             <i class="bi bi-circle"></i><span>Demander une Carte</span>
                         </a>
                     </li>
-                    <!-- <li>
-                        <a routerLink="/">
-                            <i class="bi bi-circle"></i><span>Demande</span>
+                   <li>
+                        <a routerLink="/home/carte/Demander-Plafond" routerLinkActive="active"   [routerLinkActiveOptions]="{exact: true}">
+                            <i class="bi bi-circle"></i><span>Demande  augmentation plafond</span>
                         </a>
-                    </li> -->
+                    </li>
+
+                    <li>
+                        <a class="nav-link collapsed" (click)="ShowHideCollapse('virement-unitaire-nav')" data-bs-target="#virement-unitaire-nav" data-bs-toggle="collapse">
+                            <i class="bi bi-circle"></i><span>Recharge Carte</span><i class="bi bi-chevron-down ms-auto"></i>
+                        </a>
+                        <ul id="virement-unitaire-nav" class="nav-content collapse">
+                            <li>
+                                <a routerLink="/home/carte/RechargeMesCarte" routerLinkActive="active">
+                                    <i class="bi bi-dot"></i><span>recharger mes cartes</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a routerLink="/home/carte/RechargeAutresCarte" routerLinkActive="active">
+                                    <i class="bi bi-dot"></i><span>recharger autres cartes</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a routerLink="/home/carte/HistoriqueRecharges" routerLinkActive="active"   [routerLinkActiveOptions]="{exact: true}">
+                            <i class="bi bi-circle"></i><span>Historique</span>
+                        </a>
+                    </li>
 
                 </ul>
             </li><!-- End Forms Nav -->
@@ -158,6 +177,12 @@
             </li><!-- End Profile Page Nav -->
 
 
+            <li class="nav-item">
+                <a class="nav-link collapsed"  routerLink="/home/Reclamation" routerLinkActive="active"   [routerLinkActiveOptions]="{exact: true}" >
+                    <i class="bi bi-chat-left-text"></i>
+                    <span>Reclamation</span>
+                </a>
+            </li>
 
 
   <!-- End Sidebar-->

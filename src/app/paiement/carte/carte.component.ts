@@ -33,16 +33,25 @@ export class CarteComponent implements OnInit {
   // Méthode pour obtenir l'image de la carte
   getCarteImage(nomCarte: string): string {
     switch (nomCarte) {
+      case  NomCarte.CIB:
+        return 'assets/img/CARTE-MASTERCARD-GOLD-INTERNATIONALE-350x238-1.webp';
+
+      case  NomCarte.Epargne:
+          return 'assets/img/Carte_STB_Epargne.png';
       case NomCarte.MastercardGold:
         return 'assets/img/CARTE-MASTERCARD-GOLD-INTERNATIONALE-350x238-1.webp';
       case NomCarte.VisaClassic:
         return 'assets/img/CARTE_VISA_CLASSICNATIONALE.png';
-      
+        case NomCarte.Mastercard:
+          return 'assets/img/CARTE-MASTERCARD-GOLD-INTERNATIONALE-350x238-1.webp';
       case NomCarte.VisaPlatinum:
         return 'assets/images/visa-platinum.jpg';
+        case  NomCarte.C_cash:
+          return 'assets/img/Ccash.png';
+      case NomCarte.C_pay:
+        return 'assets/img/Cpay.png';
       
-      case NomCarte.MastercardWorld:
-        return 'assets/images/mastercard-world.jpg';
+     
       default:
         return 'assets/images/default-card.jpg';
     }
@@ -61,7 +70,11 @@ export class CarteComponent implements OnInit {
     const lastFour = numCarte.slice(-4);
     return masked + lastFour;
   }
-
+  shouldShowOverlay(statut: StatutCarte): boolean {
+    return statut === StatutCarte.Inactive || 
+           statut === StatutCarte.Blocked || 
+           statut === StatutCarte.Expired;
+  }
   blockCarte(numCarte: string): void {
     Swal.fire({
       title: 'Confirmation',

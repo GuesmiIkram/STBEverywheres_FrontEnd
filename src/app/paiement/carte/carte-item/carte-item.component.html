@@ -1,1 +1,108 @@
-<p>carte-item works!</p>
+<div class="container">
+    <!-- Onglets de navigation -->
+    <h2 class="form-title">Augmentation de plafond</h2>
+    <div class="tabs">
+      <button [class.active]="activeTab === 'demande'" (click)="changeTab('demande')">
+        Initiation demande augmentation plafond
+      </button>
+      <button [class.active]="activeTab === 'suivi'" (click)="changeTab('suivi')">
+        Suivi demandes d'augmentation plafond
+      </button>
+    </div>
+  
+    <!-- Messages d'erreur/succès -->
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      <p>{{ errorMessage }}</p>
+    </div>
+  
+    <div *ngIf="successMessage" class="alert alert-success">
+      <p>{{ successMessage }}</p>
+    </div>
+  
+    <!-- Indicateur de chargement -->
+    <div *ngIf="isLoading" class="loading-spinner">
+      <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Chargement...</span>
+      </div>
+    </div>
+  
+    <!-- Formulaire de demande -->
+    <div *ngIf="activeTab === 'demande' && !isLoading" class="tab-content">
+      <h2>Demande d'augmentation de plafond</h2>
+  
+      <form [formGroup]="demandeForm" class="demande-form">
+        <div class="form-group">
+          <label>Sélectionnez une carte :</label>
+          <select formControlName="selectedCard" class="form-control">
+            <option value="">– Sélectionnez une carte –</option>
+            <option *ngFor="let card of clientCards" [value]="card.numCarte">
+              {{card.nomCarte}} - {{card.numCarte}}
+            </option>
+          </select>
+        </div>
+  
+        <div class="form-group">
+          <label>Nouveau plafond TPE (TND):</label>
+          <input type="number" formControlName="newTPELimit" class="form-control" 
+                 placeholder="Entrez le montant en TND" min="0">
+        </div>
+  
+        <div class="form-group">
+          <label>Nouveau plafond DAB (TND):</label>
+          <input type="number" formControlName="newDABLimit" class="form-control" 
+                 placeholder="Entrez le montant en TND" min="0">
+        </div>
+  
+        <div class="form-group">
+          <label>Raison de la demande (minimum 10 caractères):</label>
+          <textarea formControlName="requestReason" class="form-control" rows="3"
+                    placeholder="Décrivez la raison de votre demande"></textarea>
+        </div>
+  
+        <div class="form-group">
+          <button type="button" class="btn btn-primary" (click)="submitRequest()"
+                  [disabled]="!demandeForm.valid || isLoading">
+            <span *ngIf="!isLoading">Envoyer la demande</span>
+            <span *ngIf="isLoading">Envoi en cours...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  
+    <!-- Suivi des demandes -->
+    <div *ngIf="activeTab === 'suivi' && !isLoading" class="tab-content">
+      <h2>Historique des demandes</h2>
+  
+      <div *ngIf="demandes.length === 0" class="alert alert-info">
+        <p>Aucune demande trouvée.</p>
+      </div>
+  
+      <div *ngIf="demandesParMois.length > 0">
+        <div *ngFor="let group of demandesParMois" class="month-group">
+          <h3>{{ group.mois }} {{ group.annee }}</h3>
+          
+          <div *ngFor="let demande of group.demandes" class="demande-card"
+               [class.approved]="demande.statut === 'APPROUVE'"
+               [class.rejected]="demande.statut === 'REFUSE'"
+               [class.pending]="demande.statut === 'EN_COURS'">
+            
+            <div class="demande-header">
+              <span class="date">{{ demande.dateDemande | date:'dd' }}</span>
+              <span class="month">{{ demande.dateDemande | date:'MMM' | uppercase }}</span>
+            </div>
+            
+            <div class="demande-content">
+              <h4>Carte: {{demande.numCarte }}</h4>
+              <p><strong>TPE:</strong> {{demande.nouveauPlafondTPE | currency:'TND':'symbol':'1.2-2'}}</p>
+              <p><strong>DAB:</strong> {{demande.nouveauPlafondDAB | currency:'TND':'symbol':'1.2-2'}}</p>
+              <p><strong>Raison:</strong> {{demande.raison}}</p>
+            </div>
+            
+            <span class="status-badge">
+              {{getFormattedStatus(demande.statut)}}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

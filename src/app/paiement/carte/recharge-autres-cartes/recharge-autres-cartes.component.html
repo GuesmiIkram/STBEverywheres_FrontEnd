@@ -1,0 +1,55 @@
+<div class="container mt-4">
+    <h2 class="mb-4">Recharge de carte</h2>
+  
+    <form [formGroup]="rechargeForm" (ngSubmit)="onSubmit()">
+  
+      <!-- Carte émettrice -->
+      <div class="form-group mb-3">
+        <label for="carteEmetteur">Carte émettrice</label>
+        <select class="form-control" formControlName="carteEmetteurNum" id="carteEmetteur">
+          <option value="">-- Sélectionner une carte --</option>
+          <option *ngFor="let carte of mesCartes" [value]="carte.numCarte">
+            {{ carte.typeCarte }} - {{ carte.numCarte }} (Solde: TND{{ carte.solde | number: '1.2-2' }})
+          </option>
+        </select>
+        <small *ngIf="rechargeForm.get('carteEmetteurNum')?.hasError('required') && rechargeForm.get('carteEmetteurNum')?.touched" 
+               class="text-danger">Ce champ est obligatoire</small>
+        <small *ngIf="rechargeForm.get('carteEmetteurNum')?.hasError('pattern')" 
+               class="text-danger">Le numéro doit contenir exactement 16 chiffres</small>
+      </div>
+  
+      <!-- Carte à recharger -->
+      <div class="form-group mb-3">
+        <label for="carteRecepteur">Numéro de carte à recharger</label>
+        <input type="text" 
+               (input)="removeSpaces($event)"
+               (keydown.space)="$event.preventDefault()"
+               class="form-control" 
+               id="carteRecepteur" 
+               formControlName="carteRecepteurNum" 
+               placeholder="Entrez les 16 chiffres sans espaces">
+        <small *ngIf="rechargeForm.get('carteRecepteurNum')?.hasError('required') && rechargeForm.get('carteRecepteurNum')?.touched" 
+               class="text-danger">Ce champ est obligatoire</small>
+        <small *ngIf="rechargeForm.get('carteRecepteurNum')?.hasError('pattern')" 
+               class="text-danger">Le numéro doit contenir exactement 16 chiffres</small>
+      </div>
+  
+      <!-- Montant -->
+      <div class="form-group mb-3">
+        <label for="montant">Montant (TND)</label>
+        <input type="number" 
+               class="form-control" 
+               id="montant" 
+               formControlName="montant" 
+               placeholder="Montant à recharger">
+        <small *ngIf="rechargeForm.get('montant')?.hasError('required') && rechargeForm.get('montant')?.touched" 
+               class="text-danger">Ce champ est obligatoire</small>
+        <small *ngIf="rechargeForm.get('montant')?.hasError('min')" 
+               class="text-danger">Le montant doit être supérieur à 0</small>
+      </div>
+  
+      <!-- Bouton Recharger -->
+      <button type="submit" class="btn btn-primary" [disabled]="rechargeForm.invalid">Recharger</button>
+  
+    </form>
+  </div>

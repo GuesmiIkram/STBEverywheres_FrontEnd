@@ -1,0 +1,469 @@
+// Variables
+$primary-color: #0056b3;
+$primary-hover: #004494;
+$secondary-color: #f8f9fa;
+$border-color: #dee2e6;
+$error-color: #dc3545;
+$success-color: #28a745;
+$info-color: #17a2b8;
+$warning-color: #ffc107;
+$text-color: #212529;
+$light-text: #6c757d;
+$white: #ffffff;
+$box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+$transition: all 0.2s ease-in-out;
+
+// Status colors
+$status-approved: #28a745;
+$status-rejected: #dc3545;
+$status-pending: #ffc107;
+
+// Mixins
+@mixin form-control {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: $text-color;
+  background-color: $white;
+  background-clip: padding-box;
+  border: 1px solid $border-color;
+  border-radius: 0.25rem;
+  transition: $transition;
+  
+  &:focus {
+    color: $text-color;
+    background-color: $white;
+    border-color: lighten($primary-color, 25%);
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
+  }
+  
+  &.ng-invalid.ng-touched {
+    border-color: $error-color;
+    
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba($error-color, 0.25);
+    }
+  }
+}
+
+// Main container
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
+}
+
+// Form title
+.form-title {
+  color: $primary-color;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid lighten($primary-color, 40%);
+  text-align: center;
+}
+
+// Tabs
+.tabs {
+  display: flex;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid $border-color;
+  overflow-x: auto;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    border-bottom: none;
+  }
+  
+  button {
+    background: none;
+    border: none;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: $light-text;
+    cursor: pointer;
+    transition: $transition;
+    white-space: nowrap;
+    position: relative;
+    
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background-color: $primary-color;
+      transition: $transition;
+    }
+    
+    &.active {
+      color: $primary-color;
+      font-weight: 600;
+      
+      &:after {
+        width: 100%;
+      }
+    }
+    
+    &:hover:not(.active) {
+      color: darken($light-text, 15%);
+      background-color: rgba($primary-color, 0.05);
+    }
+    
+    @media (max-width: 768px) {
+      text-align: center;
+      border-bottom: 1px solid $border-color;
+      
+      &.active {
+        background-color: rgba($primary-color, 0.1);
+        
+        &:after {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+// Alerts
+.alert {
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 0.25rem;
+  animation: fadeIn 0.3s ease-in-out;
+  
+  p {
+    margin: 0;
+  }
+  
+  &.alert-danger {
+    background-color: lighten($error-color, 40%);
+    border-left: 4px solid $error-color;
+    color: darken($error-color, 15%);
+  }
+  
+  &.alert-success {
+    background-color: lighten($success-color, 45%);
+    border-left: 4px solid $success-color;
+    color: darken($success-color, 15%);
+  }
+  
+  &.alert-info {
+    background-color: lighten($info-color, 45%);
+    border-left: 4px solid $info-color;
+    color: darken($info-color, 15%);
+    text-align: center;
+    padding: 2rem;
+  }
+}
+
+// Loading spinner
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 0;
+  
+  .spinner-border {
+    width: 3rem;
+    height: 3rem;
+    border-width: 0.25rem;
+    color: $primary-color;
+    animation: spinner 1s linear infinite;
+  }
+  
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+// Tab content
+.tab-content {
+  background-color: $white;
+  border-radius: 0.5rem;
+  box-shadow: $box-shadow;
+  padding: 2rem;
+  animation: fadeIn 0.3s ease-in-out;
+  
+  @media (max-width: 576px) {
+    padding: 1.5rem;
+  }
+  
+  h2 {
+    color: $primary-color;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 500;
+  }
+}
+
+// Form styling
+.demande-form {
+  .form-group {
+    margin-bottom: 1.5rem;
+    
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: $text-color;
+    }
+    
+    .form-control {
+      @include form-control;
+      
+      // Specific styling for number inputs
+      &[type="number"] {
+        -moz-appearance: textfield;
+        
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+      }
+    }
+    
+    textarea.form-control {
+      resize: vertical;
+      min-height: 100px;
+    }
+    
+    select.form-control {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='4' viewBox='0 0 8 4'%3E%3Cpath fill='%23343a40' d='M0 0l4 4 4-4z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 8px 4px;
+      appearance: none;
+      padding-right: 2.5rem;
+    }
+  }
+  
+  // Button styling
+  .btn {
+    display: inline-block;
+    font-weight: 500;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    border: 1px solid transparent;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: $transition;
+    cursor: pointer;
+    
+    &.btn-primary {
+      color: $white;
+      background-color: $primary-color;
+      border-color: $primary-color;
+      
+      &:hover:not(:disabled) {
+        background-color: $primary-hover;
+        border-color: $primary-hover;
+      }
+      
+      &:focus {
+        box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.5);
+      }
+      
+      &:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+// History view styling
+.month-group {
+  margin-bottom: 2rem;
+  
+  h3 {
+    font-size: 1.25rem;
+    color: $text-color;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid $border-color;
+  }
+}
+
+.demande-card {
+  display: flex;
+  margin-bottom: 1.25rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: $box-shadow;
+  transition: $transition;
+  position: relative;
+  
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  }
+  
+  &.approved {
+    border-left: 4px solid $status-approved;
+  }
+  
+  &.rejected {
+    border-left: 4px solid $status-rejected;
+  }
+  
+  &.pending {
+    border-left: 4px solid $status-pending;
+  }
+  
+  .demande-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: $secondary-color;
+    padding: 1rem;
+    min-width: 80px;
+    text-align: center;
+    
+    .date {
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+    
+    .month {
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      color: $light-text;
+    }
+  }
+  
+  .demande-content {
+    flex: 1;
+    padding: 1rem;
+    background-color: $white;
+    
+    h4 {
+      margin-top: 0;
+      margin-bottom: 0.75rem;
+      font-size: 1.1rem;
+      color: $primary-color;
+    }
+    
+    p {
+      margin: 0.5rem 0;
+      font-size: 0.95rem;
+      
+      strong {
+        font-weight: 600;
+        margin-right: 0.25rem;
+      }
+    }
+  }
+  
+  .status-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    
+    .approved & {
+      background-color: rgba($status-approved, 0.1);
+      color: $status-approved;
+    }
+    
+    .rejected & {
+      background-color: rgba($status-rejected, 0.1);
+      color: $status-rejected;
+    }
+    
+    .pending & {
+      background-color: rgba($status-pending, 0.1);
+      color: darken($status-pending, 25%);
+    }
+  }
+  
+  @media (max-width: 576px) {
+    flex-direction: column;
+    
+    .demande-header {
+      flex-direction: row;
+      width: 100%;
+      min-width: auto;
+      padding: 0.75rem;
+      
+      .date {
+        font-size: 1.25rem;
+        margin-right: 0.5rem;
+      }
+    }
+    
+    .status-badge {
+      position: static;
+      display: inline-block;
+      margin-top: 0.75rem;
+    }
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Print styles
+@media print {
+  .container {
+    padding: 0;
+  }
+  
+  .tabs, .btn {
+    display: none;
+  }
+  
+  .tab-content {
+    box-shadow: none;
+    padding: 0;
+  }
+  
+  .demande-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid $border-color;
+  }
+}
