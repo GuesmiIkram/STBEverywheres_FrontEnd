@@ -5,7 +5,10 @@ import { CarteItemComponent } from './carte-item/carte-item.component';
 import { CarteDetailsComponent } from './carte-details/carte-details.component';
 import { CarteComponent } from './carte.component';
 import { DelivrerCarteComponent } from './delivrer-carte/delivrer-carte.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RechargeMesCartesComponent } from './recharge-mes-cartes/recharge-mes-cartes.component';
+import { RechargeAutresCartesComponent } from './recharge-autres-cartes/recharge-autres-cartes.component';
+import { HistoriqueRechargesComponent } from './historique-recharges/historique-recharges.component';
 
 
 
@@ -14,12 +17,17 @@ import { FormsModule } from '@angular/forms';
     CarteComponent,
     CarteItemComponent,
     CarteDetailsComponent,
-    DelivrerCarteComponent
+    DelivrerCarteComponent,
+    RechargeMesCartesComponent,
+    RechargeAutresCartesComponent,
+    HistoriqueRechargesComponent
   ],
   imports: [
     CommonModule,
     CarteRoutingModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule,
+  
   ]
 })
 export class CarteModule { }

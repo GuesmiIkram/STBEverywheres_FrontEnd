@@ -1,0 +1,50 @@
+<div class="container mt-4">
+    <h2 class="mb-4">Recharge entre mes cartes</h2>
+  
+    <form [formGroup]="rechargeForm" (ngSubmit)="onSubmit()">
+  
+      <!-- Carte émettrice -->
+      <div class="form-group mb-3">
+        <label for="carteEmetteur">Carte émettrice</label>
+        <select class="form-control" formControlName="carteEmetteurNum" id="carteEmetteur" (change)="onEmetteurChange()">
+          <option value="">-- Sélectionner une carte --</option>
+          <option *ngFor="let carte of mesCartes" [value]="carte.numCarte">
+            {{ carte.typeCarte }} - {{ carte.numCarte }} (Solde: TND{{ carte.solde | number: '1.2-2' }})
+          </option>
+        </select>
+        <small *ngIf="rechargeForm.get('carteEmetteurNum')?.hasError('required') && rechargeForm.get('carteEmetteurNum')?.touched" 
+               class="text-danger">Veuillez sélectionner une carte émettrice</small>
+      </div>
+  
+      <!-- Carte destinataire -->
+      <div class="form-group mb-3">
+        <label for="carteRecepteur">Carte destinataire</label>
+        <select class="form-control" formControlName="carteRecepteurNum" id="carteRecepteur">
+          <option value="">-- Sélectionner une carte --</option>
+          <option *ngFor="let carte of cartesRecepteur" [value]="carte.numCarte">
+            {{ carte.typeCarte }} - {{ carte.numCarte }} (Solde: TND{{ carte.solde | number: '1.2-2' }})
+          </option>
+        </select>
+        <small *ngIf="rechargeForm.get('carteRecepteurNum')?.hasError('required') && rechargeForm.get('carteRecepteurNum')?.touched" 
+               class="text-danger">Veuillez sélectionner une carte destinataire</small>
+      </div>
+  
+      <!-- Montant -->
+      <div class="form-group mb-3">
+        <label for="montant">Montant (TND)</label>
+        <input type="number" 
+               class="form-control" 
+               id="montant" 
+               formControlName="montant" 
+               placeholder="Montant à transférer">
+        <small *ngIf="rechargeForm.get('montant')?.hasError('required') && rechargeForm.get('montant')?.touched" 
+               class="text-danger">Veuillez saisir un montant</small>
+        <small *ngIf="rechargeForm.get('montant')?.hasError('min')" 
+               class="text-danger">Le montant doit être supérieur à 0</small>
+      </div>
+  
+      <!-- Bouton Transférer -->
+      <button type="submit" class="btn btn-primary" [disabled]="rechargeForm.invalid">Transférer</button>
+  
+    </form>
+  </div>

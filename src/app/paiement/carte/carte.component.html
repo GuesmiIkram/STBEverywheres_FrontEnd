@@ -14,11 +14,16 @@
       <div class="card" *ngFor="let carte of cartes">
         <div class="card-image">
           <img [src]="getCarteImage(carte.nomCarte)" [alt]="carte.nomCarte" />
+          <div class="card-inactive-overlay" *ngIf="carte.statut === 'Inactive' || carte.statut === 'Blocked' || carte.statut === 'Expired'"></div>
         </div>
+        <div class="card-title">{{ carte.nomCarte }}</div>
         <div class="card-number">
-            {{ formatNumeroCarte(carte.numCarte) }}
+           Numero Carte {{ formatNumeroCarte(carte.numCarte) }}
         </div>
-        <h2 class="card-title">{{ carte.nomCarte }}</h2>
+        <div class="card-solde">
+          Solde:{{ carte.solde }}
+      </div>
+       
         <div class="card-actions">
             <button class="btn btn-primary" (click)="voirDetails(carte.numCarte)">Détails</button>
         

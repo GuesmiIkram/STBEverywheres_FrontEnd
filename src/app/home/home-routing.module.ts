@@ -6,11 +6,17 @@ import { DecouvertComponent } from './../ma-banque/decouvert/decouvert.component
 import { TFBankComponent } from '../tf-bank/tf-bank.component';
 import { PackStudentComponent } from '../pack-student/pack-student.component';
 import { PackElyssaComponent } from '../pack-elyssa/pack-elyssa.component';
+
 import { DemandeDecouvertComponent } from 'src/app/demandes/demande-decouvert/demande-decouvert.component';
+
+import { ReclamationComponent } from '../reclamation/reclamation.component';
+
 
 const routes: Routes = [
   {path:'', component: HomeComponent ,
         children: [
+          
+          { path: 'Reclamation', component: ReclamationComponent, data: { breadcrumb: 'reclamation' }},
           { path: 'PackStudent', component: PackStudentComponent, data: { breadcrumb: 'PackStudent' }},
            { path: '', component: DashboardComponent, data: { breadcrumb: 'Dashboard' }},
            { path: 'PackElyssa', component: PackElyssaComponent, data: { breadcrumb: 'PackElyssa' }},
