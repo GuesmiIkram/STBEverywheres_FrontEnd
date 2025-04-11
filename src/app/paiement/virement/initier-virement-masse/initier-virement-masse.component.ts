@@ -1,3 +1,4 @@
+
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Compte } from 'src/app/Models/compte';
@@ -119,29 +120,148 @@ export class InitierVirementMasseComponent implements OnInit {
       this.submitForm();
     }
   }
-
+  //ne permet pas l'ecriture des lettres dans le champ montant
+  numericOnly(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    input.value = input.value.replace(/[^0-9.]/g, ''); // Autorise les chiffres et le point
+  }
   submitFile(): void {
     if (!this.fichier) {
-      alert('Veuillez sélectionner un fichier.');
+      Swal.fire({
+        title: 'Fichier manquant',
+        html: `
+          <div style="text-align: center;">
+            <i class="fas fa-exclamation-triangle" style="color: #ffc107; font-size: 48px; margin-bottom: 15px;"></i>
+            <p>Veuillez sélectionner un fichier valide.</p>
+          </div>
+        `,
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#3366cc'
+      });
       return;
     }
 
     const formData = new FormData();
     formData.append('Fichier', this.fichier, this.fichier.name);
 
+    // Afficher un loader pendant l'upload
+    Swal.fire({
+      title: 'Traitement en cours',
+      html: `
+        <div style="text-align: center;">
+          <p>Veuillez patienter pendant le traitement du fichier...</p>
+        </div>
+      `,
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
     this.virementService.uploadVirementMasseFile(formData).subscribe(
       response => {
         console.log('Virement par fichier réussi:', response);
-        alert('Virement en masse effectué avec succès.');
+
+        // Fermer le loader
+        Swal.close();
+
+        // Afficher le succès
+        Swal.fire({
+          title: 'Succès',
+          html: `
+            <div style="text-align: center;">
+              <i class="fas fa-check-circle" style="color: #28a745; font-size: 48px; margin-bottom: 15px;"></i>
+              <p>Virement de masse effectué avec succès !</p>
+              <p><strong>Nombre de virements:</strong> ${response.nombreVirements || 'Non spécifié'}</p>
+              <p><strong>Montant total:</strong> ${response.totalDebite?.toFixed(2) || 'Non spécifié'} TND</p>
+              <p><strong>Frais appliqués:</strong> ${response.frais || 'Non spécifié'} TND</p>
+            </div>
+            <div style="font-size: 13px; color: #666; margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px;">
+              <p><i class="fas fa-file-alt" style="color: #3366cc; margin-right: 5px;"></i> Fichier traité: ${this.fichier?.name}</p>
+            </div>
+          `,
+          confirmButtonText: 'Fermer',
+          confirmButtonColor: '#3366cc'
+        });
+
+        // Réinitialiser le formulaire
         this.fichier = null;
         const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
         if (fileInput) {
-          fileInput.value = ''; // Efface le champ de sélection du fichier
+          fileInput.value = '';
         }
       },
       error => {
         console.error('Erreur lors du virement par fichier:', error);
-        alert('Erreur lors du virement.');
+
+        // Fermer le loader
+        Swal.close();
+
+        // Gérer différents types d'erreurs
+        if (error.status === 400) {
+          // Erreur de validation (fichier invalide, format incorrect, etc.)
+          Swal.fire({
+            title: 'Erreur dans le fichier',
+            html: `
+              <div style="text-align: center;">
+                <i class="fas fa-file-excel" style="color: #dc3545; font-size: 48px; margin-bottom: 15px;"></i>
+                <p>${error.error.message || 'Le fichier contient des erreurs.'}</p>
+                ${error.error.details ? `<p style="font-size: 13px; color: #666;">${error.error.details}</p>` : ''}
+              </div>
+            `,
+            confirmButtonText: 'Compris',
+            confirmButtonColor: '#3366cc'
+          });
+        } else if (error.status === 404) {
+          // Compte introuvable
+          Swal.fire({
+            title: 'Compte introuvable',
+            html: `
+              <div style="text-align: center;">
+                <i class="fas fa-university" style="color: #dc3545; font-size: 48px; margin-bottom: 15px;"></i>
+                <p>${error.error.message || 'Compte émetteur ou bénéficiaire introuvable.'}</p>
+                ${error.error.rib ? `<p style="font-size: 13px;"><strong>RIB:</strong> ${error.error.rib}</p>` : ''}
+              </div>
+            `,
+            confirmButtonText: 'Compris',
+            confirmButtonColor: '#3366cc'
+          });
+        } else if (error.status === 402) {
+          // Solde insuffisant
+          Swal.fire({
+            title: 'Solde insuffisant',
+            html: `
+              <div style="text-align: left;">
+                <i class="fas fa-money-bill-wave" style="color: #dc3545; font-size: 48px; float: left; margin-right: 15px;"></i>
+                <p style="text-align: left;">${error.error.message || 'Solde insuffisant pour effectuer le virement.'}</p>
+                <div style="clear: both;"></div>
+                <div style="margin-top: 15px; text-align: left;">
+                  <p><strong>Solde disponible:</strong> ${error.error.soldeDisponible || 'Non spécifié'} TND</p>
+                  <p><strong>Montant nécessaire:</strong> ${error.error.montantNecessaire || 'Non spécifié'} TND</p>
+                </div>
+              </div>
+              <div style="font-size: 12px; color: #666; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
+                <p>Veuillez approvisionner votre compte ou réduire le montant du virement.</p>
+              </div>
+            `,
+            confirmButtonText: 'Compris',
+            confirmButtonColor: '#3366cc'
+          });
+        } else {
+          // Erreur serveur inattendue
+          Swal.fire({
+            title: 'Erreur',
+            html: `
+              <div style="text-align: center;">
+                <i class="fas fa-server" style="color: #dc3545; font-size: 48px; margin-bottom: 15px;"></i>
+                <p>Une erreur est survenue lors du traitement du virement.</p>
+                <p style="font-size: 13px; color: #666;">${error.error.message || 'Veuillez réessayer plus tard.'}</p>
+              </div>
+            `,
+            confirmButtonText: 'Fermer',
+            confirmButtonColor: '#3366cc'
+          });
+        }
       }
     );
   }
@@ -204,22 +324,161 @@ openAddBeneficiaireModal(): void {
     );
   }
 
+
   submitForm(): void {
-    if (this.virementForm.invalid) {
-      alert('Veuillez remplir tous les champs obligatoires.');
+    if (!this.virementForm.get('ribEmetteur')?.valid ||
+      !this.virementForm.get('motif')?.valid ||
+      !this.virementForm.get('beneficiaires')?.valid) {
+    //if (this.virementForm.invalid) {
+      Swal.fire({
+        title: 'Formulaire incomplet',
+        html: `
+          <div style="text-align: center;">
+            <i class="fas fa-exclamation-circle" style="color: #dc3545; font-size: 48px; margin-bottom: 15px;"></i>
+            <p>Veuillez remplir tous les champs obligatoires correctement.</p>
+          </div>
+        `,
+        confirmButtonText: 'Fermer',
+        confirmButtonColor: '#3366cc',
+        customClass: {
+          container: 'swal-bank-container',
+          popup: 'swal-bank-popup',
+          title: 'swal-bank-title',
+          htmlContainer: 'swal-bank-html',
+          confirmButton: 'swal-bank-confirm-btn'
+        }
+      });
       return;
     }
 
-    this.virementService.uploadVirementMasseForm(this.virementForm.value).subscribe(
-      response => {
-        console.log('Virement par formulaire réussi:', response);
-        alert('Virement en masse effectué avec succès.');
-        this.virementForm.reset();
-      },
-      error => {
-        console.error('Erreur lors du virement par formulaire:', error);
-        alert('Erreur lors du virement.');
+    const formValue = this.virementForm.value;
+    const totalMontant = formValue.beneficiaires.reduce((sum: number, benef: any) => sum + benef.montant, 0);
+    const compteEmetteur = this.comptes.find(c => c.rib === formValue.ribEmetteur);
+
+    if (!compteEmetteur) {
+      return;
+    }
+
+    // Calcul des frais
+    const nombreBeneficiaires = formValue.beneficiaires.length;
+    let frais = 5.0; // Frais de base pour les 5 premiers bénéficiaires
+    if (nombreBeneficiaires > 5) {
+      frais += (nombreBeneficiaires - 5) * 0.5;
+    }
+
+    const totalAvecFrais = totalMontant + frais;
+    const soldeDisponible = compteEmetteur.solde + compteEmetteur.decouvertAutorise;
+
+    // Vérification du solde
+    if (soldeDisponible < totalAvecFrais) {
+      const legalText = `
+        <div style="font-size: 12px; color: #666; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
+          <p>Veuillez approvisionner votre compte ou réduire le montant du virement.</p>
+        </div>
+      `;
+
+      Swal.fire({
+        title: 'Solde insuffisant',
+        html: `
+          <div style="text-align: left; margin: 10px 0;">
+            <p><strong>Solde disponible:</strong> ${compteEmetteur.solde} TND</p>
+            <p><strong>Découvert autorisé:</strong> ${compteEmetteur.decouvertAutorise} TND</p>
+            <p><strong>Total à débiter:</strong> ${totalAvecFrais} TND</p>
+            <p style="color: #dc3545; font-weight: 500;">Votre solde est insuffisant pour effectuer cette opération.</p>
+          </div>
+          ${legalText}
+        `,
+        icon: 'warning',
+        confirmButtonText: 'Compris',
+        confirmButtonColor: '#3366cc',
+        customClass: {
+          container: 'swal-bank-container',
+          popup: 'swal-bank-popup',
+          title: 'swal-bank-title',
+          htmlContainer: 'swal-bank-html',
+          confirmButton: 'swal-bank-confirm-btn'
+        }
+      });
+      return;
+    }
+
+    // Confirmation avant envoi
+    const legalText = `
+      <div style="font-size: 12px; color: #666; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
+        <p>En confirmant, vous autorisez le débit immédiat de votre compte.</p>
+      </div>
+    `;
+
+    Swal.fire({
+      title: 'Confirmez le virement en masse',
+      html: `
+        <div style="text-align: left; margin: 10px 0;">
+          <p><strong>RIB Émetteur:</strong> ${formValue.ribEmetteur}</p>
+          <p><strong>Nombre de bénéficiaires:</strong> ${nombreBeneficiaires}</p>
+          <p><strong>Montant total:</strong> ${totalMontant} TND</p>
+          <p><strong>Frais:</strong> ${frais} TND</p>
+          <p><strong>Total à débiter:</strong> ${totalAvecFrais} TND</p>
+        </div>
+        ${legalText}
+      `,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3366cc',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Confirmer le virement',
+      cancelButtonText: 'Annuler',
+      focusCancel: true,
+      customClass: {
+        container: 'swal-bank-container',
+        popup: 'swal-bank-popup',
+        title: 'swal-bank-title',
+        htmlContainer: 'swal-bank-html',
+        confirmButton: 'swal-bank-confirm-btn',
+        cancelButton: 'swal-bank-cancel-btn'
       }
-    );
-  }
-}
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.virementService.uploadVirementMasseForm(this.virementForm.value).subscribe(
+          (response) => {
+            Swal.fire({
+              title: 'Virement effectué',
+              html: `
+                <div style="text-align: center;">
+                  <i class="fas fa-check-circle" style="color: #28a745; font-size: 48px; margin-bottom: 15px;"></i>
+                  <p>Votre virement de masse a été effectué avec succès.</p>
+                  <p><strong>Motif:</strong> ${formValue.motif}</p>
+                </div>
+                <div style="font-size: 13px; color: #666; margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px;">
+                  <p><i class="fas fa-mobile-alt" style="color: #3366cc; margin-right: 5px;"></i> Une notification SMS a été envoyée.</p>
+                  <p><i class="fas fa-exchange-alt" style="color: #3366cc; margin-right: 5px;"></i> Les fonds ont été transférés immédiatement.</p>
+                </div>
+              `,
+              confirmButtonText: 'Fermer',
+              confirmButtonColor: '#3366cc',
+              customClass: {
+                popup: 'swal-bank-popup-success'
+              }
+            });
+            this.virementForm.reset();
+          },
+          (error) => {
+            Swal.fire({
+              title: 'Erreur',
+              html: `
+                <div style="text-align: center;">
+                  <i class="fas fa-exclamation-circle" style="color: #dc3545; font-size: 48px; margin-bottom: 15px;"></i>
+                  <p>${error.error.message || 'Une erreur est survenue lors du virement.'}</p>
+                  ${error.error.details ? `<p style="font-size: 13px; color: #666;">${error.error.details}</p>` : ''}
+                </div>
+              `,
+              confirmButtonText: 'Fermer',
+              confirmButtonColor: '#3366cc',
+              customClass: {
+                popup: 'swal-bank-popup'
+              }
+            });
+          }
+        );
+      }
+    });
+  }}

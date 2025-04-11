@@ -20,6 +20,10 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { TFBankComponent } from './tf-bank/tf-bank.component';
 import { PackStudentComponent } from './pack-student/pack-student.component';
 import { PackElyssaComponent } from './pack-elyssa/pack-elyssa.component';
+
+//import { DemandesComponent } from './demandes/demandes.component';
+//import { DemandeDecouvertComponent } from './demandes/demande-decouvert/demande-decouvert.component';
+
 import { ReclamationComponent } from './reclamation/reclamation.component';
 
 
@@ -32,8 +36,11 @@ import { ReclamationComponent } from './reclamation/reclamation.component';
     ResetPasswordComponent,
       TFBankComponent,
       PackStudentComponent,
+
+
       PackElyssaComponent,
       ReclamationComponent,  ],
+
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -44,9 +51,6 @@ import { ReclamationComponent } from './reclamation/reclamation.component';
     AppRoutingModule,
     ReactiveFormsModule,
 
-    
-  
-   
 
   ],
   providers: [

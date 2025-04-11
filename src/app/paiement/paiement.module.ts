@@ -1,20 +1,23 @@
-import { BeneficiaireModule } from './beneficiaires/beneficiaire.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { PaiementRoutingModule } from './paiement-routing.module';
 import { VirementModule } from './virement/virement.module';
 import { CarteModule } from './carte/carte.module';
-
+import { ChequierModule } from './chequiers/chequiers.module';
+import { BeneficiaireModule } from './beneficiaires/beneficiaire.module';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    // PAS de ChequierModule ici
+  ],
   imports: [
     CommonModule,
-    BeneficiaireModule,
+    PaiementRoutingModule,
     VirementModule,
     CarteModule,
-    PaiementRoutingModule
+    ChequierModule,
+    BeneficiaireModule
   ]
 })
 export class PaiementModule { }

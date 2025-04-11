@@ -1,1 +1,63 @@
-<p>beneficiaire-details works!</p>
+<!-- list-beneficiaires.component.html -->
+<div class="beneficiaires-container">
+  <div class="header">
+    <h2>
+      <i class="icon fas fa-address-book"></i>
+      Mes bénéficiaires
+    </h2>
+
+
+    <button (click)="openAddBeneficiaireModal()" class="btn btn-primary">
+      <i class="icon fas fa-user-plus"></i>
+      Ajouter un bénéficiaire
+    </button>
+
+
+  </div>
+
+  <div *ngIf="isLoading" class="loading-spinner">
+    <i class="fas fa-spinner fa-spin"></i> Chargement en cours...
+  </div>
+
+  <div *ngIf="!isLoading && beneficiaires.length === 0" class="no-data">
+    <i class="icon fas fa-info-circle"></i>
+    <p>Aucun bénéficiaire enregistré pour le moment.</p>
+    <button routerLink="/beneficiaires/add" class="btn btn-primary">
+      <i class="icon fas fa-user-plus"></i>
+      Ajouter un premier bénéficiaire
+    </button>
+  </div>
+
+  <div *ngIf="!isLoading && beneficiaires.length > 0" class="table-responsive">
+    <table class="beneficiaires-table">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Prénom</th>
+          <th>RIB</th>
+          <th>Téléphone</th>
+          <th>Email</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let beneficiaire of beneficiaires">
+          <td>{{ beneficiaire.nom }}</td>
+          <td>{{ beneficiaire.prenom }}</td>
+          <td class="rib">{{ beneficiaire.ribCompte }}</td>
+          <td>{{ formatTelephone(beneficiaire.telephone) }}</td>
+
+          <td>{{ beneficiaire.email || '-' }}</td>
+          <td class="actions">
+            <button class="btn-icon" title="Modifier">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="btn-icon danger" title="Supprimer">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

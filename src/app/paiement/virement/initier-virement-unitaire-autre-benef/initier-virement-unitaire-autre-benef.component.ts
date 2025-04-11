@@ -17,6 +17,7 @@ export class InitierVirementUnitaireAutreBenefComponent implements OnInit {
   beneficiaires: Beneficiaire[] = [];
   virementForm: FormGroup;
   soldeCompteSelectionne: number | null = null;
+  private static readonly FRAIS_VIREMENT = 0.5;
 
 
   constructor(
@@ -29,7 +30,7 @@ export class InitierVirementUnitaireAutreBenefComponent implements OnInit {
       compteEmetteur: ['', Validators.required],
       montant: ['', [Validators.required, Validators.min(1)]],
       motif: ['', Validators.required],
-      description: ['', Validators.required],
+      description: [''],
       idBeneficiaire: [null, Validators.required]
     });
   }
@@ -130,68 +131,197 @@ export class InitierVirementUnitaireAutreBenefComponent implements OnInit {
 
 
   effectuerVirement(): void {
-    if (!this.virementForm.valid) {
+    // Marquer tous les champs comme touchés pour afficher les erreurs
+    this.markFormGroupTouched(this.virementForm);
+
+    // Debug: Afficher l'état de validation dans la console
+    console.log('État du formulaire:', {
+      valid: this.virementForm.valid,
+      errors: this.getFormValidationErrors(),
+      values: this.virementForm.value
+    });
+
+    if (this.virementForm.invalid) {
+      const invalidFields = this.getInvalidFields();
+
       Swal.fire({
         icon: 'error',
-        title: 'Formulaire invalide',
-        text: 'Veuillez remplir tous les champs obligatoires.',
+        title: 'Champs requis manquants',
+        html: this.generateErrorMessage(invalidFields),
         confirmButtonText: 'OK',
+        confirmButtonColor: '#3366cc',
+        customClass: {
+          container: 'swal-container',
+          popup: 'swal-popup',
+          title: 'swal-title',
+          htmlContainer: 'swal-html',
+          confirmButton: 'swal-confirm-btn'
+        }
       });
       return;
     }
-  const beneficiaireId = Number(this.virementForm.value.idBeneficiaire);
-  //Le sélecteur HTML renvoie id comme  une chaîne de caractères alors que id dans beneficiaire est number
-  const beneficiaireSelectionne = this.beneficiaires.find(b =>
-    b.id?.toString() === this.virementForm.value.idBeneficiaire.toString()
-  );    console.log('ID recherché:', beneficiaireId);
-    console.log('Liste des bénéficiaires:', this.beneficiaires);
-    console.log('Bénéficiaire trouvé:', beneficiaireSelectionne);
 
-    console.log('Bénéficiaire sélectionné:', beneficiaireSelectionne);
+    const beneficiaireSelectionne = this.beneficiaires.find(b =>
+      b.id?.toString() === this.virementForm.value.idBeneficiaire.toString()
+    );
+
+    if (!beneficiaireSelectionne) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Bénéficiaire introuvable',
+        text: 'Le bénéficiaire sélectionné n\'existe pas',
+        confirmButtonText: 'OK'
+      });
+      return;
+    }
 
     const virementData = {
       RIB_Emetteur: this.virementForm.value.compteEmetteur,
       Montant: this.virementForm.value.montant,
       Motif: this.virementForm.value.motif,
-      Description: this.virementForm.value.description,
+      Description: this.virementForm.value.description || '', // Garantir une string vide si null/undefined
       TypeVirement: 'VirementUnitaireVersAutreBenef',
-      IdBeneficiaire: this.virementForm.value.idBeneficiaire
+      IdBeneficiaire: Number(this.virementForm.value.idBeneficiaire) // Conversion explicite
     };
 
-    Swal.fire({
-      title: 'Confirmer le virement',
-      html: `
-        <p><strong>Compte Émetteur:</strong> ${virementData.RIB_Emetteur}</p>
-        <p><strong>Compte Recepteur:</strong> ${beneficiaireSelectionne?.ribCompte} </p>
+    // Vérification du solde
+    const compteEmetteur = this.comptes.find(c => c.rib === virementData.RIB_Emetteur);
+    if (compteEmetteur && (compteEmetteur.solde < virementData.Montant)) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Solde insuffisant',
+        html: `
+          <p>Votre solde actuel: ${compteEmetteur.solde} TND</p>
+          <p>Montant du virement: ${virementData.Montant} TND</p>
+          <p style="color: #dc3545; font-weight: bold;">Solde insuffisant pour effectuer cette opération</p>
+        `,
+        confirmButtonText: 'Compris'
+      });
+      return;
+    }
 
-        <p><strong>Montant:</strong> ${virementData.Montant} TND</p>
-        <p><strong>Motif:</strong> ${virementData.Motif}</p>
+    // Confirmation
+    Swal.fire({
+      title: 'Confirmez le virement unitaire',
+      html: `
+        <div style="text-align: left; margin: 10px 0;">
+          <p><strong>Compte Émetteur :</strong> ${virementData.RIB_Emetteur}</p>
+          <p><strong>Bénéficiaire:</strong> ${beneficiaireSelectionne.nom} ${beneficiaireSelectionne.prenom} ${beneficiaireSelectionne.ribCompte}</p>
+          <p><strong>Montant:</strong> ${virementData.Montant} TND</p>
+          <p><strong>Frais:</strong>${InitierVirementUnitaireAutreBenefComponent.FRAIS_VIREMENT.toFixed(2)} TND</p>
+          <p><strong>Total à débiter:</strong> ${virementData.Montant + InitierVirementUnitaireAutreBenefComponent.FRAIS_VIREMENT} TND</p>
+          <p><strong>Motif:</strong> ${virementData.Motif}</p>
+          ${virementData.Description ? `<p><strong>Description:</strong> ${virementData.Description}</p>` : ''}
+        </div>
+        <div style="font-size: 12px; color: #666; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
+          <p>En confirmant, vous autorisez le débit immédiat de votre compte.</p>
+        </div>
       `,
-      icon: 'warning',
+      icon: 'question',
       showCancelButton: true,
-      confirmButtonText: 'Confirmer',
+      confirmButtonColor: '#3366cc',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Confirmer le virement',
       cancelButtonText: 'Annuler',
+      focusCancel: true,
+      customClass: {
+        container: 'swal-bank-container',
+        popup: 'swal-bank-popup',
+        title: 'swal-bank-title',
+        htmlContainer: 'swal-bank-html',
+        confirmButton: 'swal-bank-confirm-btn',
+        cancelButton: 'swal-bank-cancel-btn'
+      }
     }).then((result) => {
       if (result.isConfirmed) {
-        this.virementService.effectuerVirement(virementData).subscribe(
-          (response: any) => {
+        this.virementService.effectuerVirement(virementData).subscribe({
+          next: (response) => {
             Swal.fire({
-              icon: 'success',
-              title: 'Succès',
-              text: 'Virement effectué avec succès !',
-              confirmButtonText: 'OK',
+              title: 'Virement effectué',
+              html: `
+                <div style="text-align: center;">
+                  <i class="fas fa-check-circle" style="color: #28a745; font-size: 48px; margin-bottom: 15px;"></i>
+                  <p>Votre virement a été effectué avec succès.</p>
+                   <p><strong>Bénéficiaire:</strong> ${beneficiaireSelectionne.nom}  ${beneficiaireSelectionne.prenom} ${beneficiaireSelectionne.ribCompte}</p>
+                  <p><strong>Motif:</strong> ${virementData.Motif}</p>
+                  <p><strong>Montant:</strong> ${virementData.Montant} TND</p>
+
+                </div>
+                <div style="font-size: 13px; color: #666; margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px;">
+                  <p><i class="fas fa-mobile-alt" style="color: #3366cc; margin-right: 5px;"></i> Une notification SMS a été envoyée.</p>
+                  <p><i class="fas fa-exchange-alt" style="color: #3366cc; margin-right: 5px;"></i> Les fonds ont été transférés immédiatement.</p>
+                </div>
+              `,
+              confirmButtonText: 'Fermer',
+              confirmButtonColor: '#3366cc',
+              customClass: {
+                popup: 'swal-bank-popup-success'
+              }
             });
+            this.virementForm.reset();
           },
-          (error: any) => {
+          error: (error) => {
+            console.error('Erreur virement:', error);
             Swal.fire({
               icon: 'error',
-              title: 'Erreur',
-              text: 'Erreur lors du virement : ' + (error.error?.message || 'Une erreur est survenue.'),
-              confirmButtonText: 'OK',
+              title: 'Échec du virement',
+              html: `
+                <p>${error.error?.message || 'Une erreur est survenue lors du virement.'}</p>
+                ${error.error?.details ? `<p class="error-detail">${error.error.details}</p>` : ''}
+              `,
+              confirmButtonText: 'Compris'
             });
           }
-        );
+        });
       }
     });
   }
-}
+
+  // Méthodes helper
+  private markFormGroupTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
+  }
+
+  private getInvalidFields(): string[] {
+    return Object.keys(this.virementForm.controls)
+      .filter(key => {
+        const control = this.virementForm.get(key);
+        return control?.invalid && key !== 'description';
+      })
+      .map(key => {
+        switch(key) {
+          case 'compteEmetteur': return 'Compte émetteur';
+          case 'montant': return 'Montant';
+          case 'motif': return 'Motif';
+          case 'idBeneficiaire': return 'Bénéficiaire';
+          default: return key;
+        }
+      });
+  }
+
+  private generateErrorMessage(fields: string[]): string {
+    if (fields.length === 0) return 'Veuillez vérifier les informations saisies';
+
+    return `
+      <div class="error-list">
+        <p>Veuillez remplir correctement les champs suivants :</p>
+        <ul>
+          ${fields.map(field => `<li>${field}</li>`).join('')}
+        </ul>
+      </div>
+    `;
+  }
+
+  private getFormValidationErrors() {
+    return Object.keys(this.virementForm.controls)
+      .filter(key => this.virementForm.get(key)?.errors)
+      .map(key => ({
+        field: key,
+        errors: this.virementForm.get(key)?.errors
+      }));
+  }}

@@ -1,54 +1,64 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ajout de Bénéficiaire</title>
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h1>AJOUT DE BÉNÉFICIAIRE</h1>
-      <p>Ajoutez un bénéficiaire de virement.</p>
+<div class="container">
+  <h2>
+    <i class="icon fas fa-user-plus"></i>Ajouter un nouveau bénéficiaire
+  </h2>
+
+  <form [formGroup]="beneficiaireForm" (ngSubmit)="onSubmit()">
+    <!-- Nom -->
+    <div class="form-group">
+      <label for="nom">Nom *</label>
+      <input type="text" id="nom" class="form-control" formControlName="nom" placeholder="Saisir le nom">
+      <span class="error-message" *ngIf="nom?.invalid && (nom?.dirty || nom?.touched)">
+        <span *ngIf="nom?.errors?.['required']">Le nom est obligatoire</span>
+        <span *ngIf="nom?.errors?.['minlength']">Le nom doit contenir au moins 2 caractères</span>
+      </span>
     </div>
 
-    <div class="card">
-      <div class="card-header">
-        <h2>AJOUTER UN BÉNÉFICIAIRE</h2>
-      </div>
-      <div class="card-content">
-        <form (ngSubmit)="onSubmit()">
-          <div class="form-group">
-            <label for="nom" class="form-label required">Nom</label>
-            <input type="text" id="nom" class="form-control" [(ngModel)]="beneficiaire.nom" name="nom" required>
-          </div>
-
-          <div class="form-group">
-            <label for="prenom" class="form-label required">Prénom</label>
-            <input type="text" id="prenom" class="form-control" [(ngModel)]="beneficiaire.prenom" name="prenom" required>
-          </div>
-
-          <div class="form-group">
-            <label for="rib" class="form-label required">RIB</label>
-            <input type="text" id="rib" class="form-control" [(ngModel)]="beneficiaire.ribCompte" name="ribCompte" required>
-          </div>
-
-          <div class="form-group">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" id="email" class="form-control" [(ngModel)]="beneficiaire.Email" name="email">
-          </div>
-
-          <div class="form-group">
-            <label for="telephone" class="form-label">Téléphone</label>
-            <input type="tel" id="telephone" class="form-control" [(ngModel)]="beneficiaire.Telephone" name="telephone">
-          </div>
-
-          <div class="form-hint">* Champs obligatoire</div>
-
-          <button type="submit" class="btn">Ajouter</button>
-        </form>
-      </div>
+    <!-- Prénom -->
+    <div class="form-group">
+      <label for="prenom">Prénom *</label>
+      <input type="text" id="prenom" class="form-control" formControlName="prenom" placeholder="Saisir le prénom">
+      <span class="error-message" *ngIf="prenom?.invalid && (prenom?.dirty || prenom?.touched)">
+        <span *ngIf="prenom?.errors?.['required']">Le prénom est obligatoire</span>
+        <span *ngIf="prenom?.errors?.['minlength']">Le prénom doit contenir au moins 2 caractères</span>
+      </span>
     </div>
-  </div>
-</body>
-</html>
+
+    <!-- RIB -->
+    <div class="form-group">
+      <label for="ribCompte">RIB *</label>
+      <input type="text" id="ribCompte" class="form-control" formControlName="ribCompte" placeholder="Saisir le RIB (20 chiffres)">
+      <span class="error-message" *ngIf="ribCompte?.invalid && (ribCompte?.dirty || ribCompte?.touched)">
+        <span *ngIf="ribCompte?.errors?.['required']">Le RIB est obligatoire</span>
+        <span *ngIf="ribCompte?.errors?.['pattern']">Le RIB doit contenir exactement 20 chiffres</span>
+      </span>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" class="form-control" formControlName="Email" placeholder="Saisir l'email">
+      <span class="error-message" *ngIf="Email?.invalid && (Email?.dirty || Email?.touched)">
+        <span *ngIf="Email?.errors?.['email']">Format d'email invalide(e@example.com)</span>
+      </span>
+    </div>
+
+    <!-- Téléphone -->
+    <div class="form-group">
+      <label for="telephone">Téléphone</label>
+      <input type="tel" id="telephone" class="form-control" formControlName="Telephone" placeholder="Saisir le numéro de téléphone">
+      <span class="error-message" *ngIf="Telephone?.invalid && (Telephone?.dirty || Telephone?.touched)">
+        <span *ngIf="Telephone?.errors?.['pattern']">Le numéro doit contenir entre 8 et 15 chiffres</span>
+      </span>
+    </div>
+
+    <div class="button-group">
+      <button type="button" class="btn btn-secondary" (click)="resetForm()">
+        <i class="icon fas fa-times"></i>Annuler
+      </button>
+      <button type="submit" class="btn btn-primary" [disabled]="beneficiaireForm.invalid">
+        <i class="icon fas fa-save"></i>Enregistrer
+      </button>
+    </div>
+  </form>
+</div>

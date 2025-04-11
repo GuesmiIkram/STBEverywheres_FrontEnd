@@ -14,6 +14,23 @@ comptes: Compte[] = [];
   virementForm: FormGroup;
   comptesBeneficiaires: Compte[] = [];
   soldeCompteSelectionne: number | null = null; // stocker le solde de compte emetteur
+  // Ajoutez cette propriété dans votre composant
+private swalFireConfig = {
+  customClass: {
+    container: 'swal-container',
+    popup: 'swal-popup',
+    title: 'swal-title',
+    htmlContainer: 'swal-html',
+    confirmButton: 'swal-confirm-btn',
+    cancelButton: 'swal-cancel-btn'
+  },
+  confirmButtonColor: '#3366cc',
+  cancelButtonColor: '#6c757d',
+  buttonsStyling: true,
+  showCloseButton: true,
+  showCancelButton: true,
+  focusCancel: true
+};
 
   constructor(private virementService: VirementService, private fb: FormBuilder) {
     this.virementForm = this.fb.group({
@@ -22,7 +39,7 @@ comptes: Compte[] = [];
       motif: ['', Validators.required],
 
       ribBeneficiaire: ['', Validators.required],
-      description: ['', Validators.required]  // Ajoute cette ligne pour bien initialiser le champ description
+      description: ['']
 
     });
     console.log('Formulaire initialisé :', this.virementForm.value);
@@ -48,23 +65,22 @@ this.virementForm.get('compteEmetteur')?.valueChanges.subscribe((selectedCompteE
   }
 //envoi de virement
 effectuerVirement(): void {
-  console.log('Fonction effectuerVirement() appelée !');
-
-  // Vérifier si le formulaire est invalide
+  // Validation du formulaire
   if (!this.virementForm.valid) {
-    console.log('Formulaire invalide :', this.virementForm.value);
-
-    // Afficher un message d'erreur avec Swal
     Swal.fire({
-      icon: 'error',
-      title: 'Formulaire invalide',
-      text: 'Veuillez remplir tous les champs obligatoires.',
-      confirmButtonText: 'OK',
+      title: 'Formulaire incomplet',
+      html: `
+        <div style="text-align: center;">
+          <i class="fas fa-exclamation-circle" style="color: #dc3545; font-size: 48px; margin-bottom: 15px;"></i>
+          <p>Veuillez remplir tous les champs obligatoires.</p>
+        </div>
+      `,
+      ...this.swalFireConfig,
+      showCancelButton: false
     });
     return;
   }
 
-  // Si le formulaire est valide, préparer les données du virement
   const virementData = {
     RIB_Emetteur: this.virementForm.value.compteEmetteur,
     RIB_Recepteur: this.virementForm.value.ribBeneficiaire,
@@ -74,58 +90,74 @@ effectuerVirement(): void {
     TypeVirement: 'VirementUnitaireVersMescomptes',
   };
 
-  console.log('Données envoyées pour le virement :', virementData);
-
-  // Afficher une boîte de dialogue de confirmation avec les détails du virement
+  // Confirmation
   Swal.fire({
     title: 'Confirmer le virement',
     html: `
-      <p><strong>Compte Émetteur:</strong> ${virementData.RIB_Emetteur}</p>
-      <p><strong>Compte Récepteur:</strong> ${virementData.RIB_Recepteur}</p>
-      <p><strong>Montant:</strong> ${virementData.Montant} TND</p>
-      <p><strong>Motif:</strong> ${virementData.Motif}</p>
+      <div style="text-align: left; margin: 15px 0; font-size: 15px;">
+        <p><strong>Compte émetteur:</strong> ${virementData.RIB_Emetteur}</p>
+        <p><strong>Compte bénéficiaire:</strong> ${virementData.RIB_Recepteur}</p>
+        <p><strong>Montant:</strong> ${virementData.Montant.toFixed(2)} TND</p>
+        <p><strong>Motif:</strong> ${virementData.Motif}</p>
+      </div>
+      <div style="font-size: 13px; color: #666; margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px;">
+        <p>En confirmant, vous autorisez le débit immédiat de votre compte.</p>
+      </div>
     `,
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Confirmer',
+    icon: 'question',
+    confirmButtonText: 'Confirmer le virement',
     cancelButtonText: 'Annuler',
+    ...this.swalFireConfig
   }).then((result) => {
     if (result.isConfirmed) {
-      // Si l'utilisateur confirme, envoyer les données du virement au serveur
-      this.virementService.effectuerVirement(virementData).subscribe(
-        (response: any) => {
-          console.log('Réponse du serveur:', response);
-
-          // Afficher un message de succès avec Swal
+      this.virementService.effectuerVirement(virementData).subscribe({
+        next: (response) => {
           Swal.fire({
-            icon: 'success',
-            title: 'Succès',
-            text: 'Virement effectué avec succès !',
-            confirmButtonText: 'OK',
+            title: 'Virement effectué',
+            html: `
+              <div style="text-align: center;">
+                <i class="fas fa-check-circle" style="color: #28a745; font-size: 48px; margin-bottom: 15px;"></i>
+                <p>Votre virement a été exécuté avec succès.</p>
+                <p><strong>Motif:</strong> ${virementData.Motif}</p>
+                <p><strong>Montant:</strong> ${virementData.Montant.toFixed(2)} TND</p>
+              </div>
+              <div style="font-size: 13px; color: #666; margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px;">
+                <p><i class="fas fa-mobile-alt" style="color: #3366cc; margin-right: 5px;"></i> Une notification SMS a été envoyée.</p>
+                <p><i class="fas fa-exchange-alt" style="color: #3366cc; margin-right: 5px;"></i> Les fonds ont été transférés immédiatement.</p>
+              </div>
+            `,
+            ...this.swalFireConfig,
+            showCancelButton: false
           });
+          this.virementForm.reset();
         },
-        (error: any) => {
-          console.error('Erreur API :', error);
-
-          // Afficher un message d'erreur avec Swal
+        error: (error) => {
           Swal.fire({
-            icon: 'error',
-            title: 'Erreur',
-            text: 'Erreur lors du virement : ' + (error.error?.message || 'Une erreur est survenue.'),
-            confirmButtonText: 'OK',
+            title: 'Échec du virement',
+            html: `
+              <div style="text-align: center;">
+                <i class="fas fa-times-circle" style="color: #dc3545; font-size: 48px; margin-bottom: 15px;"></i>
+                <p>${error.error?.message || 'Une erreur est survenue lors du virement.'}</p>
+                ${error.error?.details ? `<p style="font-size: 13px; color: #666;">${error.error.details}</p>` : ''}
+              </div>
+            `,
+            ...this.swalFireConfig,
+            showCancelButton: false
           });
         }
-      );
+      });
     } else if (result.dismiss === Swal.DismissReason.cancel) {
-      // Si l'utilisateur annule, afficher un message d'annulation
       Swal.fire({
-        icon: 'info',
-        title: 'Annulé',
-        text: 'Le virement a été annulé.',
-        confirmButtonText: 'OK',
+        title: 'Opération annulée',
+        html: `
+          <div style="text-align: center;">
+            <i class="fas fa-info-circle" style="color: #17a2b8; font-size: 48px; margin-bottom: 15px;"></i>
+            <p>Le virement n'a pas été effectué.</p>
+          </div>
+        `,
+        ...this.swalFireConfig,
+        showCancelButton: false
       });
     }
   });
-
-}
-}
+}}

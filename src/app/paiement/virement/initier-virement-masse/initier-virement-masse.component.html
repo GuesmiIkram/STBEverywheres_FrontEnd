@@ -1,23 +1,23 @@
-
 <!-- Formulaire de virement en masse -->
 <div *ngIf="methodeVirement === 'form'">
   <form [formGroup]="virementForm" (ngSubmit)="onSubmit()">
     <h2 class="form-title">Initiation virement de masse</h2>
-    <!-- Choix de la méthode -->
-<div>
-  <label>
-    <input type="radio" name="methodeVirement" value="form" [(ngModel)]="methodeVirement" (change)="onMethodChange('form')" />
-    Virement par formulaire
-  </label>
 
-  <label>
-    <input type="radio" name="methodeVirement" value="file" [(ngModel)]="methodeVirement" (change)="onMethodChange('file')" />
-    Virement par fichier
-  </label>
-</div>
+    <!-- Choix de la méthode -->
+    <div>
+      <label>
+        <input type="radio" name="methodeVirement" value="form" [(ngModel)]="methodeVirement" (change)="onMethodChange('form')" />
+        Virement par formulaire
+      </label>
+
+      <label>
+        <input type="radio" name="methodeVirement" value="file" [(ngModel)]="methodeVirement" (change)="onMethodChange('file')" />
+        Virement par fichier
+      </label>
+    </div>
 
     <div>
-      <label for="ribEmetteur">RIB Émetteur:</label>
+      <label for="ribEmetteur">RIB Émetteur: <span class="required">*</span></label>
       <select formControlName="ribEmetteur" required>
         <option *ngFor="let compte of comptes" [value]="compte.rib">
           {{ compte.rib }} - {{ compte.type }}
@@ -25,19 +25,25 @@
       </select>
 
       <!-- Afficher le solde du compte sélectionné -->
-      <div *ngIf="soldeCompteSelectionne !== null" class="solde-compte">
-        <strong>Solde disponible :</strong> {{ soldeCompteSelectionne }} TND
-      </div>
+
+ <div *ngIf="soldeCompteSelectionne !== null" class="solde-compte"
+ [class.solde-negatif]="soldeCompteSelectionne < 0">
+<strong>Solde disponible :</strong>
+<span [class.text-danger]="soldeCompteSelectionne < 0">
+    {{ soldeCompteSelectionne | number:'1.2-2' }} TND
+</span>
+</div>
+
     </div>
 
     <div>
-      <label for="motif">Motif:</label>
+      <label for="motif">Motif: <span class="required">*</span></label>
       <input type="text" formControlName="motif" required />
     </div>
 
     <div>
       <label for="description">Description:</label>
-      <input type="text" formControlName="description" required />
+      <input type="text" formControlName="description" />
     </div>
 
     <div formArrayName="beneficiaires">
@@ -52,23 +58,40 @@
                 {{ beneficiaire.nom }} {{ beneficiaire.prenom }} - {{ beneficiaire.ribCompte }}
               </option>
             </select>
+
+            <div class="nouveau-beneficiaire-option">
+              <div class="option-container">
+                <span class="info-text">Pas dans la liste ?Ajoute le bénéficiaire à votre carnet d'adresses</span>
+                <button type="button" class="btn-lien" (click)="openAddBeneficiaireModal()">
+                  <span class="plus-icon"></span> Enregistrer un nouveau bénéficiaire
+                </button>
+
+              </div>
+            </div>
           </div>
         </div>
-        <div class="ajouter-beneficiaire-container">
-          <button type="button" class="ajouter-beneficiaire" (click)="openAddBeneficiaireModal()">
-              <span class="plus-icon"></span> Ajouter un bénéficiaire
-          </button>
-      </div>
-        <input type="number" formControlName="montant" placeholder="Montant" required />
+
+        <input type="text"
+        formControlName="montant"
+        placeholder="Montant"
+        required
+        (input)="numericOnly($event)">
 
         <!-- Bouton "− Supprimer" (Désactivé si un seul bénéficiaire) -->
         <button type="button" (click)="supprimerBeneficiaire(i)" *ngIf="beneficiairesFormArray.length > 1">− Supprimer</button>
       </div>
+
+
+
+      <div class="aide-section">
+        <div class="aide-text">(Ajoute un nouveau destinataire à ce virement)</div>
+        <button type="button" class="btn-ajouter" (click)="ajouterBeneficiaire()">
+          <span class="plus-icon"></span> Ajouter un bénéficiaire
+        </button>
+      </div>
+
+      <button type="submit">Envoyer le virement</button>
     </div>
-
-    <button type="button" (click)="ajouterBeneficiaire()">+ Ajouter un bénéficiaire</button>
-
-    <button type="submit">Envoyer le virement</button>
   </form>
 </div>
 
@@ -76,19 +99,21 @@
 <div *ngIf="methodeVirement === 'file'">
   <form (ngSubmit)="onSubmit()">
     <h2 class="form-title">Initiation virement de masse</h2>
-    <!-- Choix de la méthode -->
-<div>
-  <label>
-    <input type="radio" name="methodeVirement" value="form" [(ngModel)]="methodeVirement" (change)="onMethodChange('form')" />
-    Virement par formulaire
-  </label>
 
-  <label>
-    <input type="radio" name="methodeVirement" value="file" [(ngModel)]="methodeVirement" (change)="onMethodChange('file')" />
-    Virement par fichier
-  </label>
-</div>
-    <label for="file">Sélectionner un fichier :</label>
+    <!-- Choix de la méthode -->
+    <div>
+      <label>
+        <input type="radio" name="methodeVirement" value="form" [(ngModel)]="methodeVirement" (change)="onMethodChange('form')" />
+        Virement par formulaire
+      </label>
+
+      <label>
+        <input type="radio" name="methodeVirement" value="file" [(ngModel)]="methodeVirement" (change)="onMethodChange('file')" />
+        Virement par fichier
+      </label>
+    </div>
+
+    <label for="file">Sélectionner un fichier : <span class="required">*</span></label>
     <input type="file" (change)="onFileChange($event)" required />
 
     <button type="submit">Envoyer le fichier</button>

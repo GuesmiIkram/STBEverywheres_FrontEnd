@@ -24,9 +24,9 @@ export class AuthService {
 
   // Méthode pour réinitialiser le mot de passe
   resetPassword(token: string, newPassword: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/reset-password`, { 
-      token, 
-      newPassword 
+    return this.http.post(`${this.apiUrl}/reset-password`, {
+      token,
+      newPassword
     }).pipe(
       catchError((error) => {
         console.error('Reset password error:', error);
@@ -35,8 +35,85 @@ export class AuthService {
     );
   }
   // Login method
-  
   login(email: string, password: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/login`, { email, password }).pipe(
+      tap((response: any) => {
+        console.log('Réponse de login du backend', response);
+
+        // Utilisez les mêmes noms de propriétés que la réponse (minuscules)
+        this.setTokens(response.token, response.refreshToken); // minuscules
+
+        console.log('userRole:', response.role); // minuscule
+        console.log('userId:', response.userId); // minuscule
+
+        if (response.role) {
+          localStorage.setItem('userRole', response.role);
+        }
+        if (response.userId) {
+          localStorage.setItem('userId', response.userId.toString());
+        }
+        if (response.clientId) {
+          localStorage.setItem('clientId', response.clientId.toString());
+        }
+        if (response.agentId) {
+          localStorage.setItem('agentId', response.agentId.toString());
+        }
+      }),
+      catchError((error) => {
+        console.error('Login error:', error);
+        return throwError(() => new Error(error.error?.message || 'Identifiants incorrects'));
+      })
+    );
+  }
+/*
+  login(email: string, password: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/login`, { email, password }).pipe(
+      tap((response: any) => {
+        console.log('REsonse de login de back', response);
+        this.setTokens(response.Token, response.RefreshToken);
+        // Stocker les informations utilisateur dont le rôle
+        console.log('userRole', response.Role);
+        console.log('userId', response.UserId);
+        localStorage.setItem('userRole', response.Role);
+        localStorage.setItem('userId', response.UserId);
+        if (response.ClientId) {
+          console.log('clientId', response.clientId);
+
+          localStorage.setItem('clientId', response.ClientId);
+        }
+        if (response.AgentId) {
+          console.log('agentId', response.agentId);
+
+          localStorage.setItem('agentId', response.AgentId);
+        }
+      }),
+      catchError((error) => {
+        console.error('Login error:', error);
+        return throwError(() => new Error(error.error?.message || 'Identifiants incorrects'));
+      })
+    );
+  }
+*/
+getUserRole(): string {
+  return localStorage.getItem('userRole') || '';
+}
+
+getUserId(): number | null {
+  const userId = localStorage.getItem('userId');
+  return userId ? parseInt(userId) : null;
+}
+
+  isAgent(): boolean {
+    return this.getUserRole() === 'Agent';
+  }
+
+  isClient(): boolean {
+    return this.getUserRole() === 'Client';
+  }
+
+
+
+  /*login(email: string, password: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, { email, password }).pipe(
       tap((response: any) => {
         this.setTokens(response.token, response.refreshToken);
@@ -46,7 +123,7 @@ export class AuthService {
         return throwError(() => new Error(error.error?.message || 'Identifiants incorrects'));
       })
     );
-  }
+  }*/
 
   // Get access token from local storage
   getAccessToken(): string | null {
@@ -91,5 +168,5 @@ export class AuthService {
   isLoggedIn(): boolean {
     return !!this.getAccessToken();
   }
- 
+
 }

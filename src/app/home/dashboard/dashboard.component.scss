@@ -1,4 +1,3 @@
-
 /*--------------------------------------------------------------
 # Dashboard
 --------------------------------------------------------------*/
@@ -737,4 +736,598 @@ body {
     padding: 10px 20px;
   }
 }
+// Variables spécifiques à la modale de création de compte
+$create-account-primary: #2563eb;
+$create-account-primary-dark: #1d4ed8;
+$create-account-primary-light: #eff6ff;
+$create-account-secondary: #6c757d;
+$create-account-white: #ffffff;
+$create-account-gray-50: #f9fafb;
+$create-account-gray-100: #f3f4f6;
+$create-account-gray-200: #e5e7eb;
+$create-account-gray-300: #d1d5db;
+$create-account-gray-400: #9ca3af;
+$create-account-gray-500: #6b7280;
+$create-account-gray-600: #4b5563;
+$create-account-gray-700: #374151;
+$create-account-gray-800: #1f2937;
+$create-account-gray-900: #111827;
+$create-account-blue-900: #1e3a8a;
+$create-account-red-50: #fee2e2;
+$create-account-red-700: #b91c1c;
+$create-account-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+$create-account-radius: 12px;
+$create-account-transition: all 0.2s ease;
 
+// Modale de création de compte
+.create-account-modal {
+  position: fixed;
+  display: flex;
+  z-index: 1060; // Plus élevé que les autres modales (1050)
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  align-items: center;
+  justify-content: center;
+
+  // Backdrop avec flou
+  &__backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+    z-index: -1;
+  }
+
+  // Contenu de la modale
+  &__content {
+    background-color: $create-account-white;
+    width: 90%;
+    max-width: 500px;
+    border-radius: $create-account-radius;
+    box-shadow: $create-account-shadow;
+    position: relative;
+    animation: createAccountModalFadeIn 0.3s ease-out;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: none;
+  }
+
+  // En-tête de la modale
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    border-bottom: 1px solid $create-account-gray-200;
+    background: linear-gradient(to right, $create-account-primary-light, #eef2ff);
+  }
+
+  &__title {
+    margin: 0;
+    color: $create-account-blue-900;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  &__close {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    color: $create-account-gray-500;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    transition: $create-account-transition;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+      color: $create-account-gray-700;
+    }
+  }
+
+  // Corps de la modale
+  &__body {
+    padding: 25px;
+    flex-grow: 1;
+  }
+
+  // Pied de la modale
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 20px 25px;
+    border-top: 1px solid $create-account-gray-200;
+    background-color: $create-account-gray-50;
+  }
+
+  // Éléments de formulaire
+  &__form-group {
+    margin-bottom: 20px;
+  }
+
+  &__label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    color: $create-account-gray-600;
+  }
+
+  &__select-wrapper {
+    position: relative;
+  }
+
+  &__select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid $create-account-gray-300;
+    border-radius: 8px;
+    font-size: 15px;
+    appearance: none;
+    background-color: $create-account-white;
+    transition: border-color 0.2s, box-shadow 0.2s;
+
+    &:focus {
+      outline: none;
+      border-color: $create-account-primary;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+  }
+
+  &__select-icon {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $create-account-gray-500;
+    pointer-events: none;
+  }
+
+  // Message d'erreur
+  &__error {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background-color: $create-account-red-50;
+    border-radius: 8px;
+    color: $create-account-red-700;
+    font-size: 14px;
+    margin-top: 16px;
+
+    i {
+      font-size: 16px;
+    }
+  }
+
+  // Boutons
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    transition: $create-account-transition;
+    border: 1px solid transparent;
+
+    i {
+      margin-right: 8px;
+    }
+
+    &--primary {
+      background-color: $create-account-primary;
+      color: $create-account-white;
+
+      &:hover {
+        background-color: $create-account-primary-dark;
+      }
+    }
+
+    &--cancel {
+      background-color: transparent;
+      border-color: $create-account-gray-300;
+      color: $create-account-gray-600;
+
+      &:hover {
+        background-color: $create-account-gray-100;
+        border-color: $create-account-gray-400;
+      }
+    }
+  }
+}
+
+// Animation spécifique à cette modale
+@keyframes createAccountModalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .create-account-modal {
+    &__content {
+      width: 95%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    &__footer {
+      flex-direction: column-reverse;
+    }
+
+    &__btn {
+      width: 100%;
+    }
+  }
+}
+
+// Variables spécifiques à la modale d'historique
+$historique-white: #ffffff;
+$historique-gray-50: #f9fafb;
+$historique-gray-100: #f3f4f6;
+$historique-gray-200: #e5e7eb;
+$historique-gray-300: #d1d5db;
+$historique-gray-400: #9ca3af;
+$historique-gray-500: #6b7280;
+$historique-gray-600: #4b5563;
+$historique-gray-700: #374151;
+$historique-gray-800: #1f2937;
+$historique-gray-900: #111827;
+$historique-green-50: #ecfdf5;
+$historique-green-500: #10b981;
+$historique-green-600: #059669;
+$historique-red-50: #fef2f2;
+$historique-red-500: #ef4444;
+$historique-red-600: #dc2626;
+$historique-blue-50: #eff6ff;
+$historique-blue-100: #dbeafe;
+$historique-blue-500: #3b82f6;
+$historique-blue-600: #2563eb;
+$historique-orange-50: #fff7ed;
+$historique-orange-500: #f97316;
+$historique-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+$historique-radius: 16px;
+$historique-transition: all 0.2s ease;
+
+// Modale d'historique - Styles spécifiques qui n'affecteront pas les autres modales
+.historique-modal {
+  position: fixed;
+  display: flex;
+  z-index: 1050;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+
+  // Backdrop avec flou léger
+  &__backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+    z-index: -1;
+  }
+
+  // Contenu de la modale
+  &__content {
+    background-color: $historique-white;
+    width: 90%;
+    max-width: 550px;
+    border-radius: $historique-radius;
+    box-shadow: $historique-shadow;
+    position: relative;
+    animation: historiqueModalFadeIn 0.3s ease-out;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    max-height: 85vh;
+  }
+
+  // En-tête de la modale
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid $historique-gray-200;
+    background-color: $historique-white;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  &__title {
+    margin: 0;
+    color: $historique-gray-900;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  &__close {
+    background: transparent;
+    border: none;
+    font-size: 18px;
+    color: $historique-gray-500;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    transition: $historique-transition;
+
+    &:hover {
+      background-color: $historique-gray-100;
+      color: $historique-gray-700;
+    }
+  }
+
+  // Corps de la modale
+  &__body {
+    padding: 0;
+    flex-grow: 1;
+    overflow-y: auto;
+    max-height: calc(85vh - 70px); // Hauteur max moins la hauteur de l'en-tête
+  }
+
+  // Filtres
+  &__filters {
+    display: flex;
+    padding: 16px 20px;
+    gap: 8px;
+    background-color: $historique-white;
+    border-bottom: 1px solid $historique-gray-200;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+
+  &__filter-btn {
+    background-color: $historique-gray-100;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: $historique-gray-600;
+    cursor: pointer;
+    transition: $historique-transition;
+
+    &:hover {
+      background-color: $historique-gray-200;
+    }
+
+    &.active {
+      background-color: $historique-blue-100;
+      color: $historique-blue-600;
+    }
+  }
+
+  // Message d'erreur
+  &__error {
+    margin: 16px 20px;
+    padding: 12px 16px;
+    background-color: $historique-red-50;
+    border-radius: 8px;
+    color: $historique-red-600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+
+    i {
+      font-size: 16px;
+    }
+  }
+
+  // État vide
+  &__empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    color: $historique-gray-500;
+    font-size: 15px;
+    text-align: center;
+  }
+
+  // Chargement
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    color: $historique-gray-600;
+    font-size: 15px;
+    gap: 16px;
+  }
+
+  &__spinner {
+    width: 30px;
+    height: 30px;
+    border: 3px solid $historique-blue-100;
+    border-top: 3px solid $historique-blue-500;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  // Transactions
+  &__transaction {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid $historique-gray-100;
+    transition: $historique-transition;
+
+    &:hover {
+      background-color: $historique-gray-50;
+    }
+  }
+
+  &__transaction-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 16px;
+    flex-shrink: 0;
+
+    i {
+      font-size: 18px;
+    }
+
+    &--received {
+      background-color: $historique-green-50;
+      color: $historique-green-600;
+    }
+
+    &--sent {
+      background-color: $historique-red-50;
+      color: $historique-red-600;
+    }
+
+    &--other {
+      background-color: $historique-orange-50;
+      color: $historique-orange-500;
+    }
+  }
+
+  &__transaction-details {
+    flex-grow: 1;
+    min-width: 0;
+  }
+
+  &__transaction-title {
+    font-weight: 500;
+    font-size: 15px;
+    color: $historique-gray-900;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__transaction-subtitle {
+    font-size: 13px;
+    color: $historique-gray-600;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__transaction-date {
+    font-size: 12px;
+    color: $historique-gray-500;
+  }
+
+  &__transaction-amount {
+    font-weight: 600;
+    font-size: 16px;
+    margin-left: 16px;
+    flex-shrink: 0;
+
+    &--positive {
+      color: $historique-green-500;
+    }
+
+    &--negative {
+      color: $historique-red-500;
+    }
+  }
+
+  // Groupement par mois
+  &__month-header {
+    padding: 12px 20px;
+    background-color: $historique-gray-50;
+    font-size: 14px;
+    font-weight: 500;
+    color: $historique-gray-700;
+    position: sticky;
+    top: 60px; // Hauteur des filtres + padding
+    z-index: 4;
+  }
+}
+
+// Animation spécifique à cette modale
+@keyframes historiqueModalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .historique-modal {
+    &__content {
+      width: 95%;
+      max-height: 90vh;
+    }
+
+    &__filters {
+      overflow-x: auto;
+      padding: 12px 16px;
+    }
+
+    &__filter-btn {
+      white-space: nowrap;
+    }
+
+    &__transaction {
+      padding: 14px 16px;
+    }
+
+    &__transaction-icon {
+      width: 36px;
+      height: 36px;
+      margin-right: 12px;
+    }
+
+    &__transaction-amount {
+      font-size: 15px;
+    }
+  }
+}

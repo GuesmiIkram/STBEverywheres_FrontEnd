@@ -5,7 +5,7 @@ export interface Beneficiaire {
   ribCompte: string; // Obligatoire
   prenom: string; // Obligatoire
   nom: string; // Obligatoire
-  Email?: string | null; // Optionnel
-  Telephone?: string | null; // Optionnel
+  email?: string | null; // Optionnel
+  telephone?: string | null; // Optionnel
   client?: Client | null; // Optionnel
 }

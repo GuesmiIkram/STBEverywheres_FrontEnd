@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Page dédiée à la gestion des virements unitaires internes.">
+
     <title>Initiation Virement Unitaire</title>
 </head>
 <body>
@@ -32,10 +34,16 @@
                     {{ compte.type }} - {{ compte.rib }}
                   </option>
                 </select>
-                 <!-- Afficher le solde du compte sélectionné -->
-  <div *ngIf="soldeCompteSelectionne !== null" class="solde-compte">
-    <strong>Solde disponible :</strong> {{ soldeCompteSelectionne }} TND
-  </div>
+                 <!-- Afficher le solde du compte sélectionné-->
+
+  <div *ngIf="soldeCompteSelectionne !== null" class="solde-compte"
+  [class.solde-negatif]="soldeCompteSelectionne < 0">
+ <strong>Solde disponible :</strong>
+ <span [class.text-danger]="soldeCompteSelectionne < 0">
+     {{ soldeCompteSelectionne | number:'1.2-2' }} TND
+ </span>
+</div>
+
               </div>
             </div>
 
@@ -51,8 +59,8 @@
             </div>
 
             <div class="form-group">
-              <label for="description">Description <span class="required">*</span></label>
-              <input type="text" id="description" formControlName="description" class="form-control" required>
+              <label for="description">Description </label>
+              <input type="text" id="description" formControlName="description" class="form-control">
             </div>
           </div>
 

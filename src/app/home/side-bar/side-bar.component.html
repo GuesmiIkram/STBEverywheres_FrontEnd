@@ -1,3 +1,27 @@
+
+<!-- ======= Sidebar ======= -->
+<ng-container *ngIf="isClient">
+<ul class="sidebar-nav" id="sidebar-nav">
+
+  <li class="nav-item">
+      <a class="nav-link" routerLink="/home">
+          <i class="bi bi-grid"></i>
+          <span>Dashboard</span>
+      </a>
+  </li>
+  <!-- End Dashboard Nav -->
+
+  <li class="nav-heading mt-4">Ma Banque</li>
+
+  <li class="nav-item">
+      <a class="nav-link collapsed" (click)="ShowHideCollapse('beneficiaire-nav')" data-bs-target="#beneficiaire-nav" data-bs-toggle="collapse">
+          <i class="ri-user-add-line"></i><span>Ma banque</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="beneficiaire-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+          <li>
+              <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                  <i class="bi bi-circle"></i><span>RIB/IBAN</span>
+
     <!-- ======= Sidebar ======= -->
 
 
@@ -130,51 +154,219 @@
             <li class="nav-item">
               <a class="nav-link collapsed" (click)="ShowHideCollapse('virements-nav')" data-bs-target="#virements-nav" data-bs-toggle="collapse">
                   <i class="ri-send-plane-fill"></i><span>Virements</span><i class="bi bi-chevron-down ms-auto"></i>
+
               </a>
-              <ul id="virements-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+          </li>
+          <li>
+              <a routerLink="/home/TF" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                  <i class="bi bi-circle"></i><span>Compte TF Banque</span>
+              </a>
+          </li>
+          <li>
+              <a routerLink="/home/beneficiaire/ajouter-beneficiaire" routerLinkActive="active">
+                  <i class="bi bi-circle"></i><span>Extrait du compte</span>
+              </a>
+          </li>
+          <li>
+              <a routerLink="/home/decouvert/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                  <i class="bi bi-circle"></i><span>Découvert Autorisé</span>
+              </a>
+          </li>
+      </ul>
+  </li>
+  <!-- End Ma Banque -->
+
+  <li class="nav-heading mt-4">Paiement</li>
+
+  <li class="nav-item">
+      <a class="nav-link collapsed" (click)="ShowHideCollapse('beneficiaire-paiement-nav')" data-bs-target="#beneficiaire-paiement-nav" data-bs-toggle="collapse">
+          <i class="ri-user-add-line"></i><span>Bénéficiaires</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="beneficiaire-paiement-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+          <li>
+              <a routerLink="/home/beneficiaire" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                  <i class="bi bi-circle"></i><span>Consulter</span>
+              </a>
+          </li>
+          <li>
+              <a routerLink="/home/beneficiaire/ajouter-beneficiaire" routerLinkActive="active">
+                  <i class="bi bi-circle"></i><span>Ajouter</span>
+              </a>
+          </li>
+          <li>
+              <a routerLink="/home/beneficiaire/7" routerLinkActive="active">
+                  <i class="bi bi-circle"></i><span>Mettre à jour</span>
+              </a>
+          </li>
+          <li>
+              <a routerLink="/home/PackStudent">
+                  <i class="bi bi-circle"></i><span>Supprimer</span>
+              </a>
+          </li>
+      </ul>
+  </li>
+  <!-- End Bénéficiaires -->
+
+  <li class="nav-item">
+      <a class="nav-link collapsed" (click)="ShowHideCollapse('cartes-nav')" data-bs-target="#cartes-nav" data-bs-toggle="collapse">
+          <i class="ri-bank-card-fill"></i><span>Cartes</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="cartes-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+          <li>
+              <a routerLink="/home/carte" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                  <i class="bi bi-circle"></i><span>Mes Cartes</span>
+              </a>
+          </li>
+          <li>
+              <a routerLink="/home/carte/Demander-Carte" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                  <i class="bi bi-circle"></i><span>Demander une Carte</span>
+              </a>
+          </li>
+      </ul>
+  </li>
+  <!-- End Cartes -->
+
+  <li class="nav-item">
+      <a class="nav-link collapsed" (click)="ShowHideCollapse('virements-nav')" data-bs-target="#virements-nav" data-bs-toggle="collapse">
+          <i class="ri-send-plane-fill"></i><span>Virements</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="virements-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+          <li>
+              <a routerLink="/home/virement/create-virement-masse" routerLinkActive="active">
+                  <i class="bi bi-circle"></i><span>Initier Virement de masse</span>
+              </a>
+          </li>
+          <li>
+              <a class="nav-link collapsed" (click)="ShowHideCollapse('virement-unitaire-nav')" data-bs-target="#virement-unitaire-nav" data-bs-toggle="collapse">
+                  <i class="bi bi-circle"></i><span>Initier Virement Unitaire</span><i class="bi bi-chevron-down ms-auto"></i>
+              </a>
+              <ul id="virement-unitaire-nav" class="nav-content collapse">
                   <li>
-                      <a routerLink="/home/virement/create-virement-masse" routerLinkActive="active">
-                          <i class="bi bi-circle"></i><span>Initier Virement de masse</span>
+                      <a routerLink="/home/virement/virement-unitaire-AutreBeneiciaire" routerLinkActive="active">
+                          <i class="bi bi-dot"></i><span>Vers d'autres bénéficiaires</span>
                       </a>
                   </li>
-
-                  <!-- Initier Virement Unitaire avec sous-menu -->
                   <li>
-                      <a class="nav-link collapsed" (click)="ShowHideCollapse('virement-unitaire-nav')" data-bs-target="#virement-unitaire-nav" data-bs-toggle="collapse">
-                          <i class="bi bi-circle"></i><span>Initier Virement Unitaire</span><i class="bi bi-chevron-down ms-auto"></i>
-                      </a>
-                      <ul id="virement-unitaire-nav" class="nav-content collapse">
-                          <li>
-                              <a routerLink="/home/virement/virement-unitaire-AutreBeneiciaire" routerLinkActive="active">
-                                  <i class="bi bi-dot"></i><span>Vers d'autres bénéficiaires</span>
-                              </a>
-                          </li>
-                          <li>
-                              <a routerLink="/home/virement/virement-unitaire-mescomptes" routerLinkActive="active">
-                                  <i class="bi bi-dot"></i><span>Vers mes comptes</span>
-                              </a>
-                          </li>
-                      </ul>
-                  </li>
-
-                  <li>
-                      <a routerLink="/home/virement/valider-virement" routerLinkActive="active">
-                          <i class="bi bi-circle"></i><span>Valider</span>
+                      <a routerLink="/home/virement/virement-unitaire-mescomptes" routerLinkActive="active">
+                          <i class="bi bi-dot"></i><span>Vers mes comptes</span>
                       </a>
                   </li>
               </ul>
           </li>
-          <!-- End Forms Nav -->
+          <li>
+              <a routerLink="/home/virement/valider-virement" routerLinkActive="active">
+                  <i class="bi bi-circle"></i><span>Valider</span>
+              </a>
+          </li>
+      </ul>
+  </li>
+  <!-- End Virements -->
+  <li class="nav-item">
+    <a class="nav-link collapsed" (click)="ShowHideCollapse('cartes-nav')" data-bs-target="#cartes-nav" data-bs-toggle="collapse">
+        <i class="ri-bank-card-fill"></i><span>Chequiers</span><i class="bi bi-chevron-down ms-auto"></i>
+    </a>
+    <ul id="cartes-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+        <li>
+          <a routerLink="/home/chequier/liste-demandechequiers" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+            <i class="bi bi-circle"></i><span>Mes Chequiers</span>
+          </a>
+
+        </li>
+        <li>
+            <a routerLink="/home/carte/Demander-Carte" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                <i class="bi bi-circle"></i><span>Demander un chéquier</span>
+            </a>
+        </li>
+
+        <li>
+          <a routerLink="/home/carte/Demander-Carte" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+              <i class="bi bi-circle"></i><span>Suivre mes demandes de chequier</span>
+          </a>
+      </li>
+    </ul>
+</li>
+
+  <li class="nav-heading">Pages</li>
+
+  <li class="nav-item">
+      <a class="nav-link collapsed" routerLink="/home/user" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+          <i class="bi bi-person"></i>
+          <span>Profile</span>
+      </a>
+  </li>
+  <!-- End Profile Page -->
+
+</ul>
+<!-- End Sidebar -->
+</ng-container>
+<ng-container *ngIf="isAgent">
 
 
-            <li class="nav-heading">Pages</li>
 
-            <li class="nav-item">
-                <a class="nav-link collapsed"  routerLink="/home/user" routerLinkActive="active"   [routerLinkActiveOptions]="{exact: true}" >
-                    <i class="bi bi-person"></i>
-                    <span>Profile</span>
-                </a>
-            </li><!-- End Profile Page Nav -->
+
+  <!-- Sidebar Agent -->
+  <ul class="sidebar-nav" id="sidebar-nav">
+    <li class="nav-heading mt-4">Espace Agent</li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="/home">
+        <i class="bi bi-grid"></i>
+        <span>Dashbord</span>
+      </a>
+    </li>
+
+
+
+    <li class="nav-heading mt-4">Demandes</li>
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" (click)="ShowHideCollapse('beneficiaire-paiement-nav')" data-bs-target="#beneficiaire-paiement-nav" data-bs-toggle="collapse">
+        <i class="ri-user-add-line"></i><span>Demande modification découvert autorisé</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="beneficiaire-paiement-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+        <li>
+          <a class="nav-link" routerLink="/home/RepondreDemandedecouvert">
+            <i class="ri-circle-line"></i><span>Liste des demandes</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" (click)="ShowHideCollapse('demande-carte-nav')" data-bs-target="#demande-carte-nav" data-bs-toggle="collapse">
+        <i class="ri-user-add-line"></i><span>Demande carte</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="demande-carte-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+        <li>
+          <a class="nav-link collapsed" routerLink="/demande-carte">
+            <i class="ri-circle-line"></i><span>Liste des demandes</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+
+    <li class="nav-heading mt-4">Activation/blocage</li>
+
+    <li class="nav-item">
+      <a class="nav-link collapsed" (click)="ShowHideCollapse('demande-carte-nav')" data-bs-target="#demande-carte-nav" data-bs-toggle="collapse">
+        <i class="ri-user-add-line"></i><span>Activation/blocage</span><i class="bi bi-chevron-down ms-auto"></i>
+      </a>
+      <ul id="demande-carte-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+        <li>
+          <a class="nav-link collapsed" routerLink="/demande-carte">
+            <i class="ri-circle-line"></i><span>Activer/désactiver compte</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+
+
+  </ul>
+
+
+
+
 
 
             <li class="nav-item">
@@ -185,4 +377,4 @@
             </li>
 
 
-  <!-- End Sidebar-->
+</ng-container>
