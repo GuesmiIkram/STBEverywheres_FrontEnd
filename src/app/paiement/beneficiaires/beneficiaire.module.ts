@@ -5,6 +5,7 @@ import { BeneficiaireDetailsComponent } from './beneficiaire-details/beneficiair
 import { BeneficiairesComponent } from './beneficiaires.component';
 import { BeneficiaireRoutingModule } from './beneficiaire-routing.module';
 import { AddBeneficiaireComponent } from './add-beneficiaire/add-beneficiaire.component';
+import { ReactiveFormsModule } from '@angular/forms'; // Add this import
 
 import { FormsModule } from '@angular/forms'; // Import FormsModule
 
@@ -19,6 +20,7 @@ import { FormsModule } from '@angular/forms'; // Import FormsModule
   imports: [
     CommonModule,
     BeneficiaireRoutingModule,
+    ReactiveFormsModule,
     FormsModule
   ]
 })

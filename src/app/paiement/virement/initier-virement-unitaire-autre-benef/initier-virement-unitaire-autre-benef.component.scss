@@ -325,3 +325,30 @@ select.form-control {
     outline: none;  // Enlève le contour par défaut lorsque le bouton est cliqué
   }
 }
+
+
+// style du solde du compte affiché au dessous de selectionner un compte
+
+.solde-compte {
+  margin-top: 8px;
+  font-size: 14px;
+  padding: 6px 10px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  border-left: 3px solid #28a745; /* Bordure verte par défaut */
+}
+
+.solde-compte.solde-negatif {
+  border-left-color: #dc3545; /* Bordure rouge si négatif */
+}
+
+/* Utilisez cette classe si vous utilisez Bootstrap */
+.text-danger {
+  color: #dc3545 !important;
+}
+
+/* Sinon, créez votre propre classe */
+.solde-negatif span {
+  color: #dc3545;
+  font-weight: 500;
+}

@@ -20,6 +20,8 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { TFBankComponent } from './tf-bank/tf-bank.component';
 import { PackStudentComponent } from './pack-student/pack-student.component';
 import { PackElyssaComponent } from './pack-elyssa/pack-elyssa.component';
+//import { DemandesComponent } from './demandes/demandes.component';
+//import { DemandeDecouvertComponent } from './demandes/demande-decouvert/demande-decouvert.component';
 
 
 @NgModule({
@@ -31,7 +33,9 @@ import { PackElyssaComponent } from './pack-elyssa/pack-elyssa.component';
     ResetPasswordComponent,
       TFBankComponent,
       PackStudentComponent,
-      PackElyssaComponent,  ],
+      PackElyssaComponent
+      //DemandesComponent,
+       ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -42,11 +46,10 @@ import { PackElyssaComponent } from './pack-elyssa/pack-elyssa.component';
     AppRoutingModule,
     ReactiveFormsModule,
 
-    
-    
-    MatDialogModule, // Correctement importé maintenant
-    // Ajouté
-   
+
+
+
+
 
   ],
   providers: [

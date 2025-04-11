@@ -1,0 +1,52 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.table-responsive {
+  margin-top: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table {
+  margin-bottom: 0;
+
+  th {
+    font-weight: 600;
+    background-color: #f8f9fa;
+  }
+
+  td, th {
+    vertical-align: middle;
+    padding: 12px 15px;
+  }
+}
+
+.alert {
+  margin-top: 20px;
+}
+
+.response-form {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+
+  h4 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+}
+
+.btn {
+  &-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+}
+
+.text-danger {
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}

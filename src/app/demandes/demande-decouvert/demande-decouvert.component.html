@@ -1,0 +1,82 @@
+<div class="table-responsive" *ngIf="demands.length > 0">
+  <table class="table table-hover">
+    <thead class="table-light">
+      <tr>
+        <th>ID Demande</th>
+        <th>Date</th>
+        <th>RIB Compte</th>
+        <th>CIN Client</th>
+        <th>Montant Demandé</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let demand of demands">
+        <td>{{ demand.id }}</td>
+        <td>{{ demand.dateDemande | date:'dd/MM/yyyy' }}</td>
+        <td>{{ demand.ribCompte }}</td>
+        <td>{{ demand.numCin }}</td>
+        <td>{{ demand.montant | currency:'EUR':'symbol':'1.2-2' }}</td>
+        <td>
+          <button class="btn btn-sm btn-primary"
+                  (click)="selectDemand(demand.id)">
+            Répondre
+          </button>
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+<div *ngIf="demands.length === 0 && !isLoading" class="alert alert-info">
+  Aucune demande en attente
+</div>
+
+<!-- Formulaire de réponse -->
+<div *ngIf="selectedDemandId" class="mt-4 p-3 border rounded bg-light">
+  <h4>Réponse à la demande {{ selectedDemandId }}</h4>
+
+  <form [formGroup]="responseForm" (ngSubmit)="submitResponse()">
+    <div class="mb-3">
+      <label class="me-3">Réponse:</label>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" id="accept"
+               formControlName="accepte" [value]="true">
+        <label class="form-check-label" for="accept">Accepter</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" id="reject"
+               formControlName="accepte" [value]="false">
+        <label class="form-check-label" for="reject">Refuser</label>
+      </div>
+      <div *ngIf="responseForm.get('accepte')?.invalid &&
+                 responseForm.get('accepte')?.touched"
+           class="text-danger mt-1">
+        Veuillez sélectionner une réponse
+      </div>
+    </div>
+
+    <div class="mb-3" *ngIf="responseForm.get('accepte')?.value === false">
+      <label for="motifRefus" class="form-label">Motif de refus</label>
+      <textarea class="form-control" id="motifRefus" rows="3"
+                formControlName="motifRefus"></textarea>
+      <div *ngIf="responseForm.get('motifRefus')?.invalid &&
+                 responseForm.get('motifRefus')?.touched"
+           class="text-danger">
+        Le motif de refus est obligatoire
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2">
+      <button type="button" class="btn btn-secondary"
+              (click)="selectedDemandId = null">
+        Annuler
+      </button>
+      <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-1"></span>
+        Envoyer la réponse
+      </button>
+    </div>
+  </form>
+</div>
+

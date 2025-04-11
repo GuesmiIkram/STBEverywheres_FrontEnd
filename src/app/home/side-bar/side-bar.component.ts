@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/services/auth.service';
+
 
 @Component({
   selector: 'app-side-bar',
@@ -7,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SideBarComponent implements OnInit {
 
-  constructor() { }
+  userRole: string = '';
+  isAgent: boolean = false;
+  isClient: boolean = false;
+  userName: string = '';
+  constructor(private authService:AuthService,) { }
 
   ngOnInit(): void {
+    this.userRole = this.authService.getUserRole();
+    this.isAgent = this.authService.isAgent();
+    this.isClient = this.authService.isClient();
   }
 
   ShowHideCollapse(a:string){
@@ -18,9 +27,9 @@ export class SideBarComponent implements OnInit {
       if (elt != null){
         if (elt.classList.contains("show")){
           elt.classList.remove('show')
-        } 
+        }
           else {
-            elt.classList.add('show') 
+            elt.classList.add('show')
           }
           elt.classList.toggle('show')
         }

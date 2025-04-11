@@ -50,16 +50,16 @@ export class LoginComponent implements OnInit {
           <p style="color: #64748b; font-size: 14px; text-align: center; margin-bottom: 20px; font-weight: 400; line-height: 1.5;">
             Entrez votre adresse email pour recevoir un lien de réinitialisation
           </p>
-          <input 
-            type="email" 
-            id="swal-email" 
-            class="swal2-input" 
+          <input
+            type="email"
+            id="swal-email"
+            class="swal2-input"
             placeholder="Email"
             style="height: 40px; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0 12px; font-size: 14px; width: 100%; margin: 0; box-shadow: none;"
           >
-          <div 
-            id="swal-error" 
-            class="text-danger" 
+          <div
+            id="swal-error"
+            class="text-danger"
             style="color: #ef4444; font-size: 12px; text-align: left; font-weight: 500; min-height: 20px; margin-top: 5px; margin-bottom: 10px;"
           ></div>
         </div>
@@ -69,7 +69,7 @@ export class LoginComponent implements OnInit {
       confirmButtonText: 'Envoyer',
       showCloseButton: true,
       showLoaderOnConfirm: true,
-      
+
       // Styles personnalisés pour SweetAlert
       customClass: {
         popup: 'lstb-popup',
@@ -78,7 +78,7 @@ export class LoginComponent implements OnInit {
         closeButton: 'lstb-close-button',
         loader: 'lstb-loader'
       },
-      
+
       // Styles CSS injectés
       backdrop: `
         rgba(0,0,0,0.4)
@@ -86,14 +86,14 @@ export class LoginComponent implements OnInit {
         center
         no-repeat
       `,
-      
+
       // Styles pour les boutons
       buttonsStyling: true,
       confirmButtonColor: '#1e3a8a',
-      
+
       // Styles pour le loader
       loaderHtml: '',
-      
+
       preConfirm: () => {
         const email = (Swal.getPopup()?.querySelector('#swal-email') as HTMLInputElement)?.value;
         const errorEl = Swal.getPopup()?.querySelector('#swal-error');
@@ -112,7 +112,7 @@ export class LoginComponent implements OnInit {
         return { email: email };
       },
       allowOutsideClick: () => !Swal.isLoading(),
-      
+
       // Injecter des styles CSS personnalisés
       didOpen: () => {
         // Injecter des styles CSS personnalisés dans le document
@@ -219,8 +219,7 @@ export class LoginComponent implements OnInit {
   checkPasswords(): void {
     this.passwordMismatch = this.registerForm.password !== this.registerForm.confirmPassword;
   }
-
-  onSubmit(): void {
+  /*onSubmit(): void {
     if (!this.loginForm.email || !this.loginForm.password) {
       Swal.fire('Erreur', 'Veuillez remplir tous les champs', 'error');
       return;
@@ -238,7 +237,26 @@ export class LoginComponent implements OnInit {
         Swal.fire('Erreur', err.message || 'Erreur lors de la connexion', 'error');
       }
     });
-  }
+  }*/
+
+    onSubmit(): void {
+      this.authService.login(this.loginForm.email, this.loginForm.password).subscribe({
+        next: (response) => {
+          console.log('Connexion réussie, données:', {
+            role: this.authService.getUserRole(),
+            userId: this.authService.getUserId()
+          });
+          this.router.navigate(['/home']).then(() => {
+            // Rechargez le composant pour actualiser le sidebar
+            window.location.reload();
+          });
+        },
+        error: (err) => {
+          console.error('Erreur de connexion:', err);
+          Swal.fire('Erreur', err.message || 'Échec de la connexion', 'error');
+        }
+      });
+    }
 
   // Méthode pour soumettre le formulaire d'inscription
   onRegister(): void {

@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { Compte } from 'src/app/Models/compte';
 import { CompteService } from 'src/app/services/compte.service';
 import { VirementService } from 'src/app/services/virement.service';
+import { AuthService } from 'src/app/services/auth.service';
+
 import Swal from 'sweetalert2';
 
 @Component({
@@ -23,12 +25,25 @@ export class DashboardComponent implements OnInit {
   selectedRib: string = '';
   filter: string = 'all';
 
-   // Nouvelle variable pour gérer les erreurs d'historique
+
+  userRole: string = '';
+  isAgent: boolean = false;
+  isClient: boolean = false;
+  userName: string = '';
+
+
+   //variable pour gérer les erreurs d'historique
    historiqueErrorMessage: string | null = null;
-  constructor(private compteService: CompteService, private router: Router , private virementService: VirementService) {}
+  constructor(private authService:AuthService,private compteService: CompteService, private router: Router , private virementService: VirementService) {}
 
   ngOnInit(): void {
-    this.loadComptes();
+    this.userRole = this.authService.getUserRole();
+    this.isAgent = this.authService.isAgent();
+    this.isClient = this.authService.isClient();
+    if(this.isClient){
+      this.loadComptes() // ne l'appeler que pour le client
+    }
+
   }
   // Rechercher un compte par RIB
   searchCompteByRib(): void {

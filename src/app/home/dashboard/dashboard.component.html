@@ -1,97 +1,107 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mes Comptes</title>
+<div class="page-container">
+  <ng-container *ngIf="isClient">
+  <div class="pagetitle">
+    <h1>Consultation Compte</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="dashboard.component.html">Home</a></li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
 
-</head>
-<div>
-  <div class="page-container">
-    <div class="pagetitle">
-      <h1>Consultation Compte</h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="dashboard.component.html">Home</a></li>
-        </ol>
-      </nav>
-    </div><!-- End Page Title -->
+  <div class="container">
+    <div class="card main-card">
+      <div class="card-header">
+        <h2 class="card-title">Mes Comptes</h2>
+        <div class="btn-container">
+          <button type="button" class="btn btn-primary btn-add-account" (click)="toggleCreateAccountForm()">
+            <i class="bi bi-plus-circle me-2"></i>
+            Ajouter un compte
+          </button>
+        </div>
+      </div>
 
-    <div class="container">
-      <div class="card main-card">
-        <div class="card-header">
-          <h2 class="card-title">Mes Comptes</h2>
-          <div class="btn-container">
-            <button type="button" class="btn btn-primary btn-add-account" (click)="toggleCreateAccountForm()">
-              <i class="bi bi-plus-circle me-2"></i>
-              Ajouter un compte
-            </button>
+      <!-- Formulaire de recherche -->
+      <div class="card-content">
+        <div class="search-section">
+          <div class="search-container">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-search"></i></span>
+              <input type="text" class="form-control" [(ngModel)]="rib" placeholder="Saisir un RIB">
+              <button type="button" class="btn btn-search" (click)="searchCompteByRib()">Rechercher</button>
+            </div>
+            <div *ngIf="errorMessage" class="alert alert-danger">
+              {{ errorMessage }}
+            </div>
           </div>
         </div>
 
-        <!-- Formulaire de recherche -->
-        <div class="card-content">
-          <div class="search-section">
-            <div class="search-container">
-              <div class="input-group">
-                <span class="input-group-text"><i class="bi bi-search"></i></span>
-                <input type="text" class="form-control" [(ngModel)]="rib" placeholder="Saisir un RIB">
-                <button type="button" class="btn btn-search" (click)="searchCompteByRib()">Rechercher</button>
+        <!-- Affichage conditionnel du formulaire de création de compte -->
+        <!-- Modale de création de compte -->
+        <div *ngIf="showCreateAccountForm" class="create-account-modal">
+          <div class="create-account-modal__backdrop" (click)="toggleCreateAccountForm()"></div>
+          <div class="create-account-modal__content">
+            <div class="create-account-modal__header">
+              <h2 class="create-account-modal__title">Créer un nouveau compte</h2>
+              <button class="create-account-modal__close" (click)="toggleCreateAccountForm()" aria-label="Fermer">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+            <div class="create-account-modal__body">
+              <div class="create-account-modal__form-group">
+                <label for="typeCompte" class="create-account-modal__label">Type de compte</label>
+                <div class="create-account-modal__select-wrapper">
+                  <select id="typeCompte" class="create-account-modal__select" [(ngModel)]="compteDto.type">
+                    <option value="courant">Compte Courant</option>
+                    <option value="epargne">Compte Épargne</option>
+                    <option value="cheque">Compte Chèque</option>
+                  </select>
+                  <i class="bi bi-chevron-down create-account-modal__select-icon"></i>
+                </div>
               </div>
-              <div *ngIf="errorMessage" class="alert alert-danger">
-  {{ errorMessage }}
-</div>
+              <div *ngIf="errorMessage" class="create-account-modal__error">
+                <i class="bi bi-exclamation-circle"></i>
+                <span>{{ errorMessage }}</span>
+              </div>
+            </div>
+            <div class="create-account-modal__footer">
+              <button type="button" class="create-account-modal__btn create-account-modal__btn--cancel" (click)="toggleCreateAccountForm()">
+                Annuler
+              </button>
+              <button type="button" class="create-account-modal__btn create-account-modal__btn--primary" (click)="createCompte()">
+                <i class="bi bi-check2"></i>
+                Créer le compte
+              </button>
             </div>
           </div>
+        </div>
 
-          <!-- Affichage conditionnel du formulaire de création de compte -->
-          <div class="form-container"
-          *ngIf="showCreateAccountForm">
-            <div class="create-account-form">
-              <h3>Créer un nouveau compte</h3>
-              <div class="form-group">
-                <label for="typeCompte">Type de compte</label>
-                <select id="typeCompte" class="form-select" [(ngModel)]="compteDto.type">
-                  <option value="courant">Compte Courant</option>
-                  <option value="epargne">Compte Épargne</option>
-                  <option value="cheque">Compte Chèque</option>
-                </select>
+        <!-- Liste des comptes -->
+        <div class="comptes-container">
+          <div *ngFor="let compte of comptes" class="compte-card" (click)="openModal(compte.rib)">
+            <div class="compte-header">
+              <h3>{{ compte.type.toUpperCase() }}</h3>
+              <div class="compte-status" [ngClass]="{'active': compte.statut === 'Actif'}">
+                {{ compte.statut }}
               </div>
-              <div class="form-actions">
-                <button type="button" class="btn btn-secondary" (click)="toggleCreateAccountForm()">Annuler</button>
-                <button type="button" class="btn btn-primary" (click)="createCompte()">Créer le compte</button>
-              </div>
-              <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
             </div>
-          </div>
-
-          <!-- Liste des comptes -->
-          <div class="comptes-container">
-            <div *ngFor="let compte of comptes" class="compte-card" (click)="openModal(compte.rib)">
-              <div class="compte-header">
-                <h3>{{ compte.type.toUpperCase() }}</h3>
-                <div class="compte-status" [ngClass]="{'active': compte.statut === 'Actif'}">
-                  {{ compte.statut }}
-                </div>
+            <div class="compte-body">
+              <div class="rib-container">
+                <span class="rib-label">RIB</span>
+                <span class="rib-value">{{ compte.rib }}</span>
               </div>
-              <div class="compte-body">
-                <div class="rib-container">
-                  <span class="rib-label">RIB</span>
-                  <span class="rib-value">{{ compte.rib }}</span>
-                </div>
-                <div class="solde-container">
-                  <span class="solde-value">{{ compte.solde | number:'1.3-3' }}</span>
-                  <span class="currency">TND</span>
-                </div>
+              <div class="solde-container">
+                <span class="solde-value">{{ compte.solde | number:'1.3-3' }}</span>
+                <span class="currency">TND</span>
               </div>
-              <div class="compte-actions">
-                <button type="button" class="btn btn-outline-primary btn-historique"  (click)="openHistoriqueModal(compte.rib); $event.stopPropagation()">
-                  <i class="bi bi-clock-history"></i> Historique
-                </button>
-                <button type="button" class="btn btn-outline-danger btn-cloturer" (click)="cloturerCompte(compte.rib); $event.stopPropagation()">
-                  <i class="bi bi-x-circle"></i> Clôturer
-                </button>
-              </div>
+            </div>
+            <div class="compte-actions">
+              <button type="button" class="btn btn-outline-primary btn-historique"  (click)="openHistoriqueModal(compte.rib); $event.stopPropagation()">
+                <i class="bi bi-clock-history"></i> Historique
+              </button>
+              <button type="button" class="btn btn-outline-danger btn-cloturer" (click)="cloturerCompte(compte.rib); $event.stopPropagation()">
+                <i class="bi bi-x-circle"></i> Clôturer
+              </button>
             </div>
           </div>
         </div>
@@ -100,96 +110,82 @@
   </div>
 
 
+<!-- Modal pour afficher l'historique de virement -->
+<div *ngIf="showHistoriqueModal" class="historique-modal">
+  <div class="historique-modal__backdrop" (click)="closeHistoriqueModal()"></div>
+  <div class="historique-modal__content">
+    <div class="historique-modal__header">
+      <h2 class="historique-modal__title">Historique des virements</h2>
+      <button class="historique-modal__close" (click)="closeHistoriqueModal()" aria-label="Fermer">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
 
-  <!-- Modal pour afficher l historique de virement  -->
-
-  <div *ngIf="showHistoriqueModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Historique des virements</h2>
-        <button class="close-button" (click)="closeHistoriqueModal()" aria-label="Fermer">
-          <i class="bi bi-x-lg"></i>
-        </button>
+    <div class="historique-modal__body">
+      <div class="historique-modal__filters">
+        <button type="button" class="historique-modal__filter-btn" [class.active]="filter === 'all'" (click)="filterHistorique('all')">Tous</button>
+        <button type="button" class="historique-modal__filter-btn" [class.active]="filter === 'sent'" (click)="filterHistorique('sent')">Virements émis</button>
+        <button type="button" class="historique-modal__filter-btn" [class.active]="filter === 'received'" (click)="filterHistorique('received')">Virements reçus</button>
       </div>
 
-      <div class="modal-body">
-        <div class="filter-buttons">
-          <button type="button" class="btn btn-filter" (click)="filterHistorique('all')">Tous</button>
-          <button type="button" class="btn btn-filter" (click)="filterHistorique('sent')">Virements émis</button>
-          <button type="button" class="btn btn-filter" (click)="filterHistorique('received')">Virements reçus</button>
-        </div>
+      <!-- Affichage des erreurs -->
+      <div *ngIf="historiqueErrorMessage" class="historique-modal__error">
+        <i class="bi bi-exclamation-triangle"></i>
+        {{ historiqueErrorMessage }}
+      </div>
 
-        <!-- Affichage des erreurs -->
-        <div *ngIf="historiqueErrorMessage" class="alert alert-danger">
-          {{ historiqueErrorMessage }}
-        </div>
-
-        <div *ngIf="historiqueVirements">
-          <!-- Virements émis -->
-          <div *ngIf="filter === 'sent'">
-            <h3 *ngIf="historiqueVirements.virementsEnvoyes.length > 0">Virements émis</h3>
-            <div *ngIf="historiqueVirements.virementsEnvoyes.length === 0" class="no-virements">
-              Aucun virement émis pour ce compte.
+      <div *ngIf="historiqueVirements">
+        <!-- Grouper par mois -->
+        <div *ngIf="filter === 'sent' || filter === 'all'">
+          <div *ngFor="let virement of historiqueVirements.virementsEnvoyes" class="historique-modal__transaction">
+            <div class="historique-modal__transaction-icon historique-modal__transaction-icon--sent">
+              <i class="bi bi-arrow-up-right"></i>
             </div>
-            <div *ngFor="let virement of historiqueVirements.virementsEnvoyes" class="virement-card">
-              <div class="virement-date">{{ virement.date | date:'yyyy-MM-dd' }}</div>
-              <div class="virement-montant">{{ virement.montant }} TND</div>
-              <div class="virement-motif">{{ virement.motif }}</div>
-              <div class="virement-rib">RIB Récepteur: {{ virement.riB_Recepteur }}</div>
+            <div class="historique-modal__transaction-details">
+              <div class="historique-modal__transaction-title">Paiement</div>
+              <div class="historique-modal__transaction-subtitle">RIB Récepteur: {{ virement.riB_Recepteur }}</div>
+              <div class="historique-modal__transaction-date">{{ virement.date | date:'d MMMM yyyy' }}</div>
+            </div>
+            <div class="historique-modal__transaction-amount historique-modal__transaction-amount--negative">
+              -{{ virement.montant }} TND
             </div>
           </div>
-      <!-- Virements reçus -->
-      <div *ngIf="filter === 'received'">
-        <h3 *ngIf="historiqueVirements.virementsRecus.length > 0">Virements reçus</h3>
-        <div *ngIf="historiqueVirements.virementsRecus.length === 0" class="no-virements">
-          Aucun virement reçu pour ce compte.
         </div>
-        <div *ngFor="let virement of historiqueVirements.virementsRecus" class="virement-card">
-          <div class="virement-date">{{ virement.date | date:'yyyy-MM-dd' }}</div>
-          <div class="virement-montant">{{ virement.montant }} TND</div>
-          <div class="virement-motif">{{ virement.motif }}</div>
-          <div class="virement-rib">RIB Émetteur: {{ virement.riB_Emetteur }}</div>
+
+        <!-- Virements reçus -->
+        <div *ngIf="filter === 'received' || filter === 'all'">
+          <div *ngFor="let virement of historiqueVirements.virementsRecus" class="historique-modal__transaction">
+            <div class="historique-modal__transaction-icon historique-modal__transaction-icon--received">
+              <i class="bi bi-arrow-down-left"></i>
+            </div>
+            <div class="historique-modal__transaction-details">
+              <div class="historique-modal__transaction-title">{{ virement.motif || 'Alimentation Compte' }}</div>
+              <div class="historique-modal__transaction-subtitle">RIB Émetteur: {{ virement.riB_Emetteur }}</div>
+              <div class="historique-modal__transaction-date">{{ virement.date | date:'d MMMM yyyy' }}</div>
+            </div>
+            <div class="historique-modal__transaction-amount historique-modal__transaction-amount--positive">
+              +{{ virement.montant }} TND
+            </div>
+          </div>
         </div>
-      </div>
 
-        <!-- Tous les virements -->
-        <div *ngIf="filter === 'all'">
-          <h3 *ngIf="historiqueVirements.virementsEnvoyes.length > 0"></h3>
-          <div *ngFor="let virement of historiqueVirements.virementsEnvoyes" class="virement-card">
-            <div class="virement-date">{{ virement.date | date:'yyyy-MM-dd' }}</div>
-            <div class="virement-montant">{{ virement.montant }} TND</div>
-            <div class="virement-motif">{{ virement.motif }}</div>
-            <div class="virement-rib">RIB Récepteur: {{ virement.riB_Recepteur }}</div>
-          </div>
-
-          <h3 *ngIf="historiqueVirements.virementsRecus.length > 0"></h3>
-          <div *ngFor="let virement of historiqueVirements.virementsRecus" class="virement-card">
-            <div class="virement-date">{{ virement.date | date:'yyyy-MM-dd' }}</div>
-            <div class="virement-montant">{{ virement.montant }} TND</div>
-            <div class="virement-motif">{{ virement.motif }}</div>
-            <div class="virement-rib">RIB Émetteur: {{ virement.riB_Emetteur }}</div>
-          </div>
-
-          <div *ngIf="historiqueVirements.virementsEnvoyes.length === 0 && historiqueVirements.virementsRecus.length === 0" class="no-virements">
-            Aucun virement trouvé pour ce compte.
-          </div>
+        <div *ngIf="(filter === 'sent' && historiqueVirements.virementsEnvoyes.length === 0) ||
+                    (filter === 'received' && historiqueVirements.virementsRecus.length === 0) ||
+                    (filter === 'all' && historiqueVirements.virementsEnvoyes.length === 0 && historiqueVirements.virementsRecus.length === 0)"
+             class="historique-modal__empty">
+          Aucun virement trouvé pour ce compte.
         </div>
       </div>
 
-      <div *ngIf="!historiqueVirements && !historiqueErrorMessage" class="no-virements">
-        Aucun virement trouvé.
+      <div *ngIf="!historiqueVirements && !historiqueErrorMessage" class="historique-modal__loading">
+        <div class="historique-modal__spinner"></div>
+        Chargement des données...
       </div>
     </div>
   </div>
 </div>
 
-</div>
-
-
-
-
-
-  <!-- Modal pour afficher les détails du compte - Version corrigée -->
+<!-- Modal pour afficher les détails du compte - Version corrigée -->
 <div *ngIf="selectedCompte" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -274,4 +270,13 @@
     </div>
   </div>
 </div>
-</html>
+</ng-container>
+
+<ng-container *ngIf="isAgent">
+
+  <div class="pagetitle">
+    <h1>agnet</h1>
+
+  </div>
+
+  </ng-container>

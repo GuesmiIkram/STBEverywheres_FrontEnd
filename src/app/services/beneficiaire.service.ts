@@ -18,4 +18,7 @@ export class BeneficiaireService {
   getBeneficiairesByClientId(): Observable<Beneficiaire[]> {
     return this.http.get<Beneficiaire[]>(`${this.apiUrl}/GetBeneficiairesByClientId`);
   }
+
+
+
 }

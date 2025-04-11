@@ -1,6 +1,6 @@
 export interface DemandeModificationDecouvertDto {
   ribCompte: string;
   decouvertDemande: number;
-  statutDemande: string;
+  statutDemande: number;
   dateDemande: Date;
 }

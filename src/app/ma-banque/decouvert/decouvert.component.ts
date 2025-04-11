@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DecouvertService } from 'src/app/services/decouvert.service';
 import { DemandeModificationDecouvertDto } from 'src/app/Models/DemandeModificationDecouvertDto';
+import { DemandeModifDecouvertStatut } from 'src/app/enums/DemandeModifDecouvertStatut.enum';
 
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-decouvert',
   templateUrl: './decouvert.component.html',
@@ -95,32 +97,99 @@ demandesParMois: { mois: string, annee: number, demandes: DemandeModificationDec
   }
 
   // Envoyer la demande de modification
-  demandeModificationDecouvert(): void {
-    if (this.demandeForm.valid) {
-      const demandeDto: DemandeModificationDecouvertDto = {
-        ribCompte: this.demandeForm.get('rib')?.value,
-        decouvertDemande: this.demandeForm.get('montantDemande')?.value,
-        statutDemande: 'En attente',
-        dateDemande: new Date()
-      };
 
-      this.decouvertService.demandeModificationDecouvert(demandeDto).subscribe({
-        next: () => {
-          this.successMessage = 'Demande envoyée avec succès!';
-          this.errorMessage = null;
-          this.demandeForm.reset();
-          this.decouvertAutorise = null;
-        },
-        error: (err) => {
-          this.errorMessage = err.error.message || 'Erreur lors de l\'envoi.';
-          this.successMessage = null;
-        }
-      });
-    } else {
-      this.errorMessage = 'Veuillez remplir tous les champs obligatoires.';
+    demandeModificationDecouvert(): void {
+      if (this.demandeForm.valid) {
+        const rib = this.demandeForm.get('rib')?.value;
+        const montant = this.demandeForm.get('montantDemande')?.value;
+
+        const compteSelectionne = this.comptes.find(c => c.rib === rib);
+        const typeCompte = compteSelectionne ? compteSelectionne.type : 'Compte';
+
+
+        const legalText = `
+          <div style="font-size: 12px; color: #666; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
+            <p>En confirmant, vous reconnaissez avoir pris connaissance des <a href="/conditions-decouvert" style="color: #0056b3; text-decoration: none;">conditions générales de découvert</a>.</p>
+            <p style="margin-top: 5px;">Toute autorisation de découvert est soumise à l'approbation de notre service risques et peut être refusée.</p>
+          </div>
+        `;
+
+        Swal.fire({
+          title: 'Confirmez votre demande de découvert',
+          html: `
+            <div style="text-align: left; margin: 10px 0;">
+              <p><strong>Type de compte:</strong> ${typeCompte}</p>
+              <p><strong>RIB:</strong> ${rib}</p>
+              <p><strong>Montant demandé:</strong> ${montant} TND</p>
+            </div>
+            ${legalText}
+          `,
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#3366cc',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: 'Confirmer la demande',
+          cancelButtonText: 'Annuler',
+          focusCancel: true,
+          customClass: {
+            container: 'swal-bank-container',
+            popup: 'swal-bank-popup',
+            htmlContainer: 'swal-bank-html'
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            const demandeDto: DemandeModificationDecouvertDto = {
+              ribCompte: rib,
+              decouvertDemande: montant,
+              statutDemande: DemandeModifDecouvertStatut.EN_ATTENTE,
+              dateDemande: new Date()
+            };
+
+            this.decouvertService.demandeModificationDecouvert(demandeDto).subscribe({
+              next: () => {
+                Swal.fire({
+                  title: 'Demande enregistrée',
+                  html: `
+                    <div style="text-align: center;">
+                      <i class="fas fa-check-circle" style="color: #28a745; font-size: 48px; margin-bottom: 15px;"></i>
+                      <p>Votre demande de découvert a bien été transmise à notre service.</p>
+                      <p><strong>Vous recevrez un email dès que la décision (acceptation ou refus) sera prise.</strong></p>
+                    </div>
+                    <div style="font-size: 13px; color: #666; margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px;">
+                      <p><i class="far fa-clock" style="color: #3366cc; margin-right: 5px;"></i> Délai de traitement : généralement sous 48h ouvrées.</p>
+                      <p><i class="fas fa-user-tie" style="color: #3366cc3; margin-right: 5px;"></i> Pour toute question, contactez votre conseiller.</p>
+                    </div>
+                  `,
+
+                  confirmButtonText: 'Compris',
+                  confirmButtonColor: '#3366cc',
+                  customClass: {
+                    popup: 'swal-bank-popup-success'
+                  }
+                });
+
+                // Réinitialisation du formulaire
+                this.successMessage = 'Demande envoyée avec succès!';
+                this.errorMessage = null;
+                this.demandeForm.reset();
+                this.decouvertAutorise = null;
+                this.loadDemandes();
+              },
+              error: (err) => {
+                Swal.fire({
+                  title: 'Erreur',
+                  text: err.error.message || 'Une erreur est survenue lors du traitement de votre demande.',
+                  icon: 'error',
+                  confirmButtonText: 'Fermer'
+                });
+              }
+            });
+          }
+        });
+      } else {
+        this.errorMessage = 'Veuillez remplir tous les champs obligatoires correctement.';
+      }
     }
-  }
-
   // Changer d'onglet
   changeTab(tab: string): void {
     this.activeTab = tab;
@@ -156,32 +225,23 @@ loadDemandes(): void {
   });
 }
 //pour formater le statut de la demande dans la liste des demande accepte de back s'affiche acceptée...
-getFormattedStatus(statut: string): string {
-  switch(statut.toLowerCase()) {
-    case 'accepte':
-      return 'Acceptée';
-    case 'refuse':
-      return 'Refusée';
-    case 'en attente':
-      return 'En attente';
-    default:
-      return statut;
+
+getFormattedStatus(statut: number): string {
+  switch(statut) {
+    case 1: return 'Acceptée';
+    case 2: return 'Refusée';
+    case 0:
+    default: return 'En attente';
   }
 }
 
-getStatusClass(statut: string): string {
-  switch(statut.toLowerCase()) {
-    case 'accepte':
-      return 'statut-acceptee';
-    case 'refuse':
-      return 'statut-refusee';
-    case 'en attente':
-      return 'statut-en-attente';
-    default:
-      return '';
+getStatusClass(statut: number): string {
+  switch(statut) {
+    case 1: return 'statut-acceptee';
+    case 2: return 'statut-refusee';
+    case 0:
+    default: return 'statut-en-attente';
   }
+
 }
-
-
-
 }

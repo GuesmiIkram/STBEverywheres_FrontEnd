@@ -225,18 +225,7 @@ button[type="button"]:contains("− Supprimer") {
   }
 }
 
-// Style pour l'affichage du solde
-.solde-compte {
-  background-color: $light-gray;
-  padding: 10px;
-  border-radius: 4px;
-  margin-top: 5px;
-  font-size: 14px;
 
-  strong {
-    color: $primary-color;
-  }
-}
 
 // Style pour les séparateurs
 hr, .separator {
@@ -421,4 +410,221 @@ div[formArrayName="beneficiaires"] > div {
   &:focus {
     outline: none;  // Enlève le contour par défaut lorsque le bouton est cliqué
   }
+}
+
+
+/* Styles pour les SweetAlert personnalisés */
+.swal-bank-container {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  z-index: 1060;
+}
+
+.swal-bank-popup {
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e0e0e0;
+  padding: 20px;
+  max-width: 500px;
+}
+
+.swal-bank-title {
+  color: #2c3e50;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.swal-bank-html {
+  font-size: 15px;
+  color: #34495e;
+  line-height: 1.5;
+  text-align: left;
+  padding: 0 10px;
+}
+
+.swal-bank-confirm-btn {
+  background-color: #3366cc !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 8px 20px !important;
+  font-weight: 500 !important;
+  transition: background-color 0.2s !important;
+  box-shadow: none !important;
+
+  &:hover {
+    background-color: #2a56a3 !important;
+  }
+}
+
+.swal-bank-cancel-btn {
+  border-radius: 4px !important;
+  padding: 8px 20px !important;
+  font-weight: 500 !important;
+  background-color: #6c757d !important;
+  border: none !important;
+  color: white !important;
+  transition: background-color 0.2s !important;
+
+  &:hover {
+    background-color: #5a6268 !important;
+  }
+}
+
+.swal-bank-popup-success {
+  border-top: 4px solid #28a745;
+}
+
+/* Icônes Font Awesome */
+.fas, .far {
+  margin-right: 5px;
+}
+
+.fa-check-circle {
+  color: #28a745;
+}
+
+.fa-exclamation-circle {
+  color: #dc3545;
+}
+
+.fa-clock, .fa-user-tie, .fa-receipt {
+  color: #3366cc;
+  font-size: 14px;
+}
+
+
+
+//.ajouter-beneficiaire-link {
+  //color: #0056b3; /* Bleu similaire à l'image */
+  /*cursor: pointer;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 15px; /* Espacement comme dans l'image */
+ // transition: color 0.2s ease;
+//}
+
+/*.ajouter-beneficiaire-link:hover {
+  color: #003d7a; /* Bleu plus foncé au survol */
+  /*text-decoration: underline; /* Optionnel - si vous voulez un effet de lien */
+//}
+
+/*.ajouter-beneficiaire-link .plus-icon {
+  font-size: 18px;
+  margin-right: 5px;
+  font-weight: bold;
+}*/
+
+
+.nouveau-beneficiaire-option {
+  margin-top: 8px;
+  text-align: right;
+
+  .option-container {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .info-text {
+    color: #6c757d;
+    font-style: italic;
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+
+  .btn-lien {
+    background: none;
+    border: none;
+    color: #0056b3;
+    padding: 0;
+    cursor: pointer;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    transition: color 0.2s ease;
+    font-size: 14px;
+
+    &:hover {
+      color: #003d7a;
+      text-decoration: underline;
+    }
+
+    .plus-icon {
+      font-size: 18px;
+      margin-right: 5px;
+      font-weight: bold;
+    }
+  }
+
+  .aide-text {
+    color: #6c757d;
+    font-size: 12px;
+    margin-top: 4px;
+    font-style: italic;
+  }
+}
+
+.aide-section {
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  .aide-text {
+    color: #6c757d;
+    font-size: 12px;
+    font-style: italic;
+    margin-bottom: 5px;
+  }
+
+  .btn-ajouter {
+    background-color: transparent;
+    color: #0056b3;
+    border: 1px solid #0056b3;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: rgba(0, 86, 179, 0.05);
+    }
+
+    .plus-icon {
+      font-size: 18px;
+      margin-right: 5px;
+      font-weight: bold;
+    }
+  }
+}
+// style du solde du compte affiché au dessous de selectionner un compte
+
+
+.solde-compte {
+  margin-top: 8px;
+  font-size: 14px;
+  padding: 6px 10px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  border-left: 3px solid #28a745; /* Bordure verte par défaut */
+}
+
+.solde-compte.solde-negatif {
+  border-left-color: #dc3545; /* Bordure rouge si négatif */
+}
+
+/* Utilisez cette classe si vous utilisez Bootstrap */
+.text-danger {
+  color: #dc3545 !important;
+}
+
+/* Sinon, créez votre propre classe */
+.solde-negatif span {
+  color: #dc3545;
+  font-weight: 500;
 }
