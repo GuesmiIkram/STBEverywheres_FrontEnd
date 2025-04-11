@@ -1,0 +1,62 @@
+<div class="reclamation-container">
+    <h2 class="title">
+      <i class="bi bi-exclamation-triangle"></i> Formulaire de Réclamation
+    </h2>
+  
+    <form [formGroup]="reclamationForm" (ngSubmit)="onSubmit()" class="reclamation-form">
+      <!-- Champ Objet -->
+      <div class="form-group">
+        <label for="objet">
+          <i class="bi bi-card-heading"></i> Objet de la réclamation *
+        </label>
+        <input 
+          type="text" 
+          id="objet" 
+          formControlName="objet" 
+          placeholder="Ex: Problème de virement"
+          class="form-control"
+        >
+        <div *ngIf="reclamationForm.get('objet')?.invalid && reclamationForm.get('objet')?.touched" 
+             class="error-message">
+          Ce champ est obligatoire
+        </div>
+      </div>
+  
+      <!-- Champ Description -->
+      <div class="form-group">
+        <label for="description">
+          <i class="bi bi-text-paragraph"></i> Description détaillée *
+        </label>
+        <textarea 
+          id="description" 
+          formControlName="description" 
+          rows="5" 
+          placeholder="Décrivez votre problème en détail..."
+          class="form-control"
+        ></textarea>
+        <div *ngIf="reclamationForm.get('description')?.invalid && reclamationForm.get('description')?.touched" 
+             class="error-message">
+          Ce champ est obligatoire
+        </div>
+      </div>
+  
+      <!-- Bouton Soumettre -->
+      <div class="form-footer">
+        <button 
+          type="submit" 
+          class="submit-btn"
+          [disabled]="!reclamationForm.valid || isLoading"
+        >
+          <span *ngIf="!isLoading">
+            <i class="bi bi-send"></i> Envoyer la réclamation
+          </span>
+          <span *ngIf="isLoading">
+            <i class="bi bi-hourglass"></i> Envoi en cours...
+          </span>
+        </button>
+      </div>
+    </form>
+  
+    <!-- Message de succès -->
+  
+  </div>

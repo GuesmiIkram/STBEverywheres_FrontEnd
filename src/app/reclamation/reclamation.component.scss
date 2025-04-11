@@ -1,0 +1,238 @@
+// Variables
+$primary-color: #0056b3;
+$primary-light: #e6f0ff;
+$primary-dark: #004494;
+$secondary-color: #6c757d;
+$success-color: #28a745;
+$danger-color: #dc3545;
+$warning-color: #ffc107;
+$light-color: #f8f9fa;
+$dark-color: #343a40;
+$border-color: #dee2e6;
+$box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+$transition: all 0.2s ease-in-out;
+
+// Mixins
+@mixin focus-state {
+  border-color: $primary-color;
+  box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
+  outline: none;
+}
+
+// Container
+.reclamation-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1);
+  
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+}
+
+// Title
+.title {
+  color: $primary-color;
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid $primary-light;
+  display: flex;
+  align-items: center;
+  
+  i {
+    margin-right: 0.75rem;
+    color: $warning-color;
+    font-size: 1.5rem;
+  }
+  
+  @media (max-width: 576px) {
+    font-size: 1.5rem;
+  }
+}
+
+// Form
+.reclamation-form {
+  .form-group {
+    margin-bottom: 1.5rem;
+    
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: $dark-color;
+      
+      i {
+        color: $primary-color;
+        margin-right: 0.5rem;
+      }
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      border: 1px solid $border-color;
+      border-radius: 0.5rem;
+      background-color: $light-color;
+      transition: $transition;
+      
+      &:focus {
+        @include focus-state;
+        background-color: white;
+      }
+      
+      &::placeholder {
+        color: lighten($secondary-color, 20%);
+        font-style: italic;
+      }
+      
+      &.ng-invalid.ng-touched {
+        border-color: $danger-color;
+        background-color: rgba($danger-color, 0.02);
+      }
+    }
+    
+    textarea.form-control {
+      resize: vertical;
+      min-height: 120px;
+    }
+    
+    .error-message {
+      margin-top: 0.5rem;
+      color: $danger-color;
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      
+      &::before {
+        content: "\f071"; // FontAwesome exclamation triangle
+        font-family: "Bootstrap Icons";
+        margin-right: 0.5rem;
+      }
+      
+      animation: fadeIn 0.3s ease-in-out;
+    }
+  }
+  
+  .form-footer {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: flex-end;
+    
+    .submit-btn {
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      color: white;
+      background-color: $primary-color;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      transition: $transition;
+      display: flex;
+      align-items: center;
+      
+      i {
+        margin-right: 0.5rem;
+        font-size: 1.125rem;
+      }
+      
+      &:hover:not(:disabled) {
+        background-color: $primary-dark;
+        transform: translateY(-2px);
+        box-shadow: 0 0.25rem 0.5rem rgba($primary-color, 0.3);
+      }
+      
+      &:active:not(:disabled) {
+        transform: translateY(0);
+        box-shadow: none;
+      }
+      
+      &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
+      
+      @media (max-width: 576px) {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Success message styling
+.success-message {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: rgba($success-color, 0.1);
+  border-left: 4px solid $success-color;
+  border-radius: 0.5rem;
+  color: darken($success-color, 10%);
+  display: flex;
+  align-items: center;
+  
+  i {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+  }
+  
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+// Loading animation
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.bi-hourglass {
+  animation: spin 1.5s linear infinite;
+}
+
+// Hover effects for form fields
+.form-control:hover:not(:focus) {
+  border-color: darken($border-color, 10%);
+}
+
+// Additional responsive adjustments
+@media (max-width: 576px) {
+  .reclamation-container {
+    padding: 1.25rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+}
+
+// Print styles
+@media print {
+  .reclamation-container {
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .submit-btn {
+    display: none !important;
+  }
+}

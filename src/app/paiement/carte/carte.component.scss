@@ -1,135 +1,346 @@
 // Variables
-$primary-color: #068bd4;
-$primary-hover: #0579b8;
-$background-color: #f5f5f5;
-$card-bg: #f8f8f8;
-$text-color: #333;
-$border-radius: 4px;
-$box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-$spacing: 16px;
-
-// Reset & Base Styles
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: Arial, sans-serif;
-  color: $text-color;
-  background-color: white;
-  line-height: 1.6;
-}
+$primary-color: #0056b3;
+$primary-hover: #004494;
+$secondary-color: #f8f9fa;
+$border-color: #dee2e6;
+$error-color: #dc3545;
+$success-color: #28a745;
+$info-color: #17a2b8;
+$text-color: #212529;
+$light-text: #6c757d;
+$white: #ffffff;
+$card-bg: #ffffff;
+$box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+$transition: all 0.2s ease-in-out;
 
 // Container
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: $spacing * 2;
-}
-
-// Typography
-h1 {
-  font-size: 28px;
-  font-weight: 500;
-  margin-bottom: $spacing * 2;
-  color: $text-color;
-}
-
-h2 {
-  font-size: 16px;
-  font-weight: 700;
-  text-align: center;
+  padding: 2rem;
+  
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
+  
+  h1 {
+    color: $primary-color;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid lighten($primary-color, 40%);
+    text-align: center;
+    
+    @media (max-width: 576px) {
+      font-size: 1.75rem;
+    }
+  }
 }
 
 // Cards Grid
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  gap: $spacing * 1.5;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
   
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  @media (min-width: 1024px) {
-    grid-template-columns: repeat(3, 1fr);
+  @media (max-width: 576px) {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 }
 
-// Card Component
+// Card
 .card {
   background-color: $card-bg;
-  border-radius: $border-radius;
+  border-radius: 1rem;
   box-shadow: $box-shadow;
-  padding: $spacing;
+  overflow: hidden;
+  transition: $transition;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  position: relative;
   
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  }
+  
+  // Card Image
   .card-image {
-    position: relative; // Nécessaire pour positionner .card-number
     height: 180px;
-    width: 100%;
+    overflow: hidden;
+    background: linear-gradient(135deg, lighten($border-color, 40%), lighten($border-color, 20%));
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: $spacing;
     
     img {
-      max-width: 300px;
-      max-height: 180px;
-      box-shadow: $box-shadow;
-    }
-  
-    .card-number {
-      position: absolute; // Position absolue par rapport à .card-image
-      bottom: 10px; // Ajustez la position verticale
-      left: 50%; // Centre horizontalement
-      transform: translateX(-50%); // Centre parfaitement
-      background-color: rgba(0, 0, 0, 0.7); // Fond semi-transparent
-      color: white; // Couleur du texte
-      padding: 5px 10px;
-      border-radius: 4px;
-      font-size: 16px;
-      font-weight: bold;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: $transition;
+      
+      &:hover {
+        transform: scale(1.05);
+      }
     }
   }
   
+  // Card Title
   .card-title {
-    margin-bottom: $spacing * 1.5;
-    height: 64px;
-    display: flex;
-    align-items: center;
-   
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: $primary-color;
+    padding: 1.25rem 1.25rem 0.5rem;
+    text-align: center;
   }
   
+  // Card Number
+  .card-number {
+    font-size: 0.95rem;
+    color: $light-text;
+    padding: 0 1.25rem 0.5rem;
+    text-align: center;
+    letter-spacing: 0.5px;
+    font-family: monospace;
+  }
+  
+  // Card Solde
+  .card-solde {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: $text-color;
+    padding: 0.5rem 1.25rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    
+    &::after {
+      content: ' TND';
+      font-size: 0.9rem;
+      color: $light-text;
+    }
+  }
+  
+  // Card Actions
   .card-actions {
+    padding: 1rem 1.25rem 1.25rem;
     display: flex;
-    gap: $spacing / 2;
-    width: 100%;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
     margin-top: auto;
+    
+    .btn {
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+      border-radius: 0.375rem;
+      font-weight: 500;
+      transition: $transition;
+      flex: 1;
+      min-width: 120px;
+      text-align: center;
+      cursor: pointer;
+      border: none;
+      
+      &.btn-primary {
+        background-color: $primary-color;
+        color: $white;
+        
+        &:hover {
+          background-color: $primary-hover;
+        }
+        
+        &:focus {
+          box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.5);
+          outline: none;
+        }
+      }
+      
+      &:first-child {
+        background-color: $info-color;
+        
+        &:hover {
+          background-color: darken($info-color, 10%);
+        }
+        
+        &:focus {
+          box-shadow: 0 0 0 0.2rem rgba($info-color, 0.5);
+        }
+      }
+    }
+  }
+  
+  // Status indicator
+  &::before {
+    content: '';
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 0.75rem;
+    height: 0.75rem;
+    border-radius: 50%;
+   // background-color: $success-color;
+    box-shadow: 0 0 0 2px rgba($white, 0.8);
+    z-index: 1;
+  }
+  
+  &.blocked::before {
+    background-color: $error-color;
   }
 }
 
-// Buttons
-.btn {
-  display: inline-block;
-  padding: $spacing / 2 $spacing;
-  border: none;
-  border-radius: $border-radius;
-  cursor: pointer;
-  font-size: 14px;
+// No cards message
+.no-cards-message {
+  grid-column: 1 / -1;
+  background-color: $secondary-color;
+  padding: 3rem;
+  border-radius: 0.5rem;
   text-align: center;
-  flex: 1;
+  border: 1px dashed $border-color;
   
-  &.btn-primary {
-    background-color: $primary-color;
-    color: white;
-    
-    &:hover {
-      background-color: $primary-hover;
-    }
+  p {
+    font-size: 1.1rem;
+    color: $light-text;
+    margin: 0;
   }
 }
+
+// Card hover effects
+.card {
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba($primary-color, 0.1), rgba($primary-color, 0));
+    opacity: 0;
+    transition: $transition;
+    pointer-events: none;
+  }
+  
+  &:hover::after {
+    opacity: 1;
+  }
+}
+
+// Card number formatting
+.card-number {
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba($light-text, 0.2), transparent);
+  }
+}
+
+// Animation for cards
+@keyframes cardAppear {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  animation: cardAppear 0.5s ease-out forwards;
+}
+
+@for $i from 1 through 10 {
+  .card:nth-child(#{$i}) {
+    animation-delay: #{$i * 0.1}s;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .card {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}
+
+// Print styles
+@media print {
+  .container {
+    padding: 0;
+  }
+  
+  .cards-grid {
+    display: block;
+  }
+  
+  .card {
+    break-inside: avoid;
+    margin-bottom: 1rem;
+    box-shadow: none;
+    border: 1px solid $border-color;
+    
+    &:hover {
+      transform: none;
+    }
+  }
+  
+  .card-actions {
+    display: none;
+  }
+}
+// Add this to your existing SCSS file
+
+// Card inactive overlay
+.card-inactive-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 30px;
+    background-color: rgba(220, 53, 69, 0.8); // Red color with opacity
+    transform: rotate(-45deg) translateX(-50%);
+    transform-origin: 0 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  &::before {
+    content: 'BLOQUÉE';
+    position: absolute;
+    top: 20px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: red;
+    font-weight: bold;
+    font-size: 1rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    transform: rotate(-45deg);
+    z-index: 3;
+  }
+}
+
+// Position the card image as relative to contain the overlay
+.card-image {
+  position: relative;
+  // Keep your existing styles for .card-image
+}
+
+

@@ -7,6 +7,9 @@ import { NomCarte } from '../enums/nom-carte.enum';
 import { TypeCarte } from '../enums/type-carte.enum';
 import { StatutCarte } from '../enums/statut-carte.enum';
 import { DemandeCarte } from '../Models/DemandeCarte';
+import { DemandeAugmentationPlafondDTO } from '../Models/DemandeAugmentationPlafondDTO ';
+import { RechargeCarteDTO } from '../Models/RechargeCarteDTO';
+import { HistoriqueRechargeDto } from '../Models/HistoriqueRechargeDto';
 @Injectable({
   providedIn: 'root',
 })
@@ -43,6 +46,23 @@ private apiUrl ='http://localhost:5000/api/carte';
   }
 
   createDemandeCartePrepayee(demande: DemandeCarte): Observable<any> {
-    return this.http.post('/api/demande-carte-prepayee', demande);
+    return this.http.post(`${this.apiUrl}/demande-prepayee`, demande);
+  }
+  createDemandeAugmentation(demande: DemandeAugmentationPlafondDTO): Observable<any> {
+    return this.http.post(`${this.apiUrl}/demande-augmentation`, demande);
+  }
+
+  /**
+   * Récupère les demandes d'augmentation de plafond pour le client connecté
+   */
+  getDemandesAugmentation(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/demandes-augmentation`);
+  }
+  rechargerCarte(data: RechargeCarteDTO): Observable<any> {
+    return this.http.post(`${this.apiUrl}/effectuer-recharge`, data);
+  }
+
+  getHistorique(): Observable<HistoriqueRechargeDto[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/historique-recharges`);
   }
 }

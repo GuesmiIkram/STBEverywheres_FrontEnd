@@ -6,6 +6,8 @@ export enum NomCarte {
     VisaInfinite = 'VisaInfinite',
     MastercardGold = 'MastercardGold',
     MastercardWorld = 'MastercardWorld',
-    CarteCIB = 'CarteCIB',
-    Épargne='Épargne'
+    CIB = 'CIB',
+    Epargne='Epargne',
+    C_cash='C_cash',
+    C_pay='C_pay',
   }
