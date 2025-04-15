@@ -25,6 +25,9 @@ import { PackElyssaComponent } from './pack-elyssa/pack-elyssa.component';
 //import { DemandeDecouvertComponent } from './demandes/demande-decouvert/demande-decouvert.component';
 
 import { ReclamationComponent } from './reclamation/reclamation.component';
+import { SimulateurCreditComponent } from './simulateur-credit/simulateur-credit.component';
+import { ReponseReclamationComponent } from './reponse-reclamation/reponse-reclamation.component';
+import { RibIbanComponent } from './rib-iban/rib-iban.component';
 
 
 @NgModule({
@@ -39,7 +42,10 @@ import { ReclamationComponent } from './reclamation/reclamation.component';
 
 
       PackElyssaComponent,
-      ReclamationComponent,  ],
+      ReclamationComponent,
+      SimulateurCreditComponent,
+      ReponseReclamationComponent,
+      RibIbanComponent,  ],
 
   imports: [
     BrowserModule,

@@ -1,0 +1,162 @@
+<div class="reclamations-container">
+  <div class="reclamations-header">
+    <h2>Réclamations en attente</h2>
+    <div class="search-container">
+      <input
+        type="text"
+        placeholder="Rechercher une réclamation..."
+        [(ngModel)]="searchTerm"
+        (input)="filterReclamations()"
+        class="search-input"
+      >
+      <i class="search-icon">🔍</i>
+    </div>
+  </div>
+
+  <!-- Loader -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="loading-spinner"></div>
+    <span>Chargement en cours...</span>
+  </div>
+
+  <!-- Error message -->
+  <div *ngIf="errorLoad" class="error-message">
+    <i class="error-icon">⚠️</i>
+    <span>{{ errorLoad }}</span>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="!loading && filteredReclamations.length === 0 && !errorLoad" class="empty-state">
+    <i class="empty-icon">📭</i>
+    <p>Aucune réclamation en attente</p>
+  </div>
+
+  <!-- Réclamations list -->
+  <div *ngIf="!loading && filteredReclamations.length > 0" class="reclamations-list">
+    <table class="reclamations-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Objet</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let rec of paginatedReclamations" (click)="voirDetails(rec)" class="reclamation-row">
+          <td class="id-cell">{{ rec.id }}</td>
+          <td class="objet-cell">{{ rec.objet }}</td>
+          <td class="date-cell">{{ rec.dateCreation | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td class="actions-cell">
+            <button class="details-btn" (click)="$event.stopPropagation(); voirDetails(rec)">
+              Détails
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="pagination-container">
+      <div class="pagination-info">
+        Page {{ currentPage }} sur {{ totalPages }}
+      </div>
+      <div class="pagination-controls">
+        <button
+          class="pagination-btn"
+          [disabled]="currentPage === 1"
+          (click)="changePage(currentPage - 1)"
+        >
+          Précédent
+        </button>
+        <div class="pagination-pages">
+          <button
+            *ngFor="let page of pagesArray"
+            class="page-btn"
+            [class.active]="page === currentPage"
+            (click)="changePage(page)"
+          >
+            {{ page }}
+          </button>
+        </div>
+        <button
+          class="pagination-btn"
+          [disabled]="currentPage === totalPages"
+          (click)="changePage(currentPage + 1)"
+        >
+          Suivant
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Détails de la réclamation -->
+  <div *ngIf="selectedReclamation" class="reclamation-details">
+    <div class="details-header">
+      <h3>Détails de la réclamation</h3>
+      <button class="close-btn" (click)="selectedReclamation = undefined">×</button>
+    </div>
+
+    <div class="details-content">
+      <div class="details-info">
+        <div class="info-group">
+          <span class="info-label">Référence:</span>
+          <span class="info-value">#{{ selectedReclamation.id }}</span>
+        </div>
+        <div class="info-group">
+          <span class="info-label">Objet:</span>
+          <span class="info-value">{{ selectedReclamation.objet }}</span>
+        </div>
+        <div class="info-group">
+          <span class="info-label">Date:</span>
+          <span class="info-value">{{ selectedReclamation.dateCreation | date:'fullDate' }}</span>
+        </div>
+      </div>
+
+      <div class="message-container">
+        <h4>Message du client</h4>
+        <div class="message-content">
+          {{ selectedReclamation.message }}
+        </div>
+      </div>
+
+      <form [formGroup]="reponseForm" (ngSubmit)="envoyerReponse()" class="reponse-form">
+        <div class="form-group">
+          <label for="contenuReponse">Réponse :</label>
+          <textarea
+            id="contenuReponse"
+            formControlName="contenuReponse"
+            rows="5"
+            placeholder="Tapez votre réponse ici..."
+            class="reponse-textarea"
+          ></textarea>
+          <div *ngIf="reponseForm.get('contenuReponse')?.invalid && reponseForm.get('contenuReponse')?.touched" class="validation-error">
+            Une réponse est requise
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="cancel-btn" (click)="selectedReclamation = undefined">Annuler</button>
+          <button
+            type="submit"
+            class="submit-btn"
+            [disabled]="reponseForm.invalid || isSubmitting"
+          >
+            <span *ngIf="!isSubmitting">Envoyer la réponse</span>
+            <span *ngIf="isSubmitting">Envoi en cours...</span>
+          </button>
+        </div>
+      </form>
+
+      <div *ngIf="successMsg" class="success-message">
+        <i class="success-icon">✓</i>
+        <span>{{ successMsg }}</span>
+      </div>
+
+      <div *ngIf="errorMsg" class="error-message">
+        <i class="error-icon">⚠️</i>
+        <span>{{ errorMsg }}</span>
+      </div>
+    </div>
+  </div>
+</div>

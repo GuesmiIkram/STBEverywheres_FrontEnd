@@ -1,0 +1,137 @@
+.suivi-container {
+  background-color: #f5f7fa;
+  padding: 20px;
+  border-radius: 4px;
+  font-family: Arial, sans-serif;
+}
+
+.suivi-title {
+  color: #333;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.mois-section {
+  margin-bottom: 20px;
+}
+
+.mois-header {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.demande-card {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: #4285f4;
+  }
+}
+
+.date-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 20px;
+  min-width: 80px;
+  text-align: center;
+}
+
+.jour {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #4285f4;
+  line-height: 1;
+}
+
+.mois-abrev {
+  font-size: 0.8rem;
+  color: #666;
+  text-transform: uppercase;
+}
+
+.demande-details {
+  flex: 1;
+  padding: 15px 0;
+}
+
+.rib {
+  font-size: 0.9rem;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.type {
+  font-size: 0.9rem;
+  color: #4285f4;
+  font-weight: 500;
+}
+
+.status-container {
+  padding: 0 20px;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.status-attente {
+  background-color: #fff8e1;
+  color: #ffa000;
+}
+
+.status-preparation {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.status-disponible {
+  background-color: #e8f5e9;
+  color: #388e3c;
+}
+
+.status-remis {
+  background-color: #e8f5e9;
+  color: #388e3c;
+}
+
+.status-expedie {
+  background-color: #e8f5e9;
+  color: #388e3c;
+}
+
+.status-refuse {
+  background-color: #ffebee;
+  color: #d32f2f;
+}
+
+.no-data {
+  text-align: center;
+  color: #666;
+  padding: 20px;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}

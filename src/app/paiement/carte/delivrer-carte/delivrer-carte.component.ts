@@ -74,10 +74,10 @@ export class DelivrerCarteComponent implements OnInit {
   }
 
   updateNomCarteOptions(): void {
-    this.nomCarteOptions = this.isPostpayee 
-      ? this.cartesPostpayees 
+    this.nomCarteOptions = this.isPostpayee
+      ? this.cartesPostpayees
       : this.cartesPrepayees;
-    
+
     // Réinitialiser la sélection si non valide
     if (this.demandeCarteDTO.NomCarte && !this.nomCarteOptions.includes(this.demandeCarteDTO.NomCarte)) {
       this.demandeCarteDTO.NomCarte = '' as NomCarte;
@@ -148,9 +148,7 @@ export class DelivrerCarteComponent implements OnInit {
       errorMessage = err.error.message || JSON.stringify(err.error);
     }
 
-    if (err.status === 0) {
-      errorMessage = 'Erreur réseau. Vérifiez votre connexion Internet.';
-    }
+
 
     Swal.fire({
       icon: 'error',

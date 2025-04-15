@@ -1,0 +1,65 @@
+<div class="rib-container">
+  <h2 class="title">
+    <i class="bi bi-file-earmark-pdf"></i> Téléchargement du RIB/IBAN
+  </h2>
+
+  <div class="form-group">
+    <label for="compteSelection">
+      <i class="bi bi-bank"></i> Sélectionnez un compte *
+    </label>
+    <select
+      id="compteSelection"
+      [(ngModel)]="selectedCompte"
+      class="form-control"
+      [disabled]="isLoadingComptes"
+    >
+      <option value="" disabled selected>Choisissez un compte...</option>
+      <option *ngFor="let compte of comptes" [value]="compte.rib">
+        {{ compte.rib }} - {{ compte.type }}
+      </option>
+    </select>
+    <div *ngIf="isLoadingComptes" class="loading-message">
+      <i class="bi bi-hourglass"></i> Chargement des comptes...
+    </div>
+  </div>
+
+  <div class="action-buttons">
+    <button
+      class="btn preview-btn"
+      (click)="previewRIB()"
+      [disabled]="!selectedCompte || isDownloading"
+    >
+      <span *ngIf="!isDownloading">
+        <i class="bi bi-eye"></i> Visualiser le RIB
+      </span>
+      <span *ngIf="isDownloading">
+        <i class="bi bi-hourglass"></i> Chargement...
+      </span>
+    </button>
+
+    <button
+      class="btn download-btn"
+      (click)="downloadRIB()"
+      [disabled]="!selectedCompte || isDownloading"
+    >
+      <span *ngIf="!isDownloading">
+        <i class="bi bi-download"></i> Télécharger le RIB
+      </span>
+      <span *ngIf="isDownloading">
+        <i class="bi bi-hourglass"></i> Génération en cours...
+      </span>
+    </button>
+  </div>
+
+  <!-- Zone d'affichage du PDF - Ajoutée ici -->
+  <div *ngIf="showPdfViewer && pdfUrl" class="pdf-preview-container">
+    <button class="close-preview" (click)="closePreview()">
+      <i class="bi bi-x"></i>
+    </button>
+    <iframe [src]="pdfUrl" frameborder="0"></iframe>
+  </div>
+
+  <div *ngIf="errorMessage" class="error-message">
+    <i class="bi bi-exclamation-triangle"></i> {{ errorMessage }}
+  </div>
+</div>

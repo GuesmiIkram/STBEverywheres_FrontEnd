@@ -1,1 +1,134 @@
-<p>liste-chequiers works!</p>
+<!-- chequier.component.html -->
+<div class="container mt-4">
+  <h2>Mes Chéquiers</h2>
+
+  <!-- Liste des chéquiers -->
+  <div *ngIf="isLoadingChequiers" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Chargement...</span>
+    </div>
+  </div>
+
+  <!-- <div *ngIf="errorChequiers" class="alert alert-danger"> -->
+    <div *ngIf="errorChequiers && !chequiers.length" class="alert alert-danger">
+
+    {{ errorChequiers }}
+    <button class="btn btn-sm btn-outline-danger ms-2" (click)="loadChequiers()">Réessayer</button>
+  </div>
+
+  <div *ngIf="!isLoadingChequiers && !errorChequiers">
+    <div *ngIf="chequiers.length === 0" class="alert alert-info">
+      Vous n'avez aucun chéquier.
+    </div>
+
+    <div *ngIf="chequiers.length > 0">
+      <div class="table-responsive">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+
+              <th>Type</th>
+              <th>Statut</th>
+              <th>Date Livraison</th>
+              <th>Plafond</th>
+              <th>RIB Compte</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let chequier of chequiers">
+
+              <td>{{ chequier.type }}</td>
+              <td>
+                <span [ngClass]="{
+                  'badge bg-success': chequier.status === 'Actif',
+                  'badge bg-warning': chequier.status !== 'Actif'
+                }">
+                  {{ chequier.status }}
+                </span>
+              </td>
+              <td>{{ chequier.dateLivraison | date:'dd/MM/yyyy' }}</td>
+              <td>{{ chequier.plafondChequier | currency:'EUR':'symbol':'1.2-2' }}</td>
+              <td>{{ truncateText(chequier.ribCompte, 8) }}</td>
+
+              <td>
+                <button class="btn btn-sm btn-primary"
+                        (click)="showFeuillesDetails(chequier)">
+                  Détails
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal pour les détails des feuilles -->
+  <div *ngIf="showDetailsModal" class="modal-backdrop fade show"></div>
+
+  <div *ngIf="showDetailsModal" class="modal fade show d-block" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Détails du chéquier {{ selectedChequier?.numeroChequier }}</h5>
+          <button type="button" class="btn-close" (click)="closeDetailsModal()" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="isLoadingFeuilles" class="text-center">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Chargement...</span>
+            </div>
+          </div>
+
+          <div *ngIf="errorFeuilles" class="alert alert-danger">
+            {{ errorFeuilles }}
+            <button class="btn btn-sm btn-outline-danger ms-2" (click)="showFeuillesDetails(selectedChequier)">Réessayer</button>
+          </div>
+
+          <div *ngIf="!isLoadingFeuilles && !errorFeuilles">
+            <div *ngIf="feuilles.length === 0" class="alert alert-info">
+              Aucune feuille trouvée pour ce chéquier.
+            </div>
+
+            <div *ngIf="feuilles.length > 0">
+              <h6>Informations du chéquier</h6>
+              <ul class="list-group mb-3">
+                <li class="list-group-item">
+                  <strong>Type:</strong> {{ selectedChequier?.type }}
+                </li>
+                <li class="list-group-item">
+                  <strong>Statut:</strong> {{ selectedChequier?.status }}
+                </li>
+                <li class="list-group-item">
+                  <strong>Plafond total:</strong> {{ selectedChequier?.plafondChequier | currency:'EUR':'symbol':'1.2-2' }}
+                </li>
+              </ul>
+
+              <h6>Feuilles de chèque</h6>
+              <div class="table-responsive">
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                      <th>Numéro de feuille</th>
+                      <th>Plafond</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let feuille of feuilles">
+                      <td>{{ feuille.numeroFeuille }}</td>
+                      <td>{{ feuille.plafondFeuille | currency:'EUR':'symbol':'1.2-2' }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeDetailsModal()">Fermer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

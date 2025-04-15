@@ -40,6 +40,9 @@
         <h3 *ngIf="decouvertAutorise !== null">
           Découvert autorisé actuel : {{ decouvertAutorise }} TND
         </h3>
+        <h3 *ngIf="decouvertMaxAutorise !== null" class="max-overdraft">
+          Découvert maximum autorisé : {{ decouvertMaxAutorise }} TND (double de votre revenu mensuel)
+        </h3>
       </div>
 
       <!-- Champ pour le nouveau montant -->
@@ -51,7 +54,12 @@
           formControlName="montantDemande"
           placeholder="Entrez le montant en TND"
           (input)="onMontantInputChange()"
+          [max]="decouvertMaxAutorise"
           required>
+            <div *ngIf="demandeForm.get('montantDemande')?.errors?.['max']" class="error-message">
+
+            Le montant ne peut pas dépasser {{ decouvertMaxAutorise }} TND
+          </div>
       </div>
 
       <!-- Slider pour sélectionner le montant -->
@@ -62,7 +70,7 @@
           type="range"
           id="montantSlider"
           [min]="0"
-          [max]="1000000"
+          [max]="sliderMaxValue"
           [step]="50"
           [value]="demandeForm.get('montantDemande')?.value || 0"
           (input)="onSliderChange($event)">

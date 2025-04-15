@@ -484,20 +484,32 @@ body {
   color: #012970;
 }
 
+
+
 .compte-status {
   font-size: 12px;
   font-weight: 600;
   padding: 4px 8px;
   border-radius: 20px;
-  background-color: #e8f5e9;
-  color: var(--success-color);
+  text-transform: capitalize;
 }
 
 .compte-status.active {
   background-color: #e8f5e9;
-  color: var(--success-color);
+  color: #28a745; /* Vert pour actif */
 }
 
+
+
+.compte-status.cloture {
+  background-color: #fff3cd;
+  color: #ffc107; /* Jaune/orange pour clôturé */
+}
+
+.compte-status.desactive {
+  background-color: #f8d7da;
+  color: #dc3545; /* Rouge pour désactivé */
+}
 .compte-body {
   padding: 15px;
   flex-grow: 1;

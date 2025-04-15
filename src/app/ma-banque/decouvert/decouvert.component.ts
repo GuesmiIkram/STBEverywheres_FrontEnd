@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DecouvertService } from 'src/app/services/decouvert.service';
 import { DemandeModificationDecouvertDto } from 'src/app/Models/DemandeModificationDecouvertDto';
@@ -13,14 +13,14 @@ import Swal from 'sweetalert2';
 export class DecouvertComponent implements OnInit {
   activeTab: string = 'demande'; // Onglet actif ('demande' ou 'suivi')
   alertSymbol: string = '\u26A0'; // ⚠ (symbole Unicode)affiché si client choisit le nv decouvert=decouvet actuel
-
+  decouvertMaxAutorise: number | null = null;
   // Variables pour le formulaire
   demandeForm: FormGroup;
   comptes: any[] = [];
   decouvertAutorise: number | null = null;
   alertSameAmount: boolean = false; // Indicateur d'alerte
   montantDemande: number | null = null;
-
+  sliderMaxValue: number = 4000;
 // Variables pour le suivi des demandes
 demandes: DemandeModificationDecouvertDto[] = [];
 demandesParMois: { mois: string, annee: number, demandes: DemandeModificationDecouvertDto[] }[] = [];
@@ -31,7 +31,8 @@ demandesParMois: { mois: string, annee: number, demandes: DemandeModificationDec
 
   constructor(
     private decouvertService: DecouvertService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private cdr: ChangeDetectorRef
   ) {
     this.demandeForm = this.fb.group({
       rib: ['', Validators.required],
@@ -58,7 +59,7 @@ demandesParMois: { mois: string, annee: number, demandes: DemandeModificationDec
   }
 
   // Récupérer le découvert autorisé pour un RIB spécifique
-  onCompteSelected(): void {
+  /*onCompteSelected(): void {
     const rib = this.demandeForm.get('rib')?.value;
     if (rib) {
       this.decouvertAutorise = null; // Réinitialiser pendant le chargement
@@ -76,7 +77,51 @@ demandesParMois: { mois: string, annee: number, demandes: DemandeModificationDec
     } else {
       this.decouvertAutorise = null;
     }
-  }
+  }*/
+
+
+    onCompteSelected(): void {
+      const rib = this.demandeForm.get('rib')?.value;
+      if (rib) {
+        this.decouvertAutorise = null; // Réinitialiser pendant le chargement
+        this.decouvertMaxAutorise = null; // Réinitialiser aussi le max
+
+        this.decouvertService.getDecouvertAutorise(rib).subscribe({
+          next: (data) => {
+            this.decouvertAutorise = data.decouvertAutorise;
+            // Récupérer aussi le revenu mensuel pour calculer le max
+            this.decouvertService.getClientInfo().subscribe({
+              next: (clientInfo) => {
+                if (clientInfo && clientInfo.revenuMensuel) {
+                  this.decouvertMaxAutorise = clientInfo.revenuMensuel * 2;
+                  console.log("decouvertMaxAutorise",this.decouvertMaxAutorise);
+                  this.sliderMaxValue = this.decouvertMaxAutorise;
+                  this.cdr.detectChanges();
+
+                  // Mettre à jour la valeur max du slider
+                  this.demandeForm.get('montantDemande')?.setValidators([
+                    Validators.required,
+                    Validators.min(0),
+                    Validators.max(this.decouvertMaxAutorise)
+                  ]);
+                  this.demandeForm.get('montantDemande')?.updateValueAndValidity();
+                }
+              }
+            });
+            this.errorMessage = null;
+            this.checkSameOverdraft();
+          },
+          error: (err) => {
+            this.decouvertAutorise = null;
+            this.decouvertMaxAutorise = null;
+            this.errorMessage = err.message;
+          }
+        });
+      } else {
+        this.decouvertAutorise = null;
+        this.decouvertMaxAutorise = null;
+      }
+    }
 
   // Vérifie si le montant demandé est égal au découvert autorisé
   checkSameOverdraft(): void {
