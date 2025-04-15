@@ -82,9 +82,9 @@
           <h3>{{ group.mois }} {{ group.annee }}</h3>
           
           <div *ngFor="let demande of group.demandes" class="demande-card"
-               [class.approved]="demande.statut === 'APPROUVE'"
-               [class.rejected]="demande.statut === 'REFUSE'"
-               [class.pending]="demande.statut === 'EN_COURS'">
+          [class.approved]="demande.statut === 'Approuvee'"
+          [class.rejected]="demande.statut === 'Rejetee'"
+          [class.pending]="demande.statut === 'EnAttente'">
             
             <div class="demande-header">
               <span class="date">{{ demande.dateDemande | date:'dd' }}</span>
@@ -101,6 +101,7 @@
             <span class="status-badge">
               {{getFormattedStatus(demande.statut)}}
             </span>
+       
           </div>
         </div>
       </div>

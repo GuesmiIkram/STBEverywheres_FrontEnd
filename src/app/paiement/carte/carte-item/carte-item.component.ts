@@ -147,7 +147,7 @@ export class CarteItemComponent implements OnInit {
 
     this.carteService.createDemandeAugmentation(request).subscribe({
       next: (response) => {
-        this.successMessage = 'Demande envoyée avec succès';
+        this.successMessage = response.message || 'Demande envoyée avec succès';
         this.demandeForm.reset();
         this.loadDemandes();
         setTimeout(() => this.successMessage = '', 5000);
@@ -155,14 +155,53 @@ export class CarteItemComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error submitting request:', err);
-        this.errorMessage = 'Erreur lors de l\'envoi de la demande: ' + 
-          (err.error?.message || 'Veuillez réessayer plus tard');
+        
+        // Récupération du message d'erreur depuis la réponse du backend
+        const backendError = err.error;
+        let errorMessage = 'Une erreur est survenue lors de la demande';
+        
+        if (backendError) {
+          // Cas 1: Message personnalisé dans la propriété 'message'
+          if (backendError.message) {
+            errorMessage = backendError.message;
+          } 
+          // Cas 2: Erreurs de validation ASP.NET Core
+          else if (backendError.errors) {
+            errorMessage = this.extractValidationErrors(backendError.errors);
+          }
+          // Cas 3: Titre standard
+          else if (backendError.title) {
+            errorMessage = backendError.title;
+          }
+          // Cas 4: Réponse avec 'success: false'
+          else if (backendError.success === false && backendError.message) {
+            errorMessage = backendError.message;
+          }
+        }
+      
+        this.errorMessage = errorMessage;
         setTimeout(() => this.errorMessage = '', 5000);
         this.isLoading = false;
       }
     });
   }
 
+  private extractValidationErrors(errors: any): string {
+    if (!errors) return 'Erreur de validation';
+    
+    // Si c'est un objet avec des erreurs par propriété
+    if (typeof errors === 'object') {
+      const errorMessages = [];
+      for (const key in errors) {
+        if (errors.hasOwnProperty(key)) {
+          errorMessages.push(...errors[key]);
+        }
+      }
+      return errorMessages.join(', ');
+    }
+    
+    return 'Erreur de validation';
+  }
   getFormattedStatus(status: string): string {
     switch(status?.toUpperCase()) {
       case 'APPROUVE':
