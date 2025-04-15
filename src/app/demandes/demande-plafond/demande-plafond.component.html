@@ -1,0 +1,78 @@
+<div class="container">
+    <h2>Gestion des demandes de plafond</h2>
+  
+    <!-- Tableau des demandes -->
+    <div *ngIf="hasLoaded">
+      <div *ngIf="demandes.length > 0" class="table-responsive">
+        <table class="demandes-table">
+          <thead>
+            <tr>
+              <th>N° Carte</th>
+              <th>Plafond TPE</th>
+              <th>Plafond DAB</th>
+              <th>Date demande</th>
+              <th>Statut</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let demande of paginatedDemandes">
+              <td>{{ demande.numCarte }}</td>
+              <td>{{ demande.nouveauPlafondTPE }} TND</td>
+              <td>{{ demande.nouveauPlafondDAB }} TND</td>
+              <td>{{ demande.dateDemande | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td>
+                <span class="status-badge {{ getStatusClass(demande.statut) }}">
+                  {{ demande.statut }}
+                </span>
+              </td>
+              <td class="actions">
+                <button *ngIf="demande.statut === 'EnAttente'" 
+                        class="btn btn-approve"
+                        (click)="traiterDemande(demande.id, 'Approuvee')">
+                  <i class="fas fa-check-circle"></i> Approuver
+                </button>
+                <button *ngIf="demande.statut === 'EnAttente'" 
+                        class="btn btn-reject"
+                        (click)="traiterDemande(demande.id, 'Rejetee')">
+                  <i class="fas fa-times-circle"></i> Refuser
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+  
+        <!-- Pagination -->
+        <div class="pagination-container" *ngIf="totalPages > 1">
+          <div class="pagination-info">
+            Affichage de {{ getStartIndex() + 1 }} à {{ getEndIndex() }} sur {{ demandes.length }} demandes
+          </div>
+          <div class="pagination-controls">
+            <button class="pagination-btn" [disabled]="currentPage === 1" (click)="previousPage()">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            
+            <div class="pagination-pages">
+              <button *ngFor="let page of getVisiblePages()" 
+                      class="pagination-btn" 
+                      [class.active]="page === currentPage"
+                      (click)="goToPage(page)">
+                {{ page }}
+              </button>
+            </div>
+            
+            <button class="pagination-btn" [disabled]="currentPage === totalPages" (click)="nextPage()">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Message quand aucune donnée -->
+      <div *ngIf="demandes.length === 0" class="no-data">
+        <i class="fas fa-info-circle"></i>
+        <p>Aucune demande d'augmentation en attente</p>
+      </div>
+    </div>
+  </div>
+  

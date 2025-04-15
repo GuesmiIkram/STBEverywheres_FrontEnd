@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { Client } from '../Models/Client';
 import { AuthService } from './auth.service';
+import { NotificationPack } from '../Models/NotificationPack';
  // Importation du modèle
 
 @Injectable({
@@ -27,6 +28,8 @@ uploadStudentDocuments(files: FormData): Observable<any> {
     // Ne pas ajouter 'Content-Type' - sera défini automatiquement par le navigateur
   });
 
+
+
   return this.http.post(`${this.apiUrl}/upload-documents`, files, {
     headers: headers,
     reportProgress: true,  // Active le suivi de progression
@@ -43,7 +46,25 @@ uploadStudentDocuments(files: FormData): Observable<any> {
     })
   );
 }
+getClientNotifications(): Observable<NotificationPack[]> {
+  return this.http.get<NotificationPack[]>(`${this.apiUrl}/notifications`, {
+    headers: {
+      'Authorization': `Bearer ${this.authService.getAccessToken()}`
+    }
+  });
+}
 
+markNotificationAsRead(notificationId: number): Observable<any> {
+  return this.http.post(`${this.apiUrl}/notifications/${notificationId}/mark-as-read`, {}, {
+    headers: {
+      'Authorization': `Bearer ${this.authService.getAccessToken()}`
+    }
+  });
+}
+
+getClientInfoById(clientId: number): Observable<Client> {
+  return this.http.get<Client>(`${this.apiUrl}/${clientId}`);
+}
 uploadElyssaDocuments(files: FormData): Observable<any> {
   // Création des headers avec HttpHeaders
   const headers = new HttpHeaders({
