@@ -229,7 +229,6 @@ $status-pending: #ffc107;
     .form-control {
       @include form-control;
       
-      // Specific styling for number inputs
       &[type="number"] {
         -moz-appearance: textfield;
         
@@ -315,6 +314,7 @@ $status-pending: #ffc107;
   box-shadow: $box-shadow;
   transition: $transition;
   position: relative;
+  border-left: 4px solid #ccc; // Couleur par défaut
   
   &:hover {
     transform: translateY(-3px);
@@ -322,15 +322,30 @@ $status-pending: #ffc107;
   }
   
   &.approved {
-    border-left: 4px solid $status-approved;
+    border-left-color: $status-approved;
+    
+    .status-badge {
+      background-color: lighten($status-approved, 40%);
+      color: darken($status-approved, 15%);
+    }
   }
   
   &.rejected {
-    border-left: 4px solid $status-rejected;
+    border-left-color: $status-rejected;
+    
+    .status-badge {
+      background-color: lighten($status-rejected, 40%);
+      color: darken($status-rejected, 15%);
+    }
   }
   
-  &.pending {
-    border-left: 4px solid $status-pending;
+  &.pending, &.enattente {
+    border-left-color: $status-pending;
+    
+    .status-badge {
+      background-color: lighten($status-pending, 40%);
+      color: darken($status-pending, 30%);
+    }
   }
   
   .demande-header {
@@ -381,28 +396,12 @@ $status-pending: #ffc107;
   
   .status-badge {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
-    padding: 0.25rem 0.75rem;
-    border-radius: 1rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    
-    .approved & {
-      background-color: rgba($status-approved, 0.1);
-      color: $status-approved;
-    }
-    
-    .rejected & {
-      background-color: rgba($status-rejected, 0.1);
-      color: $status-rejected;
-    }
-    
-    .pending & {
-      background-color: rgba($status-pending, 0.1);
-      color: darken($status-pending, 25%);
-    }
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
   }
   
   @media (max-width: 576px) {

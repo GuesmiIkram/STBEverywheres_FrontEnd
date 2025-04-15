@@ -1,4 +1,4 @@
-<!-- ======= Header ======= -->
+<ng-container *ngIf="isClient"><!-- ======= Header ======= -->
 <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
@@ -20,76 +20,39 @@
             </li><!-- End Search Icon-->
 
             <li class="nav-item dropdown">
-                <a class="nav-link nav-icon"   data-bs-toggle="dropdown">
-                    <i class="bi bi-bell"></i>
-                    <span class="badge bg-primary badge-number">4</span>
-                </a><!-- End Notification Icon -->
+                <a class="nav-link nav-icon" data-bs-toggle="dropdown">
+                  <i class="bi bi-bell"></i>
+                  <span *ngIf="unreadCount > 0" class="badge bg-primary badge-number">{{unreadCount}}</span>
+                </a>
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-                    <li class="dropdown-header">
-                        You have 4 new notifications
-                        <a  ><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
+                  <li class="dropdown-header">
+                    Vous avez {{unreadCount}} nouvelle(s) notification(s)
+                    <a><span class="badge rounded-pill bg-primary p-2 ms-2">Voir tout</span></a>
+                  </li>
+                  <li><hr class="dropdown-divider"></li>
+                  
+                  <ng-container *ngFor="let notification of notifications.slice(0, 5)">
+                    <li class="notification-item" (click)="markAsRead(notification.id)" [class.unread]="!notification.isRead">
+                      <i class="bi" [ngClass]="{
+                        'bi-exclamation-circle text-warning': notification.notificationType === 'warning',
+                        'bi-check-circle text-success': notification.notificationType === 'success',
+                        'bi-x-circle text-danger': notification.notificationType === 'error',
+                        'bi-info-circle text-primary': notification.notificationType === 'info'
+                      }"></i>
+                      <div>
+                        <h4>{{notification.title}}</h4>
+                        <p>{{notification.message}}</p>
+                        <p>{{notification.createdAt | date:'short'}}</p>
+                      </div>
                     </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li class="notification-item">
-                        <i class="bi bi-exclamation-circle text-warning"></i>
-                        <div>
-                            <h4>Lorem Ipsum</h4>
-                            <p>Quae dolorem earum veritatis oditseno</p>
-                            <p>30 min. ago</p>
-                        </div>
-                    </li>
-
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-
-                    <li class="notification-item">
-                        <i class="bi bi-x-circle text-danger"></i>
-                        <div>
-                            <h4>Atque rerum nesciunt</h4>
-                            <p>Quae dolorem earum veritatis oditseno</p>
-                            <p>1 hr. ago</p>
-                        </div>
-                    </li>
-
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-
-                    <li class="notification-item">
-                        <i class="bi bi-check-circle text-success"></i>
-                        <div>
-                            <h4>Sit rerum fuga</h4>
-                            <p>Quae dolorem earum veritatis oditseno</p>
-                            <p>2 hrs. ago</p>
-                        </div>
-                    </li>
-
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-
-                    <li class="notification-item">
-                        <i class="bi bi-info-circle text-primary"></i>
-                        <div>
-                            <h4>Dicta reprehenderit</h4>
-                            <p>Quae dolorem earum veritatis oditseno</p>
-                            <p>4 hrs. ago</p>
-                        </div>
-                    </li>
-
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li class="dropdown-footer">
-                        <a  >Show all notifications</a>
-                    </li>
-
-                </ul><!-- End Notification Dropdown Items -->
-
-            </li><!-- End Notification Nav -->
+                    <li><hr class="dropdown-divider"></li>
+                  </ng-container>
+                  
+                  <li class="dropdown-footer">
+                    <a routerLink="/notifications">Voir toutes les notifications</a>
+                  </li>
+                </ul>
+              </li>
 
             <li class="nav-item dropdown">
 
@@ -220,3 +183,37 @@
     </nav><!-- End Icons Navigation -->
 
 </header><!-- End Header -->
+</ng-container>
+
+
+
+<ng-container *ngIf="isAgent"><!-- ======= Header ======= -->
+    <header id="header" class="header fixed-top d-flex align-items-center">
+    
+        <div class="d-flex align-items-center justify-content-between">
+            <a  routerLink="/home"  class="logo d-flex align-items-center">
+                <img src="assets/img/STBlogo.jpg" alt="">
+                <span class="d-none d-lg-block">STBEverywhere</span>
+            </a>
+            <i class="bi bi-list toggle-sidebar-btn" (click)="ShowHideMenu()"></i>
+        </div><!-- End Logo -->
+    
+    
+        <nav class="header-nav ms-auto">
+            <ul class="d-flex align-items-center">
+    
+                <li class="nav-item d-block d-lg-none">
+                    <a class="nav-link nav-icon search-bar-toggle" routerLink="/home" >
+                        <i class="bi bi-search"></i>
+                    </a>
+                </li><!-- End Search Icon-->
+    
+                
+    
+                
+    
+            </ul>
+        </nav><!-- End Icons Navigation -->
+    
+    </header><!-- End Header -->
+    </ng-container>

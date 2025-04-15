@@ -1,0 +1,82 @@
+<div class="container">
+    <h2>Gestion des demandes de cartes</h2>
+  
+    <div class="filters">
+        <div class="filter-group">
+            <label for="accountFilter">Filtrer par numéro de compte:</label>
+            <input type="text" id="accountFilter" [(ngModel)]="accountFilter" 
+                   (input)="applyFilter()" placeholder="Entrez le numéro de compte">
+        </div>
+    </div>
+  
+ 
+  
+    <div *ngIf="!isLoading">
+      <div *ngIf="filteredDemandes.length > 0; else noData">
+        <table class="demandes-table">
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Prénom</th>
+              <th>Compte</th>
+              <th>Type Carte</th>
+              <th>Usage</th>
+              <th>Date Demande</th>
+              <th>Statut</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let demande of pagedDemandes">
+              <td>{{demande.clientNom}}</td>
+              <td>{{demande.clientPrenom}}</td>
+              <td>{{demande.numCompte}}</td>
+              <td>{{demande.nomCarte}}</td>
+              <td>{{demande.typeCarte}}</td>
+              <td>{{demande.dateCreation | date:'dd/MM/yyyy'}}</td>
+              <td>
+                <span class="status-badge {{getStatusClass(demande.statut)}}">
+                  {{getStatusLabel(demande.statut)}}
+                </span>
+              </td>
+              
+                <td>
+                    <button class="btn-edit" 
+                            (click)="prepareUpdate(demande.iddemande, demande.statut)"
+                            [disabled]="demande.statut === 'Recuperee' || getStatusNumber(demande.statut) === 3">
+                      Modifier statut
+                    </button>
+                  </td>
+             
+            </tr>
+          </tbody>
+        </table>
+  
+        <!-- Pagination -->
+        <div class="pagination" *ngIf="filteredDemandes.length > itemsPerPage">
+            <button (click)="previousPage()" [disabled]="currentPage === 1">Précédent</button>
+            <span>Page {{currentPage}} sur {{totalPages}}</span>
+            <button (click)="nextPage()" [disabled]="currentPage === totalPages">Suivant</button>
+        </div>
+  
+        <div *ngIf="selectedDemandeId" class="update-status-form">
+          <h3>Modifier le statut de la demande </h3>
+          <select [(ngModel)]="selectedStatus">
+            <option value="EnPreparation">En préparation</option>
+            <option value="DisponibleEnAgence">Disponible en agence</option>
+            <option value="Livree">Livrée</option>
+            <option value="Recuperee">Récupérée</option>
+            <option value="Rejetee">Rejetée</option>
+          </select>
+          <button class="btn-save" (click)="updateDemandeStatus()">Enregistrer</button>
+          <button class="btn-cancel" (click)="selectedDemandeId = null">Annuler</button>
+        </div>
+      </div>
+  
+      <ng-template #noData>
+        <div class="no-data">
+          <p>Aucune demande de carte trouvée</p>
+        </div>
+      </ng-template>
+    </div>
+</div>

@@ -86,35 +86,59 @@ export class DelivrerCarteComponent implements OnInit {
 
   onSubmit(): void {
     if (this.isPostpayee) {
-      this.carteService.createDemandeCarte(this.demandeCarteDTO)
-        .subscribe({
-          next: (response) => {
-            Swal.fire({
-              icon: 'success',
-              title: 'Succès',
-              text: response.message || 'Demande de carte postpayée créée avec succès.',
+        this.carteService.createDemandeCarte(this.demandeCarteDTO)
+            .subscribe({
+                next: (response) => {
+                    Swal.fire({
+                        title: 'Demande enregistrée',
+                        html: `
+                            <div style="text-align: left;">
+                                <p>Votre demande de carte a bien été transmise à notre service.</p>
+                                <p><strong>Vous recevrez un email dès que votre carte sera prête.</strong></p>
+                                <ul style="padding-left: 20px; margin-top: 10px;">
+                                    <li>Délai de traitement : généralement sous 48h ouvrées</li>
+                                    <li>Pour toute question, contactez votre conseiller</li>
+                                </ul>
+                            </div>
+                        `,
+                        icon: 'success',
+                        confirmButtonText: 'Compris',
+                        confirmButtonColor: '#3085d6',
+                        focusConfirm: false
+                    });
+                },
+                error: (err) => {
+                    this.handleError(err);
+                }
             });
-          },
-          error: (err) => {
-            this.handleError(err);
-          }
-        });
     } else {
-      this.carteService.createDemandeCartePrepayee(this.demandeCarteDTO)
-        .subscribe({
-          next: (response) => {
-            Swal.fire({
-              icon: 'success',
-              title: 'Succès',
-              text: response.message || 'Demande de carte prépayée créée avec succès.',
+        this.carteService.createDemandeCartePrepayee(this.demandeCarteDTO)
+            .subscribe({
+                next: (response) => {
+                    Swal.fire({
+                        title: 'Demande enregistrée',
+                        html: `
+                            <div style="text-align: left;">
+                                <p>Votre demande de carte prépayée a bien été transmise à notre service.</p>
+                                <p><strong>Vous recevrez un email dès que votre carte sera prête.</strong></p>
+                                <ul style="padding-left: 20px; margin-top: 10px;">
+                                    <li>Délai de traitement : généralement sous 48h ouvrées</li>
+                                    <li>Pour toute question, contactez votre conseiller</li>
+                                </ul>
+                            </div>
+                        `,
+                        icon: 'success',
+                        confirmButtonText: 'Compris',
+                        confirmButtonColor: '#3085d6',
+                        focusConfirm: false
+                    });
+                },
+                error: (err) => {
+                    this.handleError(err);
+                }
             });
-          },
-          error: (err) => {
-            this.handleError(err);
-          }
-        });
     }
-  }
+}
 
   private handleError(err: any): void {
     console.error('Erreur:', err);

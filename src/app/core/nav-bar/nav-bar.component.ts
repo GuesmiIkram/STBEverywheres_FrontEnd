@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Client } from 'src/app/Models/Client';
+import { NotificationPack } from 'src/app/Models/NotificationPack';
 import { AuthService } from 'src/app/services/auth.service';
 import { ClientService } from 'src/app/services/client.service';
 
@@ -9,7 +10,10 @@ import { ClientService } from 'src/app/services/client.service';
   styleUrls: ['./nav-bar.component.scss']
 })
 export class NavBarComponent implements OnInit {
-
+  
+  isAgent: boolean = false;
+  isClient: boolean = false;
+  userRole: string = '';
   client: Client = {
     id: 0,
     nom: '',
@@ -49,9 +53,17 @@ export class NavBarComponent implements OnInit {
   confirmNewPasswordError = false;
   passwordMismatch = false;
   constructor(private clientService: ClientService,private authService:AuthService) {}
+  notifications: NotificationPack[] = [];
+  unreadCount = 0;
 
   ngOnInit(): void {
-    this.getClientInfo();
+    this.userRole = this.authService.getUserRole();
+    this.isAgent = this.authService.isAgent();
+    this.isClient = this.authService.isClient();
+    if (this.isClient) {
+      this.getClientInfo();
+      this.loadNotifications();
+    }
   }
 
   getClientInfo(): void {
@@ -61,6 +73,32 @@ export class NavBarComponent implements OnInit {
       },
       (error) => {
         console.error('Erreur lors de la récupération des informations du client', error);
+      }
+    );
+  }
+  loadNotifications(): void {
+    this.clientService.getClientNotifications().subscribe(
+      (notifications: NotificationPack[]) => {
+        this.notifications = notifications;
+        this.unreadCount = notifications.filter(n => !n.isRead).length;
+      },
+      (error) => {
+        console.error('Erreur lors du chargement des notifications', error);
+      }
+    );
+  }
+
+  markAsRead(notificationId: number): void {
+    this.clientService.markNotificationAsRead(notificationId).subscribe(
+      () => {
+        const notification = this.notifications.find(n => n.id === notificationId);
+        if (notification) {
+          notification.isRead = true;
+          this.unreadCount = this.notifications.filter(n => !n.isRead).length;
+        }
+      },
+      (error) => {
+        console.error('Erreur lors du marquage de la notification comme lue', error);
       }
     );
   }

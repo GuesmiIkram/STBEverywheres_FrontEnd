@@ -10,16 +10,28 @@ import { PackElyssaComponent } from '../pack-elyssa/pack-elyssa.component';
 import { DemandeDecouvertComponent } from 'src/app/demandes/demande-decouvert/demande-decouvert.component';
 
 import { ReclamationComponent } from '../reclamation/reclamation.component';
+
 import { SimulateurCreditComponent } from '../simulateur-credit/simulateur-credit.component';
 import { DemandesChequierComponent } from '../demandes/demandes-chequier/demandes-chequier.component';
 import { ReponseReclamationComponent } from '../reponse-reclamation/reponse-reclamation.component';
 import { RibIbanComponent } from '../rib-iban/rib-iban.component';
 
+import { DemandePlafondComponent } from '../demandes/demande-plafond/demande-plafond.component';
+import { DemandeCarteComponent } from '../demandes/demande-carte/demande-carte.component';
+
+import { DemandePackElyssaComponent } from '../demandes/demande-pack-elyssa/demande-pack-elyssa.component';
+import { DemandePackStudentComponent } from '../demandes/demande-pack-student/demande-pack-student.component';
+
+
 
 const routes: Routes = [
   {path:'', component: HomeComponent ,
         children: [
+
           { path: 'similateur', component: SimulateurCreditComponent, data: { breadcrumb: 'similateur' }},
+
+          { path: 'RepondreDemandeCarte', component: DemandeCarteComponent },
+
           { path: 'Reclamation', component: ReclamationComponent, data: { breadcrumb: 'reclamation' }},
           { path: 'PackStudent', component: PackStudentComponent, data: { breadcrumb: 'PackStudent' }},
            { path: '', component: DashboardComponent, data: { breadcrumb: 'Dashboard' }},
@@ -35,12 +47,14 @@ const routes: Routes = [
             { path: 'chequier', loadChildren: () => import('./../paiement/chequiers/chequiers.module').then(mod => mod.ChequierModule), data: { breadcrumb: 'chequier' } },
 
             { path: 'RepondreDemandedecouvert', component: DemandeDecouvertComponent },
+
             { path: 'RepondreDemandesChequier', component: DemandesChequierComponent},
             { path: 'ReponseReclamationComponent', component: ReponseReclamationComponent, data: { breadcrumb: 'responsereclamation' }},
             { path: 'RibIbanComponent', component: RibIbanComponent, data: { breadcrumb: 'RibIban'}},
 
-
-
+            { path: 'RepondreDemandePlafond', component: DemandePlafondComponent },
+            { path: 'RepondreDemandePackStudent', component: DemandePackStudentComponent },
+            { path: 'RepondreDemandePackElyssa', component: DemandePackElyssaComponent },
 
 
             { path: '**', redirectTo: '', pathMatch: 'full' }
