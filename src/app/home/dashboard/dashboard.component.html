@@ -81,8 +81,22 @@
           <div *ngFor="let compte of comptes" class="compte-card" (click)="openModal(compte.rib)">
             <div class="compte-header">
               <h3>{{ compte.type.toUpperCase() }}</h3>
-              <div class="compte-status" [ngClass]="{'active': compte.statut === 'Actif'}">
-                {{ compte.statut }}
+             <!-- <div class="compte-status" [ngClass]="{'active': compte.statut === 'Actif'}">
+                {{ compte.statut }}-->
+
+
+
+                <div class="compte-status"
+                [ngClass]="{
+                  'active': compte.statut === 'Actif',
+                  'cloture': compte.statut === 'Clôturé',
+                  'desactive': compte.statut === 'desactive'
+                }">
+             {{ compte.statut }}
+
+
+
+
               </div>
             </div>
             <div class="compte-body">
@@ -275,7 +289,7 @@
 <ng-container *ngIf="isAgent">
 
   <div class="pagetitle">
-    <h1>agnet</h1>
+    <h1>agent</h1>
 
   </div>
 

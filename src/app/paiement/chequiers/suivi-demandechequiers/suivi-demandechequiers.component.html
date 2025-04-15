@@ -1,1 +1,29 @@
-<p>suivi-demandechequiers works!</p>
+<div class="suivi-container">
+  <h2 class="suivi-title">Suivi des demandes de chéquier</h2>
+
+  <ng-container *ngIf="demandesParMois.length > 0; else aucuneDemande">
+    <div *ngFor="let mois of demandesParMois" class="mois-section">
+      <div class="mois-header">{{ mois.nom }} {{ mois.annee }}</div>
+
+      <div *ngFor="let demande of mois.demandes" class="demande-card">
+        <div class="date-container">
+          <div class="jour">{{ demande.jour }}</div>
+          <div class="mois-abrev">{{ demande.moisAbrev }}</div>
+        </div>
+
+        <div class="demande-details">
+          <div class="rib">RIB : {{ demande.ribCompte }}</div>
+          <div class="type">Chéquier demandé : {{ demande.nombreFeuilles }} feuilles{{ demande.type ? ' - ' + demande.type : '' }}</div>
+        </div>
+
+        <div class="status-container">
+          <span class="status-badge" [ngClass]="demande.statusClass">{{ demande.status }}</span>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #aucuneDemande>
+    <p class="no-data">Aucune demande de chéquier trouvée.</p>
+  </ng-template>
+</div>

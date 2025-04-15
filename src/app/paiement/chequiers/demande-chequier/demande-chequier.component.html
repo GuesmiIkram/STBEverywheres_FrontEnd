@@ -1,1 +1,225 @@
-<p>demande-chequier works!</p>
+<div class="chequier-container">
+  <div class="form-header">
+    <h2>Demande de chéquier</h2>
+    <p class="subtitle">Complétez le formulaire ci-dessous pour demander un nouveau chéquier</p>
+  </div>
+
+  <form [formGroup]="demandeForm" (ngSubmit)="onSubmit()" class="chequier-form">
+    <div class="form-section">
+      <h3 class="section-title">Informations du compte</h3>
+
+      <!-- Sélection du compte -->
+      <div class="form-field">
+        <label for="ribCompte">Compte concerné <span class="required">*</span></label>
+        <div class="select-wrapper">
+          <select id="ribCompte" formControlName="ribCompte" class="form-control">
+            <option value="">Sélectionnez un compte</option>
+            <option *ngFor="let compte of comptes" [value]="compte.rib">
+              {{ compte.rib }} - {{ compte.type }}
+            </option>
+          </select>
+          <div class="select-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+        </div>
+        <div *ngIf="demandeForm.get('ribCompte')?.invalid && demandeForm.get('ribCompte')?.touched"
+             class="error-message">
+          Sélection obligatoire
+        </div>
+      </div>
+
+      <!-- Détails du chéquier -->
+      <div class="form-row">
+        <div class="form-field half-width">
+          <label for="nombreFeuilles">Nombre de feuilles <span class="required">*</span></label>
+          <input type="number" id="nombreFeuilles" formControlName="nombreFeuilles"
+                 class="form-control" min="5" max="50">
+          <div *ngIf="demandeForm.get('nombreFeuilles')?.invalid && demandeForm.get('nombreFeuilles')?.touched"
+               class="error-message">
+            Entre 5 et 50 feuilles
+          </div>
+        </div>
+        <div class="form-field half-width">
+          <label for="plafondChequier">Plafond (TND) <span class="required">*</span></label>
+          <input type="number" id="plafondChequier" formControlName="plafondChequier"
+                 class="form-control">
+          <div *ngIf="demandeForm.get('plafondChequier')?.errors?.['max']"
+               class="error-message">
+            Maximum 30 000 TND
+          </div>
+        </div>
+      </div>
+
+      <!-- Authentification OTP -->
+      <div class="form-field checkbox-field">
+        <div class="checkbox-container">
+          <input type="checkbox" id="avecOtp" formControlName="avecOtp" class="form-check-input">
+          <label for="avecOtp" class="checkbox-label">
+            <span class="checkbox-custom"></span>
+            Utiliser OTP pour sécuriser la transaction
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3 class="section-title">Type de chéquier</h3>
+
+      <!-- Type de chéquier -->
+      <div class="form-field radio-group">
+        <label class="group-label">Type de chéquier <span class="required">*</span></label>
+        <div class="radio-options">
+          <div class="radio-option">
+            <input type="radio" id="barre" formControlName="typeChequier"
+                   value="barre" class="form-check-input">
+            <label for="barre" class="radio-label">
+              <span class="radio-custom"></span>
+              Barré
+            </label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="nonBarre" formControlName="typeChequier"
+                   value="nonBarre" class="form-check-input">
+            <label for="nonBarre" class="radio-label">
+              <span class="radio-custom"></span>
+              Non barré
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Champs spécifiques non barré -->
+      <div *ngIf="showNonBarreFields" class="non-barre-fields">
+        <div class="form-field">
+          <label for="raisonDemande">Raison de la demande <span class="required">*</span></label>
+          <textarea id="raisonDemande" formControlName="raisonDemande"
+                    class="form-control" rows="3" placeholder="Veuillez préciser la raison de votre demande de chéquier non barré"></textarea>
+          <div *ngIf="demandeForm.get('raisonDemande')?.invalid && demandeForm.get('raisonDemande')?.touched"
+               class="error-message">
+            Raison obligatoire
+          </div>
+        </div>
+
+        <div class="form-field engagement-field">
+          <button type="button" class="engagement-button" (click)="showEngagement()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 7 17l-5-5"/></svg>
+            Lire l'engagement
+          </button>
+          <div *ngIf="showEngagementText" class="engagement-container">
+            <div class="engagement-header">
+              <h4>Engagement et responsabilités</h4>
+              <button type="button" class="close-button" (click)="showEngagementText = false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </button>
+            </div>
+            <div class="engagement-content">
+              <p>Je soussigné(e), titulaire du compte mentionné ci-dessus, m'engage solennellement à :</p>
+              <ul>
+                <li>Utiliser mon chéquier conformément aux lois et réglementations en vigueur</li>
+                <li>Prendre toutes les précautions nécessaires pour éviter la perte, le vol ou l'utilisation frauduleuse des chèques</li>
+                <li>Signaler immédiatement à la banque toute perte ou vol du chéquier</li>
+                <li>Ne pas émettre de chèques sans provision suffisante sur mon compte</li>
+                <li>Assumer l'entière responsabilité de l'utilisation de ce chéquier non barré</li>
+              </ul>
+              <p>Je reconnais avoir été informé(e) que l'émission de chèques sans provision constitue un délit passible de sanctions pénales.</p>
+            </div>
+            <div class="form-field checkbox-field engagement-checkbox">
+              <div class="checkbox-container">
+                <input type="checkbox" id="accepteEngagement"
+                       formControlName="accepteEngagement" class="form-check-input">
+                <label for="accepteEngagement" class="checkbox-label">
+                  <span class="checkbox-custom"></span>
+                  J'accepte les conditions et engagements ci-dessus
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3 class="section-title">Mode de livraison</h3>
+
+      <!-- Mode de livraison -->
+      <!-- Mode de livraison -->
+<!-- Mode de livraison -->
+<div class="form-field radio-group">
+  <label class="group-label">Livraison <span class="required">*</span></label>
+  <div class="radio-options" style="display: flex; gap: 2rem;">
+
+    <!-- En agence -->
+    <div class="radio-option" style="text-align: center;">
+      <input type="radio" id="livraisonAgence" formControlName="modeLivraison"
+             value="LivraisonAgence" class="form-check-input" style="display: none;">
+      <label for="livraisonAgence" class="radio-label" style="cursor: pointer; display: flex; flex-direction: column; align-items: center;">
+        <i class="fas fa-building fa-2x" style="color: #3366cc; margin-bottom: 8px;"></i>
+        <span style="margin-bottom: 5px;">En agence</span>
+        <span class="radio-custom"></span>
+      </label>
+    </div>
+
+    <!-- Envoi recommandé -->
+    <div class="radio-option" style="text-align: center;">
+      <input type="radio" id="envoiRecommande" formControlName="modeLivraison"
+             value="EnvoiRecommande" class="form-check-input" style="display: none;">
+      <label for="envoiRecommande" class="radio-label" style="cursor: pointer; display: flex; flex-direction: column; align-items: center;">
+        <i class="fas fa-envelope fa-2x" style="color: #3366cc; margin-bottom: 8px;"></i>
+        <span style="margin-bottom: 5px;">Envoi recommandé</span>
+        <span class="radio-custom"></span>
+      </label>
+    </div>
+
+  </div>
+</div>
+
+
+      <!-- Adresse pour envoi recommandé -->
+      <div *ngIf="showEnvoiRecommandeFields" class="recommande-fields">
+        <div class="form-row">
+          <div class="form-field full-width">
+            <label for="adresseComplete">Adresse <span class="required">*</span></label>
+            <input type="text" id="adresseComplete" formControlName="adresseComplete"
+                   class="form-control" placeholder="Adresse complète">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field half-width">
+            <label for="codePostal">Code postal <span class="required">*</span></label>
+            <input type="text" id="codePostal" formControlName="codePostal"
+                   class="form-control" placeholder="Code postal">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3 class="section-title">Coordonnées</h3>
+
+      <!-- Coordonnées -->
+      <div class="form-row">
+        <div class="form-field half-width">
+          <label for="email">Email <span class="required">*</span></label>
+          <input type="email" id="email" formControlName="email" class="form-control" placeholder="exemple@email.com">
+          <div *ngIf="demandeForm.get('email')?.invalid && demandeForm.get('email')?.touched"
+               class="error-message">
+            Email invalide
+          </div>
+        </div>
+        <div class="form-field half-width">
+          <label for="numTel">Téléphone <span class="required">*</span></label>
+          <input type="tel" id="numTel" formControlName="numTel" class="form-control" placeholder="+216 XX XXX XXX">
+        </div>
+      </div>
+    </div>
+
+    <!-- Bouton de soumission -->
+    <div class="form-actions">
+      <button type="submit" class="submit-button"
+              [disabled]="demandeForm.invalid || (showNonBarreFields && !demandeForm.get('accepteEngagement')?.value)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        Valider la demande
+      </button>
+    </div>
+  </form>
+</div>

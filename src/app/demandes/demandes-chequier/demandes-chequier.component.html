@@ -1,0 +1,220 @@
+<div class="container-fluid py-3">
+  <div class="row mb-3">
+    <div class="col-12">
+      <!-- En-tête et recherche -->
+      <h2 class="text-primary mb-4">Demandes de chéquiers en attente</h2>
+
+      <div class="row mb-4 align-items-center">
+        <div class="col-md-6">
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Rechercher par RIB"
+              [(ngModel)]="ribRecherche"
+            />
+            <button class="btn btn-primary" (click)="rechercherParRib()">
+              <i class="bi bi-search"></i> Rechercher
+            </button>
+          </div>
+        </div>
+        <div class="col-md-6 text-end">
+          <button class="btn btn-outline-secondary btn-sm" (click)="reinitialiserRecherche()">
+            Réinitialiser
+          </button>
+          <span class="ms-3 text-muted">
+            {{ totalItems }} demande(s) trouvée(s)
+          </span>
+        </div>
+      </div>
+
+      <!-- Message si aucune demande -->
+      <div *ngIf="demandes.length === 0 && !isLoading" class="alert alert-info">
+        Aucune demande de chéquier en attente trouvée.
+      </div>
+
+      <!-- Loader -->
+      <div *ngIf="isLoading" class="text-center py-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Chargement...</span>
+        </div>
+      </div>
+
+      <!-- Liste des demandes -->
+      <div *ngIf="!isLoading && demandes.length > 0">
+        <div *ngFor="let demande of paginatedDemandes" class="card mb-3 border">
+          <div class="card-header bg-white d-flex justify-content-between align-items-center py-2">
+            <div>
+              <h5 class="mb-0">
+                Demande #{{ demande.idDemande }}
+                <span class="ms-2 badge rounded-pill" [ngClass]="{
+                  'bg-primary': demande.status === DemandeStatus.EnCoursPreparation,
+                  'bg-warning text-dark': demande.status === DemandeStatus.DisponibleEnAgence,
+                  'bg-success': demande.status === DemandeStatus.RemisAuClient || demande.status === DemandeStatus.Expedie
+                }">
+                  {{ getStatusLabel(demande.status) }}
+                </span>
+              </h5>
+            </div>
+            <div class="text-muted small">
+              <i class="bi bi-calendar-event me-1"></i>
+              {{ demande.dateDemande | date:'dd/MM/yyyy HH:mm' }}
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div class="row">
+              <!-- Colonne gauche - Informations générales -->
+              <div class="col-md-6">
+                <h6 class="text-primary mb-3">
+                  <i class="bi bi-info-circle me-1"></i>Informations générales
+                </h6>
+                <table class="table table-sm table-borderless">
+                  <tbody>
+                    <tr>
+                      <td class="text-muted" style="width: 40%">Compte barré :</td>
+                      <td>
+                        <span [ngClass]="demande.isBarre ? 'text-danger' : 'text-success'">
+                          {{ demande.isBarre ? 'Oui' : 'Non' }}
+                        </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-muted">RIB :</td>
+                      <td>{{ demande.ribCompte }}</td>
+                    </tr>
+                    <tr>
+                      <td class="text-muted">Nombre de feuilles :</td>
+                      <td>{{ demande.nombreFeuilles }}</td>
+                    </tr>
+                    <tr>
+                      <td class="text-muted">OTP :</td>
+                      <td>
+                        <span [ngClass]="demande.otp ? 'text-success' : 'text-danger'">
+                          {{ demande.otp ? 'Oui' : 'Non' }}
+                        </span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-muted">Plafond chéquier :</td>
+                      <td>{{ demande.plafondChequier | currency:'EUR':'symbol':'1.2-2' }}</td>
+                    </tr>
+                    <tr>
+                      <td class="text-muted">Raison :</td>
+                      <td>{{ demande.raisonDemande || 'Non spécifiée' }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Colonne droite - Livraison et contact -->
+              <div class="col-md-6">
+                <h6 class="text-primary mb-3">
+                  <i class="bi bi-truck me-1"></i>Livraison et contact
+                </h6>
+                <table class="table table-sm table-borderless">
+                  <tbody>
+                    <tr>
+                      <!-- <td class="text-muted" style="width: 40%">Mode de livraison :</td>
+                      <td>
+                        <span class="badge" [ngClass]="{
+                          'bg-info text-dark': demande.modeLivraison === ModeLivraison.LivraisonAgence,
+                          'bg-secondary': demande.modeLivraison === ModeLivraison.EnvoiRecommande
+                        }">
+                          {{ getModeLivraisonLabel(demande.modeLivraison) }}
+                        </span>
+                      </td> -->
+                      <td>
+                        <span class="badge" [ngClass]="{
+                          'bg-info text-dark': getModeLivraisonLabel(demande.modeLivraison) === 'Livraison en agence',
+                          'bg-secondary': getModeLivraisonLabel(demande.modeLivraison) === 'Envoi recommandé'
+                        }">
+                          {{ getModeLivraisonLabel(demande.modeLivraison) }}
+                        </span>
+                      </td>
+                    </tr>
+                    <tr *ngIf="demande.modeLivraison === ModeLivraison.EnvoiRecommande">
+                      <td class="text-muted">Adresse :</td>
+                      <td>{{ demande.adresseComplete }}, {{ demande.codePostal }}</td>
+                    </tr>
+                    <tr>
+                      <td class="text-muted">Email :</td>
+                      <td>
+                        <a href="mailto:{{ demande.email }}" class="text-decoration-none">{{ demande.email }}</a>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-muted">Téléphone :</td>
+                      <td>
+                        <a href="tel:{{ demande.numTel }}" class="text-decoration-none">{{ demande.numTel }}</a>
+                      </td>
+                    </tr>
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Section réponse agent -->
+            <div class="mt-3 pt-3 border-top">
+              <div class="d-flex align-items-center">
+                <span class="text-primary me-3">Réponse de l'agent :</span>
+
+           <select [(ngModel)]="selectedStatuses[demande.idDemande]"
+                        class="form-select form-select-sm me-2"
+                        style="width: auto;">
+                  <option [ngValue]="null" disabled>Sélectionnez un statut</option>
+                  <option *ngFor="let option of getOptionsStatut(demande)"
+                    [ngValue]="option">
+                    {{ getStatusOptionLabel(option) }}
+                  </option>
+                </select> -
+
+
+
+                <button class="btn btn-primary btn-sm"
+                        (click)="updateStatus(demande)"
+                        [disabled]="!selectedStatuses[demande.idDemande]">
+                  Confirmer
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Pagination des demandes" *ngIf="totalPages > 1">
+          <ul class="pagination justify-content-center">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <a class="page-link" href="javascript:void(0)" (click)="goToPage(1)">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <a class="page-link" href="javascript:void(0)" (click)="goToPage(currentPage - 1)">
+                <span aria-hidden="true">&lsaquo;</span>
+              </a>
+            </li>
+
+            <ng-container *ngFor="let page of getPaginationRange()">
+              <li class="page-item" [class.active]="page === currentPage">
+                <a class="page-link" href="javascript:void(0)" (click)="goToPage(page)">{{ page }}</a>
+              </li>
+            </ng-container>
+
+            <li class="page-item" [class.disabled]="currentPage === totalPages">
+              <a class="page-link" href="javascript:void(0)" (click)="goToPage(currentPage + 1)">
+                <span aria-hidden="true">&rsaquo;</span>
+              </a>
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === totalPages">
+              <a class="page-link" href="javascript:void(0)" (click)="goToPage(totalPages)">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>

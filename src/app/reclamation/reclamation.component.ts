@@ -18,7 +18,8 @@ export class ReclamationComponent implements OnInit {
   ) {
     this.reclamationForm = this.fb.group({
       objet: ['', Validators.required],
-      description: ['', Validators.required]
+      motif: ['', Validators.required],
+      message: ['', Validators.required] // Changé de 'description' à 'message'
     });
   }
 
@@ -37,17 +38,24 @@ export class ReclamationComponent implements OnInit {
 
     this.isLoading = true;
 
-    this.reclamationService.createReclamation(this.reclamationForm.value).subscribe({
+    // Création de l'objet conforme au backend
+    const reclamationData = {
+      Objet: this.reclamationForm.value.objet,
+      Motif: this.reclamationForm.value.motif,
+      Message: this.reclamationForm.value.message
+    };
+
+    this.reclamationService.createReclamation(reclamationData).subscribe({
       next: (response) => {
         this.isLoading = false;
         this.reclamationForm.reset();
-        
+
         Swal.fire({
           icon: 'success',
           title: 'Succès!',
           html: `
             <p>Votre réclamation a été enregistrée avec succès</p>
-           
+            <p>Référence: ${response.reference}</p>
           `,
           confirmButtonColor: '#3498db',
           showConfirmButton: true,
@@ -57,7 +65,7 @@ export class ReclamationComponent implements OnInit {
       error: (err) => {
         this.isLoading = false;
         console.error('Erreur:', err);
-        
+
         Swal.fire({
           icon: 'error',
           title: 'Erreur',
