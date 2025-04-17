@@ -28,6 +28,7 @@ import { ReclamationComponent } from './reclamation/reclamation.component';
 import { SimulateurCreditComponent } from './simulateur-credit/simulateur-credit.component';
 import { ReponseReclamationComponent } from './reponse-reclamation/reponse-reclamation.component';
 import { RibIbanComponent } from './rib-iban/rib-iban.component';
+import { HistoriqueReclamationsComponent } from './historique-reclamations/historique-reclamations.component';
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import { RibIbanComponent } from './rib-iban/rib-iban.component';
       ReclamationComponent,
       SimulateurCreditComponent,
       ReponseReclamationComponent,
-      RibIbanComponent,  ],
+      RibIbanComponent,
+      HistoriqueReclamationsComponent,  ],
 
   imports: [
     BrowserModule,

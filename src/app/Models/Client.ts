@@ -14,13 +14,13 @@ export interface Client {
   dateDelivranceCIN?: Date; // Optionnel
   dateExpirationCIN?: Date; // Optionnel
   lieuDelivranceCIN?: string; // Optionnel
-  photoClient?: string; // Optionnel // Optionnel
-  genre: string; // Nouveau champ : Genre (Masculin, Féminin, Autre)
-  profession: string; // Nouveau champ : Profession
-  situationProfessionnelle: string; // Nouveau champ : Situation professionnelle
-  niveauEducation: string; // Nouveau champ : Niveau d'éducation
-  nombreEnfants: number; // Nouveau champ : Nombre d'enfants
-  revenuMensuel: number; // Nouveau champ : Revenu mensuel
+  photoClient?: string; // Optionnel 
+  genre: string; 
+  profession: string; 
+  situationProfessionnelle: string; 
+  niveauEducation: string; 
+  nombreEnfants: number; 
+  revenuMensuel: number;
   paysNaissance?: string; // Optionnel
   nomMere?: string; // Optionnel
   nomPere?: string; // Optionnel

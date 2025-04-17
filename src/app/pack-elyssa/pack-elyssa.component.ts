@@ -75,7 +75,7 @@ export class PackElyssaComponent {
           confirmButtonColor: '#3085d6',
         });
         form.resetForm();
-        this.selectedFiles = Array(6).fill(null); // Changé de 5 à 6
+        this.selectedFiles = Array(6).fill(null); 
         this.selectedAgency = '';
         this.isSubmitting = false;
       },

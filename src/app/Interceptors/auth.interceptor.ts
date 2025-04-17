@@ -14,8 +14,6 @@ import { AuthService } from '../services/auth.service';
 export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService) {}
 
-
-  // Dans votre intercepteur (auth.interceptor.ts)
 intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
   // Ne pas modifier les requêtes d'authentification
   if (req.url.includes('/login') || req.url.includes('/refresh')|| req.url.includes('/GetByRIB')) {

@@ -10,21 +10,22 @@ import { DemandeCarte } from '../Models/DemandeCarte';
 import { DemandeAugmentationPlafondDTO } from '../Models/DemandeAugmentationPlafondDTO ';
 import { RechargeCarteDTO } from '../Models/RechargeCarteDTO';
 import { HistoriqueRechargeDto } from '../Models/HistoriqueRechargeDto';
+import { environnement } from '../environnement/environnement';
 @Injectable({
   providedIn: 'root',
 })
 export class CarteService {
- // private apiUrl = 'http://localhost:5132/api/carte'; // URL du backend
-private apiUrl ='http://localhost:5000/api/carte';
+ 
+ private apiUrl = environnement.apiurl+"/carte";
   constructor(private http: HttpClient) {}
 
   getCartesByClientId(): Observable<CarteDTO[]> {
     return this.http.get<CarteDTO[]>(`${this.apiUrl}/cartes/by-client`).pipe(
       map(cartes => cartes.map(carte => ({
         ...carte,
-        nomCarte: NomCarte[carte.nomCarte as keyof typeof NomCarte], // Convertir en enum
-        typeCarte: TypeCarte[carte.typeCarte as keyof typeof TypeCarte], // Convertir en enum
-        statut: StatutCarte[carte.statut as keyof typeof StatutCarte] // Convertir en enum
+        nomCarte: NomCarte[carte.nomCarte as keyof typeof NomCarte], 
+        typeCarte: TypeCarte[carte.typeCarte as keyof typeof TypeCarte], 
+        statut: StatutCarte[carte.statut as keyof typeof StatutCarte] 
       })))
     );
   }

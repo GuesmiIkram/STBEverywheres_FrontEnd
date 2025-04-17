@@ -5,16 +5,17 @@ import { Compte } from '../Models/compte';
 import { catchError, tap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { AuthService } from './auth.service';
+import { environnement } from '../environnement/environnement';
 
 @Injectable({
   providedIn: 'root'
 })
 export class VirementService {
 
-  //private apiUrl = 'http://localhost:5185/api/VirementApi';
-  private apiUrl ='http://localhost:5000/api/virement';
-  //private apiCompteUrl = 'http://localhost:5185/api/CompteApi';
-  private apiCompteUrl = 'http://localhost:5000/api/compte';
+
+  private apiUrl = environnement.apiurl+"/virement";
+
+  private apiCompteUrl =  environnement.apiurl+"/compte";
 
   constructor(private http: HttpClient, private AuthService: AuthService) { }
 
@@ -25,43 +26,37 @@ export class VirementService {
 
   // Effectuer un virement
   effectuerVirement(virementData: any): Observable<any> {
-    console.log('Envoi de la requête de virement avec les données :', virementData); // Log avant l'envoi HTTP
+    console.log('Envoi de la requête de virement avec les données :', virementData); 
 
     return this.http.post(`${this.apiUrl}/Virement`, virementData).pipe(
       tap(response => {
-        console.log('Réponse du backend pour le virement :', response); // Log de la réponse de l'API
+        console.log('Réponse du backend pour le virement :', response); 
       }),
       catchError(error => {
-        console.error('Erreur lors de l\'appel API pour le virement :', error); // Log d'erreur API
+        console.error('Erreur lors de l\'appel API pour le virement :', error); 
         return throwError(error);
       })
     );
   }
-
+ // Effectuer un virement de masse par formulaire 
   uploadVirementMasseForm(virementData: any): Observable<any> {
-    console.log('Envoi de la requête de virement avec les données :', virementData); // Log avant l'envoi HTTP
+    console.log('Envoi de la requête de virement avec les données :', virementData); 
 
     return this.http.post(`${this.apiUrl}/VirementDeMasseForm`, virementData).pipe(
       tap(response => {
-        console.log('Réponse du backend pour le virement :', response); // Log de la réponse de l'API
+        console.log('Réponse du backend pour le virement :', response); 
       }),
       catchError(error => {
-        console.error('Erreur lors de l\'appel API pour le virement :', error); // Log d'erreur API
+        console.error('Erreur lors de l\'appel API pour le virement :', error); 
         return throwError(error);
       })
     );
   }
 
-  // Fonction pour envoyer le fichier au serveur
- /* uploadVirementMasse(formData: FormData): Observable<any> {
 
-    return this.http.post(`${this.apiUrl}/VirementDeMasse`, formData);
-
-    }
-*/
 uploadVirementMasseFile(formData: FormData): Observable<any> {
   const headers = new HttpHeaders({
-    // Ne pas définir Content-Type, le navigateur le fera automatiquement
+
     'Authorization': `Bearer ${this.AuthService.getAccessToken}`
   });
 

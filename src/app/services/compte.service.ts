@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 //import { environment } from 'src/environments/environment.development';
 import { Compte } from '../Models/compte';
+import { environnement } from '../environnement/environnement';
 @Injectable({
   providedIn: 'root'
 })
@@ -12,10 +13,9 @@ export class CompteService {
 
 
   private http = inject(HttpClient);
-  //private apiUrl =environment.apiURL+'/api/CompteApi';
-  //private apiUrl = 'http://localhost:5185/api/CompteApi'; // URL du backend
-  private apiUrl = 'http://localhost:5000/api/compte';
-  private apiRibIbanUrl ='http://localhost:5185/api/compte';
+ 
+  private apiUrl = environnement.apiurl+"/compte";
+  private apiRibIbanUrl =environnement.apiurl+"/compte";
   /*public getComptesByCin(): Observable<Compte[]> {
     const token = localStorage.getItem('token'); // Récupérer le token stocké
     const headers = new HttpHeaders({

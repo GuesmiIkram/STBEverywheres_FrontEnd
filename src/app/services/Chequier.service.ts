@@ -2,12 +2,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environnement } from '../environnement/environnement';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChequierService {
-  private apiChequierUrl = 'http://localhost:5264/api/ChequierApi';
+  private apiChequierUrl = environnement.apiurl+"/ChequierApi";
 
   constructor(private http: HttpClient) { }
 

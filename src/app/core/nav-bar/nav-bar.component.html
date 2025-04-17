@@ -22,16 +22,17 @@
             <li class="nav-item dropdown">
                 <a class="nav-link nav-icon" data-bs-toggle="dropdown">
                   <i class="bi bi-bell"></i>
-                  <span *ngIf="unreadCount > 0" class="badge bg-primary badge-number">{{unreadCount}}</span>
+                  <span *ngIf="totalUnreadCount > 0" class="badge bg-primary badge-number">{{totalUnreadCount}}</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
                   <li class="dropdown-header">
-                    Vous avez {{unreadCount}} nouvelle(s) notification(s)
+                    Vous avez {{totalUnreadCount}} nouvelle(s) notification(s)
                     <a><span class="badge rounded-pill bg-primary p-2 ms-2">Voir tout</span></a>
                   </li>
                   <li><hr class="dropdown-divider"></li>
                   
-                  <ng-container *ngFor="let notification of notifications.slice(0, 5)">
+                  <!-- Notifications du ClientService -->
+                  <ng-container *ngFor="let notification of clientNotifications.slice(0, 3)">
                     <li class="notification-item" (click)="markAsRead(notification.id)" [class.unread]="!notification.isRead">
                       <i class="bi" [ngClass]="{
                         'bi-exclamation-circle text-warning': notification.notificationType === 'warning',
@@ -43,6 +44,26 @@
                         <h4>{{notification.title}}</h4>
                         <p>{{notification.message}}</p>
                         <p>{{notification.createdAt | date:'short'}}</p>
+                        <small class="text-muted">(Service Client)</small>
+                      </div>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                  </ng-container>
+                  
+                  <!-- Notifications du ReclamationService -->
+                  <ng-container *ngFor="let notification of reclamationNotifications.slice(0, 3)">
+                    <li class="notification-item" (click)="markAsReadrec(notification.id)" [class.unread]="!notification.isRead">
+                      <i class="bi" [ngClass]="{
+                        'bi-exclamation-circle text-warning': notification.notificationType === 'warning',
+                        'bi-check-circle text-success': notification.notificationType === 'success',
+                        'bi-x-circle text-danger': notification.notificationType === 'error',
+                        'bi-info-circle text-primary': notification.notificationType === 'info'
+                      }"></i>
+                      <div>
+                        <h4>{{notification.title}}</h4>
+                        <p>{{notification.message}}</p>
+                        <p>{{notification.createdAt | date:'short'}}</p>
+                        <small class="text-muted">(Réclamation)</small>
                       </div>
                     </li>
                     <li><hr class="dropdown-divider"></li>
@@ -54,76 +75,11 @@
                 </ul>
               </li>
 
-            <li class="nav-item dropdown">
-
-                <a class="nav-link nav-icon"   data-bs-toggle="dropdown">
-                    <i class="bi bi-chat-left-text"></i>
-                    <span class="badge bg-success badge-number">3</span>
-                </a><!-- End Messages Icon -->
-
-                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
-                    <li class="dropdown-header">
-                        You have 3 new messages
-                        <a  ><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-
-                    <li class="message-item">
-                        <a  >
-                            <img src="assets/img/messages-1.jpg" alt="" class="rounded-circle">
-                            <div>
-                                <h4>Maria Hudson</h4>
-                                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                                <p>4 hrs. ago</p>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-
-                    <li class="message-item">
-                        <a  >
-                            <img src="assets/img/messages-2.jpg" alt="" class="rounded-circle">
-                            <div>
-                                <h4>Anna Nelson</h4>
-                                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                                <p>6 hrs. ago</p>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-
-                    <li class="message-item">
-                        <a  >
-                            <img src="assets/img/messages-3.jpg" alt="" class="rounded-circle">
-                            <div>
-                                <h4>David Muldon</h4>
-                                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                                <p>8 hrs. ago</p>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-
-                    <li class="dropdown-footer">
-                        <a  >Show all messages</a>
-                    </li>
-
-                </ul><!-- End Messages Dropdown Items -->
-
-            </li><!-- End Messages Nav -->
-
+           
             <li class="nav-item dropdown pe-3">
 
                 <a class="nav-link nav-profile d-flex align-items-center pe-0"   data-bs-toggle="dropdown">
-                    <img [src]="client?.photoClient ? 'http://localhost:5260/Images/' + client.photoClient : 'lien_vers_image_par_defaut'" alt="Profile" class="rounded-circle">
+                    <img [src]="client?.photoClient ? 'http://localhost:5260/Images/' + client.photoClient : 'assets/img/default.png'" alt="Profile"  class="rounded-circle">
                      
                     <span class="d-none d-md-block dropdown-toggle ps-2">{{ client?.nom }}{{ client?.prenom }}</span>
                 </a><!-- End Profile Iamge Icon -->

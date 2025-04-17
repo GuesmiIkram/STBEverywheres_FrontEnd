@@ -3,6 +3,7 @@ import { Client } from 'src/app/Models/Client';
 import { NotificationPack } from 'src/app/Models/NotificationPack';
 import { AuthService } from 'src/app/services/auth.service';
 import { ClientService } from 'src/app/services/client.service';
+import { ReclamationService } from 'src/app/services/ReclamationService';
 
 @Component({
   selector: 'app-nav-bar',
@@ -40,8 +41,8 @@ export class NavBarComponent implements OnInit {
     paysNaissance: '',
     nomMere: '',
     nomPere: '',
-  }; // Initialisez `client` avec une valeur p
-  //client: Client | null = null;
+  };
+  
   selectedFile: File | null = null;
   changePasswordData = {
     currentPassword: '',
@@ -52,9 +53,16 @@ export class NavBarComponent implements OnInit {
   newPasswordError = false;
   confirmNewPasswordError = false;
   passwordMismatch = false;
-  constructor(private clientService: ClientService,private authService:AuthService) {}
-  notifications: NotificationPack[] = [];
-  unreadCount = 0;
+
+  constructor(
+    private clientService: ClientService,
+    private reclamationService: ReclamationService,
+    private authService: AuthService
+  ) {}
+
+  clientNotifications: NotificationPack[] = [];
+  reclamationNotifications: NotificationPack[] = [];
+  totalUnreadCount = 0;
 
   ngOnInit(): void {
     this.userRole = this.authService.getUserRole();
@@ -63,6 +71,7 @@ export class NavBarComponent implements OnInit {
     if (this.isClient) {
       this.getClientInfo();
       this.loadNotifications();
+      this.loadNotificationsReclamtion();
     }
   }
 
@@ -76,25 +85,44 @@ export class NavBarComponent implements OnInit {
       }
     );
   }
+
   loadNotifications(): void {
     this.clientService.getClientNotifications().subscribe(
       (notifications: NotificationPack[]) => {
-        this.notifications = notifications;
-        this.unreadCount = notifications.filter(n => !n.isRead).length;
+        this.clientNotifications = notifications;
+        this.calculateTotalUnread();
       },
       (error) => {
-        console.error('Erreur lors du chargement des notifications', error);
+        console.error('Erreur lors du chargement des notifications client', error);
       }
     );
+  }
+
+  loadNotificationsReclamtion(): void {
+    this.reclamationService.getClientNotifications().subscribe(
+      (notifications: NotificationPack[]) => {
+        this.reclamationNotifications = notifications;
+        this.calculateTotalUnread();
+      },
+      (error) => {
+        console.error('Erreur lors du chargement des notifications réclamation', error);
+      }
+    );
+  }
+
+  calculateTotalUnread(): void {
+    const clientUnread = this.clientNotifications.filter(n => !n.isRead).length;
+    const reclamationUnread = this.reclamationNotifications.filter(n => !n.isRead).length;
+    this.totalUnreadCount = clientUnread + reclamationUnread;
   }
 
   markAsRead(notificationId: number): void {
     this.clientService.markNotificationAsRead(notificationId).subscribe(
       () => {
-        const notification = this.notifications.find(n => n.id === notificationId);
+        const notification = this.clientNotifications.find(n => n.id === notificationId);
         if (notification) {
           notification.isRead = true;
-          this.unreadCount = this.notifications.filter(n => !n.isRead).length;
+          this.calculateTotalUnread();
         }
       },
       (error) => {
@@ -103,9 +131,22 @@ export class NavBarComponent implements OnInit {
     );
   }
 
-
-  ShowHideMenu(){
-    document.getElementsByTagName("body")[0].classList.toggle('toggle-sidebar');
+  markAsReadrec(notificationId: number): void {
+    this.reclamationService.markNotificationAsRead(notificationId).subscribe(
+      () => {
+        const notification = this.reclamationNotifications.find(n => n.id === notificationId);
+        if (notification) {
+          notification.isRead = true;
+          this.calculateTotalUnread();
+        }
+      },
+      (error) => {
+        console.error('Erreur lors du marquage de la notification comme lue', error);
+      }
+    );
   }
 
+  ShowHideMenu(): void {
+    document.getElementsByTagName("body")[0].classList.toggle('toggle-sidebar');
+  }
 }

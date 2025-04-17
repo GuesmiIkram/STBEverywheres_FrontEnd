@@ -3,11 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, catchError, throwError, tap } from 'rxjs';
 
+import { environnement } from '../environnement/environnement';
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:5000/api/Auth';
+  private apiUrl = environnement.apiurl+"/Auth";
 
   constructor(
     private http: HttpClient,
@@ -151,7 +153,7 @@ getUserId(): number | null {
     localStorage.removeItem('AccessToken');
     localStorage.removeItem('RefreshToken');
     this.http.post(`${this.apiUrl}/logout`, {}, { withCredentials: true }).subscribe({
-      next: () => this.router.navigate(['/login']),
+      next: () => this.router.navigate(['']),
       error: (err) => console.error('Logout error:', err)
     });
   }

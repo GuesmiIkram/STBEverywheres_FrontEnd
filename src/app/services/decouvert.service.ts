@@ -5,14 +5,15 @@ import { Compte } from '../Models/compte';
 import { Client } from '../Models/Client';
 
 import { DemandeModificationDecouvertDto } from '../Models/DemandeModificationDecouvertDto';
+import { environnement } from '../environnement/environnement';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DecouvertService {
-  private apiUrl = 'http://localhost:5185/api/Decouvert';
-  private apiCompteUrl = 'http://localhost:5000/api/compte';
-private apiClientUrl ='http://localhost:5000/api/client';
+  private apiUrl = environnement.apiurl+"/Decouvert";
+  private apiCompteUrl = environnement.apiurl+"/compte";
+  private apiClientUrl =environnement.apiurl+"/client";
 
   constructor(private http: HttpClient) {}
 
@@ -21,10 +22,10 @@ private apiClientUrl ='http://localhost:5000/api/client';
    getClientInfo(): Observable<Client> {
      return this.http.get<Client>(`${this.apiClientUrl}/me`);
    }
-  // Méthode pour récupérer les comptes (si vous avez un endpoint pour ça)
+  // Méthode pour récupérer les comptes 
   getComptes(): Observable<any> {
     return this.http.get<Compte[]>(`${this.apiCompteUrl}/listecompteVirement`);
- // Remplacez par votre endpoint pour récupérer les comptes
+ 
   }
   // Méthode pour récupérer le découvert autorisé en fonction du RIB
   getDecouvertAutorise(rib: string): Observable<any> {

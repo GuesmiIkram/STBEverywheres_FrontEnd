@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 
 import { CommonModule } from '@angular/common';
 import { DemandesRoutingModule } from './demandes-routing.module';
@@ -19,7 +18,7 @@ import { DemandePackElyssaComponent } from './demande-pack-elyssa/demande-pack-e
   declarations: [
     DemandeDecouvertComponent,
 
-    DemandesChequierComponent
+    DemandesChequierComponent,
 
     DemandePlafondComponent,
     DemandeCarteComponent,
