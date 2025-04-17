@@ -4,6 +4,7 @@ import { Client } from '../Models/Client';
 import Swal from 'sweetalert2';
 import { AuthService } from '../services/auth.service';
 import { NgForm, NgModel } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user',
@@ -59,7 +60,7 @@ export class UserComponent implements OnInit {
 
   constructor(
     private clientService: ClientService,
-    private authService: AuthService
+    private authService: AuthService,  private router: Router 
   ) {}
 
   ngOnInit(): void {
@@ -392,7 +393,9 @@ export class UserComponent implements OnInit {
             }
         });
 
-        this.resetForm();
+            this.authService.logout(); 
+             this.router.navigate(['']);
+
 
     } catch (error: any) {
         console.error('Erreur:', error);

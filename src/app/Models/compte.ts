@@ -8,8 +8,8 @@ export interface Compte {
   type: string;
   solde: number;
   decouvertAutorise: number;
-  dateCreation: string; // Correction : date_creation => dateCreation
+  dateCreation: string; 
   statut: string;
-  montantMaxAutoriseParJour: number; // Correction : MontantMaxAutoriseParJour => montantMaxAutoriseParJour
-  nbrOperationsAutoriseesParJour: string; // Correction : NbrOperationsAutoriseesParJour => nbrOperationsAutoriseesParJour
+  montantMaxAutoriseParJour: number; 
+  nbrOperationsAutoriseesParJour: string; 
 }

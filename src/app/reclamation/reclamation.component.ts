@@ -19,7 +19,7 @@ export class ReclamationComponent implements OnInit {
     this.reclamationForm = this.fb.group({
       objet: ['', Validators.required],
       motif: ['', Validators.required],
-      message: ['', Validators.required] // Changé de 'description' à 'message'
+      message: ['', Validators.required] 
     });
   }
 
@@ -55,7 +55,7 @@ export class ReclamationComponent implements OnInit {
           title: 'Succès!',
           html: `
             <p>Votre réclamation a été enregistrée avec succès</p>
-            <p>Référence: ${response.reference}</p>
+            
           `,
           confirmButtonColor: '#3498db',
           showConfirmButton: true,

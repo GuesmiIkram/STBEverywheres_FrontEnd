@@ -127,9 +127,6 @@ export class InitierVirementUnitaireAutreBenefComponent implements OnInit {
     );
   }
 
-
-
-
   effectuerVirement(): void {
     // Marquer tous les champs comme touchés pour afficher les erreurs
     this.markFormGroupTouched(this.virementForm);

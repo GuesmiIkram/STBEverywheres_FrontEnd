@@ -1,0 +1,346 @@
+// Variables de couleurs
+$primary: #5983f5;
+$primary-dark: #4180f5;
+$secondary: #012970;
+$text-muted: #899bbd;
+$light-bg: #f6f9ff;
+$white: #ffffff;
+$border-color: #e0e0e0;
+
+// Variables supplémentaires
+$success: #2eca6a;
+$warning: #ff9f43;
+$danger: #ff4b4b;
+$border-radius: 4px;
+$box-shadow: 0 1px 3px rgba($secondary, 0.08);
+$transition: all 0.2s ease;
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  background-color: $light-bg;
+  padding: 20px;
+
+  h2 {
+    color: $secondary;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+    font-size: 1.5rem;
+    position: relative;
+    padding-left: 15px;
+    border-left: 4px solid $primary;
+  }
+
+  // Card de filtre
+  .card {
+    border: none;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+    margin-bottom: 1.5rem;
+    background-color: $white;
+    overflow: hidden;
+
+    .card-header {
+      background-color: $white;
+      border-bottom: 1px solid $border-color;
+      padding: 0.75rem 1rem;
+
+      h5 {
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: $secondary;
+        display: flex;
+        align-items: center;
+        
+        &:before {
+          content: '⏱️';
+          margin-right: 8px;
+          font-size: 1rem;
+        }
+      }
+    }
+
+    .card-body {
+      padding: 0.75rem 1rem;
+      background-color: $white;
+
+      .row {
+        align-items: center;
+      }
+
+      .form-label {
+        font-weight: 500;
+        color: $secondary;
+        margin-bottom: 0.25rem;
+        font-size: 0.85rem;
+      }
+
+      .form-control {
+        border-radius: $border-radius;
+        border: 1px solid $border-color;
+        padding: 0.4rem 0.75rem;
+        height: 36px;
+        font-size: 0.85rem;
+        background-color: $light-bg;
+        
+        &:focus {
+          border-color: $primary;
+          box-shadow: 0 0 0 0.15rem rgba($primary, 0.15);
+        }
+      }
+    }
+  }
+
+  // Message d'erreur
+  .alert-danger {
+    background-color: rgba($danger, 0.1);
+    color: darken($danger, 15%);
+    border: none;
+    border-radius: $border-radius;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    
+    &:before {
+      content: '⚠️';
+      margin-right: 10px;
+      font-size: 1rem;
+    }
+  }
+
+  // Tableau des réclamations
+  .table-responsive {
+    border-radius: $border-radius;
+    overflow: hidden;
+    box-shadow: $box-shadow;
+    margin-bottom: 1.5rem;
+    background-color: $white;
+
+    .table {
+      margin-bottom: 0;
+
+      // Forcer la couleur bleue pour l'en-tête avec une spécificité plus élevée
+      thead.table-dark {
+        background-color: $primary-dark !important; // Forcer le bleu foncé
+        color: $white !important;
+
+        th {
+          font-weight: 500;
+          padding: 0.85rem 1rem;
+          border-bottom: none;
+          font-size: 0.85rem;
+          letter-spacing: 0.02em;
+          border: none;
+          white-space: nowrap;
+          background-color: $secondary !important; // Forcer le bleu foncé sur chaque cellule
+        }
+      }
+
+      // Alternative: remplacer complètement la classe table-dark
+      thead {
+        background-color: $secondary;
+        color: $white;
+
+        th {
+          font-weight: 500;
+          padding: 0.85rem 1rem;
+          border-bottom: none;
+          font-size: 0.85rem;
+          letter-spacing: 0.02em;
+          border: none;
+          white-space: nowrap;
+          background-color: $secondary;
+        }
+      }
+
+      tbody {
+        tr {
+          transition: $transition;
+          border-bottom: 1px solid $border-color;
+
+          &:last-child {
+            border-bottom: none;
+          }
+
+          &:nth-child(odd) {
+            background-color: rgba($light-bg, 0.5);
+          }
+
+          td {
+            padding: 0.85rem 1rem;
+            vertical-align: middle;
+            color: $secondary;
+            font-size: 0.85rem;
+            border: none;
+          }
+
+          .badge {
+            padding: 0.35rem 0.65rem;
+            font-weight: 500;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            letter-spacing: 0.03em;
+            
+            &.bg-warning {
+              background-color: $warning !important;
+              color: $white;
+            }
+            
+            &.bg-success {
+              background-color: $success !important;
+              color: $white;
+            }
+            
+            &.bg-danger {
+              background-color: $danger !important;
+              color: $white;
+            }
+          }
+        }
+
+        tr:hover {
+          background-color: rgba($primary, 0.03);
+        }
+      }
+    }
+  }
+
+  // Pagination
+  .pagination {
+    margin-top: 1.25rem;
+    
+    .page-item {
+      margin: 0 0.15rem;
+      
+      .page-link {
+        border-radius: $border-radius;
+        min-width: 34px;
+        height: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $primary;
+        border: 1px solid rgba($primary, 0.2);
+        background-color: $white;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: $transition;
+        
+        &:hover {
+          background-color: rgba($primary, 0.1);
+          color: $primary-dark;
+          border-color: rgba($primary, 0.3);
+        }
+      }
+      
+      &.active .page-link {
+        background-color: $primary-dark;
+        color: $white;
+        border-color: $primary-dark;
+        font-weight: 500;
+      }
+      
+      &.disabled .page-link {
+        color: $text-muted;
+        cursor: not-allowed;
+        background-color: $light-bg;
+        border-color: $border-color;
+      }
+    }
+  }
+  
+  // Message "Aucune réclamation"
+  .text-center {
+    padding: 1.5rem;
+    color: $text-muted;
+    font-style: italic;
+  }
+}
+
+// Surcharge globale pour s'assurer que table-dark utilise notre couleur bleue
+.table-dark {
+  background-color: $secondary !important;
+  color: $white !important;
+  
+  th, td {
+    background-color: $secondary !important;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+    
+    h2 {
+      font-size: 1.3rem;
+    }
+    
+    .table-responsive {
+      .table {
+        thead th, tbody td {
+          padding: 0.75rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .container {
+    padding: 10px;
+    
+    h2 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+    
+    .card {
+      margin-bottom: 1rem;
+      
+      .card-header h5 {
+        font-size: 0.9rem;
+      }
+      
+      .card-body {
+        padding: 0.6rem 0.75rem;
+        
+        .form-label {
+          font-size: 0.8rem;
+        }
+      }
+    }
+    
+    .table-responsive {
+      .table {
+        thead th {
+          padding: 0.6rem 0.75rem;
+          font-size: 0.8rem;
+        }
+        
+        tbody td {
+          padding: 0.6rem 0.75rem;
+          font-size: 0.8rem;
+        }
+        
+        .badge {
+          font-size: 0.7rem;
+          padding: 0.25rem 0.5rem;
+        }
+      }
+    }
+    
+    .pagination {
+      .page-item .page-link {
+        min-width: 30px;
+        height: 30px;
+        font-size: 0.8rem;
+      }
+    }
+  }
+}

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { MaBanqueRoutingModule } from './ma-banque-routing.module';
 import { DecouvertComponent } from './decouvert/decouvert.component';
-import { FormsModule } from '@angular/forms'; // Importez FormsModule ici
+import { FormsModule } from '@angular/forms'; 
 import { ReactiveFormsModule } from '@angular/forms';
 
 

@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 })
 export class DecouvertComponent implements OnInit {
   activeTab: string = 'demande'; // Onglet actif ('demande' ou 'suivi')
-  alertSymbol: string = '\u26A0'; // ⚠ (symbole Unicode)affiché si client choisit le nv decouvert=decouvet actuel
+  alertSymbol: string = '\u26A0'; //(symbole Unicode)affiché si client choisit le nv decouvert=decouvet actuel
   decouvertMaxAutorise: number | null = null;
   // Variables pour le formulaire
   demandeForm: FormGroup;
@@ -269,7 +269,7 @@ loadDemandes(): void {
     }
   });
 }
-//pour formater le statut de la demande dans la liste des demande accepte de back s'affiche acceptée...
+//pour formater le statut de la demande dans la liste des demande accepte de back s'affiche acceptée
 
 getFormattedStatus(statut: number): string {
   switch(statut) {

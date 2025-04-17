@@ -1,61 +1,274 @@
+// Variables de couleurs
+$primary: #5983f5;
+$primary-dark: #4180f5;
+$secondary: #012970;
+$text-muted: #899bbd;
+$light-bg: #f6f9ff;
+$white: #ffffff;
+$border-color: #e0e0e0;
+$success: #2eca6a;
+$border-radius: 4px;
+$box-shadow: 0 1px 3px rgba($secondary, 0.08);
+$transition: all 0.2s ease;
+
 .simulateur-credit {
-  width: 60%;
+  max-width: 800px;
   margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+  background-color: $light-bg;
+  border-radius: $border-radius;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  
+  h2 {
+    color: $secondary;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    position: relative;
+    padding-left: 15px;
+    border-left: 4px solid $primary;
+  }
+  
+  form {
+    background-color: $white;
+    padding: 25px;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+    margin-bottom: 25px;
+    
+    div {
+      margin-bottom: 20px;
+      
+      &:last-of-type {
+        margin-bottom: 25px;
+      }
+      
+      label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: $secondary;
+        font-size: 0.9rem;
+      }
+      
+      input, select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid $border-color;
+        border-radius: $border-radius;
+        font-size: 0.9rem;
+        color: $secondary;
+        background-color: $light-bg;
+        transition: $transition;
+        
+        &:focus {
+          outline: none;
+          border-color: $primary;
+          box-shadow: 0 0 0 2px rgba($primary, 0.15);
+        }
+        
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+        
+        &[type=number] {
+          -moz-appearance: textfield;
+        }
+      }
+      
+      select {
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23012970' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 16px;
+        padding-right: 40px;
+      }
+    }
+    
+    button {
+      background: linear-gradient(135deg, $primary, $primary-dark);
+      color: $white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: $border-radius;
+      font-weight: 500;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: $transition;
+      display: block;
+      width: 100%;
+      
+      &:hover {
+        background: linear-gradient(135deg, lighten($primary, 5%), $primary);
+        box-shadow: 0 4px 8px rgba($primary-dark, 0.2);
+        transform: translateY(-1px);
+      }
+      
+      &:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 4px rgba($primary-dark, 0.2);
+      }
+    }
+  }
+  
+  // Section résultat - style pour la structure exacte
+  > div:last-child {
+    background-color: $white;
+    padding: 25px;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+    
+    h3 {
+      color: $secondary;
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid $border-color;
+    }
+    
+    // Style commun pour les deux types de résultats
+    > div {
+      margin-top: 15px;
+      
+      p {
+        margin-bottom: 10px;
+        color: $secondary;
+        font-size: 0.95rem;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+    
+    // Style spécifique pour le résultat de type "Mensualité constante"
+    > div:first-of-type {
+      padding: 15px;
+      background-color: rgba($light-bg, 0.5);
+      border-radius: $border-radius;
+      border-left: 3px solid $primary;
+    }
+    
+    // Style pour le tableau d'amortissement variable
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      font-size: 0.9rem;
+      
+      thead {
+        background-color: $secondary;
+        color: $white;
+        
+        th {
+          padding: 12px 15px;
+          text-align: left;
+          font-weight: 500;
+          white-space: nowrap;
+          
+          &:first-child {
+            border-top-left-radius: $border-radius;
+          }
+          
+          &:last-child {
+            border-top-right-radius: $border-radius;
+          }
+        }
+      }
+      
+      tbody {
+        tr {
+          border-bottom: 1px solid $border-color;
+          
+          &:last-child {
+            border-bottom: none;
+          }
+          
+          &:nth-child(even) {
+            background-color: rgba($light-bg, 0.5);
+          }
+          
+          &:hover {
+            background-color: rgba($primary, 0.03);
+          }
+          
+          td {
+            padding: 12px 15px;
+            color: $secondary;
+            
+            &:nth-child(2),
+            &:nth-child(3),
+            &:nth-child(4) {
+              text-align: right;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
-h2 {
-  text-align: center;
+// Responsive styles
+@media (min-width: 768px) {
+  .simulateur-credit {
+    form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      
+      div {
+        margin-bottom: 0;
+        
+        &:last-of-type {
+          margin-bottom: 0;
+        }
+      }
+      
+      button {
+        grid-column: span 2;
+        margin-top: 20px;
+      }
+    }
+  }
 }
 
-form div {
-  margin-bottom: 15px;
+@media (max-width: 767px) {
+  .simulateur-credit {
+    padding: 15px;
+    
+    form, > div:last-child {
+      padding: 20px;
+    }
+    
+    table {
+      display: block;
+      overflow-x: auto;
+      
+      th, td {
+        min-width: 100px;
+      }
+    }
+  }
 }
 
-form label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-form input,
-form select {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-button {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
-table {
-  width: 100%;
-  margin-top: 20px;
-  border-collapse: collapse;
-}
-
-table th,
-table td {
-  padding: 10px;
-  border: 1px solid #ddd;
-  text-align: center;
-}
-
-table th {
-  background-color: #f4f4f4;
+@media (max-width: 480px) {
+  .simulateur-credit {
+    padding: 10px;
+    
+    h2 {
+      font-size: 1.3rem;
+    }
+    
+    form, > div:last-child {
+      padding: 15px;
+    }
+    
+    h3 {
+      font-size: 1.1rem;
+    }
+  }
 }

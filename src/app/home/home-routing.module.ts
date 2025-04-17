@@ -21,6 +21,7 @@ import { DemandeCarteComponent } from '../demandes/demande-carte/demande-carte.c
 
 import { DemandePackElyssaComponent } from '../demandes/demande-pack-elyssa/demande-pack-elyssa.component';
 import { DemandePackStudentComponent } from '../demandes/demande-pack-student/demande-pack-student.component';
+import { HistoriqueReclamationsComponent } from '../historique-reclamations/historique-reclamations.component';
 
 
 
@@ -29,9 +30,10 @@ const routes: Routes = [
         children: [
 
           { path: 'similateur', component: SimulateurCreditComponent, data: { breadcrumb: 'similateur' }},
-
+          { path: 'RepondreDemandePlafond', component: DemandePlafondComponent },
           { path: 'RepondreDemandeCarte', component: DemandeCarteComponent },
-
+       
+          { path: 'Reclamationhsitorique', component:   HistoriqueReclamationsComponent, data: { breadcrumb: 'reclamation' }},
           { path: 'Reclamation', component: ReclamationComponent, data: { breadcrumb: 'reclamation' }},
           { path: 'PackStudent', component: PackStudentComponent, data: { breadcrumb: 'PackStudent' }},
            { path: '', component: DashboardComponent, data: { breadcrumb: 'Dashboard' }},
@@ -52,7 +54,7 @@ const routes: Routes = [
             { path: 'ReponseReclamationComponent', component: ReponseReclamationComponent, data: { breadcrumb: 'responsereclamation' }},
             { path: 'RibIbanComponent', component: RibIbanComponent, data: { breadcrumb: 'RibIban'}},
 
-            { path: 'RepondreDemandePlafond', component: DemandePlafondComponent },
+         
             { path: 'RepondreDemandePackStudent', component: DemandePackStudentComponent },
             { path: 'RepondreDemandePackElyssa', component: DemandePackElyssaComponent },
 

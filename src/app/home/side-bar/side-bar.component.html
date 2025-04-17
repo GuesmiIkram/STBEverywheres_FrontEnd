@@ -5,7 +5,7 @@
     <li class="nav-item">
       <a class="nav-link" routerLink="/home">
         <i class="bi bi-grid"></i>
-        <span>Dashboard</span>
+        <span>Mes Comptes</span>
       </a>
     </li>
     <!-- End Dashboard Nav -->
@@ -14,7 +14,7 @@
 
     <li class="nav-item">
       <a class="nav-link collapsed" (click)="ShowHideCollapse('banque-nav')" data-bs-target="#banque-nav" data-bs-toggle="collapse">
-        <i class="ri-user-add-line"></i><span>Ma banque</span><i class="bi bi-chevron-down ms-auto"></i>
+        <i class="bi bi-bank fs-2 text-primary"></i><span>Ma banque</span><i class="bi bi-chevron-down ms-auto"></i>
       </a>
       <ul id="banque-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
         <li>
@@ -49,11 +49,7 @@
         <i class="ri-user-add-line"></i><span>Bénéficiaires</span><i class="bi bi-chevron-down ms-auto"></i>
       </a>
       <ul id="beneficiaire-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-        <li>
-          <a routerLink="/home/beneficiaire" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-            <i class="bi bi-circle"></i><span>Consulter</span>
-          </a>
-        </li>
+       
         <li>
           <a routerLink="/home/beneficiaire/ajouter-beneficiaire" routerLinkActive="active">
             <i class="bi bi-circle"></i><span>Ajouter</span>
@@ -64,11 +60,7 @@
             <i class="bi bi-circle"></i><span>Mettre à jour</span>
           </a>
         </li>
-        <li>
-          <a routerLink="/home/PackStudent">
-            <i class="bi bi-circle"></i><span>Supprimer</span>
-          </a>
-        </li>
+       
       </ul>
     </li>
     <!-- End Bénéficiaires -->
@@ -87,6 +79,7 @@
           <a routerLink="/home/carte/Demander-Carte" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
             <i class="bi bi-circle"></i><span>Demander une Carte</span>
           </a>
+
         </li>
         <li>
           <a routerLink="/home/carte/Demander-Plafond" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
@@ -121,7 +114,7 @@
 
     <li class="nav-item">
       <a class="nav-link collapsed" (click)="ShowHideCollapse('chequiers-nav')" data-bs-target="#chequiers-nav" data-bs-toggle="collapse">
-        <i class="ri-bank-card-fill"></i><span>Chequiers</span><i class="bi bi-chevron-down ms-auto"></i>
+        <i class="bi bi-journal-bookmark"></i><span>Chequiers</span><i class="bi bi-chevron-down ms-auto"></i>
       </a>
       <ul id="chequiers-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
         <li>
@@ -192,13 +185,19 @@
     <li class="nav-item">
       <a class="nav-link collapsed" routerLink="/home/Reclamation" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
         <i class="bi bi-chat-left-text"></i>
-        <span>Reclamation</span>
+        <span>Réclamation</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link collapsed" routerLink="/home/Reclamationhsitorique" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <i class="bi bi-journal-text"></i>
+        <span>Historique des Réclamations</span>
       </a>
     </li>
     <li class="nav-item">
       <a class="nav-link collapsed" routerLink="/home/similateur" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-        <i class="bi bi-chat-left-text"></i>
-        <span>similateur</span>
+        <i class="bi bi-calculator"></i>
+        <span>simulateur</span>
       </a>
     </li>
   </ul>
@@ -236,8 +235,11 @@
       </a>
       <ul id="demande-carte-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
         <li>
-          <a class="nav-link collapsed" routerLink="/demande-carte">
-            <i class="ri-circle-line"></i><span>Liste des demandes</span>
+          <a class="nav-link collapsed" routerLink="/home/RepondreDemandeCarte">
+            <i class="ri-circle-line"></i><span>Liste des demandes Carte</span>
+          </a>
+          <a class="nav-link collapsed" routerLink="/home/RepondreDemandePlafond">
+            <i class="ri-circle-line"></i><span>Liste des demandes Plafond</span>
           </a>
         </li>
       </ul>

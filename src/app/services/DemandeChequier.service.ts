@@ -3,14 +3,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Compte } from '../Models/compte';
+import { environnement } from '../environnement/environnement';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class DemandeChequierService {
-  private apiDemandeChequierUrl = 'http://localhost:5264/api/DemandeChequierApi';
-  private apiCompteUrl = 'http://localhost:5000/api/compte';
+  private apiDemandeChequierUrl =  environnement.apiurl+"/DemandeChequierApi";
+  private apiCompteUrl = environnement.apiurl+"/compte";
 
   constructor(private http: HttpClient) { }
 

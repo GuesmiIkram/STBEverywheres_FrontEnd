@@ -4,15 +4,16 @@ import { catchError, Observable, tap, throwError } from 'rxjs';
 import { Client } from '../Models/Client';
 import { AuthService } from './auth.service';
 import { NotificationPack } from '../Models/NotificationPack';
- // Importation du modèle
+import { environnement } from '../environnement/environnement';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class ClientService {
   
-  //private apiUrl = 'http://localhost:5260/api/client'; // URL du backend
-  private apiUrl ='http://localhost:5000/api/client';
+
+   private apiUrl = environnement.apiurl+ "/client";
   constructor(private http: HttpClient,private authService :AuthService) {}
 
   // Récupérer les infos du client
