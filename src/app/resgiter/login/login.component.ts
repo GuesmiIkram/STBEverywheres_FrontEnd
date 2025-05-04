@@ -1,7 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatDialogModule } from '@angular/material/dialog'; // Changé depuis MatDialog
+
 
 import { AuthService } from 'src/app/services/auth.service';
 import Swal from 'sweetalert2';
@@ -246,6 +246,8 @@ export class LoginComponent implements OnInit {
             role: this.authService.getUserRole(),
             userId: this.authService.getUserId()
           });
+          //sessionStorage.setItem("",document.cookie);
+          //console.log(document.cookie);
           this.router.navigate(['/home']).then(() => {
             // Rechargez le composant pour actualiser le sidebar
             window.location.reload();

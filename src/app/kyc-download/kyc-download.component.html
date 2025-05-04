@@ -1,0 +1,45 @@
+<div class="kyc-container">
+    <h2 class="title">
+      <i class="bi bi-file-earmark-person"></i> Fiche KYC (Know Your Customer)
+    </h2>
+  
+    <div class="action-buttons">
+      <button
+        class="btn preview-btn"
+        (click)="previewKYC()"
+        [disabled]="isDownloading"
+      >
+        <span *ngIf="!isDownloading">
+          <i class="bi bi-eye"></i> Visualiser la fiche KYC
+        </span>
+        <span *ngIf="isDownloading">
+          <i class="bi bi-hourglass"></i> Chargement...
+        </span>
+      </button>
+  
+      <button
+        class="btn download-btn"
+        (click)="downloadKYC()"
+        [disabled]="isDownloading"
+      >
+        <span *ngIf="!isDownloading">
+          <i class="bi bi-download"></i> Télécharger la fiche KYC
+        </span>
+        <span *ngIf="isDownloading">
+          <i class="bi bi-hourglass"></i> Génération en cours...
+        </span>
+      </button>
+    </div>
+  
+    <!-- Zone d'affichage du PDF -->
+    <div *ngIf="showPdfViewer && pdfUrl" class="pdf-preview-container">
+      <button class="close-preview" (click)="closePreview()">
+        <i class="bi bi-x"></i>
+      </button>
+      <iframe [src]="pdfUrl" frameborder="0"></iframe>
+    </div>
+  
+    <div *ngIf="errorMessage" class="error-message">
+      <i class="bi bi-exclamation-triangle"></i> {{ errorMessage }}
+    </div>
+  </div>

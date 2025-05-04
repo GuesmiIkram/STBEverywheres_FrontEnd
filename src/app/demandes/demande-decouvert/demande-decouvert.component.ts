@@ -56,7 +56,7 @@ export class DemandeDecouvertComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
-        this.errorMessage = 'Échec du chargement des demandes';
+       // this.errorMessage = 'Échec du chargement des demandes';
         this.isLoading = false;
         console.error(err);
       }

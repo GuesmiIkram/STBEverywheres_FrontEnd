@@ -22,6 +22,7 @@ import { DemandeCarteComponent } from '../demandes/demande-carte/demande-carte.c
 import { DemandePackElyssaComponent } from '../demandes/demande-pack-elyssa/demande-pack-elyssa.component';
 import { DemandePackStudentComponent } from '../demandes/demande-pack-student/demande-pack-student.component';
 import { HistoriqueReclamationsComponent } from '../historique-reclamations/historique-reclamations.component';
+import { KycDownloadComponent } from '../kyc-download/kyc-download.component';
 
 
 
@@ -49,7 +50,8 @@ const routes: Routes = [
             { path: 'chequier', loadChildren: () => import('./../paiement/chequiers/chequiers.module').then(mod => mod.ChequierModule), data: { breadcrumb: 'chequier' } },
 
             { path: 'RepondreDemandedecouvert', component: DemandeDecouvertComponent },
-
+            { path: 'fichekyc', component:  KycDownloadComponent },
+           
             { path: 'RepondreDemandesChequier', component: DemandesChequierComponent},
             { path: 'ReponseReclamationComponent', component: ReponseReclamationComponent, data: { breadcrumb: 'responsereclamation' }},
             { path: 'RibIbanComponent', component: RibIbanComponent, data: { breadcrumb: 'RibIban'}},

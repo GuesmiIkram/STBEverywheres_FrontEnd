@@ -1,278 +1,585 @@
-// Variables
-$primary-color: #3085d6;
+// Variables - Palette professionnelle
+$primary-color: #0056b3;
+$primary-light: #e8f1fa;
+$primary-hover: #0069d9;
+$primary-active: #004494;
 $secondary-color: #f8f9fa;
 $border-color: #dee2e6;
-$text-color: #333;
-$error-color: #d33;
+$text-color: #212529;
+$text-muted: #6c757d;
 $success-color: #28a745;
 $warning-color: #ffc107;
+$danger-color: #dc3545;
 $info-color: #17a2b8;
+$white: #ffffff;
+$gray-100: #f8f9fa;
+$gray-200: #e9ecef;
+$gray-300: #dee2e6;
+$gray-400: #ced4da;
+$gray-500: #adb5bd;
+$gray-600: #6c757d;
+$gray-700: #495057;
+$gray-800: #343a40;
+$gray-900: #212529;
 
-// Status colors
-$status-pending: #ffc107;
-$status-preparing: #17a2b8;
-$status-available: #3085d6;
-$status-delivered: #28a745;
-$status-completed: #6f42c1;
-$status-rejected: #dc3545;
+// Couleurs spécifiques pour les statuts
+$status-pending: #ff9800;      // En cours
+$status-preparing: #ffc107;    // En préparation
+$status-available: #17a2b8;    // Disponible en agence
+$status-delivered: #28a745;    // Livrée
+$status-completed: #6c757d;    // Récupérée
+$status-rejected: #dc3545;     // Rejetée
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+// Typographie
+$font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+$font-size-base: 14px;
+$font-size-sm: 12px;
+$font-size-lg: 16px;
+$font-size-xl: 18px;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 600;
+$line-height-base: 1.5;
+
+// Ombres et élévations
+$shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+$shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+// Mixins
+@mixin button($bg-color, $text-color, $hover-color) {
+  background-color: $bg-color;
   color: $text-color;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-family: $font-family;
+  font-weight: $font-weight-medium;
+  font-size: $font-size-base;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: $shadow-sm;
+  
+  &:hover {
+    background-color: $hover-color;
+    box-shadow: $shadow-md;
+  }
+  
+  &:active {
+    transform: translateY(1px);
+    box-shadow: $shadow-sm;
+  }
+  
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
 }
 
-h2 {
-  color: $primary-color;
-  margin-bottom: 20px;
-  font-weight: 600;
-  border-bottom: 2px solid $primary-color;
-  padding-bottom: 10px;
+@mixin card {
+  background-color: $white;
+  border-radius: 6px;
+  box-shadow: $shadow-sm;
+  border: 1px solid $gray-200;
 }
 
+// Styles globaux
+body {
+  font-family: $font-family;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  color: $text-color;
+  background-color: $gray-100;
+}
+
+// Container
+.container {
+  width: 100%;
+  padding: 24px;
+  @include card;
+  
+  h2 {
+    color: $gray-800;
+    font-size: $font-size-xl;
+    margin-bottom: 24px;
+    font-weight: $font-weight-bold;
+    letter-spacing: -0.01em;
+  }
+}
+
+// Filters
 .filters {
-  background-color: $secondary-color;
-  padding: 15px;
-  border-radius: 5px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: $gray-100;
+  border-radius: 6px;
+  border: 1px solid $gray-200;
+  
   .filter-group {
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-
+    gap: 12px;
+    
     label {
-      font-weight: 500;
-      margin-right: 10px;
+      font-weight: $font-weight-medium;
+      color: $gray-700;
+      white-space: nowrap;
     }
-
+    
     input {
-      padding: 8px 12px;
-      border: 1px solid $border-color;
-      border-radius: 4px;
       flex: 1;
-      min-width: 200px;
+      padding: 8px 12px;
+      border: 1px solid $gray-300;
+      border-radius: 4px;
+      font-size: $font-size-base;
+      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
       
       &:focus {
         outline: none;
         border-color: $primary-color;
-        box-shadow: 0 0 0 2px rgba($primary-color, 0.25);
+        box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
+      }
+      
+      &::placeholder {
+        color: $gray-500;
       }
     }
   }
 }
 
-.loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 0;
-
-  .spinner {
-    border: 4px solid rgba($primary-color, 0.1);
-    border-radius: 50%;
-    border-top: 4px solid $primary-color;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-    margin-bottom: 15px;
-  }
-
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+// Loading spinner
+.loading-spinner {
+  text-align: center;
+  padding: 40px;
+  color: $gray-600;
+  
+  p {
+    margin-top: 12px;
+    font-size: $font-size-base;
   }
 }
 
+// Table
 .demandes-table {
   width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 24px;
+  @include card;
+  overflow: hidden;
   
   th, td {
-    padding: 12px 15px;
+    padding: 14px 16px;
     text-align: left;
-    border-bottom: 1px solid $border-color;
   }
   
   th {
-    background-color: $primary-color;
-    color: white;
-    font-weight: 500;
-    position: sticky;
-    top: 0;
+    background-color: $primary-light;
+    color: $gray-800;
+    font-weight: $font-weight-bold;
+    white-space: nowrap;
+    border-bottom: 2px solid $primary-color;
+    position: relative;
+    
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: $primary-color;
+    }
   }
   
-  tr:nth-child(even) {
-    background-color: rgba($secondary-color, 0.5);
+  tr {
+    &:not(:last-child) td {
+      border-bottom: 1px solid $gray-200;
+    }
+    
+    &:hover td {
+      background-color: rgba($primary-light, 0.5);
+    }
   }
   
-  tr:hover {
-    background-color: rgba($primary-color, 0.05);
-  }
-  
-  .status-badge {
-    display: inline-block;
-    padding: 5px 10px;
-    border-radius: 20px;
-    font-size: 0.85em;
-    font-weight: 500;
-    text-align: center;
-    color: white;
-    
-    &.status-pending {
-      background-color: $status-pending;
-    }
-    
-    &.status-preparing {
-      background-color: $status-preparing;
-    }
-    
-    &.status-available {
-      background-color: $status-available;
-    }
-    
-    &.status-delivered {
-      background-color: $status-delivered;
-    }
-    
-    &.status-completed {
-      background-color: $status-completed;
-    }
-    
-    &.status-rejected {
-      background-color: $status-rejected;
-    }
+  td {
+    vertical-align: middle;
+    transition: background-color 0.15s ease;
   }
   
   .btn-edit {
-    background-color: $primary-color;
-    color: white;
-    border: none;
+    @include button($primary-color, $white, $primary-hover);
+    font-size: $font-size-sm;
     padding: 6px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 100px;
     
-    &:hover {
-      background-color: darken($primary-color, 10%);
+    &:disabled {
+      background-color: $gray-400;
     }
   }
 }
 
+// Status badges
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  border-radius: 50px;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  text-align: center;
+  letter-spacing: 0.01em;
+  min-width: 100px;
+  
+  // Styles spécifiques pour chaque statut selon votre composant Angular
+  &.status-pending {
+    background-color: rgba($status-pending, 0.15);
+    color: darken($status-pending, 25%);
+    border: 1px solid rgba($status-pending, 0.3);
+  }
+  
+  &.status-preparing {
+    background-color: rgba($status-preparing, 0.15);
+    color: darken($status-preparing, 30%);
+    border: 1px solid rgba($status-preparing, 0.3);
+  }
+  
+  &.status-available {
+    background-color: rgba($status-available, 0.15);
+    color: darken($status-available, 15%);
+    border: 1px solid rgba($status-available, 0.3);
+  }
+  
+  &.status-delivered {
+    background-color: rgba($status-delivered, 0.15);
+    color: darken($status-delivered, 10%);
+    border: 1px solid rgba($status-delivered, 0.3);
+  }
+  
+  &.status-completed {
+    background-color: rgba($status-completed, 0.15);
+    color: darken($status-completed, 15%);
+    border: 1px solid rgba($status-completed, 0.3);
+  }
+  
+  &.status-rejected {
+    background-color: rgba($status-rejected, 0.15);
+    color: $status-rejected;
+    border: 1px solid rgba($status-rejected, 0.3);
+  }
+}
+
+// Pagination
 .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 20px 0;
-  gap: 15px;
+  gap: 12px;
+  margin-top: 24px;
   
   button {
-    background-color: $primary-color;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    
-    &:hover:not(:disabled) {
-      background-color: darken($primary-color, 10%);
-    }
+    @include button($primary-color, $white, $primary-hover);
+    min-width: 100px;
     
     &:disabled {
-      background-color: lighten($primary-color, 20%);
-      cursor: not-allowed;
+      background-color: $gray-400;
     }
   }
   
   span {
-    font-weight: 500;
+    color: $gray-700;
+    font-size: $font-size-base;
+    font-weight: $font-weight-medium;
   }
 }
 
-.update-status-form {
-  background-color: $secondary-color;
-  padding: 20px;
-  border-radius: 5px;
-  margin-top: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  
-  h3 {
-    margin-top: 0;
-    margin-bottom: 15px;
-    color: $primary-color;
-  }
-  
-  select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid $border-color;
-    border-radius: 4px;
-    
-    &:focus {
-      outline: none;
-      border-color: $primary-color;
-    }
-  }
-  
-  .btn-save {
-    background-color: $success-color;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-right: 10px;
-    
-    &:hover {
-      background-color: darken($success-color, 10%);
-    }
-  }
-  
-  .btn-cancel {
-    background-color: $error-color;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    
-    &:hover {
-      background-color: darken($error-color, 10%);
-    }
-  }
-}
-
+// No data message
 .no-data {
   text-align: center;
-  padding: 40px 0;
-  background-color: $secondary-color;
-  border-radius: 5px;
+  padding: 48px 0;
+  color: $gray-600;
+  background-color: $gray-100;
+  border-radius: 6px;
+  margin: 24px 0;
+  border: 1px dashed $gray-300;
   
   p {
-    font-size: 1.1em;
-    color: lighten($text-color, 20%);
+    font-size: $font-size-lg;
+    font-weight: $font-weight-medium;
   }
 }
 
-// Make sure pagination always shows on first page
-.pagination {
-  display: flex !important;
-  visibility: visible !important;
+// Modal - Style amélioré et plus professionnel
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($gray-900, 0.65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+  backdrop-filter: blur(4px);
+  animation: modalBackdropIn 0.3s ease;
   
-  // When there's only one page, still show the pagination but disable buttons
-  &.single-page {
-    button {
-      opacity: 0.5;
-      cursor: not-allowed;
+  .modal-content {
+    background-color: $white;
+    border-radius: 10px;
+    padding: 0;
+    width: 100%;
+    max-width: 550px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15), 0 5px 15px rgba(0, 0, 0, 0.08);
+    position: relative;
+    animation: modalSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+    
+    // En-tête du modal avec fond bleu comme dans vos captures d'écran
+    h3 {
+      color: $white;
+      font-size: $font-size-xl;
+      margin: 0;
+      font-weight: $font-weight-bold;
+      background-color: $primary-color;
+      padding: 16px 24px;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      display: flex;
+      align-items: center;
+      
+      &:before {
+        content: '';
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'%3E%3C/path%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: center;
+      }
     }
+    
+    // Corps du modal avec padding
+    .modal-body {
+      padding: 24px;
+    }
+    
+    p {
+      margin-bottom: 16px;
+      color: $gray-700;
+      padding: 0 24px;
+      
+      strong {
+        font-weight: $font-weight-bold;
+        color: $primary-color;
+      }
+    }
+    
+    .close {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      font-size: 24px;
+      cursor: pointer;
+      color: rgba($white, 0.8);
+      transition: all 0.2s ease;
+      z-index: 10;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      
+      &:hover {
+        color: $white;
+        background-color: rgba($white, 0.15);
+      }
+    }
+    
+    .form-group {
+      margin-bottom: 24px;
+      padding: 0 24px;
+      
+      label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: $font-weight-medium;
+        color: $gray-700;
+      }
+      
+      select {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid $gray-300;
+        border-radius: 6px;
+        background-color: $white;
+        font-size: $font-size-base;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 16px;
+        transition: all 0.2s ease;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) inset;
+        
+        &:focus {
+          outline: none;
+          border-color: $primary-color;
+          box-shadow: 0 0 0 3px rgba($primary-color, 0.25);
+        }
+        
+        &:hover {
+          border-color: $gray-400;
+        }
+        
+        option {
+          padding: 8px;
+        }
+      }
+    }
+    
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      padding: 16px 24px 24px;
+      border-top: 1px solid $gray-200;
+      background-color: $gray-100;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+      
+  
+      
+      .btn-secondary {
+        @include button($white, $gray-700, $gray-100);
+        border: 1px solid $gray-300;
+        min-width: 120px;
+        border-radius: 50px;
+        font-weight: $font-weight-medium;
+        padding: 10px 20px;
+        
+        &:hover {
+          background-color: $gray-200;
+          border-color: $gray-400;
+        }
+      }
+    }
+  }
+}
+
+// Animations pour le modal
+@keyframes modalBackdropIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+  
+  .demandes-table {
+    display: block;
+    overflow-x: auto;
+    
+    th, td {
+      white-space: nowrap;
+    }
+  }
+  
+  .filters .filter-group {
+    flex-direction: column;
+    align-items: flex-start;
+    
+    input {
+      width: 100%;
+    }
+  }
+  
+  .modal .modal-content {
+    width: 90%;
+    margin: 0 16px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  
+  .pagination button {
+    min-width: auto;
+    padding: 8px 12px;
+  }
+}
+
+// Utilitaires
+.text-primary { color: $primary-color; }
+.text-success { color: $success-color; }
+.text-warning { color: $warning-color; }
+.text-danger { color: $danger-color; }
+.text-info { color: $info-color; }
+.text-muted { color: $text-muted; }
+
+.bg-primary { background-color: $primary-color; }
+.bg-success { background-color: $success-color; }
+.bg-warning { background-color: $warning-color; }
+.bg-danger { background-color: $danger-color; }
+.bg-info { background-color: $info-color; }
+.bg-light { background-color: $gray-100; }
+
+// Ajustements spécifiques pour correspondre aux captures d'écran
+.btn-edit, .pagination button {
+  background-color: $primary-color;
+  border-radius: 50px;
+  font-weight: $font-weight-medium;
+  box-shadow: 0 2px 4px rgba($primary-color, 0.3);
+  
+  &:hover {
+    background-color: $primary-hover;
+    box-shadow: 0 4px 8px rgba($primary-color, 0.4);
+  }
+}
+
+// Style spécifique pour le bouton "Répondre" comme dans les captures d'écran
+.btn-edit {
+  background-color: $primary-color;
+  color: $white;
+  border-radius: 50px;
+  padding: 8px 16px;
+  font-weight: $font-weight-medium;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  
+  &:before {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-right: 8px;
   }
 }

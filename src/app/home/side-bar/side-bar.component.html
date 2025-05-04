@@ -179,6 +179,10 @@
         <i class="bi bi-person"></i>
         <span>Profile</span>
       </a>
+      <a class="nav-link collapsed" routerLink="/home/fichekyc" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <i class="bi bi-person"></i>
+        <span>fiche kyc</span>
+      </a>
     </li>
     <!-- End Profile Page -->
 
@@ -218,7 +222,7 @@
 
     <li class="nav-item">
       <a class="nav-link collapsed" (click)="ShowHideCollapse('decouvert-nav')" data-bs-target="#decouvert-nav" data-bs-toggle="collapse">
-        <i class="ri-user-add-line"></i><span>Demande modification découvert autorisé</span><i class="bi bi-chevron-down ms-auto"></i>
+        <i class="ri-money-dollar-circle-fill"></i><span>Demande modification découvert autorisé</span><i class="bi bi-chevron-down ms-auto"></i>
       </a>
       <ul id="decouvert-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
         <li>
@@ -231,7 +235,7 @@
 
     <li class="nav-item">
       <a class="nav-link collapsed" (click)="ShowHideCollapse('demande-carte-nav')" data-bs-target="#demande-carte-nav" data-bs-toggle="collapse">
-        <i class="ri-user-add-line"></i><span>Demande carte</span><i class="bi bi-chevron-down ms-auto"></i>
+        <i class="ri-bank-card-fill"></i><span>Demande carte</span><i class="bi bi-chevron-down ms-auto"></i>
       </a>
       <ul id="demande-carte-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
         <li>
@@ -247,7 +251,7 @@
 
     <li class="nav-item">
       <a class="nav-link collapsed" (click)="ShowHideCollapse('decouvert-nav')" data-bs-target="#decouvert-nav" data-bs-toggle="collapse">
-        <i class="ri-user-add-line"></i><span>Demande chequier</span><i class="bi bi-chevron-down ms-auto"></i>
+        <i class="bi bi-journal-bookmark"></i><span>Demande chequier</span><i class="bi bi-chevron-down ms-auto"></i>
       </a>
       <ul id="decouvert-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
         <li>
@@ -259,7 +263,7 @@
     </li>
   <li class="nav-item">
         <a class="nav-link collapsed" (click)="ShowHideCollapse('demande-carte-nav')" data-bs-target="#demande-carte-nav" data-bs-toggle="collapse">
-          <i class="ri-user-add-line"></i><span>Demande Packs</span><i class="bi bi-chevron-down ms-auto"></i>
+          <i class="ri-gift-fill"></i>  <span>Demande Packs</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="demande-carte-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
           <li>
@@ -274,29 +278,16 @@
           </li>
         </ul>
       </li>
-    <li class="nav-heading mt-4">Activation/blocage</li>
-
-    <li class="nav-item">
-      <a class="nav-link collapsed" (click)="ShowHideCollapse('activation-nav')" data-bs-target="#activation-nav" data-bs-toggle="collapse">
-        <i class="ri-user-add-line"></i><span>Activation/blocage</span><i class="bi bi-chevron-down ms-auto"></i>
-      </a>
-      <ul id="activation-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
-        <li>
-          <a class="nav-link collapsed" routerLink="/demande-carte">
-            <i class="ri-circle-line"></i><span>Activer/désactiver compte</span>
-          </a>
-        </li>
-      </ul>
-    </li>
+  
 
 
 
 
     <li class="nav-heading mt-4">Réclamations</li>
-
+   
     <li class="nav-item">
       <a class="nav-link collapsed" (click)="ShowHideCollapse('activation-nav')" data-bs-target="#activation-nav" data-bs-toggle="collapse">
-        <i class="ri-user-add-line"></i><span>Répondre aux réclamations</span><i class="bi bi-chevron-down ms-auto"></i>
+        <i class="ri-feedback-fill"></i><span>Répondre aux réclamations</span><i class="bi bi-chevron-down ms-auto"></i>
       </a>
       <ul id="activation-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
         <li>

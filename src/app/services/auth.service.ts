@@ -67,35 +67,7 @@ export class AuthService {
       })
     );
   }
-/*
-  login(email: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, { email, password }).pipe(
-      tap((response: any) => {
-        console.log('REsonse de login de back', response);
-        this.setTokens(response.Token, response.RefreshToken);
-        // Stocker les informations utilisateur dont le rôle
-        console.log('userRole', response.Role);
-        console.log('userId', response.UserId);
-        localStorage.setItem('userRole', response.Role);
-        localStorage.setItem('userId', response.UserId);
-        if (response.ClientId) {
-          console.log('clientId', response.clientId);
 
-          localStorage.setItem('clientId', response.ClientId);
-        }
-        if (response.AgentId) {
-          console.log('agentId', response.agentId);
-
-          localStorage.setItem('agentId', response.AgentId);
-        }
-      }),
-      catchError((error) => {
-        console.error('Login error:', error);
-        return throwError(() => new Error(error.error?.message || 'Identifiants incorrects'));
-      })
-    );
-  }
-*/
 getUserRole(): string {
   return localStorage.getItem('userRole') || '';
 }
@@ -132,33 +104,51 @@ getUserId(): number | null {
     return localStorage.getItem('AccessToken');
   }
 
-  // Refresh token method
-  refreshToken(): Observable<any> {
-    return this.http.post(`${this.apiUrl}/refresh-token`, {}, { withCredentials: true }).pipe(
-      tap((response: any) => {
-        if (response?.accessToken) {
-          this.setTokens(response.accessToken, response.refreshToken);
-        }
-      }),
-      catchError((error) => {
-        console.error('Refresh token error:', error);
-        this.logout();
-        return throwError(() => error);
-      })
-    );
+
+  // Dans votre AuthService, modifiez la méthode refreshToken comme suit :
+refreshToken(): Observable<any> {
+  const refreshToken = localStorage.getItem('RefreshToken');
+  if (!refreshToken) {
+    this.logout();
+    return throwError(() => new Error('No refresh token available'));
   }
+
+  return this.http.post(`${this.apiUrl}/refresh-token`, {}, { withCredentials: true }).pipe(
+    tap((response: any) => {
+      if (response?.accessToken) {
+        this.setTokens(response.accessToken, response.refreshToken);
+      }
+    }),
+    catchError((error) => {
+      console.error('Refresh token error:', error);
+      this.logout();
+      return throwError(() => error);
+    })
+  );
+}
 
   // Logout method
   logout(): void {
-    localStorage.removeItem('AccessToken');
-    localStorage.removeItem('RefreshToken');
+  
     this.http.post(`${this.apiUrl}/logout`, {}, { withCredentials: true }).subscribe({
-      next: () => this.router.navigate(['']),
-      error: (err) => console.error('Logout error:', err)
+        next: () => {
+     
+            localStorage.removeItem('AccessToken');
+            localStorage.removeItem('RefreshToken');
+            localStorage.clear();
+            this.router.navigate(['']);
+        },
+        error: (err) => {
+            console.error('Logout error:', err);
+         
+            localStorage.removeItem('AccessToken');
+            localStorage.removeItem('RefreshToken');
+            localStorage.clear();
+            this.router.navigate(['']);
+        }
     });
-  }
+}
 
-  // Helper method to set tokens
   private setTokens(accessToken: string, refreshToken?: string): void {
     localStorage.setItem('AccessToken', accessToken);
     if (refreshToken) {
@@ -166,9 +156,9 @@ getUserId(): number | null {
     }
   }
 
-  // Check if user is logged in
   isLoggedIn(): boolean {
-    return !!this.getAccessToken();
+    // Exemple basique - adaptez à votre logique
+    return !!localStorage.getItem('AccessToken'); // ou autre méthode de vérification
   }
 
 }
