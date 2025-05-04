@@ -235,7 +235,6 @@ closeModal(): void {
       cancelButtonColor: '#d33',
     }).then((result) => {
       if (result.isConfirmed) {
-        // Appeler l'API pour clôturer le compte
         this.compteService.cloturerCompte(rib).subscribe({
           next: () => {
             Swal.fire({
@@ -244,34 +243,68 @@ closeModal(): void {
               text: 'Le compte a été clôturé avec succès.',
               confirmButtonText: 'OK',
             });
-
-            this.loadComptes(); // Recharger la liste des comptes après clôture
+            this.loadComptes();
           },
           error: (err) => {
-            // Vérifier si l'erreur est liée au solde du compte
             const errorMessage = err.error?.message || 'Une erreur est survenue lors de la clôture du compte.';
 
-            // Si le solde n'est pas à zéro
-            if (errorMessage.includes('mettre votre compte à zéro')) {
+            if (errorMessage.includes('pour les raisons suivantes')) {
+              const reasonsPart = errorMessage.split('pour les raisons suivantes :')[1]?.split('.')[0];
+
+              if (reasonsPart) {
+                const reasonsList = reasonsPart.split(', ')
+                  .map((reason: string) => `<li>${reason.trim()}</li>`)
+                  .join('');
+
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Clôture impossible',
+                  html: `
+                    <div style="text-align: left;">
+                      <p>La demande de clôture du compte n'a pas pu aboutir pour les raisons suivantes :</p>
+                      <ul>${reasonsList}</ul>
+                      <p>Merci de régulariser la situation avant de renouveler votre demande.</p>
+                    </div>
+                  `,
+                  confirmButtonText: 'OK',
+                  customClass: {
+                    container: 'custom-swal-container',
+                    popup: 'custom-swal-popup',
+                    title: 'custom-swal-title',
+                    htmlContainer: 'custom-swal-html',
+                    confirmButton: 'custom-swal-confirm-button'
+                  }
+                });
+              } else {
+                this.showGenericError(errorMessage);
+              }
+            } else if (errorMessage.includes('mettre votre compte à zéro')) {
               Swal.fire({
                 icon: 'error',
-                title: 'Erreur',
+                title: 'Solde non nul',
                 text: 'Vous devez mettre votre compte à zéro puis réessayer de le clôturer.',
-                confirmButtonText: 'OK',
+                confirmButtonText: 'OK'
               });
             } else {
-              // Autres erreurs générales
-              Swal.fire({
-                icon: 'error',
-                title: 'Erreur',
-                text: errorMessage,
-                confirmButtonText: 'OK',
-              });
+              this.showGenericError(errorMessage);
             }
 
-            this.selectedCompte = null; // Ferme le modal après la clôture
+            this.selectedCompte = null;
           }
         });
+      }
+    });
+  }
+
+  private showGenericError(message: string): void {
+    Swal.fire({
+      icon: 'error',
+      title: 'Erreur',
+      text: message,
+      confirmButtonText: 'OK',
+      customClass: {
+        container: 'custom-swal-container',
+        popup: 'custom-swal-popup'
       }
     });
   }
@@ -330,4 +363,14 @@ closeModal(): void {
 
 
     }
+
+// pour afficher le solde avec un format correcte
+    getNombreFormate(nombre: number): string {
+      return new Intl.NumberFormat('fr-FR', {
+        minimumFractionDigits: 3,
+        maximumFractionDigits: 3,
+        useGrouping: true
+      }).format(nombre) + ' TND';
+    }
+
   }

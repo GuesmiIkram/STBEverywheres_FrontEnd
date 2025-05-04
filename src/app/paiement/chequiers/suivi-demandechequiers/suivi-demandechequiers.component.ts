@@ -121,72 +121,7 @@ export class SuiviDemandechequiersComponent implements OnInit{
   }
 
 
-     /* formaterDemandes(): void {
-        const demandesFormatees = this.demandes.map((demande) => {
-          const date = new Date(demande.dateDemande);
 
-          // Obtenir le mois abrégé en français
-          const moisAbrev = this.getMoisAbrege(date.getMonth());
-
-          // Convertir le statut en format d'affichage
-          let status = "EN ATTENTE";
-          if (demande.status === "ACCEPTEE" || demande.status === "ACCEPTÉE" ||
-              demande.status === "DisponibleEnAgence" || demande.status === "Expedie") {
-            status = "ACCEPTÉE";
-          } else if (demande.status === "REFUSEE" || demande.status === "REFUSÉE") {
-            status = "REFUSÉE";
-          }
-
-          return {
-            ...demande,
-            dateDemande: date,
-            jour: date.getDate(),
-            moisAbrev: moisAbrev,
-            status: status,
-            type: demande.type.replace("chéque", "chèque") // Fix French spelling
-          };
-        });
-
-    // Grouper par mois et année
-    const demParMois: { [key: string]: DemandeFormatee[] } = {}
-
-    demandesFormatees.forEach((demande) => {
-      const date = demande.dateDemande
-      const moisAnnee = `${date.getMonth()}-${date.getFullYear()}`
-
-      if (!demParMois[moisAnnee]) {
-        demParMois[moisAnnee] = []
-      }
-
-      demParMois[moisAnnee].push(demande)
-    })
-    // Convertir en tableau pour l'affichage
-    this.demandesParMois = Object.keys(demParMois).map((key) => {
-      const [mois, annee] = key.split("-")
-      return {
-        nom: this.getNomMois(Number.parseInt(mois)),
-        annee: Number.parseInt(annee),
-        demandes: demParMois[key],
-      }
-    })
-
-    // Trier par date (plus récent en premier)
-    this.demandesParMois.sort((a, b) => {
-      if (a.annee !== b.annee) return b.annee - a.annee
-      return (
-        Number.parseInt(
-          Object.keys(demParMois)
-            .find((key) => key.includes(`${a.nom}-${a.annee}`))
-            ?.split("-")[0] || "0",
-        ) -
-        Number.parseInt(
-          Object.keys(demParMois)
-            .find((key) => key.includes(`${b.nom}-${b.annee}`))
-            ?.split("-")[0] || "0",
-        )
-      )
-    })
-  }*/
 
   getMoisAbrege(mois: number): string {
     const moisAbreges = ["JAN", "FÉV", "MAR", "AVR", "MAI", "JUN", "JUL", "AOÛ", "SEP", "OCT", "NOV", "DÉC"]

@@ -12,7 +12,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from './services/auth.service';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthInterceptor } from './Interceptors/auth.interceptor';
-import { BreadcrumbModule } from 'xng-breadcrumb';
 import { RouterModule } from '@angular/router';
 import { AccueilComponent } from './accueil/accueil.component';
 
@@ -30,6 +29,14 @@ import { ReponseReclamationComponent } from './reponse-reclamation/reponse-recla
 import { RibIbanComponent } from './rib-iban/rib-iban.component';
 import { HistoriqueReclamationsComponent } from './historique-reclamations/historique-reclamations.component';
 
+import { ExtraitComponent } from './extrait/extrait.component';
+//import { DashbordAgentComponent } from './dashbord-agent/dashbord-agent.component';
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+registerLocaleData(localeFr)
+
+import { BreadcrumbModule } from 'xng-breadcrumb';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -47,7 +54,10 @@ import { HistoriqueReclamationsComponent } from './historique-reclamations/histo
       SimulateurCreditComponent,
       ReponseReclamationComponent,
       RibIbanComponent,
-      HistoriqueReclamationsComponent,  ],
+      HistoriqueReclamationsComponent,
+      ExtraitComponent,
+      //DashbordAgentComponent,
+     ],
 
   imports: [
     BrowserModule,
@@ -58,6 +68,7 @@ import { HistoriqueReclamationsComponent } from './historique-reclamations/histo
     BreadcrumbModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    NgChartsModule,
 
 
   ],

@@ -1,13 +1,22 @@
 <div class="reclamation-container">
-  <h2 class="title">
-    <i class="bi bi-exclamation-triangle"></i> Formulaire de Réclamation
-  </h2>
+  <div class="reclamation-header">
+    <h2 class="title">
+       Formulaire de Réclamation
+    </h2>
+    <div class="icon-container">
+      <i class="bi bi-file-text"></i>
+    </div>
+  </div>
+
+  <div class="instruction-box">
+    <p>Veuillez remplir le formulaire ci-dessous le plus clairement possible pour nous permettre de traiter votre réclamation dans les meilleurs délais.</p>
+  </div>
 
   <form [formGroup]="reclamationForm" (ngSubmit)="onSubmit()" class="reclamation-form">
-    <!-- Champ Objet (inchangé) -->
+    <!-- Champ Objet -->
     <div class="form-group">
       <label for="objet">
-        <i class="bi bi-card-heading"></i> Objet de la réclamation *
+        <i class="bi bi-card-heading"></i> Objet de la réclamation <span class="required">*</span>
       </label>
       <input
         type="text"
@@ -22,33 +31,33 @@
       </div>
     </div>
 
-    <!-- Champ Motif (nouveau champ) -->
-<!-- Champ Motif (transformé en liste déroulante) -->
-<div class="form-group">
-  <label for="motif">
-    <i class="bi bi-question-circle"></i> Motif de la réclamation *
-  </label>
-  <select
-    id="motif"
-    formControlName="motif"
-    class="form-control"
-  >
-    <option value="" disabled selected>Sélectionnez un motif...</option>
-    <option value="mise en opposition chequier">Mise en opposition chéquier</option>
-    <option value="anomalie transfert">Anomalie transfert</option>
-    <option value="frais erronées">Frais erronés</option>
-    <option value="opération double">Opération double</option>
-    <option value="autre">Autre</option>
-  </select>
-  <div *ngIf="reclamationForm.get('motif')?.invalid && reclamationForm.get('motif')?.touched"
-       class="error-message">
-    Ce champ est obligatoire
-  </div>
-</div>
-    <!-- Champ Description (changé pour correspondre au backend) -->
+    <!-- Champ Motif -->
+    <div class="form-group">
+      <label for="motif">
+        <i class="bi bi-question-circle"></i> Motif de la réclamation <span class="required">*</span>
+      </label>
+      <select
+        id="motif"
+        formControlName="motif"
+        class="form-control"
+      >
+        <option value="" disabled selected>Sélectionnez un motif...</option>
+        <option value="mise en opposition chequier">Mise en opposition chéquier</option>
+        <option value="anomalie transfert">Anomalie transfert</option>
+        <option value="frais erronées">Frais erronés</option>
+        <option value="opération double">Opération double</option>
+        <option value="autre">Autre</option>
+      </select>
+      <div *ngIf="reclamationForm.get('motif')?.invalid && reclamationForm.get('motif')?.touched"
+           class="error-message">
+        Ce champ est obligatoire
+      </div>
+    </div>
+
+    <!-- Champ Description -->
     <div class="form-group">
       <label for="message">
-        <i class="bi bi-text-paragraph"></i> Description détaillée *
+        <i class="bi bi-text-paragraph"></i> Description détaillée <span class="required">*</span>
       </label>
       <textarea
         id="message"
@@ -63,7 +72,7 @@
       </div>
     </div>
 
-    <!-- Bouton Soumettre (inchangé) -->
+    <!-- Bouton Soumettre -->
     <div class="form-footer">
       <button
         type="submit"
@@ -79,7 +88,4 @@
       </button>
     </div>
   </form>
-
-  <!-- Message de succès -->
-
 </div>

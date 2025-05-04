@@ -14,16 +14,16 @@ export interface Client {
   dateDelivranceCIN?: Date; // Optionnel
   dateExpirationCIN?: Date; // Optionnel
   lieuDelivranceCIN?: string; // Optionnel
-  photoClient?: string; // Optionnel 
-  genre: string; 
-  profession: string; 
-  situationProfessionnelle: string; 
-  niveauEducation: string; 
-  nombreEnfants: number; 
+  photoClient?: string; // Optionnel
+  genre: string;
+  profession: string;
+  situationProfessionnelle: string;
+  niveauEducation: string;
+  nombreEnfants: number;
   revenuMensuel: number;
   paysNaissance?: string; // Optionnel
   nomMere?: string; // Optionnel
   nomPere?: string; // Optionnel
-
+  id_convention?: number;
 
 }

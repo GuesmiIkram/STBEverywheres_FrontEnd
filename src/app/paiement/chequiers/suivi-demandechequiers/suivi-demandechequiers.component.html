@@ -1,29 +1,51 @@
-<div class="suivi-container">
-  <h2 class="suivi-title">Suivi des demandes de chéquier</h2>
+<div class="container">
+  <h2 class="title">Suivi des demandes de chéquier</h2>
 
   <ng-container *ngIf="demandesParMois.length > 0; else aucuneDemande">
-    <div *ngFor="let mois of demandesParMois" class="mois-section">
-      <div class="mois-header">{{ mois.nom }} {{ mois.annee }}</div>
-
-      <div *ngFor="let demande of mois.demandes" class="demande-card">
-        <div class="date-container">
-          <div class="jour">{{ demande.jour }}</div>
-          <div class="mois-abrev">{{ demande.moisAbrev }}</div>
-        </div>
-
-        <div class="demande-details">
-          <div class="rib">RIB : {{ demande.ribCompte }}</div>
-          <div class="type">Chéquier demandé : {{ demande.nombreFeuilles }} feuilles{{ demande.type ? ' - ' + demande.type : '' }}</div>
-        </div>
-
-        <div class="status-container">
-          <span class="status-badge" [ngClass]="demande.statusClass">{{ demande.status }}</span>
-        </div>
+    <div class="demands-container">
+      <div *ngFor="let group of demandesParMois" class="demande-group">
+        <h3>{{ group.nom }} {{ group.annee }}</h3>
+        <ul>
+          <li *ngFor="let demande of group.demandes" class="demande-item">
+            <div class="demande-card">
+              <div class="demande-header">
+                <span class="date">{{ demande.jour }}</span>
+                <span class="mois">{{ demande.moisAbrev }}</span>
+              </div>
+              <div class="demande-content">
+                <h4>RIB : {{ demande.ribCompte }}</h4>
+                <p class="montant">
+                  Chéquier demandé : {{ demande.nombreFeuilles }} feuilles
+                  <ng-container *ngIf="demande.type"> - {{ demande.type }}</ng-container>
+                </p>
+              </div>
+              <span class="statut {{ demande.statusClass }}">{{ demande.status }}</span>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
   </ng-container>
 
   <ng-template #aucuneDemande>
-    <p class="no-data">Aucune demande de chéquier trouvée.</p>
+    <div class="no-demands">
+      <svg
+        class="no-data-icon"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <rect x="3" y="5" width="18" height="14" rx="2" />
+        <line x1="3" y1="10" x2="21" y2="10" />
+        <line x1="7" y1="15" x2="8" y2="15" />
+        <line x1="12" y1="15" x2="13" y2="15" />
+      </svg>
+      <h3 class="no-data-title">Aucune demande de chéquier n'est disponible</h3>
+      <p class="no-data-message">Vous n'avez actuellement aucune demande de chéquier associé à vos comptes.</p>
+    </div>
   </ng-template>
 </div>

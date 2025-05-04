@@ -1,0 +1,395 @@
+// Variables
+$primary-color: #3366cc;
+$secondary-color: #f8f9fa;
+$accent-color-1: #36a2eb; // Blue for chequiers
+$accent-color-2: #ffce56; // Yellow for découverts
+$accent-color-3: #28a745; // Pink for réclamations
+$text-color: #333;
+$text-light: #6c757d;
+$border-color: #e9ecef;
+$card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+$success-color: #28a745;
+$warning-color: #ffc107;
+$danger-color: #dc3545;
+
+// Global styles
+.dashboard-container {
+  padding: 1.5rem;
+  background-color: #f5f7fa;
+  color: $text-color;
+  font-family: 'Roboto', sans-serif;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+
+  h1 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: $primary-color;
+    margin: 0;
+  }
+
+  .date-filter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #555;
+  }
+
+  .date-filter i {
+    font-size: 1.1em;
+    color: #3366cc;
+  }
+
+  .current-date {
+    font-weight: 500;
+  }
+
+
+
+
+
+  }
+
+
+// Summary Cards
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+
+  .card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: $card-shadow;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+    }
+
+    .card-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+
+      i {
+        font-size: 1.5rem;
+        color: white;
+      }
+    }
+
+    .card-content {
+      flex: 1;
+
+      h3 {
+        font-size: 1.25rem;
+        margin: 0 0 0.75rem 0;
+        font-weight: 500;
+      }
+
+      .card-stats {
+        display: flex;
+        margin-bottom: 0.75rem;
+
+        .stat-item {
+          margin-right: 1.5rem;
+
+          .stat-value {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 600;
+          }
+
+          .stat-label {
+            font-size: 0.875rem;
+            color: $text-light;
+          }
+        }
+      }
+
+      .progress-bar {
+        height: 6px;
+        background-color: #e9ecef;
+        border-radius: 3px;
+        overflow: hidden;
+
+        .progress {
+          height: 100%;
+          border-radius: 3px;
+        }
+      }
+    }
+
+    &.card-chequier {
+      border-left: 4px solid $accent-color-1;
+
+      .card-icon {
+        background-color: $accent-color-1;
+      }
+
+      .progress .progress {
+        background-color: $accent-color-1;
+      }
+    }
+
+    &.card-decouvert {
+      border-left: 4px solid $accent-color-2;
+
+      .card-icon {
+        background-color: $accent-color-2;
+      }
+
+      .progress .progress {
+        background-color: $accent-color-2;
+      }
+    }
+
+    &.card-reclamation {
+      border-left: 4px solid $accent-color-3;
+
+      .card-icon {
+        background-color: $accent-color-3;
+      }
+
+      .progress .progress {
+        background-color: $accent-color-3;
+      }
+    }
+  }
+}
+
+// Charts Container
+.charts-container {
+  margin-bottom: 1.5rem;
+
+  .chart-section {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: $card-shadow;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid $border-color;
+
+      h2 {
+        font-size: 1.25rem;
+        margin: 0;
+        font-weight: 500;
+      }
+
+      .chart-actions {
+        display: flex;
+
+        .btn-action {
+          background-color: transparent;
+          border: 1px solid $border-color;
+          border-radius: 4px;
+          padding: 0.375rem 0.75rem;
+          margin-left: 0.5rem;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          transition: all 0.2s;
+
+          i {
+            margin-right: 0.375rem;
+            color: $primary-color;
+          }
+
+          &:hover {
+            background-color: $secondary-color;
+          }
+        }
+      }
+
+      .chart-badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+
+        &.status-success {
+          background-color: rgba($success-color, 0.1);
+          color: $success-color;
+        }
+
+        &.status-warning {
+          background-color: rgba($warning-color, 0.1);
+          color: $warning-color;
+        }
+
+        &.status-danger {
+          background-color: rgba($danger-color, 0.1);
+          color: $danger-color;
+        }
+
+        &.status-neutral {
+          background-color: rgba($text-light, 0.1);
+          color: $text-light;
+        }
+      }
+    }
+
+    .chart-body {
+      padding: 1.5rem;
+      height: 300px;
+    }
+  }
+
+  .main-chart {
+    .chart-body {
+      height: 350px;
+    }
+  }
+
+  .charts-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+// Recent Activity
+.recent-activity {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: $card-shadow;
+  padding: 1.5rem;
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    h2 {
+      font-size: 1.25rem;
+      margin: 0;
+      font-weight: 500;
+    }
+
+    .btn-view-all {
+      background-color: transparent;
+      color: $primary-color;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .activity-list {
+    .activity-item {
+      display: flex;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid $border-color;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .activity-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+
+        i {
+          color: white;
+        }
+
+        &.chequier-icon {
+          background-color: $accent-color-1;
+        }
+
+        &.decouvert-icon {
+          background-color: $accent-color-2;
+        }
+
+        &.reclamation-icon {
+          background-color: $accent-color-3;
+        }
+      }
+
+      .activity-content {
+        flex: 1;
+
+        .activity-title {
+          font-weight: 500;
+          margin-bottom: 0.25rem;
+        }
+
+        .activity-details {
+          font-size: 0.875rem;
+          color: $text-light;
+        }
+      }
+
+      .activity-time {
+        font-size: 0.875rem;
+        color: $text-light;
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 992px) {
+  .charts-row {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .date-filter {
+      margin-top: 1rem;
+    }
+  }
+
+  .summary-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .activity-item {
+    flex-direction: column;
+    align-items: flex-start !important;
+
+    .activity-icon {
+      margin-bottom: 0.5rem;
+    }
+
+    .activity-time {
+      margin-top: 0.5rem;
+      align-self: flex-end;
+    }
+  }
+}

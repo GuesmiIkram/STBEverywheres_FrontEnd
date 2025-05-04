@@ -48,7 +48,7 @@
       <label for="telephone">Téléphone</label>
       <input type="tel" id="telephone" class="form-control" formControlName="Telephone" placeholder="Saisir le numéro de téléphone">
       <span class="error-message" *ngIf="Telephone?.invalid && (Telephone?.dirty || Telephone?.touched)">
-        <span *ngIf="Telephone?.errors?.['pattern']">Le numéro doit contenir entre 8 et 15 chiffres</span>
+        <span *ngIf="Telephone?.errors?.['pattern']">Le numéro doit contenir 8 chiffres</span>
       </span>
     </div>
 

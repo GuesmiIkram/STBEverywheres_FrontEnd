@@ -1,30 +1,76 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ClientService } from '../services/client.service';
+import { Client } from '../Models/Client';
 
 @Component({
   selector: 'app-simulateur-credit',
   templateUrl: './simulateur-credit.component.html',
   styleUrls: ['./simulateur-credit.component.scss']
 })
-export class SimulateurCreditComponent {
-  montant: number = 50000;  // Montant initial
-  duree: number = 36;      // Durée du crédit en mois
-  taux: number = 7;        // Taux d'intérêt annuel
-  typeAmortissement: string = 'constant'; // Type d'amortissement
+export class SimulateurCreditComponent implements OnInit {
+  montant: number = 50000;
+  duree: number = 36;
+  tauxBase: number = 7;
+  taux: number = 7;
 
-  result: any = null;  // Résultat du calcul
-  details: any[] = []; // Détails de l'amortissement variable
+  typeAmortissement: string = 'constant';
 
-  // Fonction pour calculer le crédit
+  clientConventionne: boolean = false;
+  margeBancaire: number = 0;
+  nomConvention: string | null = null;
+
+  result: any = null;
+  details: any[] = [];
+
+  constructor(private clientService: ClientService) {}
+
+  ngOnInit(): void {
+    this.chargerConventionClient();
+  }
+
+  chargerConventionClient() {
+    this.clientService.getClientInfo().subscribe({
+      next: (client: Client) => {
+        console.log("client retourne:",client);
+        if (client.id_convention) {
+          console.log("id de convention",client.id_convention)
+          this.clientConventionne = true;
+          // Charger les infos de la convention
+          this.clientService.getConventionById(client.id_convention).subscribe({
+            next: (convention) => {
+              console.log("convention retourne",convention);
+              this.margeBancaire = convention.marge_bancaire;
+
+              this.nomConvention = convention.nom_convention;
+              // Mettre à jour le taux
+              this.taux = this.tauxBase + this.margeBancaire;
+            },
+            error: (err) => {
+              console.error('Erreur chargement convention', err);
+            }
+          });
+        } else {
+          // Pas de convention
+          this.clientConventionne = false;
+          this.nomConvention = null;
+          this.margeBancaire = 0;
+          this.taux = this.tauxBase;
+        }
+      },
+      error: (err) => {
+        console.error('Erreur chargement client', err);
+      }
+    });
+  }
+
   calculerCredit() {
     let tauxMensuel = (this.taux / 12) / 100;
     let nombreMensualites = this.duree;
 
     if (this.typeAmortissement === 'constant') {
-      // Mensualité fixe (formule d’amortissement)
       let mensualite = this.montant * tauxMensuel / (1 - Math.pow(1 + tauxMensuel, -nombreMensualites));
       this.result = { type: 'Mensualité constante', mensualite: mensualite.toFixed(2) };
     } else if (this.typeAmortissement === 'variable') {
-      // Mensualité variable (capital fixe + intérêts décroissants)
       let capitalFixe = this.montant / nombreMensualites;
       let capitalRestant = this.montant;
       this.details = [];

@@ -1,7 +1,7 @@
 // chequier.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { Compte } from '../Models/compte';
 import { environnement } from '../environnement/environnement';
 
@@ -29,7 +29,9 @@ export class DemandeChequierService {
   getDemandesParClient(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiDemandeChequierUrl}/ListeDemandesParClient`);
   }
-
+  GetDemandeById(id: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiDemandeChequierUrl}/getDemandesChequierById/${id}`);
+  }
 
 
 

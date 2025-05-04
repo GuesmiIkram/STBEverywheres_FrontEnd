@@ -3,6 +3,10 @@ import { RepondreDemandeChequierService } from '../../services/RepondreDemandeCh
 import { DemandeChequier } from 'src/app/Models/DemandeChequier';
 import { DemandeChequierStatus } from "src/app/enums/DemandeChequierStatus.enum";
 import { ModeLivraisonChequier } from "src/app/enums/ModeLivraisonChequier.enum";
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+
+registerLocaleData(localeFr);
 
 @Component({
   selector: "app-demandes-chequier",
@@ -305,4 +309,13 @@ private numberToDemandeStatus(status: number): DemandeChequierStatus {
     console.log("Plage de pagination générée :", range)
     return range
   }
+
+
+  getPlafondFormate(plafond: number): string {
+    return new Intl.NumberFormat('fr-FR', {
+      minimumFractionDigits: 3,
+      maximumFractionDigits: 3
+    }).format(plafond) + ' TND';
+  }
+
 }

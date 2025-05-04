@@ -19,8 +19,9 @@
           </div>
         </div>
         <div class="col-md-6 text-end">
-          <button class="btn btn-outline-secondary btn-sm" (click)="reinitialiserRecherche()">
-            Réinitialiser
+
+
+          <button class="btn-action" (click)="reinitialiserRecherche()"><i class="fas fa-sync-alt"></i> Réinitialiser
           </button>
           <span class="ms-3 text-muted">
             {{ totalItems }} demande(s) trouvée(s)
@@ -29,16 +30,15 @@
       </div>
 
       <!-- Message si aucune demande -->
-      <div *ngIf="demandes.length === 0 && !isLoading" class="alert alert-info">
-        Aucune demande de chéquier en attente trouvée.
+
+      <div *ngIf="demandes.length === 0 && !isLoading"  class="empty-state">
+        <div class="empty-state-icon">
+          <i class="bi bi-credit-card-2-front"></i>
+        </div>
+        <h4>Aucune demande en attente </h4>
+        <p>Toutes les demandes ont été traitées.</p>
       </div>
 
-      <!-- Loader -->
-      <div *ngIf="isLoading" class="text-center py-4">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Chargement...</span>
-        </div>
-      </div>
 
       <!-- Liste des demandes -->
       <div *ngIf="!isLoading && demandes.length > 0">
@@ -72,7 +72,7 @@
                 <table class="table table-sm table-borderless">
                   <tbody>
                     <tr>
-                      <td class="text-muted" style="width: 40%">Compte barré :</td>
+                      <td class="text-muted" style="width: 40%">Chéque barré :</td>
                       <td>
                         <span [ngClass]="demande.isBarre ? 'text-danger' : 'text-success'">
                           {{ demande.isBarre ? 'Oui' : 'Non' }}
@@ -96,10 +96,13 @@
                       </td>
                     </tr>
                     <tr>
+
+
                       <td class="text-muted">Plafond chéquier :</td>
-                      <td>{{ demande.plafondChequier | currency:'EUR':'symbol':'1.2-2' }}</td>
+                      <td>{{ getPlafondFormate(demande.plafondChequier) }}</td>
+
                     </tr>
-                    <tr>
+                    <tr *ngIf="!demande.isBarre">
                       <td class="text-muted">Raison :</td>
                       <td>{{ demande.raisonDemande || 'Non spécifiée' }}</td>
                     </tr>
@@ -134,8 +137,8 @@
                       </td>
                     </tr>
                     <tr *ngIf="demande.modeLivraison === ModeLivraison.EnvoiRecommande">
-                      <td class="text-muted">Adresse :</td>
-                      <td>{{ demande.adresseComplete }}, {{ demande.codePostal }}</td>
+                      <td class="text-muted">Adresse:</td>
+                      <td>{{ demande.adresseComplete }},{{ demande.codePostal }}</td>
                     </tr>
                     <tr>
                       <td class="text-muted">Email :</td>

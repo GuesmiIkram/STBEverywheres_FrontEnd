@@ -10,14 +10,7 @@
     </button>
   </div>
 
-  <!-- Messages d'erreur/succès -->
-  <div *ngIf="errorMessage" class="alert error-message">
-    <p>{{ errorMessage }}</p>
-  </div>
 
-  <div *ngIf="successMessage" class="alert success-message">
-    <p>{{ successMessage }}</p>
-  </div>
 
   <!-- Formulaire de demande -->
   <div *ngIf="activeTab === 'demande'" class="tab-content">
@@ -41,7 +34,7 @@
           Découvert autorisé actuel : {{ decouvertAutorise }} TND
         </h3>
         <h3 *ngIf="decouvertMaxAutorise !== null" class="max-overdraft">
-          Découvert maximum autorisé : {{ decouvertMaxAutorise }} TND (double de votre revenu mensuel)
+          Découvert maximum autorisé : {{ decouvertMaxAutorise }} TND
         </h3>
       </div>
 
@@ -98,7 +91,7 @@
 </div>
 <!-- Suivi des demandes -->
 <div *ngIf="activeTab === 'suivi'" class="tab-content">
-  <h2>Suivi des demandes de modification</h2>
+  <h2>Suivi des demandes de modification de découvert</h2>
 
   <div *ngIf="demandes.length === 0" class="no-demands">
     <p>Aucune demande trouvée.</p>

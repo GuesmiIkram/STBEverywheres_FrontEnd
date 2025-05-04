@@ -4,7 +4,7 @@
     <h1>Consultation Compte</h1>
     <nav>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="dashboard.component.html">Home</a></li>
+        <li class="breadcrumb-item"><a href="home">Home</a></li>
       </ol>
     </nav>
   </div><!-- End Page Title -->
@@ -81,9 +81,6 @@
           <div *ngFor="let compte of comptes" class="compte-card" (click)="openModal(compte.rib)">
             <div class="compte-header">
               <h3>{{ compte.type.toUpperCase() }}</h3>
-             <!-- <div class="compte-status" [ngClass]="{'active': compte.statut === 'Actif'}">
-                {{ compte.statut }}-->
-
 
 
                 <div class="compte-status"
@@ -104,16 +101,20 @@
                 <span class="rib-label">RIB</span>
                 <span class="rib-value">{{ compte.rib }}</span>
               </div>
+
+
+
               <div class="solde-container">
-                <span class="solde-value">{{ compte.solde | number:'1.3-3' }}</span>
-                <span class="currency">TND</span>
+                <span class="solde-value">{{ getNombreFormate(compte.solde) }}</span>
               </div>
+
+
             </div>
             <div class="compte-actions">
               <button type="button" class="btn btn-outline-primary btn-historique"  (click)="openHistoriqueModal(compte.rib); $event.stopPropagation()">
                 <i class="bi bi-clock-history"></i> Historique
               </button>
-              <button type="button" class="btn btn-outline-danger btn-cloturer" (click)="cloturerCompte(compte.rib); $event.stopPropagation()">
+              <button  *ngIf="compte.statut !== 'Clôturé'" type="button" class="btn btn-outline-danger btn-cloturer" (click)="cloturerCompte(compte.rib); $event.stopPropagation()">
                 <i class="bi bi-x-circle"></i> Clôturer
               </button>
             </div>
@@ -161,7 +162,8 @@
               <div class="historique-modal__transaction-date">{{ virement.date | date:'d MMMM yyyy' }}</div>
             </div>
             <div class="historique-modal__transaction-amount historique-modal__transaction-amount--negative">
-              -{{ virement.montant }} TND
+              -{{ getNombreFormate(virement.montant) }}
+
             </div>
           </div>
         </div>
@@ -178,7 +180,7 @@
               <div class="historique-modal__transaction-date">{{ virement.date | date:'d MMMM yyyy' }}</div>
             </div>
             <div class="historique-modal__transaction-amount historique-modal__transaction-amount--positive">
-              +{{ virement.montant }} TND
+              +{{ getNombreFormate(virement.montant) }}
             </div>
           </div>
         </div>
@@ -199,7 +201,7 @@
   </div>
 </div>
 
-<!-- Modal pour afficher les détails du compte - Version corrigée -->
+<!-- Modal pour afficher les détails du compte  -->
 <div *ngIf="selectedCompte" class="modal">
   <div class="modal-content">
     <div class="modal-header">
@@ -261,12 +263,12 @@
           <div class="info-row">
             <div class="info-col">
               <div class="info-label">Solde</div>
-              <div class="info-value solde-value">{{ selectedCompte.solde | number:'1.3-3' }} TND</div>
+              <div class="info-value solde-value">{{ getNombreFormate(selectedCompte.solde)}} </div>
             </div>
             <div class="info-col">
               <div class="info-label">Découvert autorisé</div>
-              <div class="info-value solde-value">{{ selectedCompte.decouvertAutorise
-                | number:'1.3-3' }} TND</div>
+              <div class="info-value solde-value">{{ getNombreFormate(selectedCompte.decouvertAutorise)}}
+                </div>
             </div>
             <div class="info-col">
               <div class="info-label">Montant maximum autorisé par jour</div>
@@ -286,11 +288,7 @@
 </div>
 </ng-container>
 
-<ng-container *ngIf="isAgent">
 
-  <div class="pagetitle">
-    <h1>agent</h1>
-
-  </div>
-
+  <ng-container *ngIf="isAgent">
+    <app-dashbord-agent></app-dashbord-agent>
   </ng-container>
