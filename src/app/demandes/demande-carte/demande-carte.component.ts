@@ -28,6 +28,8 @@ export class DemandeCarteComponent implements OnInit {
   selectedStatus: string = '';
   selectedDemandeId: number | null = null;
   accountFilter: string = '';
+  showStatusModal: boolean = false;
+  selectedDemande: DemandeCarte | null = null;
   
   // Pagination
   currentPage: number = 1;
@@ -70,7 +72,7 @@ export class DemandeCarteComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading demandes:', err);
-        this.showErrorAlert('Erreur', 'Erreur lors du chargement des demandes');
+        //this.showErrorAlert('Erreur', 'Erreur lors du chargement des demandes');
         this.isLoading = false;
       }
     });
@@ -112,6 +114,7 @@ export class DemandeCarteComponent implements OnInit {
 
   prepareUpdate(demandeId: number, currentStatus: string): void {
     this.selectedDemandeId = demandeId;
+    this.selectedDemande = this.demandes.find(d => d.iddemande === demandeId) || null;
     
     if (!isNaN(Number(currentStatus))) {
       const statusNum = parseInt(currentStatus, 10);
@@ -119,6 +122,15 @@ export class DemandeCarteComponent implements OnInit {
     } else {
       this.selectedStatus = currentStatus;
     }
+    
+    this.showStatusModal = true;
+  }
+
+  closeStatusModal(): void {
+    this.showStatusModal = false;
+    this.selectedDemandeId = null;
+    this.selectedStatus = '';
+    this.selectedDemande = null;
   }
 
   updateDemandeStatus(): void {
@@ -150,8 +162,7 @@ export class DemandeCarteComponent implements OnInit {
             timer: 2000
           });
           this.loadDemandes();
-          this.selectedDemandeId = null;
-          this.selectedStatus = '';
+          this.closeStatusModal();
         },
         error: (err) => {
           console.error('Error updating status:', err);
@@ -207,6 +218,7 @@ export class DemandeCarteComponent implements OnInit {
     }
     return this.statusToNumberMap[status] ?? 0;
   }
+
   getStatusClass(status: string): string {
     if (!isNaN(Number(status))) {
       const statusNum = parseInt(status, 10);

@@ -1,9 +1,20 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Client } from 'src/app/Models/Client';
 import { NotificationPack } from 'src/app/Models/NotificationPack';
 import { AuthService } from 'src/app/services/auth.service';
 import { ClientService } from 'src/app/services/client.service';
 import { ReclamationService } from 'src/app/services/ReclamationService';
+import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({
+  name: 'unreadNotifications'
+})
+export class UnreadNotificationsPipe implements PipeTransform {
+  transform(notifications: NotificationPack[]): NotificationPack[] {
+    return notifications ? notifications.filter(n => !n.isRead) : [];
+  }
+}
 
 @Component({
   selector: 'app-nav-bar',
@@ -57,7 +68,8 @@ export class NavBarComponent implements OnInit {
   constructor(
     private clientService: ClientService,
     private reclamationService: ReclamationService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   clientNotifications: NotificationPack[] = [];
@@ -148,5 +160,10 @@ export class NavBarComponent implements OnInit {
 
   ShowHideMenu(): void {
     document.getElementsByTagName("body")[0].classList.toggle('toggle-sidebar');
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['']);
   }
 }

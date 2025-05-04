@@ -122,7 +122,11 @@ export class DemandeDecouvertComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
+
         this.showErrorAlert("Échec du chargement des demandes. Veuillez réessayer.");
+
+       // this.errorMessage = 'Échec du chargement des demandes';
+
         this.isLoading = false;
         console.error(err);
       },

@@ -28,6 +28,8 @@ import { SimulateurCreditComponent } from './simulateur-credit/simulateur-credit
 import { ReponseReclamationComponent } from './reponse-reclamation/reponse-reclamation.component';
 import { RibIbanComponent } from './rib-iban/rib-iban.component';
 import { HistoriqueReclamationsComponent } from './historique-reclamations/historique-reclamations.component';
+import { KycDownloadComponent } from './kyc-download/kyc-download.component';
+
 
 import { ExtraitComponent } from './extrait/extrait.component';
 //import { DashbordAgentComponent } from './dashbord-agent/dashbord-agent.component';
@@ -55,9 +57,14 @@ import { NgChartsModule } from 'ng2-charts';
       ReponseReclamationComponent,
       RibIbanComponent,
       HistoriqueReclamationsComponent,
+       KycDownloadComponent,
       ExtraitComponent,
       //DashbordAgentComponent,
      ],
+
+     
+      
+
 
   imports: [
     BrowserModule,
