@@ -24,6 +24,8 @@ import { DemandePackStudentComponent } from '../demandes/demande-pack-student/de
 import { HistoriqueReclamationsComponent } from '../historique-reclamations/historique-reclamations.component';
 import { KycDownloadComponent } from '../kyc-download/kyc-download.component';
 
+import {ExtraitComponent} from '../extrait/extrait.component'
+import {DashbordAgentComponent} from '../dashbord-agent/dashbord-agent.component'
 
 
 const routes: Routes = [
@@ -33,7 +35,7 @@ const routes: Routes = [
           { path: 'similateur', component: SimulateurCreditComponent, data: { breadcrumb: 'similateur' }},
           { path: 'RepondreDemandePlafond', component: DemandePlafondComponent },
           { path: 'RepondreDemandeCarte', component: DemandeCarteComponent },
-       
+
           { path: 'Reclamationhsitorique', component:   HistoriqueReclamationsComponent, data: { breadcrumb: 'reclamation' }},
           { path: 'Reclamation', component: ReclamationComponent, data: { breadcrumb: 'reclamation' }},
           { path: 'PackStudent', component: PackStudentComponent, data: { breadcrumb: 'PackStudent' }},
@@ -55,10 +57,12 @@ const routes: Routes = [
             { path: 'RepondreDemandesChequier', component: DemandesChequierComponent},
             { path: 'ReponseReclamationComponent', component: ReponseReclamationComponent, data: { breadcrumb: 'responsereclamation' }},
             { path: 'RibIbanComponent', component: RibIbanComponent, data: { breadcrumb: 'RibIban'}},
+            { path: 'ExtraitComponent', component: ExtraitComponent, data: { breadcrumb: 'extrait'}},
+            { path:'DashbordAgentComponent', component: DashbordAgentComponent},
 
-         
             { path: 'RepondreDemandePackStudent', component: DemandePackStudentComponent },
             { path: 'RepondreDemandePackElyssa', component: DemandePackElyssaComponent },
+
 
 
             { path: '**', redirectTo: '', pathMatch: 'full' }

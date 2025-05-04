@@ -5,4 +5,7 @@ export interface Chequier {
   plafondChequier: number;
   ribCompte: string;
   type: string;
+
+demandeChequierId:number;
+
 }

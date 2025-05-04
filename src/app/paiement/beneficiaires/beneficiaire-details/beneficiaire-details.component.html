@@ -7,28 +7,26 @@
     </h2>
 
 
+    <div *ngIf="beneficiaires.length > 0">
     <button (click)="openAddBeneficiaireModal()" class="btn btn-primary">
       <i class="icon fas fa-user-plus"></i>
       Ajouter un bénéficiaire
     </button>
-
+  </div>
 
   </div>
 
-  <div *ngIf="isLoading" class="loading-spinner">
-    <i class="fas fa-spinner fa-spin"></i> Chargement en cours...
-  </div>
 
-  <div *ngIf="!isLoading && beneficiaires.length === 0" class="no-data">
+  <div *ngIf=" beneficiaires.length === 0" class="no-data">
     <i class="icon fas fa-info-circle"></i>
     <p>Aucun bénéficiaire enregistré pour le moment.</p>
-    <button routerLink="/beneficiaires/add" class="btn btn-primary">
+    <button (click)="openAddBeneficiaireModal()" class="btn btn-primary">
       <i class="icon fas fa-user-plus"></i>
       Ajouter un premier bénéficiaire
     </button>
   </div>
 
-  <div *ngIf="!isLoading && beneficiaires.length > 0" class="table-responsive">
+  <div *ngIf="beneficiaires.length > 0" class="table-responsive">
     <table class="beneficiaires-table">
       <thead>
         <tr>

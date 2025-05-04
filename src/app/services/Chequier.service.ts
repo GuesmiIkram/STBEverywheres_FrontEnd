@@ -16,8 +16,8 @@ export class ChequierService {
     return this.http.get(`${this.apiChequierUrl}/cheques`);
   }
 
-  getFeuillesParChequier(numeroChequier: string): Observable<any> {
-    return this.http.get(`${this.apiChequierUrl}/feuilles/${numeroChequier}`);
+  getFeuillesParChequier(idDemande: number): Observable<any> {
+    return this.http.get(`${this.apiChequierUrl}/feuilles/${idDemande}`);
   }
 
 

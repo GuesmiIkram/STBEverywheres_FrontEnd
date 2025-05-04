@@ -16,36 +16,24 @@ export class BeneficiaireDetailsComponent implements OnInit {
 
 
   beneficiaires: Beneficiaire[] = [];
-  isLoading = true;
 
   constructor(private beneficiaireService: BeneficiaireService,private modalService: NgbModal) { }
 
   ngOnInit(): void {
-    this.loadBeneficiaires();
+    //this.loadBeneficiaires();
     this.chargerBeneficiaires();
   }
 
-  loadBeneficiaires(): void {
-    this.isLoading = true;
+  /*loadBeneficiaires(): void {
     this.beneficiaireService.getBeneficiairesByClientId().subscribe({
       next: (data) => {
         console.log("benef retourne de back",data);
         this.beneficiaires = data;
-        this.isLoading = false;
       },
-      error: (error) => {
-        this.isLoading = false;
-        Swal.fire({
-          title: 'Erreur',
-          text: 'Une erreur est survenue lors du chargement des bénéficiaires.',
-          icon: 'error',
-          confirmButtonText: 'OK'
-        });
-        console.error('Error loading beneficiaires:', error);
-      }
+
     });
   }
-
+*/
 
 
   formatTelephone(tel: string | null | undefined): string {
@@ -113,11 +101,14 @@ openAddBeneficiaireModal(): void {
         });
 
         // Fonction de fermeture
-        closeButton.addEventListener('click', () => modalRef.dismiss());
+        closeButton.addEventListener('click', () => {
+          modalRef.dismiss();
+          this.chargerBeneficiaires(); // Ajout de cette ligne pour recharger
+        });
 
         modalElement.appendChild(closeButton);
       }
-    }, 100); // Petite attente pour que le modal soit chargé
+    }, 100);// Petite attente pour que le modal soit chargé
 
     modalRef.result.then(
       (result) => {
@@ -130,6 +121,7 @@ openAddBeneficiaireModal(): void {
         console.log('Modal fermé sans ajout');
       }
     );
+
   }
 
 

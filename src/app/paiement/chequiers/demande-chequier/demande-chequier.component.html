@@ -43,6 +43,13 @@
           <label for="plafondChequier">Plafond (TND) <span class="required">*</span></label>
           <input type="number" id="plafondChequier" formControlName="plafondChequier"
                  class="form-control">
+
+                <div *ngIf="demandeForm.get('plafondChequier')?.invalid && demandeForm.get('plafondChequier')?.touched"
+                class="error-message">
+                Plafond obligatoire
+           </div>
+
+
           <div *ngIf="demandeForm.get('plafondChequier')?.errors?.['max']"
                class="error-message">
             Maximum 30 000 TND
@@ -132,6 +139,10 @@
                   J'accepte les conditions et engagements ci-dessus
                 </label>
               </div>
+              <div *ngIf="demandeForm.get('accepteEngagement')?.invalid && demandeForm.get('accepteEngagement')?.touched"
+                   class="error-message">
+                Acceptation obligatoire
+              </div>
             </div>
           </div>
         </div>
@@ -141,38 +152,29 @@
     <div class="form-section">
       <h3 class="section-title">Mode de livraison</h3>
 
-      <!-- Mode de livraison -->
-      <!-- Mode de livraison -->
-<!-- Mode de livraison -->
-<div class="form-field radio-group">
-  <label class="group-label">Livraison <span class="required">*</span></label>
-  <div class="radio-options" style="display: flex; gap: 2rem;">
-
-    <!-- En agence -->
-    <div class="radio-option" style="text-align: center;">
-      <input type="radio" id="livraisonAgence" formControlName="modeLivraison"
-             value="LivraisonAgence" class="form-check-input" style="display: none;">
-      <label for="livraisonAgence" class="radio-label" style="cursor: pointer; display: flex; flex-direction: column; align-items: center;">
-        <i class="fas fa-building fa-2x" style="color: #3366cc; margin-bottom: 8px;"></i>
-        <span style="margin-bottom: 5px;">En agence</span>
-        <span class="radio-custom"></span>
-      </label>
-    </div>
-
-    <!-- Envoi recommandé -->
-    <div class="radio-option" style="text-align: center;">
-      <input type="radio" id="envoiRecommande" formControlName="modeLivraison"
-             value="EnvoiRecommande" class="form-check-input" style="display: none;">
-      <label for="envoiRecommande" class="radio-label" style="cursor: pointer; display: flex; flex-direction: column; align-items: center;">
-        <i class="fas fa-envelope fa-2x" style="color: #3366cc; margin-bottom: 8px;"></i>
-        <span style="margin-bottom: 5px;">Envoi recommandé</span>
-        <span class="radio-custom"></span>
-      </label>
-    </div>
-
-  </div>
-</div>
-
+      <div class="form-field radio-group">
+        <label class="group-label">Livraison <span class="required">*</span></label>
+        <div class="radio-options" style="display: flex; gap: 2rem;">
+          <div class="radio-option" style="text-align: center;">
+            <input type="radio" id="livraisonAgence" formControlName="modeLivraison"
+                   value="LivraisonAgence" class="form-check-input" style="display: none;">
+            <label for="livraisonAgence" class="radio-label" style="cursor: pointer; display: flex; flex-direction: column; align-items: center;">
+              <i class="fas fa-building fa-2x" style="color: #3366cc; margin-bottom: 8px;"></i>
+              <span style="margin-bottom: 5px;">En agence</span>
+              <span class="radio-custom"></span>
+            </label>
+          </div>
+          <div class="radio-option" style="text-align: center;">
+            <input type="radio" id="envoiRecommande" formControlName="modeLivraison"
+                   value="EnvoiRecommande" class="form-check-input" style="display: none;">
+            <label for="envoiRecommande" class="radio-label" style="cursor: pointer; display: flex; flex-direction: column; align-items: center;">
+              <i class="fas fa-envelope fa-2x" style="color: #3366cc; margin-bottom: 8px;"></i>
+              <span style="margin-bottom: 5px;">Envoi recommandé</span>
+              <span class="radio-custom"></span>
+            </label>
+          </div>
+        </div>
+      </div>
 
       <!-- Adresse pour envoi recommandé -->
       <div *ngIf="showEnvoiRecommandeFields" class="recommande-fields">
@@ -181,13 +183,27 @@
             <label for="adresseComplete">Adresse <span class="required">*</span></label>
             <input type="text" id="adresseComplete" formControlName="adresseComplete"
                    class="form-control" placeholder="Adresse complète">
+            <div *ngIf="demandeForm.get('adresseComplete')?.invalid && demandeForm.get('adresseComplete')?.touched"
+                 class="error-message">
+              Adresse obligatoire
+            </div>
           </div>
         </div>
         <div class="form-row">
           <div class="form-field half-width">
             <label for="codePostal">Code postal <span class="required">*</span></label>
             <input type="text" id="codePostal" formControlName="codePostal"
-                   class="form-control" placeholder="Code postal">
+                   class="form-control" placeholder="Code postal" maxlength="4">
+            <div *ngIf="demandeForm.get('codePostal')?.invalid && demandeForm.get('codePostal')?.touched"
+                 class="error-message">
+              <div *ngIf="demandeForm.get('codePostal')?.errors?.['required']">Code postal obligatoire</div>
+              <div *ngIf="demandeForm.get('codePostal')?.errors?.['minlength'] || demandeForm.get('codePostal')?.errors?.['maxlength']">
+                Le code postal doit contenir 4 chiffres
+              </div>
+              <div *ngIf="demandeForm.get('codePostal')?.errors?.['pattern']">
+                Uniquement des chiffres autorisés
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -196,7 +212,6 @@
     <div class="form-section">
       <h3 class="section-title">Coordonnées</h3>
 
-      <!-- Coordonnées -->
       <div class="form-row">
         <div class="form-field half-width">
           <label for="email">Email <span class="required">*</span></label>
@@ -208,15 +223,20 @@
         </div>
         <div class="form-field half-width">
           <label for="numTel">Téléphone <span class="required">*</span></label>
-          <input type="tel" id="numTel" formControlName="numTel" class="form-control" placeholder="+216 XX XXX XXX">
+          <input type="tel" id="numTel" formControlName="numTel" class="form-control" placeholder="216 XX XXX XXX">
+          <div *ngIf="demandeForm.get('numTel')?.invalid && demandeForm.get('numTel')?.touched" class="error-message">
+            <div *ngIf="demandeForm.get('numTel')?.errors?.['required']">Téléphone obligatoire</div>
+            <div *ngIf="demandeForm.get('numTel')?.errors?.['pattern']">Numéro invalide (8 chiffres requis)</div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Bouton de soumission -->
     <div class="form-actions">
       <button type="submit" class="submit-button"
-              [disabled]="demandeForm.invalid || (showNonBarreFields && !demandeForm.get('accepteEngagement')?.value)">
+              [disabled]="demandeForm.invalid ||
+                        (showNonBarreFields && !demandeForm.get('accepteEngagement')?.value) ||
+                        (showEnvoiRecommandeFields && (demandeForm.get('adresseComplete')?.invalid || demandeForm.get('codePostal')?.invalid))">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         Valider la demande
       </button>

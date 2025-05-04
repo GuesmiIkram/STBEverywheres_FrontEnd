@@ -11,18 +11,28 @@ import { environnement } from '../environnement/environnement';
   providedIn: 'root',
 })
 export class ClientService {
-  
+
 
    private apiUrl = environnement.apiurl+ "/client";
   constructor(private http: HttpClient,private authService :AuthService) {}
 
-  // Récupérer les infos du client
+
+  getConventionById(idConvention: number): Observable<{ id_convention: number, nom_convention: string, marge_bancaire: number }> {
+    return this.http.get<{ id_convention: number, nom_convention: string, marge_bancaire: number }>(
+      `${this.apiUrl}/convention/${idConvention}`
+    );
+  }
+
+
+
+
+
+
   getClientInfo(): Observable<Client> {
     return this.http.get<Client>(`${this.apiUrl}/me`);
   }
-// Modifiez votre service pour ajouter des headers spécifiques
+
 uploadStudentDocuments(files: FormData): Observable<any> {
-  // Création des headers avec HttpHeaders
   const headers = new HttpHeaders({
     'Authorization': `Bearer ${this.authService.getAccessToken()}`,
     'Accept': 'application/json'
@@ -136,7 +146,7 @@ uploadElyssaDocuments(files: FormData): Observable<any> {
   removeProfileImage(clientId: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/remove-profile-image`);
   }
- 
+
   // Méthode pour demander l'envoi du code OTP
   requestPasswordChangeOTP(): Observable<any> {
     return this.http.post(`${this.apiUrl}/request-password-change-otp`, {}).pipe(

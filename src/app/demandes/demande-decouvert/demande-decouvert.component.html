@@ -1,82 +1,236 @@
-<div class="table-responsive" *ngIf="demands.length > 0">
-  <table class="table table-hover">
-    <thead class="table-light">
-      <tr>
-        <th>ID Demande</th>
-        <th>Date</th>
-        <th>RIB Compte</th>
-        <th>CIN Client</th>
-        <th>Montant Demandé</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let demand of demands">
-        <td>{{ demand.id }}</td>
-        <td>{{ demand.dateDemande | date:'dd/MM/yyyy' }}</td>
-        <td>{{ demand.ribCompte }}</td>
-        <td>{{ demand.numCin }}</td>
-        <td>{{ demand.montant | currency:'EUR':'symbol':'1.2-2' }}</td>
-        <td>
-          <button class="btn btn-sm btn-primary"
-                  (click)="selectDemand(demand.id)">
-            Répondre
-          </button>
-        </td>
-      </tr>
-
-    </tbody>
-  </table>
+<!-- En haut du tableau -->
+<div class="alert alert-light border mb-3">
+  <button class="btn btn-link p-0" data-bs-toggle="collapse" href="#colorLegend">
+    <i class="bi bi-question-circle me-1"></i>Signification des couleurs
+  </button>
+  <div id="colorLegend" class="collapse mt-2">
+    <div class="d-flex gap-3">
+      <span class="text-success"><i class="bi bi-square-fill"></i> Demande d'augmentation</span>
+      <span class="text-danger"><i class="bi bi-square-fill"></i> Demande de réduction</span>
+    </div>
+  </div>
 </div>
-<div *ngIf="demands.length === 0 && !isLoading" class="alert alert-info">
-  Aucune demande en attente
-</div>
+<div class="container-fluid p-4">
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-header bg-white border-0 py-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <h4 class="mb-0 text-primary fw-semibold">Demandes de modification de découvert</h4>
+        <div class="d-flex gap-2">
+          <div class="input-group">
+            <span class="input-group-text bg-light border-end-0">
+              <i class="bi bi-search"></i>
+            </span>
+            <input
+              type="text"
+              class="form-control border-start-0 bg-light"
+              placeholder="Rechercher..."
+              [(ngModel)]="searchTerm"
+              (ngModelChange)="filterDemands()">
+          </div>
 
-<!-- Formulaire de réponse -->
-<div *ngIf="selectedDemandId" class="mt-4 p-3 border rounded bg-light">
-  <h4>Réponse à la demande {{ selectedDemandId }}</h4>
-
-  <form [formGroup]="responseForm" (ngSubmit)="submitResponse()">
-    <div class="mb-3">
-      <label class="me-3">Réponse:</label>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" id="accept"
-               formControlName="accepte" [value]="true">
-        <label class="form-check-label" for="accept">Accepter</label>
-      </div>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" id="reject"
-               formControlName="accepte" [value]="false">
-        <label class="form-check-label" for="reject">Refuser</label>
-      </div>
-      <div *ngIf="responseForm.get('accepte')?.invalid &&
-                 responseForm.get('accepte')?.touched"
-           class="text-danger mt-1">
-        Veuillez sélectionner une réponse
+        </div>
       </div>
     </div>
 
-    <div class="mb-3" *ngIf="responseForm.get('accepte')?.value === false">
-      <label for="motifRefus" class="form-label">Motif de refus</label>
-      <textarea class="form-control" id="motifRefus" rows="3"
-                formControlName="motifRefus"></textarea>
-      <div *ngIf="responseForm.get('motifRefus')?.invalid &&
-                 responseForm.get('motifRefus')?.touched"
-           class="text-danger">
-        Le motif de refus est obligatoire
+    <div class="card-body p-0">
+
+
+      <!-- Empty state -->
+      <div *ngIf="filteredDemands.length === 0 && !isLoading" class="text-center py-5">
+        <div class="mb-3">
+          <i class="bi bi-inbox text-muted" style="font-size: 3rem;"></i>
+        </div>
+        <h5 class="text-muted">Aucune demande en attente</h5>
+        <p class="text-muted small">Toutes les demandes ont été traitées</p>
+      </div>
+
+      <!-- Data table -->
+      <div class="table-responsive" *ngIf="filteredDemands.length > 0">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr class="bg-light">
+              <th class="py-3 px-4 border-0">RIB Compte</th>
+              <th class="py-3 px-4 border-0">CIN Client</th>
+              <th class="py-3 px-4 border-0">Découvert actuel</th>
+              <th class="py-3 px-4 border-0">Montant demandé </th>
+              <th class="py-3 px-4 border-0">Date de la demande</th>
+              <th class="py-3 px-4 border-0 text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let demand of pagedDemands" class="border-top">
+              <td class="py-3 px-4">
+                <span class="badge bg-light text-dark border">{{ demand.ribCompte }}</span>
+              </td>
+              <td class="py-3 px-4">{{ demand.numCin }}</td>
+              <td class="py-3 px-4">
+                <span class="text-muted">{{ getNombreFormate(demand.decouvertactuel) }}</span>
+              </td>
+              <td class="py-3 px-4">
+                <span [ngClass]="demand.montant > demand.decouvertactuel ? 'text-success fw-semibold' : 'text-danger fw-semibold'">
+                  {{ getNombreFormate(demand.montant) }}
+                </span>
+              </td>
+
+
+
+
+
+
+
+
+
+              <td class="py-3 px-4">
+                <span class="badge bg-light text-dark">
+                  <i class="bi bi-calendar-date me-1"></i>
+                  {{ demand.dateDemande | date:'dd/MM/yyyy' }}
+                </span>
+              </td>
+              <td class="py-3 px-4 text-end">
+                <button class="btn btn-sm btn-primary rounded-pill px-3"
+                        (click)="selectDemand(demand.id, responseModal)">
+                  <i class="bi bi-reply-fill me-1"></i> Répondre
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="d-flex justify-content-between align-items-center p-3 border-top" *ngIf="filteredDemands.length > 0">
+        <div class="small text-muted">
+          Affichage de {{ (currentPage - 1) * pageSize + 1 }} à
+          {{ Math.min(currentPage * pageSize, filteredDemands.length) }}
+          sur {{ filteredDemands.length }} demandes
+        </div>
+        <nav aria-label="Pagination des demandes">
+          <ul class="pagination pagination-sm mb-0">
+            <li class="page-item" [ngClass]="{'disabled': currentPage === 1}">
+              <a class="page-link" href="javascript:void(0)" (click)="changePage(1)">
+                <i class="bi bi-chevron-double-left"></i>
+              </a>
+            </li>
+            <li class="page-item" [ngClass]="{'disabled': currentPage === 1}">
+              <a class="page-link" href="javascript:void(0)" (click)="changePage(currentPage - 1)">
+                <i class="bi bi-chevron-left"></i>
+              </a>
+            </li>
+            <li class="page-item" *ngFor="let page of getPageNumbers()"
+                [ngClass]="{'active': page === currentPage}">
+              <a class="page-link" href="javascript:void(0)" (click)="changePage(page)">{{ page }}</a>
+            </li>
+            <li class="page-item" [ngClass]="{'disabled': currentPage === totalPages}">
+              <a class="page-link" href="javascript:void(0)" (click)="changePage(currentPage + 1)">
+                <i class="bi bi-chevron-right"></i>
+              </a>
+            </li>
+            <li class="page-item" [ngClass]="{'disabled': currentPage === totalPages}">
+              <a class="page-link" href="javascript:void(0)" (click)="changePage(totalPages)">
+                <i class="bi bi-chevron-double-right"></i>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de réponse -->
+<ng-template #responseModal let-modal>
+  <div class="modal-header bg-primary text-white">
+    <h5 class="modal-title">
+      <i class="bi bi-reply-fill me-2"></i> Réponse à la demande
+    </h5>
+    <button type="button" class="btn-close btn-close-white" (click)="modal.dismiss()" aria-label="Close"></button>
+  </div>
+  <div class="modal-body">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h6 class="mb-0">Détails de la demande</h6>
+      <span class="badge bg-primary rounded-pill px-3 py-2">ID: {{ selectedDemandId }}</span>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label small text-muted">RIB Compte</label>
+              <p class="fw-semibold mb-0">{{ selectedDemandDetails?.ribCompte || '--' }}</p>
+            </div>
+            <div class="mb-3">
+              <label class="form-label small text-muted">CIN Client</label>
+              <p class="fw-semibold mb-0">{{ selectedDemandDetails?.numCin || '--' }}</p>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label small text-muted">Découvert actuel</label>
+              <p class="fw-semibold mb-0">{{ selectedDemandDetails?.decouvertactuel }}TND</p>
+            </div>
+            <div class="mb-3">
+              <label class="form-label small text-muted">Montant demandé</label>
+              <p class="fw-semibold mb-0" [ngClass]="selectedDemandDetails?.montant > selectedDemandDetails?.decouvertactuel ? 'text-success' : 'text-danger'">
+                {{ selectedDemandDetails?.montant | currency:'TND':'symbol':'1.2-2' || '--' }}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="d-flex justify-content-end gap-2">
-      <button type="button" class="btn btn-secondary"
-              (click)="selectedDemandId = null">
-        Annuler
-      </button>
-      <button type="submit" class="btn btn-primary" [disabled]="isLoading">
-        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-1"></span>
-        Envoyer la réponse
-      </button>
-    </div>
-  </form>
-</div>
+    <form [formGroup]="responseForm" (ngSubmit)="submitResponse()">
+      <div class="mb-4">
+        <label class="form-label fw-semibold">Décision:</label>
+        <div class="d-flex gap-3">
+          <div class="form-check">
+            <input class="form-check-input" type="radio" id="accept"
+                  formControlName="accepte" [value]="true">
+            <label class="form-check-label" for="accept">
+              <span class="text-success">
+                <i class="bi bi-check-circle-fill me-1"></i> Accepter la demande
+              </span>
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" id="reject"
+                  formControlName="accepte" [value]="false">
+            <label class="form-check-label" for="reject">
+              <span class="text-danger">
+                <i class="bi bi-x-circle-fill me-1"></i> Refuser la demande
+              </span>
+            </label>
+          </div>
+        </div>
+        <div *ngIf="responseForm.get('accepte')?.invalid && responseForm.get('accepte')?.touched"
+            class="text-danger small mt-1">
+          <i class="bi bi-exclamation-triangle-fill me-1"></i> Veuillez sélectionner une décision
+        </div>
+      </div>
 
+      <div class="mb-4" *ngIf="responseForm.get('accepte')?.value === false">
+        <label for="motifRefus" class="form-label fw-semibold">Motif de refus</label>
+        <textarea class="form-control" id="motifRefus" rows="3"
+                formControlName="motifRefus"
+                placeholder="Veuillez expliquer la raison du refus..."></textarea>
+        <div *ngIf="responseForm.get('motifRefus')?.invalid && responseForm.get('motifRefus')?.touched"
+            class="text-danger small mt-1">
+          <i class="bi bi-exclamation-triangle-fill me-1"></i> Le motif de refus est obligatoire
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2 mt-4">
+        <button type="button" class="btn btn-light px-4"
+                (click)="modal.dismiss()">
+          <i class="bi bi-x me-1"></i> Annuler
+        </button>
+        <button type="submit" class="btn btn-primary px-4" [disabled]="responseForm.invalid || isSubmitting">
+          <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+          <i *ngIf="!isSubmitting" class="bi bi-send-fill me-1"></i>
+          Envoyer la réponse
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

@@ -1,0 +1,164 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>Tableau de bord</h1>
+    <div class="date-filter">
+      <i class="fas fa-calendar-alt"></i>
+      <span class="current-date">{{ currentDate | date: 'fullDate':'':'fr' }}</span>
+    </div>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="summary-cards">
+    <div class="card card-chequier">
+      <div class="card-icon">
+        <i class="fas fa-book-open"></i>
+      </div>
+      <div class="card-content">
+        <h3>Chéquiers</h3>
+        <div class="card-stats">
+          <div class="stat-item">
+            <span class="stat-value">{{ chequierStats?.total || 0 }}</span>
+            <span class="stat-label">Total</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">{{ chequierStats?.traitees || 0 }}</span>
+            <span class="stat-label">Traitées</span>
+          </div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress" [style.width.%]="getCompletionPercentage(chequierStats?.traitees, chequierStats?.total)"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-decouvert">
+      <div class="card-icon">
+        <i class="fas fa-money-check-alt"></i>
+      </div>
+      <div class="card-content">
+        <h3>Découverts</h3>
+        <div class="card-stats">
+          <div class="stat-item">
+            <span class="stat-value">{{ decouvertStats?.total || 0 }}</span>
+            <span class="stat-label">Total</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">{{ decouvertStats?.traitees || 0 }}</span>
+            <span class="stat-label">Traitées</span>
+          </div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress" [style.width.%]="getCompletionPercentage(decouvertStats?.traitees, decouvertStats?.total)"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-reclamation">
+      <div class="card-icon">
+        <i class="fas fa-comment-alt"></i>
+      </div>
+      <div class="card-content">
+        <h3>Réclamations</h3>
+        <div class="card-stats">
+          <div class="stat-item">
+            <span class="stat-value">{{ reclamationStats?.total || 0 }}</span>
+            <span class="stat-label">Total</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">{{ reclamationStats?.traitees || 0 }}</span>
+            <span class="stat-label">Traitées</span>
+          </div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress" [style.width.%]="getCompletionPercentage(reclamationStats?.traitees, reclamationStats?.total)"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Charts Section -->
+  <div class="charts-container">
+    <div class="chart-section main-chart">
+      <div class="chart-header">
+        <h2>Résumé Global des Demandes</h2>
+        <div class="chart-actions">
+       <button class="btn-action" (click)="exporterDonnees()"><i class="fas fa-download"></i>Exporter</button>
+
+
+        </div>
+      </div>
+      <div class="chart-body">
+        <canvas baseChart
+                [data]="barChartData"
+                [options]="chartOptions"
+                [type]="'bar'">
+        </canvas>
+      </div>
+    </div>
+
+    <div class="charts-row">
+      <div class="chart-section">
+        <div class="chart-header">
+          <h2>Demandes de Chéquiers</h2>
+          <div class="chart-badge" [ngClass]="getStatusClass(chequierStats)">
+            {{ getStatusText(chequierStats) }}
+          </div>
+        </div>
+        <div class="chart-body">
+          <canvas baseChart
+                  [data]="barChartDataChequier"
+                  [options]="singleChartOptions"
+                  [type]="'bar'">
+          </canvas>
+        </div>
+      </div>
+
+      <div class="chart-section">
+        <div class="chart-header">
+          <h2>Demandes de Découverts</h2>
+          <div class="chart-badge" [ngClass]="getStatusClass(decouvertStats)">
+            {{ getStatusText(decouvertStats) }}
+          </div>
+        </div>
+        <div class="chart-body">
+          <canvas baseChart
+                  [data]="barChartDataDecouvert"
+                  [options]="singleChartOptions"
+                  [type]="'bar'">
+          </canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="charts-row">
+      <div class="chart-section">
+        <div class="chart-header">
+          <h2>Réclamations</h2>
+          <div class="chart-badge" [ngClass]="getStatusClass(reclamationStats)">
+            {{ getStatusText(reclamationStats) }}
+          </div>
+        </div>
+        <div class="chart-body">
+          <canvas baseChart
+                  [data]="barChartDataReclamation"
+                  [options]="singleChartOptions"
+                  [type]="'bar'">
+          </canvas>
+        </div>
+      </div>
+
+      <div class="chart-section">
+        <div class="chart-header">
+          <h2>Répartition des Demandes</h2>
+        </div>
+        <div class="chart-body">
+          <canvas baseChart
+                  [data]="pieChartData"
+                  [options]="pieChartOptions"
+                  [type]="'pie'">
+          </canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+

@@ -12,7 +12,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from './services/auth.service';
 import { CookieService } from 'ngx-cookie-service';
 import { AuthInterceptor } from './Interceptors/auth.interceptor';
-import { BreadcrumbModule } from 'xng-breadcrumb';
 import { RouterModule } from '@angular/router';
 import { AccueilComponent } from './accueil/accueil.component';
 
@@ -32,6 +31,14 @@ import { HistoriqueReclamationsComponent } from './historique-reclamations/histo
 import { KycDownloadComponent } from './kyc-download/kyc-download.component';
 
 
+import { ExtraitComponent } from './extrait/extrait.component';
+//import { DashbordAgentComponent } from './dashbord-agent/dashbord-agent.component';
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+registerLocaleData(localeFr)
+
+import { BreadcrumbModule } from 'xng-breadcrumb';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -50,8 +57,14 @@ import { KycDownloadComponent } from './kyc-download/kyc-download.component';
       ReponseReclamationComponent,
       RibIbanComponent,
       HistoriqueReclamationsComponent,
-      KycDownloadComponent,
-      ],
+       KycDownloadComponent,
+      ExtraitComponent,
+      //DashbordAgentComponent,
+     ],
+
+     
+      
+
 
   imports: [
     BrowserModule,
@@ -62,6 +75,7 @@ import { KycDownloadComponent } from './kyc-download/kyc-download.component';
     BreadcrumbModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    NgChartsModule,
 
 
   ],

@@ -24,9 +24,12 @@ export class AddBeneficiaireComponent implements OnInit {
       Validators.email // Validation optionnelle pour email
     ]),
     Telephone: new FormControl(null, [
-      Validators.pattern(/^[0-9]{8,15}$/) // Validation optionnelle pour téléphone
+      Validators.pattern(/^[0-9]{8}$/) // Accepte exactement 8 chiffres
     ])
+
   });
+
+
 
   constructor(private beneficiaireService: BeneficiaireService) {}
 

@@ -13,7 +13,7 @@ export class CompteService {
 
 
   private http = inject(HttpClient);
- 
+
   private apiUrl = environnement.apiurl+"/compte";
   private apiRibIbanUrl =environnement.apiurl+"/compte";
   /*public getComptesByCin(): Observable<Compte[]> {
@@ -55,6 +55,24 @@ export class CompteService {
       })
     });
   }
+
+
+
+  public downloadExtrait(rib: string, datedebut: Date, dateFin: Date): Observable<Blob> {
+    const dateDebutStr = datedebut.toISOString().split('T')[0];
+    const dateFinStr = dateFin.toISOString().split('T')[0];
+
+    const url = `${this.apiUrl}/extrait/download?rib=${encodeURIComponent(rib)}&datedebut=${dateDebutStr}&dateFin=${dateFinStr}`;
+
+    return this.http.get(url, {
+      responseType: 'blob',
+      headers: new HttpHeaders({
+        'Accept': 'application/pdf'
+      })
+    });
+  }
+
+
 
 
 }

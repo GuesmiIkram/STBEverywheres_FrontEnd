@@ -1,6 +1,18 @@
 <div class="simulateur-credit">
   <h2>Simulateur de Crédit</h2>
 
+  <!-- Affichage convention -->
+  <div *ngIf="clientConventionne; else pasConvention">
+    <p><strong>Convention :</strong> {{ nomConvention }}</p>
+    <p><strong>Marge bancaire :</strong> {{ margeBancaire }}%</p>
+  </div>
+  <ng-template #pasConvention>
+    <p><strong>Client non conventionné</strong></p>
+  </ng-template>
+
+  <!-- Taux affiché -->
+  <p><strong>Taux appliqué :</strong> {{ taux }} %</p>
+
   <form (ngSubmit)="calculerCredit()">
     <div>
       <label for="montant">Montant du crédit :</label>
@@ -10,11 +22,6 @@
     <div>
       <label for="duree">Durée (en mois) :</label>
       <input type="number" [(ngModel)]="duree" name="duree" required />
-    </div>
-
-    <div>
-      <label for="taux">Taux d'intérêt annuel (%) :</label>
-      <input type="number" [(ngModel)]="taux" name="taux" required />
     </div>
 
     <div>
