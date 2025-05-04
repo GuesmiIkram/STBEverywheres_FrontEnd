@@ -1,440 +1,556 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STB Banque - Société Tunisienne de Banque</title>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
-    <!-- Top Bar -->
-    <div class="top-bar">
-        <div class="container">
-            <div class="contact-info">
-                <a href="tel:+21671782463"><i class="fas fa-phone"></i> +216 71 782 463</a>
-                <a href="mailto:contact@stb.com.tn"><i class="fas fa-envelope"></i> contact@stb.com.tn</a>
-            </div>
-          
-        </div>
-    </div>
-
-    <!-- Header -->
-    <header class="main-header">
-  <div class="container">
-    <div class="logo">
-      <a href="index.html">
-        <img src="assets/img/STBlogo.jpg" alt="STB Banque Logo">
-        <span class="app-name">STBEverywhere</span>
-      </a>
-    </div>
-    
-    <div class="auth-buttons">
-      <a href="#" class="btn btn-outline">Espace Client</a>
-      <a href="#" class="btn btn-primary">Devenir Client <i class="fas fa-lock"></i></a>
-    </div>
-    <div class="mobile-menu-toggle">
-      <i class="fas fa-bars"></i>
+<!-- Top Bar -->
+<div class="top-bar">
+    <div class="container">
+      <div class="contact-info">
+        <a href="tel:+21671782463"><i class="fas fa-phone"></i> +216 71 782 463</a>
+        <a href="mailto:contact@stb.com.tn"><i class="fas fa-envelope"></i> contact@stb.com.tn</a>
+      </div>
     </div>
   </div>
-</header>
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="container">
-          <div class="hero-content">
-            <h1>Bienvenue dans la platforme STBEverywhere</h1>
-            <p>Découvrez nos solutions bancaires adaptées à vos besoins et ambitions</p>
-            <div class="hero-buttons">
-                <a (click)="scrollToAuth('login')" class="btn btn-primary">
-                    <i class="fas fa-user-circle"></i> Espace client
-                </a>
-                <a (click)="scrollToAuth('register')" class="btn btn-secondary">
-                    Devenir client <i class="fas fa-arrow-right"></i>
-                </a>
+  
+  <!-- Header -->
+  <header class="main-header">
+    <div class="container">
+      <div class="logo">
+        <a href="index.html">
+          <img src="assets/img/STBlogo.jpg" alt="STB Banque Logo">
+          <span class="app-name">STBEverywhere</span>
+        </a>
+      </div>
+      
+      <div class="auth-buttons">
+        <a href="" class="btn btn-outline">Espace Client</a>
+        <a  class="btn btn-primary">Devenir Client <i class="fas fa-lock"></i></a>
+      </div>
+      <div class="mobile-menu-toggle">
+        <i class="fas fa-bars"></i>
+      </div>
+    </div>
+  </header>
+  
+  <section class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+          <h1>Bienvenue dans la platforme STBEverywhere</h1>
+          <p>Découvrez nos solutions bancaires adaptées à vos besoins et ambitions</p>
+          <div class="hero-buttons">
+              <a href="" class="btn btn-primary">
+                  <i class="fas fa-user-circle"></i> Espace client
+              </a>
+              <a  class="btn btn-secondary">
+                  Devenir client <i class="fas fa-arrow-right"></i>
+              </a>
+          </div>
+      </div>
+          <div class="hero-image">
+              <img src="assets/img/digiopa.png" alt="STB Banking Services">
+          </div>
+      </div>
+    
+    <!-- Quick Access Section -->
+    <div class="quick-access">
+      <div class="container">
+        <div class="quick-access-items">
+          <a (click)="toggleBlock('map')" class="quick-access-item">
+            <i class="fas fa-university"></i>
+            <span>Trouver une agence</span>
+          </a>
+          <a (click)="toggleBlock('simulator')" class="quick-access-item" [class.active]="showSimulator">
+            <i class="fas fa-calculator"></i>
+            <span>Simulateur de crédit</span>
+          </a>
+          <a (click)="toggleBlock('chatbot')" class="quick-access-item" [class.active]="showChatbot">
+            <i class="fas fa-headset"></i>
+            <span>Assistance</span>
+          </a>
+          <a href="#" class="quick-access-item">
+            <i class="fas fa-exchange-alt"></i>
+            <span>Taux de change</span>
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Interactive Blocks Container -->
+    <div class="interactive-blocks-container">
+      <!-- Bloc simulateur -->
+      <div *ngIf="showSimulator" class="interactive-block simulator-block">
+        <div class="block-header">
+          <h2><i class="fas fa-calculator"></i> Simulateur de crédit</h2>
+          <button class="close-button" (click)="toggleBlock('simulator')">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        
+        <div class="block-content">
+          <form (ngSubmit)="calculerCredit()">
+            <div class="form-group">
+              <label for="montant">Montant du crédit (TND):</label>
+              <input 
+                type="number" 
+                id="montant" 
+                [(ngModel)]="montant" 
+                name="montant" 
+                required 
+                placeholder="Ex: 50000"
+                class="form-control"
+              />
+            </div>
+        
+            <div class="form-group">
+              <label for="duree">Durée (en mois):</label>
+              <input 
+                type="number" 
+                id="duree" 
+                [(ngModel)]="duree" 
+                name="duree" 
+                required 
+                placeholder="Ex: 60"
+                class="form-control"
+              />
+            </div>
+        
+            <div class="form-group">
+              <label for="taux">Taux d'intérêt annuel (%):</label>
+              <input 
+                type="number" 
+                id="taux" 
+                [(ngModel)]="taux" 
+                name="taux" 
+                required 
+                step="0.01"
+                placeholder="Ex: 7.5"
+                class="form-control"
+              />
+            </div>
+        
+            <div class="form-group">
+              <label for="typeAmortissement">Type d'amortissement:</label>
+              <select 
+                id="typeAmortissement" 
+                [(ngModel)]="typeAmortissement" 
+                name="typeAmortissement" 
+                required
+                class="form-control"
+              >
+                <option value="constant">Mensualité constante</option>
+                <option value="variable">Amortissement variable</option>
+              </select>
+            </div>
+        
+            <button type="submit" class="btn btn-primary btn-block">
+              <i class="fas fa-calculator"></i> Calculer
+            </button>
+          </form>
+        
+          <div *ngIf="result" class="result-container">
+            <h3>Résultat de la simulation:</h3>
+            
+            <div *ngIf="result.type === 'Mensualité constante'" class="result-constant">
+              <p>Type: {{ result.type }}</p>
+              <p class="mensualite">Mensualité: <span>{{ result.mensualite }} TND</span></p>
+            </div>
+        
+            <div *ngIf="result.type === 'Amortissement variable'" class="result-variable">
+              <p>Type: {{ result.type }}</p>
+              <div class="table-container">
+                <table class="result-table">
+                  <thead>
+                    <tr>
+                      <th>Mois</th>
+                      <th>Mensualité</th>
+                      <th>Intérêt</th>
+                      <th>Capital Restant</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let detail of result.details">
+                      <td>{{ detail.mois }}</td>
+                      <td>{{ detail.mensualite }} TND</td>
+                      <td>{{ detail.interet }} TND</td>
+                      <td>{{ detail.capitalRestant }} TND</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+<!-- Bloc carte OpenStreetMap -->
+<div *ngIf="showMap" class="interactive-block map-block">
+    <div class="block-header">
+      <h2><i class="fas fa-map-marker-alt"></i> Trouver une agence STB</h2>
+      <button class="close-button" (click)="toggleBlock('')">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="block-content">
+      <div class="map-search">
+        <div class="search-container">
+          <i class="fas fa-search search-icon"></i>
+          <input 
+            type="text" 
+            placeholder="Rechercher une agence..." 
+            (input)="searchAgences($event)" 
+            class="search-input"
+          />
+        </div>
+      </div>
+      
+      <div class="map-container">
+        <div class="agency-list">
+          <div 
+            *ngFor="let agence of filteredAgences" 
+            class="agency-item" 
+            [class.active]="selectedAgence === agence"
+            (click)="focusOnAgence(agence)"
+          >
+            <h3 class="agency-name">{{ agence.name }}</h3>
+            <div class="agency-address">
+              <i class="fas fa-map-marker-alt"></i> {{ agence.shortAddress }}
+            </div>
+            <div class="agency-phone">
+              <i class="fas fa-phone"></i> {{ agence.phone }}
+            </div>
+          </div>
+        </div>
+        
+        <div id="map" class="map-view"></div>
+      </div>
+    </div>
+  </div>
+  
+  
+  <div *ngIf="showChatbot" class="interactive-block chatbot-block">
+    <div class="block-header">
+      <div class="chatbot-info">
+        <div class="chatbot-avatar">
+          <i class="fas fa-robot"></i>
+        </div>
+        <h2>Assistant STB</h2>
+      </div>
+      <button class="close-button" (click)="toggleblock()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div class="block-content">
+      <div class="chat-messages">
+        <div *ngFor="let message of messages" 
+             [class.user-message]="message.sender === 'user'"
+             [class.bot-message]="message.sender === 'bot'"
+             class="message">
+          {{ message.text }}
+        </div>
+      </div>
+      
+      <div class="message-input">
+        <input type="text" 
+               [(ngModel)]="newMessage" 
+               (keyup.enter)="sendMessage()"
+               placeholder="Tapez votre message...">
+        <button (click)="sendMessage()">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+  </div>   
+      <!-- Bloc chatbot -->
+     
+ </div>
+  </section>
+  <section class="services-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Nos services bancaires</h2>
+        <p>Des solutions adaptées à tous vos besoins financiers</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card" (click)="showDetails('comptes')">
+          <div class="service-icon"><i class="fas fa-wallet"></i></div>
+          <h3>Comptes</h3>
+        </div>
+  
+        <div class="service-card" (click)="showDetails('cartes')">
+          <div class="service-icon"><i class="fas fa-credit-card"></i></div>
+          <h3>Cartes</h3>
+        </div>
+  
+        <div class="service-card" (click)="showDetails('credits')">
+          <div class="service-icon"><i class="fas fa-home"></i></div>
+          <h3>Crédits</h3>
+        </div>
+  
+        <div class="service-card" (click)="showDetails('chequier')">
+          <div class="service-icon"><i class="fas fa-book"></i></div>
+          <h3>Chéquier</h3>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Bloc central affiché au clic -->
+    <div class="detail-block" *ngIf="selectedService">
+      <div class="detail-content">
+        <button class="close-btn" (click)="closeDetails()">×</button>
+        <ng-container [ngSwitch]="selectedService">
+          <div *ngSwitchCase="'comptes'">
+            <h3>Comptes bancaires</h3>
+            <p>La STB propose une gamme variée de comptes bancaires conçus pour répondre aux besoins de sa clientèle, qu’il s’agisse de particuliers, de professionnels ou d’entreprises. Que vous recherchiez un compte courant pour vos opérations quotidiennes, un compte épargne pour sécuriser votre argent ou un compte devise pour vos transactions à l’international, la STB vous offre des solutions pratiques et flexibles. L’ouverture de compte est simple, et les services associés comme le suivi en ligne, les alertes SMS et les relevés électroniques permettent une gestion autonome et sécurisée de vos finances.</p>
+          </div>
+          <div *ngSwitchCase="'cartes'">
+            <h3>Cartes bancaires</h3>
+            <p>Les cartes bancaires STB, adaptées à tous les profils, vous accompagnent dans votre quotidien en vous offrant confort, sécurité et liberté. Que ce soit pour les paiements en magasin, les achats en ligne ou les retraits d’espèces, la STB propose plusieurs types de cartes : cartes internationales, cartes jeunes, cartes prépayées, etc. Elles sont également dotées de services de sécurité renforcée comme le 3D Secure et peuvent être utilisées aussi bien en Tunisie qu’à l’étranger selon les options choisies. Grâce à l’application STB Mobile, vous pouvez suivre vos opérations en temps réel et gérer vos cartes à distance.</p>
+          </div>
+          <div *ngSwitchCase="'credits'">
+            <h3>Crédits</h3>
+            <p>La STB vous accompagne dans la réalisation de vos projets grâce à une large gamme de crédits adaptés à vos besoins personnels ou professionnels. Que vous souhaitiez acheter un logement, acquérir un véhicule, financer les études de vos enfants ou démarrer une activité, la STB vous propose des crédits souples, des taux compétitifs et des modalités de remboursement personnalisées. Grâce à un accompagnement professionnel, la banque vous aide à choisir la formule la plus adaptée à votre situation financière, tout en assurant une gestion transparente de votre dossier.</p>
+          </div>
+          <div *ngSwitchCase="'chequier'">
+            <h3>Chéquier</h3>
+            <p>La STB met à la disposition de ses clients la possibilité de disposer d’un chéquier pour faciliter le règlement de leurs dépenses. Le chéquier STB est un moyen de paiement pratique, particulièrement apprécié par les professionnels, commerçants et particuliers pour le règlement de loyers, factures ou encore d'achats importants. La commande d’un chéquier peut se faire directement en agence ou via les services en ligne, avec la possibilité de suivi de la demande. La banque assure également des services d’opposition en cas de perte ou de vol, garantissant ainsi la sécurité des opérations.</p>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </section>
+
+  <section class="digital-banking-section">
+    <div class="container">
+        <div class="digital-content">
+            <div class="digital-text">
+                <h2>STBEverywhere à votre service</h2>
+                <p>Gérez vos comptes en toute sécurité, où que vous soyez et à tout moment.</p>
+                <ul class="digital-features">
+                    <li><i class="fas fa-check-circle"></i> Consultez vos comptes 24h/24 et 7j/7</li>
+                    <li><i class="fas fa-check-circle"></i> Effectuez vos virements en quelques clics</li>
+               
+                    <li><i class="fas fa-check-circle"></i> Sécurisez vos transactions en ligne</li>
+                </ul>
+                
+            </div>
+            <div class="digital-image">
+                <img src="assets/img/carte.jpg" alt="STB Mobile Banking">
             </div>
         </div>
-            <div class="hero-image">
-                <img src="assets/img/digiopa.png" alt="STB Banking Services">
+    </div>
+</section>
+  <!-- Section Témoignages -->
+<section class="testimonials-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Ce que nos clients disent</h2>
+        <p>Découvrez les expériences de nos clients avec STBEverywhere</p>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="quote-icon"><i class="fas fa-quote-right"></i></div>
+          <p class="testimonial-content">Grâce à STBEverywhere, je peux gérer mes comptes à tout moment. L'application est intuitive et les fonctionnalités sont complètes. Un vrai gain de temps au quotidien !</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">
+                <i class="fas fa-user-circle fa-3x"></i>
+
+            </div>
+            <div class="author-info">
+              <h4>Ahmed B.</h4>
+              <p>Client depuis 5 ans</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="testimonial-card">
+          <div class="quote-icon"><i class="fas fa-quote-right"></i></div>
+          <p class="testimonial-content">Le simulateur de crédit m'a permis de planifier mon projet immobilier avec précision. Le conseiller qui m'a ensuite accompagné était parfaitement informé de ma situation.</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">
+                <i class="fas fa-user-circle fa-3x"></i>
+
+            </div>
+            <div class="author-info">
+              <h4>Sonia M.</h4>
+              <p>Cliente depuis 3 ans</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="testimonial-card">
+          <div class="quote-icon"><i class="fas fa-quote-right"></i></div>
+          <p class="testimonial-content">En tant qu'entrepreneur, j'apprécie particulièrement la réactivité du service client et les solutions adaptées aux professionnels. STB comprend vraiment les enjeux de mon activité.</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">
+                <i class="fas fa-user-circle fa-3x"></i>
+
+            </div>
+            <div class="author-info">
+              <h4>Karim H.</h4>
+              <p>Client professionnel</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Section Actualités -->
+  <section class="news-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Actualités STB</h2>
+        <p>Restez informé des dernières nouvelles et offres de la STB</p>
+      </div>
+      <div class="news-grid">
+        <div class="news-card">
+          <div class="news-image">
+            <img src="assets/img/news-1.jpg" alt="Nouvelle offre d'épargne">
+          </div>
+          <div class="news-content">
+            <span class="news-date">15 Mai 2023</span>
+            <h3>Nouvelle offre d'épargne pour les jeunes</h3>
+            <p>La STB lance une nouvelle offre d'épargne spécialement conçue pour les jeunes de 18 à 25 ans, avec des avantages exclusifs.</p>
+          
+          </div>
+        </div>
+        
+        <div class="news-card">
+          <div class="news-image">
+            <img src="assets/img/news-2.jpg" alt="Ouverture d'agence">
+          </div>
+          <div class="news-content">
+            <span class="news-date">3 Avril 2023</span>
+            <h3>Ouverture d'une nouvelle agence à Sousse</h3>
+            <p>La STB poursuit son expansion avec l'ouverture d'une nouvelle agence moderne et digitalisée au centre-ville de Sousse.</p>
+     
+          </div>
+        </div>
+        
+        <div class="news-card">
+          <div class="news-image">
+            <img src="assets/img/news-3.jpg" alt="Partenariat international">
+          </div>
+          <div class="news-content">
+            <span class="news-date">20 Mars 2023</span>
+            <h3>Nouveau partenariat international</h3>
+            <p>La STB signe un partenariat stratégique avec une banque européenne pour faciliter les transactions internationales.</p>
+           
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Section FAQ -->
+  <section class="faq-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Questions fréquentes</h2>
+        <p>Trouvez rapidement des réponses à vos questions</p>
+      </div>
+      <div class="faq-container">
+        <div class="faq-item">
+          <div class="faq-question">
+            Comment ouvrir un compte à la STB ? <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>Pour ouvrir un compte à la STB, vous pouvez vous rendre dans l'agence la plus proche muni d'une pièce d'identité, d'un justificatif de domicile et d'un justificatif de revenus. Vous pouvez également initier votre demande en ligne via notre plateforme STBEverywhere et finaliser l'ouverture en agence.</p>
+          </div>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">
+            Comment accéder à mon espace client en ligne ? <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>Pour accéder à votre espace client en ligne, rendez-vous sur la page d'accueil de STBEverywhere et cliquez sur "Espace Client". Saisissez ensuite votre identifiant et votre mot de passe. Si vous n'avez pas encore activé votre compte en ligne, contactez votre conseiller ou appelez notre service client.</p>
+          </div>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">
+            Comment demander un crédit immobilier ? <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>Pour demander un crédit immobilier, vous pouvez utiliser notre simulateur en ligne pour estimer votre capacité d'emprunt, puis prendre rendez-vous avec un conseiller en agence ou via notre plateforme. Vous devrez fournir des documents justificatifs tels que bulletins de salaire, compromis de vente, etc.</p>
+          </div>
+        </div>
+        
+        <div class="faq-item">
+          <div class="faq-question">
+            Comment signaler la perte ou le vol de ma carte bancaire ? <i class="fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>En cas de perte ou de vol de votre carte bancaire, vous devez immédiatement faire opposition en appelant le centre d'opposition au +216 71 123 456 (disponible 24h/24 et 7j/7). Vous pouvez également faire opposition via votre espace client STBEverywhere ou l'application mobile.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="container">
+        <div class="footer-top">
+            <div class="footer-col">
+                <div class="footer-logo">
+                    <img src="assets/img/STBlogo.jpg" alt="STB Banque">
+                </div>
+                <p class="footer-about">La Société Tunisienne de Banque (STB) est l'une des principales banques en Tunisie, offrant une gamme complète de services financiers aux particuliers, professionnels et entreprises.</p>
+                <div class="social-links">
+                    <a ><i class="fab fa-facebook-f"></i></a>
+                    <a><i class="fab fa-twitter"></i></a>
+                    <a ><i class="fab fa-linkedin-in"></i></a>
+                    <a ><i class="fab fa-instagram"></i></a>
+                    <a ><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>Services</h3>
+                <ul class="footer-links">
+                    <li><a >Comptes Bancaires</a></li>
+                    <li><a >Cartes Bancaires</a></li>
+                    <li><a >Crédits</a></li>
+                    <li><a>Épargne & Placements</a></li>
+                    <li><a >Assurances</a></li>
+                    <li><a>Services Internationaux</a></li>
+                </ul>
+            </div>
+           
+            <div class="footer-col">
+                <h3>Contact</h3>
+                <ul class="contact-info">
+                    <li><i class="fas fa-map-marker-alt"></i> Rue Hédi Nouira, 1001 Tunis, Tunisie</li>
+                    <li><i class="fas fa-phone"></i> +216 71 782 463</li>
+                    <li><i class="fas fa-envelope"></i> contact@stb.com.tn</li>
+                    <li><i class="fas fa-clock"></i> Lun-Ven: 8h00-16h00</li>
+                </ul>
+               
             </div>
         </div>
-        <div class="quick-access">
-            <div class="container">
-                <div class="quick-access-items">
-                    <a href="#" class="quick-access-item">
-                        <i class="fas fa-university"></i>
-                        <span>Trouver une agence</span>
-                    </a>
-                    <a href="#" class="quick-access-item">
-                        <i class="fas fa-calculator"></i>
-                        <span>Simulateur de crédit</span>
-                    </a>
-                    <a href="#" class="quick-access-item">
-                        <i class="fas fa-exchange-alt"></i>
-                        <span>Taux de change</span>
-                    </a>
-                    <a href="#" class="quick-access-item">
-                        <i class="fas fa-headset"></i>
-                        <span>Assistance</span>
-                    </a>
-                </div>
+        <div class="footer-bottom">
+            <div class="copyright">
+                <p>&copy; 2023 Société Tunisienne de Banque. Tous droits réservés.</p>
             </div>
+           
         </div>
-    </section>
+    </div>
+</footer>
 
-    <!-- Services Section -->
-    <section class="services-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>Nos services bancaires</h2>
-                <p>Des solutions adaptées à tous vos besoins financiers</p>
-            </div>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-credit-card"></i>
-                    </div>
-                    <h3>Comptes & Cartes</h3>
-                    <p>Gérez votre argent avec nos comptes courants et cartes bancaires sécurisées.</p>
-                    <a href="#" class="service-link">En savoir plus <i class="fas fa-chevron-right"></i></a>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-piggy-bank"></i>
-                    </div>
-                    <h3>Épargne & Placements</h3>
-                    <p>Faites fructifier votre épargne avec nos solutions d'investissement performantes.</p>
-                    <a href="#" class="service-link">En savoir plus <i class="fas fa-chevron-right"></i></a>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-home"></i>
-                    </div>
-                    <h3>Crédits Immobiliers</h3>
-                    <p>Réalisez votre projet immobilier avec nos offres de financement avantageuses.</p>
-                    <a href="#" class="service-link">En savoir plus <i class="fas fa-chevron-right"></i></a>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <i class="fas fa-briefcase"></i>
-                    </div>
-                    <h3>Solutions Entreprises</h3>
-                    <p>Développez votre activité avec nos services dédiés aux professionnels.</p>
-                    <a href="#" class="service-link">En savoir plus <i class="fas fa-chevron-right"></i></a>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- Back to Top Button -->
+<a href="#" class="back-to-top">
+    <i class="fas fa-chevron-up"></i>
+</a>
 
-    <!-- Digital Banking Section -->
-    <section class="digital-banking-section">
-        <div class="container">
-            <div class="digital-content">
-                <div class="digital-text">
-                    <h2>STBEverywhere à votre service</h2>
-                    <p>Gérez vos comptes en toute sécurité, où que vous soyez et à tout moment.</p>
-                    <ul class="digital-features">
-                        <li><i class="fas fa-check-circle"></i> Consultez vos comptes 24h/24 et 7j/7</li>
-                        <li><i class="fas fa-check-circle"></i> Effectuez vos virements en quelques clics</li>
-                   
-                        <li><i class="fas fa-check-circle"></i> Sécurisez vos transactions en ligne</li>
-                    </ul>
-                    
-                </div>
-                <div class="digital-image">
-                    <img src="assets/img/carte.jpg" alt="STB Mobile Banking">
-                </div>
-            </div>
-        </div>
-    </section>
+<script>
+    document.querySelectorAll('.faq-question').forEach(question => {
+      question.addEventListener('click', () => {
+        const parent = question.parentElement;
+        parent.classList.toggle('active');
+      });
+    });
+  </script>
+  
 
-    <!-- Promotions Section -->
-    <section class="promotions-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>Offres et promotions</h2>
-                <p>Découvrez nos offres spéciales et avantages exclusifs</p>
-            </div>
-            <div class="promotions-slider">
-                <div class="promotion-card">
-                    <div class="promotion-image">
-                        <img src="promo-credit.jpg" alt="Promotion Crédit">
-                        <div class="promotion-badge">Nouveau</div>
-                    </div>
-                    <div class="promotion-content">
-                        <h3>Crédit Été 2023</h3>
-                        <p>Profitez d'un taux préférentiel de 7,5% pour tous vos projets estivaux.</p>
-                        <a href="#" class="btn btn-secondary">Découvrir</a>
-                    </div>
-                </div>
-                <div class="promotion-card">
-                    <div class="promotion-image">
-                        <img src="promo-carte.jpg" alt="Promotion Carte">
-                    </div>
-                    <div class="promotion-content">
-                        <h3>Carte Gold Avantage</h3>
-                        <p>0 DT de frais la première année pour toute nouvelle souscription.</p>
-                        <a href="#" class="btn btn-secondary">Découvrir</a>
-                    </div>
-                </div>
-                <div class="promotion-card">
-                    <div class="promotion-image">
-                        <img src="promo-epargne.jpg" alt="Promotion Épargne">
-                    </div>
-                    <div class="promotion-content">
-                        <h3>Épargne Avenir Plus</h3>
-                        <p>Jusqu'à 5% d'intérêts sur votre épargne à terme de 5 ans.</p>
-                        <a href="#" class="btn btn-secondary">Découvrir</a>
-                    </div>
-                </div>
-            </div>
-            <div class="slider-controls">
-                <button class="slider-prev"><i class="fas fa-chevron-left"></i></button>
-                <div class="slider-dots">
-                    <span class="dot active"></span>
-                    <span class="dot"></span>
-                    <span class="dot"></span>
-                </div>
-                <button class="slider-next"><i class="fas fa-chevron-right"></i></button>
-            </div>
-        </div>
-    </section>
 
-    <!-- Testimonials Section -->
-    <section class="testimonials-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>Ce que disent nos clients</h2>
-                <p>La satisfaction de nos clients est notre priorité</p>
-            </div>
-            <div class="testimonials-container">
-                <div class="testimonial">
-                    <div class="testimonial-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <p class="testimonial-text">"Le service client de la STB est exceptionnel. J'ai pu obtenir mon crédit immobilier rapidement et dans d'excellentes conditions."</p>
-                    <div class="testimonial-author">
-                        <img src="client1.jpg" alt="Ahmed B.">
-                        <div>
-                            <h4>Ahmed B.</h4>
-                            <p>Client depuis 2015</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial">
-                    <div class="testimonial-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
-                    </div>
-                    <p class="testimonial-text">"L'application mobile STB est très intuitive et me permet de gérer mes comptes facilement. Je recommande vivement cette banque."</p>
-                    <div class="testimonial-author">
-                        <img src="client2.jpg" alt="Sonia M.">
-                        <div>
-                            <h4>Sonia M.</h4>
-                            <p>Cliente depuis 2018</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="testimonial">
-                    <div class="testimonial-rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <p class="testimonial-text">"En tant qu'entrepreneur, j'apprécie particulièrement les solutions professionnelles de la STB qui m'accompagnent dans le développement de mon entreprise."</p>
-                    <div class="testimonial-author">
-                        <img src="client3.jpg" alt="Karim T.">
-                        <div>
-                            <h4>Karim T.</h4>
-                            <p>Client depuis 2010</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- News Section -->
-    <section class="news-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>Actualités et événements</h2>
-                <p>Restez informé des dernières nouvelles de la STB</p>
-            </div>
-            <div class="news-grid">
-                <div class="news-card">
-                    <div class="news-image">
-                        <img src="news1.jpg" alt="Nouvelle agence">
-                        <div class="news-date">
-                            <span class="day">15</span>
-                            <span class="month">Juin</span>
-                        </div>
-                    </div>
-                    <div class="news-content">
-                        <h3>Ouverture d'une nouvelle agence à Sousse</h3>
-                        <p>La STB renforce sa présence sur la côte est avec une nouvelle agence moderne à Sousse.</p>
-                        <a href="#" class="news-link">Lire la suite <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                </div>
-                <div class="news-card">
-                    <div class="news-image">
-                        <img src="news2.jpg" alt="Partenariat">
-                        <div class="news-date">
-                            <span class="day">03</span>
-                            <span class="month">Juin</span>
-                        </div>
-                    </div>
-                    <div class="news-content">
-                        <h3>Nouveau partenariat avec Tunisair</h3>
-                        <p>La STB signe un partenariat stratégique avec Tunisair offrant des avantages exclusifs aux détenteurs de cartes premium.</p>
-                        <a href="#" class="news-link">Lire la suite <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                </div>
-                <div class="news-card">
-                    <div class="news-image">
-                        <img src="news3.jpg" alt="Récompense">
-                        <div class="news-date">
-                            <span class="day">28</span>
-                            <span class="month">Mai</span>
-                        </div>
-                    </div>
-                    <div class="news-content">
-                        <h3>La STB élue "Meilleure Banque Digitale 2023"</h3>
-                        <p>Notre engagement envers l'innovation digitale a été récompensé lors des Banking Innovation Awards.</p>
-                        <a href="#" class="news-link">Lire la suite <i class="fas fa-arrow-right"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="news-more">
-                <a href="#" class="btn btn-outline">Toutes les actualités</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Partners Section -->
-    <section class="partners-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>Nos partenaires</h2>
-                <p>Ils nous font confiance</p>
-            </div>
-            <div class="partners-logos">
-                <div class="partner-logo">
-                    <img src="partner1.png" alt="Partenaire 1">
-                </div>
-                <div class="partner-logo">
-                    <img src="partner2.png" alt="Partenaire 2">
-                </div>
-                <div class="partner-logo">
-                    <img src="partner3.png" alt="Partenaire 3">
-                </div>
-                <div class="partner-logo">
-                    <img src="partner4.png" alt="Partenaire 4">
-                </div>
-                <div class="partner-logo">
-                    <img src="partner5.png" alt="Partenaire 5">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Newsletter Section -->
-    <section class="newsletter-section">
-        <div class="container">
-            <div class="newsletter-content">
-                <div class="newsletter-text">
-                    <h2>Restez informé</h2>
-                    <p>Inscrivez-vous à notre newsletter pour recevoir nos actualités et offres exclusives</p>
-                </div>
-                <form class="newsletter-form">
-                    <input type="email" placeholder="Votre adresse email" required>
-                    <button type="submit" class="btn btn-primary">S'abonner</button>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="main-footer">
-        <div class="container">
-            <div class="footer-top">
-                <div class="footer-col">
-                    <div class="footer-logo">
-                        <img src="logo-stb-white.png" alt="STB Banque">
-                    </div>
-                    <p class="footer-about">La Société Tunisienne de Banque (STB) est l'une des principales banques en Tunisie, offrant une gamme complète de services financiers aux particuliers, professionnels et entreprises.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
-                    </div>
-                </div>
-                <div class="footer-col">
-                    <h3>Services</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Comptes Bancaires</a></li>
-                        <li><a href="#">Cartes Bancaires</a></li>
-                        <li><a href="#">Crédits</a></li>
-                        <li><a href="#">Épargne & Placements</a></li>
-                        <li><a href="#">Assurances</a></li>
-                        <li><a href="#">Services Internationaux</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h3>Informations</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">À Propos de STB</a></li>
-                        <li><a href="#">Carrières</a></li>
-                        <li><a href="#">Actualités</a></li>
-                        <li><a href="#">Tarification</a></li>
-                        <li><a href="#">Rapports Annuels</a></li>
-                        <li><a href="#">Gouvernance</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h3>Contact</h3>
-                    <ul class="contact-info">
-                        <li><i class="fas fa-map-marker-alt"></i> Rue Hédi Nouira, 1001 Tunis, Tunisie</li>
-                        <li><i class="fas fa-phone"></i> +216 71 782 463</li>
-                        <li><i class="fas fa-envelope"></i> contact@stb.com.tn</li>
-                        <li><i class="fas fa-clock"></i> Lun-Ven: 8h00-16h00</li>
-                    </ul>
-                    <a href="#" class="btn btn-outline-light">Nous contacter</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <div class="copyright">
-                    <p>&copy; 2023 Société Tunisienne de Banque. Tous droits réservés.</p>
-                </div>
-                <div class="footer-bottom-links">
-                    <a href="#">Mentions légales</a>
-                    <a href="#">Politique de confidentialité</a>
-                    <a href="#">Sécurité</a>
-                    <a href="#">Plan du site</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Back to Top Button -->
-    <a href="#" class="back-to-top">
-        <i class="fas fa-chevron-up"></i>
-    </a>
-
-   
-   
-
-    <script src="script.js"></script>
-</body>
-</html>
+<script src="script.js"></script>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Client } from 'src/app/Models/Client';
 import { ClientService } from 'src/app/services/client.service';
 import { PackService } from 'src/app/services/PackService';
+import Swal from 'sweetalert2';
 
 interface Demand {
   id: number;
@@ -36,6 +37,11 @@ export class DemandePackElyssaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.loadAllData();
+  }
+
+  // Nouvelle méthode pour charger toutes les données
+  loadAllData(): void {
     this.loadElyssaDemands();
   }
 
@@ -45,27 +51,35 @@ export class DemandePackElyssaComponent implements OnInit {
         this.demands = data;
         this.totalItems = this.demands.length;
         this.applyFilter();
-        this.demands.forEach(demand => {
-          this.loadClientDetails(demand.clientId);
-        });
+        
+        // Charger les détails clients pour toutes les demandes
+        this.loadAllClientDetails();
       },
       error: (err) => {
         console.error('Erreur lors du chargement des demandes', err);
-        alert('Erreur lors du chargement des demandes');
+       
       }
     });
   }
 
-  loadClientDetails(clientId: number): void {
-    this.clientService.getClientInfoById(clientId).subscribe({
-      next: (client: Client) => {
-        this.clientDetails[clientId] = client;
-        // Re-apply filter after client details are loaded
-        this.applyFilter();
-      },
-      error: (err) => {
-        console.error('Erreur lors du chargement des détails du client', err);
-      }
+  // Charger tous les détails clients en une fois
+  loadAllClientDetails(): void {
+    // Réinitialiser les détails clients avant de recharger
+    this.clientDetails = {};
+    
+    const uniqueClientIds = [...new Set(this.demands.map(d => d.clientId))];
+    
+    uniqueClientIds.forEach(clientId => {
+      this.clientService.getClientInfoById(clientId).subscribe({
+        next: (client: Client) => {
+          this.clientDetails[clientId] = client;
+          // Réappliquer le filtre après chaque chargement de client
+          this.applyFilter();
+        },
+        error: (err) => {
+          console.error(`Erreur lors du chargement du client ${clientId}`, err);
+        }
+      });
     });
   }
 
@@ -80,7 +94,11 @@ export class DemandePackElyssaComponent implements OnInit {
     }
     
     this.totalItems = this.filteredDemands.length;
-    this.currentPage = 1; // Reset to first page when filter changes
+    // Garder la page actuelle si possible, sinon revenir à la première page
+    const maxPage = Math.ceil(this.totalItems / this.itemsPerPage) || 1;
+    if (this.currentPage > maxPage) {
+      this.currentPage = 1;
+    }
   }
 
   viewDemand(demand: Demand): void {
@@ -99,40 +117,78 @@ export class DemandePackElyssaComponent implements OnInit {
       },
       error: (err) => {
         console.error('Erreur lors de la génération du PDF', err);
-        alert('Erreur lors de la génération du document PDF');
+      
         this.isGeneratingPdf = false;
       }
     });
   }
 
   acceptDemand(demandId: number): void {
-    if (confirm('Êtes-vous sûr de vouloir accepter cette demande ?')) {
-      this.packService.acceptElyssaDemand(demandId).subscribe({
-        next: () => {
-          alert('Demande acceptée avec succès');
-          this.loadElyssaDemands();
-        },
-        error: (err) => {
-          console.error('Erreur lors de l\'acceptation', err);
-          alert('Erreur lors de l\'acceptation');
-        }
-      });
-    }
+    Swal.fire({
+      title: 'Confirmation',
+      text: 'Êtes-vous sûr de vouloir accepter cette demande ?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Oui, accepter',
+      cancelButtonText: 'Annuler'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.packService.acceptElyssaDemand(demandId).subscribe({
+          next: () => {
+            Swal.fire(
+              'Acceptée!',
+              'La demande a été acceptée avec succès.',
+              'success'
+            ).then(() => {
+              // Recharger toutes les données après acceptation
+              this.loadAllData();
+            });
+          },
+          error: (err) => {
+            console.error('Erreur lors de l\'acceptation', err);
+           
+          }
+        });
+      }
+    });
   }
-
+  
   rejectDemand(demandId: number): void {
-    if (confirm('Êtes-vous sûr de vouloir refuser cette demande ?')) {
-      this.packService.refuseElyssaDemand(demandId).subscribe({
-        next: () => {
-          alert('Demande refusée avec succès');
-          this.loadElyssaDemands();
-        },
-        error: (err) => {
-          console.error('Erreur lors du refus', err);
-          alert('Erreur lors du refus');
-        }
-      });
-    }
+    Swal.fire({
+      title: 'Confirmation',
+      text: 'Êtes-vous sûr de vouloir refuser cette demande ?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Oui, refuser',
+      cancelButtonText: 'Annuler'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.packService.refuseElyssaDemand(demandId).subscribe({
+          next: () => {
+            Swal.fire(
+              'Refusée!',
+              'La demande a été refusée avec succès.',
+              'success'
+            ).then(() => {
+              // Recharger toutes les données après refus
+              this.loadAllData();
+            });
+          },
+          error: (err) => {
+            console.error('Erreur lors du refus', err);
+            Swal.fire(
+              'Erreur!',
+              'Une erreur est survenue lors du refus.',
+              'error'
+            );
+          }
+        });
+      }
+    });
   }
 
   getStatusClass(status: string): string {

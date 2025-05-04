@@ -34,9 +34,7 @@ export class DemandePlafondComponent {
         console.error('Erreur:', err);
         this.demandes = [];
         this.hasLoaded = true;
-        if (err.status && err.status !== 404) {
-          this.showError('Erreur lors du chargement des demandes');
-        }
+      
       }
     });
   }

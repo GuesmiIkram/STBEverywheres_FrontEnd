@@ -29,6 +29,8 @@ import { SimulateurCreditComponent } from './simulateur-credit/simulateur-credit
 import { ReponseReclamationComponent } from './reponse-reclamation/reponse-reclamation.component';
 import { RibIbanComponent } from './rib-iban/rib-iban.component';
 import { HistoriqueReclamationsComponent } from './historique-reclamations/historique-reclamations.component';
+import { KycDownloadComponent } from './kyc-download/kyc-download.component';
+
 
 
 @NgModule({
@@ -47,7 +49,9 @@ import { HistoriqueReclamationsComponent } from './historique-reclamations/histo
       SimulateurCreditComponent,
       ReponseReclamationComponent,
       RibIbanComponent,
-      HistoriqueReclamationsComponent,  ],
+      HistoriqueReclamationsComponent,
+      KycDownloadComponent,
+      ],
 
   imports: [
     BrowserModule,

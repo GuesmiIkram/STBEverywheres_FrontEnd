@@ -1,12 +1,5 @@
 <main class="main-content">
-  <!-- Breadcrumb -->
-  <div class="breadcrumb">
-    <a href="#">Home</a> /
-    <a href="#">Cartes</a> /
-    <span>Demande Carte</span>
-  </div>
-
-  <!-- Form Content -->
+   <!-- Form Content -->
   <form (ngSubmit)="onSubmit()" class="transfer-form">
     <div class="form-section">
       <h3 class="section-header">Demande de Carte</h3>
@@ -115,7 +108,13 @@
 
     <!-- Bouton de soumission -->
     <div class="form-actions">
-      <button type="submit" class="btn-submit">Demander une Carte</button>
+      <button 
+        type="submit" 
+        class="btn-submit" 
+        [disabled]="!isFormValid()"
+      >
+        Demander une Carte
+      </button>
     </div>
   </form>
 </main>
