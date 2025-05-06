@@ -506,6 +506,96 @@ body {
     overflow: hidden;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
+   // Styles modifiés pour la carte - Placement sous le formulaire
+.agency-selection {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: $light-bg;
+  border-radius: 10px;
+  width: 100%; // Pleine largeur
+}
+
+.agency-map {
+  margin: 0 0 30px 0; // Suppression de la marge supérieure
+  background-color: $light-bg;
+  border-radius: 10px;
+  padding: 20px;
+  width: 100%; // Pleine largeur
   
-  /* Styles pour les champs de fichier et autres éléments du formulaire */
-  /* ... */
+  &__title {
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: 600;
+    color: $secondary;
+    display: flex;
+    align-items: center;
+    
+    &:before {
+      content: '\f3c5'; // Icône de localisation (FontAwesome)
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 900;
+      margin-right: 10px;
+      color: $primary;
+    }
+  }
+}
+
+// Carte plus petite et mieux intégrée
+.map-container {
+  height: 300px; // Hauteur légèrement augmentée pour la vue pleine largeur
+  width: 100%;
+  margin: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid $border-color;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+// Suppression des styles responsive qui mettaient la carte à côté de la sélection
+@media (min-width: 768px) {
+  .documents__list {
+    display: block; // Revenir à l'affichage en bloc
+  }
+  
+  .agency-selection {
+    width: 100%; // Pleine largeur
+    margin-right: 0;
+  }
+  
+  .agency-map {
+    width: 100%; // Pleine largeur
+    margin-top: 0;
+    margin-left: 0;
+  }
+}
+
+@media (min-width: 992px) {
+  .agency-selection, .agency-map {
+    width: 100%; // Pleine largeur sur tous les écrans
+  }
+  
+  // Bouton d'envoi centré
+  .btn--submit {
+    display: block;
+    margin: 30px auto 0;
+    max-width: 300px;
+  }
+}
+
+// Ajout d'une séparation visuelle entre la sélection d'agence et la carte
+.agency-selection {
+  position: relative;
+  
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 3px;
+    background-color: rgba($primary, 0.3);
+    border-radius: 3px;
+  }
+}

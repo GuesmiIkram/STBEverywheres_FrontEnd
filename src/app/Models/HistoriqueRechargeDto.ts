@@ -7,5 +7,6 @@ export interface HistoriqueRechargeDto {
   
     montant: number;
     frais: number;
+    isDebit: boolean;
    
   }

@@ -141,6 +141,10 @@
             </select>
           </div>
         </div>
+        <div class="agency-map">
+          <h3 class="agency-map__title">Localisation des agences</h3>
+          <div #mapContainer id="map" class="map-container"></div>
+        </div>
   
         <button type="submit" class="btn btn--primary btn--submit" [disabled]="isSubmitting">
           {{ isSubmitting ? 'Envoi en cours...' : 'Envoyer la Demande' }}

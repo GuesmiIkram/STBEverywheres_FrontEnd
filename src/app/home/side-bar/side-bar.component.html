@@ -21,6 +21,10 @@
             <i class="bi bi-circle"></i><span>RIB/IBAN</span>
           </a>
         </li>
+        <a class="nav-link collapsed" routerLink="/home/fichekyc" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+          <i class="bi bi-person"></i>
+          <span>fiche KYC</span>
+        </a>
         <li>
           <a routerLink="/home/TF" routerLinkActive="active">
             <i class="bi bi-circle"></i><span>Compte TF Banque</span>
@@ -205,10 +209,7 @@
         <i class="bi bi-person"></i>
         <span>Profile</span>
       </a>
-      <a class="nav-link collapsed" routerLink="/home/fichekyc" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-        <i class="bi bi-person"></i>
-        <span>fiche kyc</span>
-      </a>
+     
     </li>
   </ul>
 </ng-container>
@@ -300,7 +301,19 @@
       </li>
   
 
-
+      <li class="nav-item">
+        <a class="nav-link collapsed" (click)="ShowHideCollapse('demande-carte-nav')" data-bs-target="#demande-carte-nav" data-bs-toggle="collapse">
+          <i class="ri-gift-fill"></i>  <span>Modification donnée Clients</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="demande-carte-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+          <li>
+            <a class="nav-link" routerLink="/home/ModifReq">
+                <i class="ri-circle-line"></i><span>Liste des demandes Clients</span>
+              </a>
+          </li>
+        
+        </ul>
+      </li>
 
 
 

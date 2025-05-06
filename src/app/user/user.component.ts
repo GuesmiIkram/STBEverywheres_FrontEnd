@@ -52,12 +52,17 @@ export class UserComponent implements OnInit {
     newPassword: '',
     confirmNewPassword: ''
   };
+  passwordFormatValid = false;
   currentPasswordError = false;
   newPasswordError = false;
   confirmNewPasswordError = false;
   passwordMismatch = false;
   positiveNumberPattern = "^[0-9]*\.?[0-9]+$";
-
+  selectedField: string = 'adresse';
+    newFieldValue: string = '';
+    justificationFile: File | null = null;
+    
+   
   constructor(
     private clientService: ClientService,
     private authService: AuthService,  private router: Router 
@@ -92,10 +97,22 @@ export class UserComponent implements OnInit {
     }
   }
 
-  checkPasswords(): void {
-    this.passwordMismatch =
-      this.changePasswordData.newPassword !== this.changePasswordData.confirmNewPassword;
+  // Dans votre composant
+validatePassword(password: string): boolean {
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  return regex.test(password);
+}
+
+// Modifiez la méthode checkPasswords()
+checkPasswords(): void {
+  this.passwordMismatch = 
+    this.changePasswordData.newPassword !== this.changePasswordData.confirmNewPassword;
+  
+  // Ajoutez la validation du format
+  if (this.changePasswordData.newPassword) {
+    this.passwordFormatValid = this.validatePassword(this.changePasswordData.newPassword);
   }
+}
 
   isFormInvalid(): boolean {
     return (
@@ -167,7 +184,32 @@ export class UserComponent implements OnInit {
       });
     }
   }
+  onJustificationFileSelected(event: any): void {
+    this.justificationFile = event.target.files[0] as File;
+}
 
+submitModificationRequest(): void {
+  if (!this.newFieldValue || !this.justificationFile) {
+    Swal.fire('Erreur', 'Veuillez remplir tous les champs', 'error');
+    return;
+  }
+
+  this.clientService.submitModificationRequest(
+    this.selectedField,
+    this.newFieldValue,
+    this.justificationFile
+  ).subscribe({
+    next: () => {
+      Swal.fire('Succès', 'Demande soumise avec succès', 'success');
+      this.newFieldValue = '';
+      this.justificationFile = null;
+    },
+    error: (err) => {
+      console.error('Request error:', err);
+      Swal.fire('Erreur', 'Échec de la soumission de la demande', 'error');
+    }
+  });
+}
   markAllAsTouched(): void {
     if (this.phone?.control) this.phone.control.markAsTouched();
     if (this.email?.control) this.email.control.markAsTouched();
@@ -233,6 +275,26 @@ export class UserComponent implements OnInit {
     }
   }
   async onChangePassword() {
+
+    if (!this.validatePassword(this.changePasswordData.newPassword)) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Format invalide',
+        html: `
+          <div class="text-start">
+            <p>Le mot de passe doit contenir :</p>
+            <ul class="mb-0 ps-3">
+              <li>Minimum 8 caractères</li>
+              <li>1 lettre majuscule (A-Z)</li>
+              <li>1 chiffre (0-9)</li>
+              <li>1 caractère spécial (@$!%*?&)</li>
+            </ul>
+          </div>
+        `,
+        confirmButtonColor: '#1e3a8a'
+      });
+      return;
+    }
     // Validation initiale
     if (this.changePasswordData.newPassword !== this.changePasswordData.confirmNewPassword) {
         Swal.fire({

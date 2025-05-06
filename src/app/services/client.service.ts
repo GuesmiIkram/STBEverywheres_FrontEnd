@@ -65,6 +65,30 @@ getClientNotifications(): Observable<NotificationPack[]> {
   });
 }
 
+submitModificationRequest(
+  fieldToModify: string,
+  newValue: string,
+  justificationFile: File
+): Observable<any> {
+  const formData = new FormData();
+  formData.append('fieldToModify', fieldToModify);
+  formData.append('newValue', newValue);
+  formData.append('justificationFile', justificationFile);
+
+  return this.http.post(
+    `${this.apiUrl}/submit-modification-request`, 
+    formData,
+    {
+      headers: new HttpHeaders({
+        // 'Content-Type' n'est pas nécessaire ici, 
+        // il sera automatiquement défini comme 'multipart/form-data'
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }),
+      reportProgress: true, // Pour suivre la progression du téléchargement
+      responseType: 'json'
+    }
+  );
+}
 markNotificationAsRead(notificationId: number): Observable<any> {
   return this.http.post(`${this.apiUrl}/notifications/${notificationId}/mark-as-read`, {}, {
     headers: {
