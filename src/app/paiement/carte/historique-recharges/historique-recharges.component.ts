@@ -13,6 +13,13 @@ export class HistoriqueRechargesComponent implements OnInit {
   errorMessage: string | null = null
   filteredHistoriques: HistoriqueRechargeDto[] = []
   searchTerm = ""
+  typeFilter = "all" // 'all', 'debit', 'credit'
+
+  // Date filter
+  dateRange = {
+    start: "",
+    end: "",
+  }
 
   // Pagination
   currentPage = 1
@@ -24,6 +31,14 @@ export class HistoriqueRechargesComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadHistoriques()
+    // Initialiser la date de fin à aujourd'hui
+    const today = new Date()
+    this.dateRange.end = this.formatDateForInput(today)
+
+    // Initialiser la date de début à il y a 30 jours
+    const thirtyDaysAgo = new Date()
+    thirtyDaysAgo.setDate(today.getDate() - 30)
+    this.dateRange.start = this.formatDateForInput(thirtyDaysAgo)
   }
 
   loadHistoriques(): void {
@@ -33,8 +48,7 @@ export class HistoriqueRechargesComponent implements OnInit {
     this.carteService.getHistorique().subscribe({
       next: (data) => {
         this.historiques = data
-        this.filteredHistoriques = [...this.historiques]
-        this.totalItems = this.historiques.length
+        this.applyFilters()
         this.isLoading = false
       },
       error: (err) => {
@@ -45,17 +59,75 @@ export class HistoriqueRechargesComponent implements OnInit {
     })
   }
 
-  applyFilter(): void {
-    if (!this.searchTerm) {
-      this.filteredHistoriques = [...this.historiques]
+  // Méthode pour filtrer par type en cliquant sur les cartes
+  filterByType(type: string): void {
+    // Si on clique sur le même type déjà sélectionné, on revient à "all"
+    if (this.typeFilter === type && type !== "all") {
+      this.typeFilter = "all"
     } else {
+      this.typeFilter = type
+    }
+
+    this.applyFilters()
+  }
+
+  applyFilters(): void {
+    let filtered = [...this.historiques]
+
+    // Filtre par numéro de carte
+    if (this.searchTerm) {
       const term = this.searchTerm.toLowerCase()
-      this.filteredHistoriques = this.historiques.filter(
+      filtered = filtered.filter(
         (h) => h.carteEmetteurNum.toLowerCase().includes(term) || h.carteRecepteurNum.toLowerCase().includes(term),
       )
     }
+
+    // Filtre par date
+    if (this.dateRange.start && this.dateRange.end) {
+      const startDate = new Date(this.dateRange.start)
+      startDate.setHours(0, 0, 0, 0)
+
+      const endDate = new Date(this.dateRange.end)
+      endDate.setHours(23, 59, 59, 999)
+
+      filtered = filtered.filter((h) => {
+        const transactionDate = new Date(h.dateRecharge)
+        return transactionDate >= startDate && transactionDate <= endDate
+      })
+    }
+
+    // Filtre par type (débit/crédit)
+    if (this.typeFilter !== "all") {
+      const isDebitFilter = this.typeFilter === "debit"
+      filtered = filtered.filter((h) => h.isDebit === isDebitFilter)
+    }
+
+    this.filteredHistoriques = filtered
     this.currentPage = 1
     this.totalItems = this.filteredHistoriques.length
+  }
+
+  resetFilters(): void {
+    // Réinitialiser le filtre de recherche
+    this.searchTerm = ""
+
+    // Réinitialiser le filtre de type
+    this.typeFilter = "all"
+
+    // Réinitialiser les dates (30 derniers jours)
+    const today = new Date()
+    this.dateRange.end = this.formatDateForInput(today)
+
+    const thirtyDaysAgo = new Date()
+    thirtyDaysAgo.setDate(today.getDate() - 30)
+    this.dateRange.start = this.formatDateForInput(thirtyDaysAgo)
+
+    // Appliquer les filtres réinitialisés
+    this.applyFilters()
+  }
+
+  formatDateForInput(date: Date): string {
+    return date.toISOString().split("T")[0]
   }
 
   changeItemsPerPage(items: number): void {
@@ -83,16 +155,17 @@ export class HistoriqueRechargesComponent implements OnInit {
     })
   }
 
-  // Méthode pour déterminer si c'est un débit (émetteur)
   isDebit(hist: HistoriqueRechargeDto): boolean {
-    // Implémentez la logique pour déterminer si c'est un débit
-    // Par exemple, si la carte émettrice est une des cartes du client
-    return true // À adapter selon votre logique
+    return hist.isDebit
   }
 
-  getPages(): number[] {
-    const pageCount = Math.ceil(this.totalItems / this.itemsPerPage)
-    return Array.from({ length: pageCount }, (_, i) => i + 1)
+  // Méthodes pour obtenir les compteurs de transactions
+  getDebitCount(): number {
+    return this.historiques.filter((h) => h.isDebit).length
+  }
+
+  getCreditCount(): number {
+    return this.historiques.filter((h) => !h.isDebit).length
   }
 
   // Méthode pour obtenir le nombre total de pages
@@ -118,7 +191,8 @@ export class HistoriqueRechargesComponent implements OnInit {
       return Array.from({ length: 5 }, (_, i) => totalPages - 4 + i)
     } else {
       // Au milieu
-      return Array.from({ length: 3 }, (_, i) => this.currentPage - 1 + i)
+      return Array.from({ length: 5 }, (_, i) => this.currentPage - 2 + i)
     }
   }
 }
+

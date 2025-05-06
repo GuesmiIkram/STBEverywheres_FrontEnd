@@ -1,0 +1,401 @@
+// Variables
+$primary-color: #4a6bdf;
+$primary-light: rgba($primary-color, 0.1);
+$primary-dark: darken($primary-color, 10%);
+$success-color: #2ecc71;
+$success-light: rgba($success-color, 0.1);
+$danger-color: #e74c3c;
+$danger-light: rgba($danger-color, 0.1);
+$warning-color: #f39c12;
+$light-gray: #f8f9fa;
+$medium-gray: #e9ecef;
+$dark-gray: #6c757d;
+$card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+$hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+$border-radius: 0.5rem;
+$transition-time: 0.25s;
+
+// Mixins
+@mixin card-style {
+  border: none;
+  border-radius: $border-radius;
+  box-shadow: $card-shadow;
+  transition: all $transition-time ease;
+  overflow: hidden;
+  
+  &:hover {
+    box-shadow: $hover-shadow;
+  }
+}
+
+@mixin button-hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+// Styles généraux
+.modification-requests {
+  padding: 1rem;
+  
+  .card {
+    @include card-style;
+    height: 100%;
+    
+    .card-header {
+      background: linear-gradient(135deg, $primary-color, $primary-dark);
+      color: white;
+      padding: 1rem 1.25rem;
+      border-bottom: none;
+      
+      h5 {
+        font-weight: 600;
+        letter-spacing: 0.5px;
+      }
+      
+      i {
+        font-size: 1.1rem;
+      }
+    }
+  }
+}
+
+// Liste des demandes
+.request-list-card {
+  .card-body {
+    padding: 0;
+  }
+  
+  table {
+    margin-bottom: 0;
+    
+    th {
+      background-color: $light-gray;
+      font-weight: 600;
+      padding: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      border-bottom: 2px solid $medium-gray;
+    }
+    
+    td {
+      padding: 0.75rem 1rem;
+      vertical-align: middle;
+    }
+    
+    tr {
+      cursor: pointer;
+      transition: all $transition-time ease;
+      border-left: 4px solid transparent;
+      
+      &:hover {
+        background-color: $primary-light;
+      }
+      
+      &.selected-row {
+        background-color: $primary-light;
+        border-left: 4px solid $primary-color;
+        
+        td:first-child {
+          font-weight: 600;
+        }
+      }
+    }
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    
+    .btn {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all $transition-time ease;
+      
+      i {
+        font-size: 0.8rem;
+      }
+      
+      &:hover {
+        @include button-hover;
+      }
+      
+      &.document-btn {
+        color: $primary-color;
+        border-color: $primary-color;
+        
+        &:hover {
+          background-color: $primary-color;
+          color: white;
+        }
+      }
+      
+      &.approve-btn {
+        color: $success-color;
+        border-color: $success-color;
+        
+        &:hover {
+          background-color: $success-color;
+          color: white;
+        }
+      }
+      
+      &.refuse-btn {
+        color: $danger-color;
+        border-color: $danger-color;
+        
+        &:hover {
+          background-color: $danger-color;
+          color: white;
+        }
+      }
+    }
+  }
+  
+  .empty-state {
+    padding: 3rem 1rem;
+    text-align: center;
+    color: $dark-gray;
+    
+    i {
+      color: $medium-gray;
+      margin-bottom: 1rem;
+      opacity: 0.7;
+    }
+    
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 0;
+    }
+  }
+}
+
+// Détails de la demande
+.details-card {
+  .card-body {
+    padding: 1.5rem;
+  }
+  
+  .detail-item {
+    display: flex;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid $medium-gray;
+    
+    &:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    
+    .detail-label {
+      font-weight: 600;
+      min-width: 150px;
+      color: $dark-gray;
+    }
+    
+    .detail-value {
+      flex: 1;
+      color: #333;
+    }
+  }
+  
+  .action-zone {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid $medium-gray;
+    
+    .action-btn {
+      min-width: 130px;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      transition: all $transition-time ease;
+      
+      &:hover {
+        @include button-hover;
+      }
+      
+      &.btn-success {
+        background-color: $success-color;
+        border-color: $success-color;
+        
+        &:hover {
+          background-color: darken($success-color, 5%);
+          border-color: darken($success-color, 5%);
+        }
+      }
+      
+      &.btn-danger {
+        background-color: $danger-color;
+        border-color: $danger-color;
+        
+        &:hover {
+          background-color: darken($danger-color, 5%);
+          border-color: darken($danger-color, 5%);
+        }
+      }
+    }
+    
+    .refusal-input {
+      min-width: 250px;
+      border-radius: 50px;
+      padding: 0.5rem 1rem;
+      border: 1px solid $medium-gray;
+      transition: all $transition-time ease;
+      
+      &:focus {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
+      }
+    }
+  }
+}
+
+// Animation de chargement
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+  color: $primary-color;
+  animation-duration: 1s;
+}
+
+// Responsive
+@media (max-width: 992px) {
+  .modification-requests {
+    .row {
+      gap: 1.5rem;
+    }
+  }
+  
+  .details-card {
+    .detail-item {
+      flex-direction: column;
+      
+      .detail-label {
+        margin-bottom: 0.5rem;
+      }
+    }
+    
+    .action-zone {
+      .d-flex {
+        gap: 1rem;
+      }
+    }
+  }
+  
+  .action-buttons {
+    .btn {
+      width: 36px !important;
+      height: 36px !important;
+      
+      i {
+        font-size: 0.9rem !important;
+      }
+    }
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.details-card {
+  animation: fadeIn 0.3s ease-out;
+}
+
+// Personnalisation de la barre de défilement
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: $light-gray;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $dark-gray;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: $primary-color;
+}
+
+// Effet de focus sur les éléments interactifs
+button:focus, input:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
+}
+
+// Effet de pulsation pour les notifications
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba($primary-color, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba($primary-color, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba($primary-color, 0);
+  }
+}
+
+// Effet de transition pour les changements d'état
+.table-responsive {
+  transition: all 0.3s ease;
+}
+
+// Amélioration des états de survol pour les boutons
+.btn {
+  position: relative;
+  overflow: hidden;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%, -50%);
+    transform-origin: 50% 50%;
+  }
+  
+  &:focus:not(:active)::after {
+    animation: ripple 1s ease-out;
+  }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0, 0);
+    opacity: 0.5;
+  }
+  20% {
+    transform: scale(25, 25);
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(40, 40);
+  }
+}

@@ -39,6 +39,7 @@ registerLocaleData(localeFr)
 
 import { BreadcrumbModule } from 'xng-breadcrumb';
 import { NgChartsModule } from 'ng2-charts';
+import { ModificationRequestsComponent } from './modification-requests/modification-requests.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { NgChartsModule } from 'ng2-charts';
       HistoriqueReclamationsComponent,
        KycDownloadComponent,
       ExtraitComponent,
+      ModificationRequestsComponent,
       //DashbordAgentComponent,
      ],
 
