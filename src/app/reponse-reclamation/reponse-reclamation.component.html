@@ -1,161 +1,288 @@
-<div class="reclamations-container">
-  <div class="reclamations-header">
-    <h2>Réclamations en attente</h2>
-    <div class="search-container">
-      <input
-        type="text"
-        placeholder="Rechercher une réclamation..."
-        [(ngModel)]="searchTerm"
-        (input)="filterReclamations()"
-        class="search-input"
-      >
-      <i class="search-icon">🔍</i>
+<div class="agent-dashboard">
+  <!-- En-tête avec titre et recherche -->
+  <div class="dashboard-header">
+    <div class="header-title">
+      <h2>Gestion des réclamations</h2>
+      <p class="subtitle">Traitez les réclamations clients en attente</p>
+    </div>
+    <div class="header-actions">
+
+
+      <div class="filter-dropdown">
+        <select [(ngModel)]="filterType" (change)="applyFilter()" class="filter-select">
+          <option value="all">Tous les types</option>
+          <option value="mise en opposition chequier">Mise en opposition chéquier</option>
+          <option value="mise en opposition carte">Mise en opposition carte</option>
+          <option value="frais erronés">Frais erronés</option>
+          <option value="opérations double">Opérations double</option>
+          <option value="autre">Autre</option>
+        </select>
+      </div>
+
     </div>
   </div>
 
-  <!-- Loader -->
+
+   <!-- Statistiques -->
+<div class="stats-container">
+  <div class="stat-card">
+    <div class="stat-icon">
+      <i class="fas fa-inbox"></i>
+    </div>
+    <div class="stat-content">
+      <span class="stat-value">{{ reclamations.length }}</span>
+      <span class="stat-label">Total</span>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon today">
+      <i class="fas fa-calendar-day"></i>
+    </div>
+    <div class="stat-content">
+      <span class="stat-value">{{ getTodayCount() }}</span>
+      <span class="stat-label">Reçues aujourd'hui</span>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon pending">
+      <i class="fas fa-hourglass-half"></i>
+    </div>
+    <div class="stat-content">
+      <span
+        class="stat-value"
+        [ngClass]="getOldestPendingDays() > 2 ? 'alert' : ''">
+        {{ getOldestPendingDays() }} jours
+      </span>
+<span class="stat-label">depuis la plus vieille réclamation en attente</span>
+    </div>
+  </div>
+
+</div>
+  </div>
+
+  <!-- État de chargement -->
   <div *ngIf="loading" class="loading-container">
     <div class="loading-spinner"></div>
-    <span>Chargement en cours...</span>
+    <span>Chargement des réclamations...</span>
   </div>
 
-  <!-- Error message -->
-  <div *ngIf="errorLoad" class="error-message">
-    <i class="error-icon">⚠️</i>
-    <span>{{ errorLoad }}</span>
+  <div *ngIf="!loading && reclamations.length === 0" class="no-records">
+    <i class="bi bi-check-circle-fill text-success"></i>
+    <p>Aucune réclamation en cours</p>
   </div>
 
-  <!-- Empty state -->
-  <div *ngIf="!loading && filteredReclamations.length === 0 && !errorLoad" class="empty-state">
-    <i class="empty-icon">📭</i>
-    <p>Aucune réclamation en attente</p>
+  <div *ngIf="errorLoad && reclamations.length === 0" class="alert alert-danger">
+    {{ errorLoad }}
   </div>
-
-  <!-- Réclamations list -->
-  <div *ngIf="!loading && filteredReclamations.length > 0" class="reclamations-list">
-    <table class="reclamations-table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Objet</th>
-          <th>Date</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let rec of paginatedReclamations" (click)="voirDetails(rec)" class="reclamation-row">
-          <td class="id-cell">{{ rec.id }}</td>
-          <td class="objet-cell">{{ rec.objet }}</td>
-          <td class="date-cell">{{ rec.dateCreation | date:'dd/MM/yyyy HH:mm' }}</td>
-          <td class="actions-cell">
-            <button class="details-btn" (click)="$event.stopPropagation(); voirDetails(rec)">
-              Détails
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- Pagination -->
-    <div class="pagination-container">
-      <div class="pagination-info">
-        Page {{ currentPage }} sur {{ totalPages }}
-      </div>
-      <div class="pagination-controls">
-        <button
-          class="pagination-btn"
-          [disabled]="currentPage === 1"
-          (click)="changePage(currentPage - 1)"
-        >
-          Précédent
+  <!-- Liste des réclamations -->
+  <div *ngIf="!loading && filteredReclamations.length > 0" class="reclamations-card">
+    <div class="card-header">
+      <h3>Réclamations en attente ({{ filteredReclamations.length }})</h3>
+      <div class="view-options">
+        <button class="view-btn" [class.active]="viewMode === 'table'" (click)="viewMode = 'table'">
+          <i class="fas fa-table"></i>
         </button>
-        <div class="pagination-pages">
-          <button
-            *ngFor="let page of pagesArray"
-            class="page-btn"
-            [class.active]="page === currentPage"
-            (click)="changePage(page)"
-          >
-            {{ page }}
+        <button class="view-btn" [class.active]="viewMode === 'cards'" (click)="viewMode = 'cards'">
+          <i class="fas fa-th-large"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Vue tableau -->
+    <div *ngIf="viewMode === 'table'" class="table-container">
+      <table class="reclamations-table">
+        <thead>
+          <tr>
+            <th class="sortable" (click)="sortBy('id')">
+              ID
+              <i *ngIf="sortField === 'id'" class="fas" [ngClass]="sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down'"></i>
+            </th>
+            <th class="sortable" (click)="sortBy('objet')">
+              Objet
+              <i *ngIf="sortField === 'objet'" class="fas" [ngClass]="sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down'"></i>
+            </th>
+            <th class="sortable" (click)="sortBy('dateCreation')">
+              Date
+              <i *ngIf="sortField === 'dateCreation'" class="fas" [ngClass]="sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down'"></i>
+            </th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let rec of paginatedReclamations" class="reclamation-row">
+            <td class="id-cell">{{ rec.id }}</td>
+            <td class="objet-cell">
+              <div class="objet-content">
+                <span class="objet-title">{{ rec.objet }}</span>
+                <span class="objet-preview">{{ getPreview(rec.message) }}</span>
+              </div>
+            </td>
+            <td class="date-cell">
+              <div class="date-content">
+                <span class="date-value">{{ rec.dateCreation | date:'dd/MM/yyyy' }}</span>
+                <span class="time-value">{{ rec.dateCreation | date:'HH:mm' }}</span>
+              </div>
+            </td>
+            <td class="actions-cell">
+              <button class="action-btn primary" (click)="voirDetails(rec)" title="Traiter">
+                <i class="fas fa-reply"></i>
+                <span>Répondre</span>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Vue cartes -->
+    <div *ngIf="viewMode === 'cards'" class="cards-container">
+      <div *ngFor="let rec of paginatedReclamations" class="reclamation-card">
+        <div class="card-header-content">
+          <span class="card-id">#{{ rec.id }}</span>
+        </div>
+        <div class="card-body">
+          <h4 class="card-title">{{ rec.objet }}</h4>
+          <p class="card-message">{{ getPreview(rec.message, 100) }}</p>
+        </div>
+        <div class="card-footer">
+          <div class="card-date">
+            <i class="fas fa-calendar-alt"></i>
+            <span>{{ rec.dateCreation | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          <button class="action-btn primary" (click)="voirDetails(rec)">
+            <i class="fas fa-reply"></i>
+            <span>Répondre</span>
           </button>
         </div>
-        <button
-          class="pagination-btn"
-          [disabled]="currentPage === totalPages"
-          (click)="changePage(currentPage + 1)"
-        >
-          Suivant
+      </div>
+    </div>
+
+    <!-- Pagination -->
+ <!-- Pagination Section (Corrected) -->
+<div class="pagination">
+  <button
+    class="pagination-btn"
+    [disabled]="currentPage === 1"
+    (click)="changePage(currentPage - 1)"
+  >
+    <i class="bi bi-chevron-left"></i>
+  </button>
+
+  <ng-container *ngFor="let page of pagesArray">
+    <span *ngIf="page === '...'" class="pagination-ellipsis">...</span>
+  <!-- Updated Line -->
+<button
+*ngIf="page !== '...'"
+class="pagination-btn"
+[class.active]="currentPage === page"
+(click)="changePage(getPageNumber(page))"
+>
+{{ page }}
+</button>
+
+  </ng-container>
+
+  <button
+    class="pagination-btn"
+    [disabled]="currentPage === totalPages"
+    (click)="changePage(currentPage + 1)"
+  >
+    <i class="bi bi-chevron-right"></i>
+  </button>
+</div>
+
+  <!-- Modal de réponse -->
+  <div *ngIf="selectedReclamation" class="modal-overlay" (click)="closeModal($event)">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Traitement de la réclamation #{{ selectedReclamation.id }}</h3>
+        <button class="close-btn" (click)="selectedReclamation = undefined">
+          <i class="fas fa-times"></i>
         </button>
       </div>
-    </div>
-  </div>
 
-  <!-- Détails de la réclamation -->
-  <div *ngIf="selectedReclamation" class="reclamation-details">
-    <div class="details-header">
-      <h3>Détails de la réclamation</h3>
-      <button class="close-btn" (click)="selectedReclamation = undefined">×</button>
-    </div>
+      <div class="modal-body">
+        <div class="client-info-section">
+          <div class="section-header">
+            <h4>Informations client</h4>
+          </div>
+          <div class="client-details">
+            <div class="client-details">
+              <div class="client-avatar-section">
+                <div class="client-avatar">
+                  <i class="fas fa-user"></i>
+                </div>
+                <div class="client-name" *ngIf="clientInfo">
+                  {{ clientInfo.nom }} {{ clientInfo.prenom }}
+                </div>
+              </div>
 
-    <div class="details-content">
-      <div class="details-info">
-        <div class="info-group">
-          <span class="info-label">Référence:</span>
-          <span class="info-value">#{{ selectedReclamation.id }}</span>
-        </div>
-        <div class="info-group">
-          <span class="info-label">Objet:</span>
-          <span class="info-value">{{ selectedReclamation.objet }}</span>
-        </div>
-        <div class="info-group">
-          <span class="info-label">Date:</span>
-          <span class="info-value">{{ selectedReclamation.dateCreation | date:'fullDate' }}</span>
+              <div class="client-data" *ngIf="clientInfo">
+                <div class="client-id">CIN: {{ clientInfo.numCIN }}</div>
+                <div class="client-contact">
+                  <span><i class="fas fa-envelope"></i> {{ clientInfo.email }}</span><br>
+                  <span><i class="fas fa-phone"></i> {{ clientInfo.telephone }}</span>
+                </div>
+              </div>
+            </div>
+
         </div>
       </div>
 
-      <div class="message-container">
-        <h4>Message du client</h4>
-        <div class="message-content">
-          {{ selectedReclamation.message }}
+      <div class="reclamation-info-section">
+        <div class="section-header">
+          <h4>Détails de la réclamation</h4>
+          <span class="reclamation-date">
+            <i class="fas fa-calendar-alt"></i>
+            {{ selectedReclamation.dateCreation | date:'dd MMMM yyyy à HH:mm':'':'fr' }}
+          </span>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Objet:</span>
+            <span class="info-value">{{ selectedReclamation.objet }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Motif:</span>
+            <span class="info-value">{{ selectedReclamation.motif || 'Non spécifié' }}</span>
+          </div>
+        </div>
+
+        <div class="message-container">
+          <div class="message-header">
+            <span class="message-title">Message du client</span>
+          </div>
+          <div class="message-content">
+            {{ selectedReclamation.message }}
+          </div>
         </div>
       </div>
 
       <form [formGroup]="reponseForm" (ngSubmit)="envoyerReponse()" class="reponse-form">
+        <div class="form-header">
+          <h4><i class="fas fa-comment-dots"></i> Votre réponse</h4>
+        </div>
+
         <div class="form-group">
-          <label for="contenuReponse">Réponse :</label>
-          <textarea
-            id="contenuReponse"
-            formControlName="contenuReponse"
-            rows="5"
-            placeholder="Tapez votre réponse ici..."
-            class="reponse-textarea"
-          ></textarea>
-          <div *ngIf="reponseForm.get('contenuReponse')?.invalid && reponseForm.get('contenuReponse')?.touched" class="validation-error">
-            Une réponse est requise
+          <label for="messageReponse">Message <span class="required">*</span></label>
+          <div class="textarea-container">
+            <textarea id="messageReponse" formControlName="contenuReponse" class="form-textarea" rows="5"
+                      placeholder="Saisissez votre réponse ici..."></textarea>
+            <div class="character-counter" *ngIf="reponseForm.get('contenuReponse')?.value">
+              {{ reponseForm.get('contenuReponse')?.value?.length || 0 }}/500
+            </div>
           </div>
+          <div class="hint-text">Votre réponse sera immédiatement envoyé par mail au client</div>
         </div>
 
         <div class="form-actions">
-          <button type="button" class="cancel-btn" (click)="selectedReclamation = undefined">Annuler</button>
-          <button
-            type="submit"
-            class="submit-btn"
-            [disabled]="reponseForm.invalid || isSubmitting"
-          >
-            <span *ngIf="!isSubmitting">Envoyer la réponse</span>
-            <span *ngIf="isSubmitting">Envoi en cours...</span>
+
+          <button type="submit" class="btn btn-primary" [disabled]="reponseForm.invalid">
+            <i class="fas fa-paper-plane"></i> Envoyer la réponse
           </button>
         </div>
       </form>
-
-      <div *ngIf="successMsg" class="success-message">
-        <i class="success-icon">✓</i>
-        <span>{{ successMsg }}</span>
-      </div>
-
-      <div *ngIf="errorMsg" class="error-message">
-        <i class="error-icon">⚠️</i>
-        <span>{{ errorMsg }}</span>
       </div>
     </div>
   </div>
