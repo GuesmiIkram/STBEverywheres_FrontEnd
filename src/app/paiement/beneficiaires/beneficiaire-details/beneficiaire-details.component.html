@@ -35,7 +35,7 @@
           <th>RIB</th>
           <th>Téléphone</th>
           <th>Email</th>
-          <th>Actions</th>
+
         </tr>
       </thead>
       <tbody>
@@ -46,14 +46,7 @@
           <td>{{ formatTelephone(beneficiaire.telephone) }}</td>
 
           <td>{{ beneficiaire.email || '-' }}</td>
-          <td class="actions">
-            <button class="btn-icon" title="Modifier">
-              <i class="fas fa-edit"></i>
-            </button>
-            <button class="btn-icon danger" title="Supprimer">
-              <i class="fas fa-trash-alt"></i>
-            </button>
-          </td>
+
         </tr>
       </tbody>
     </table>

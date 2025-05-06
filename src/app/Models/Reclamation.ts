@@ -5,10 +5,11 @@
   dateCreation: Date;
 }*/
 export interface Reclamation {
-  id: number;        
-  objet: string;       
-  message: string;     
-  motif: string;      
-  dateCreation: Date; 
-   
+  id: number;
+  objet: string;
+  message: string;
+  motif: string;
+  dateCreation: Date;
+  clientId: number;
+
 }

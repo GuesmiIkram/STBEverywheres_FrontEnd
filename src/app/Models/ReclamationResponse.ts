@@ -6,4 +6,9 @@ export interface ReclamationResponse {
     statut: string;
     reference: string;
     reponse?: string;
+
+
+    message?: string;
+
+    dateResolution?: string;
   }

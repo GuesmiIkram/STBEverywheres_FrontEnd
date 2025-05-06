@@ -50,8 +50,8 @@ export class CarteComponent implements OnInit {
           return 'assets/img/Ccash.png';
       case NomCarte.C_pay:
         return 'assets/img/Cpay.png';
-      
-     
+
+
       default:
         return 'assets/images/default-card.jpg';
     }
@@ -71,8 +71,8 @@ export class CarteComponent implements OnInit {
     return masked + lastFour;
   }
   shouldShowOverlay(statut: StatutCarte): boolean {
-    return statut === StatutCarte.Inactive || 
-           statut === StatutCarte.Blocked || 
+    return statut === StatutCarte.Inactive ||
+           statut === StatutCarte.Blocked ||
            statut === StatutCarte.Expired;
   }
   blockCarte(numCarte: string): void {
