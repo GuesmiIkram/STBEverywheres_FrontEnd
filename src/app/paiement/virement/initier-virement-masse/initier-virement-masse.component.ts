@@ -205,63 +205,64 @@ export class InitierVirementMasseComponent implements OnInit {
             html: `
               <div style="text-align: center;">
                 <i class="fas fa-file-excel" style="color: #dc3545; font-size: 48px; margin-bottom: 15px;"></i>
-                <p>${error.error.message || 'Le fichier contient des erreurs.'}</p>
-                ${error.error.details ? `<p style="font-size: 13px; color: #666;">${error.error.details}</p>` : ''}
+                <p>${error.error?.message || 'Le fichier contient des erreurs.'}</p>
+                ${error.error?.details ? `<p style="font-size: 13px; color: #666;">${error.error.details}</p>` : ''}
               </div>
             `,
             confirmButtonText: 'Compris',
             confirmButtonColor: '#3366cc'
           });
         } else if (error.status === 404) {
-          // Compte introuvable
-          Swal.fire({
-            title: 'Compte introuvable',
-            html: `
-              <div style="text-align: center;">
-                <i class="fas fa-university" style="color: #dc3545; font-size: 48px; margin-bottom: 15px;"></i>
-                <p>${error.error.message || 'Compte émetteur ou bénéficiaire introuvable.'}</p>
-                ${error.error.rib ? `<p style="font-size: 13px;"><strong>RIB:</strong> ${error.error.rib}</p>` : ''}
-              </div>
-            `,
-            confirmButtonText: 'Compris',
-            confirmButtonColor: '#3366cc'
-          });
-        } else if (error.status === 402) {
-          // Solde insuffisant
-          Swal.fire({
-            title: 'Solde insuffisant',
-            html: `
-              <div style="text-align: left;">
-                <i class="fas fa-money-bill-wave" style="color: #dc3545; font-size: 48px; float: left; margin-right: 15px;"></i>
-                <p style="text-align: left;">${error.error.message || 'Solde insuffisant pour effectuer le virement.'}</p>
-                <div style="clear: both;"></div>
-                <div style="margin-top: 15px; text-align: left;">
-                  <p><strong>Solde disponible:</strong> ${error.error.soldeDisponible || 'Non spécifié'} TND</p>
-                  <p><strong>Montant nécessaire:</strong> ${error.error.montantNecessaire || 'Non spécifié'} TND</p>
+          const message = error.error?.message || '';
+          const rib = error.error?.rib || null;
+        
+          if (message.includes('émetteur')) {
+            // Compte émetteur introuvable
+            Swal.fire({
+              title: 'Compte émetteur introuvable',
+              html: `
+                <div style="text-align: center;">
+                  <i class="fas fa-university" style="color: #dc3545; font-size: 48px; margin-bottom: 15px;"></i>
+                  <p>${message}</p>
+                  ${rib ? `<p style="font-size: 13px;"><strong>RIB:</strong> ${rib}</p>` : ''}
                 </div>
-              </div>
-              <div style="font-size: 12px; color: #666; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
-                <p>Veuillez approvisionner votre compte ou réduire le montant du virement.</p>
-              </div>
-            `,
-            confirmButtonText: 'Compris',
-            confirmButtonColor: '#3366cc'
-          });
-        } else {
-          // Erreur serveur inattendue
-          Swal.fire({
-            title: 'Erreur',
-            html: `
-              <div style="text-align: center;">
-                <i class="fas fa-server" style="color: #dc3545; font-size: 48px; margin-bottom: 15px;"></i>
-                <p>Une erreur est survenue lors du traitement du virement.</p>
-                <p style="font-size: 13px; color: #666;">${error.error.message || 'Veuillez réessayer plus tard.'}</p>
-              </div>
-            `,
-            confirmButtonText: 'Fermer',
-            confirmButtonColor: '#3366cc'
-          });
+              `,
+              confirmButtonText: 'Compris',
+              confirmButtonColor: '#3366cc'
+            });
+          } else if (message.includes('bénéficiaire')) {
+            // Compte bénéficiaire introuvable
+            Swal.fire({
+              title: 'Compte bénéficiaire introuvable',
+              html: `
+                <div style="text-align: center;">
+                  <i class="fas fa-user-slash" style="color: #dc3545; font-size: 48px; margin-bottom: 15px;"></i>
+                  <p>${message}</p>
+                  ${rib ? `<p style="font-size: 13px;"><strong>RIB:</strong> ${rib}</p>` : ''}
+                </div>
+              `,
+              confirmButtonText: 'Compris',
+              confirmButtonColor: '#3366cc'
+            });
+          } else {
+            // Cas générique 404
+            Swal.fire({
+              title: 'Compte introuvable',
+              html: `
+                <div style="text-align: center;">
+                  <i class="fas fa-university" style="color: #dc3545; font-size: 48px; margin-bottom: 15px;"></i>
+                  <p>${message || 'Compte émetteur ou bénéficiaire introuvable.'}</p>
+                  ${rib ? `<p style="font-size: 13px;"><strong>RIB:</strong> ${rib}</p>` : ''}
+                </div>
+              `,
+              confirmButtonText: 'Compris',
+              confirmButtonColor: '#3366cc'
+            });
+          }
         }
+        
+        
+        
       }
     );
   }
@@ -352,7 +353,7 @@ openAddBeneficiaireModal(): void {
     }
 
     const formValue = this.virementForm.value;
-    const totalMontant = formValue.beneficiaires.reduce((sum: number, benef: any) => sum + benef.montant, 0);
+    const totalMontant = formValue.beneficiaires.reduce((sum: number, benef: any) => sum + Number(benef.montant), 0);
     const compteEmetteur = this.comptes.find(c => c.rib === formValue.ribEmetteur);
 
     if (!compteEmetteur) {
@@ -366,7 +367,7 @@ openAddBeneficiaireModal(): void {
       frais += (nombreBeneficiaires - 5) * 0.5;
     }
 
-    const totalAvecFrais = totalMontant + frais;
+    const totalAvecFrais = Number(totalMontant) + frais;
     const soldeDisponible = compteEmetteur.solde + compteEmetteur.decouvertAutorise;
 
     // Vérification du solde
@@ -383,7 +384,7 @@ openAddBeneficiaireModal(): void {
           <div style="text-align: left; margin: 10px 0;">
             <p><strong>Solde disponible:</strong> ${compteEmetteur.solde} TND</p>
             <p><strong>Découvert autorisé:</strong> ${compteEmetteur.decouvertAutorise} TND</p>
-            <p><strong>Total à débiter:</strong> ${totalAvecFrais} TND</p>
+            <p><strong>Total à débiter:</strong> ${totalAvecFrais.toFixed(2)} TND</p>
             <p style="color: #dc3545; font-weight: 500;">Votre solde est insuffisant pour effectuer cette opération.</p>
           </div>
           ${legalText}

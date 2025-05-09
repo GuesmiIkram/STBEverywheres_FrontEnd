@@ -7,7 +7,7 @@
       </div>
     </div>
   </div>
-  
+
   <!-- Header -->
   <header class="main-header">
     <div class="container">
@@ -17,7 +17,7 @@
           <span class="app-name">STBEverywhere</span>
         </a>
       </div>
-      
+
       <div class="auth-buttons">
         <a href="" class="btn btn-outline">Espace Client</a>
         <a  class="btn btn-primary">Devenir Client <i class="fas fa-lock"></i></a>
@@ -27,7 +27,7 @@
       </div>
     </div>
   </header>
-  
+
   <section class="hero-section">
     <div class="container">
         <div class="hero-content">
@@ -46,7 +46,7 @@
               <img src="assets/img/digiopa.png" alt="STB Banking Services">
           </div>
       </div>
-    
+
     <!-- Quick Access Section -->
     <div class="quick-access">
       <div class="container">
@@ -70,7 +70,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Interactive Blocks Container -->
     <div class="interactive-blocks-container">
       <!-- Bloc simulateur -->
@@ -81,55 +81,55 @@
             <i class="fas fa-times"></i>
           </button>
         </div>
-        
+
         <div class="block-content">
           <form (ngSubmit)="calculerCredit()">
             <div class="form-group">
               <label for="montant">Montant du crédit (TND):</label>
-              <input 
-                type="number" 
-                id="montant" 
-                [(ngModel)]="montant" 
-                name="montant" 
-                required 
+              <input
+                type="number"
+                id="montant"
+                [(ngModel)]="montant"
+                name="montant"
+                required
                 placeholder="Ex: 50000"
                 class="form-control"
               />
             </div>
-        
+
             <div class="form-group">
               <label for="duree">Durée (en mois):</label>
-              <input 
-                type="number" 
-                id="duree" 
-                [(ngModel)]="duree" 
-                name="duree" 
-                required 
+              <input
+                type="number"
+                id="duree"
+                [(ngModel)]="duree"
+                name="duree"
+                required
                 placeholder="Ex: 60"
                 class="form-control"
               />
             </div>
-        
+
             <div class="form-group">
               <label for="taux">Taux d'intérêt annuel (%):</label>
-              <input 
-                type="number" 
-                id="taux" 
-                [(ngModel)]="taux" 
-                name="taux" 
-                required 
+              <input
+                type="number"
+                id="taux"
+                [(ngModel)]="taux"
+                name="taux"
+                required
                 step="0.01"
                 placeholder="Ex: 7.5"
                 class="form-control"
               />
             </div>
-        
+
             <div class="form-group">
               <label for="typeAmortissement">Type d'amortissement:</label>
-              <select 
-                id="typeAmortissement" 
-                [(ngModel)]="typeAmortissement" 
-                name="typeAmortissement" 
+              <select
+                id="typeAmortissement"
+                [(ngModel)]="typeAmortissement"
+                name="typeAmortissement"
                 required
                 class="form-control"
               >
@@ -137,20 +137,20 @@
                 <option value="variable">Amortissement variable</option>
               </select>
             </div>
-        
+
             <button type="submit" class="btn btn-primary btn-block">
               <i class="fas fa-calculator"></i> Calculer
             </button>
           </form>
-        
+
           <div *ngIf="result" class="result-container">
             <h3>Résultat de la simulation:</h3>
-            
+
             <div *ngIf="result.type === 'Mensualité constante'" class="result-constant">
               <p>Type: {{ result.type }}</p>
               <p class="mensualite">Mensualité: <span>{{ result.mensualite }} TND</span></p>
             </div>
-        
+
             <div *ngIf="result.type === 'Amortissement variable'" class="result-variable">
               <p>Type: {{ result.type }}</p>
               <div class="table-container">
@@ -185,25 +185,25 @@
         <i class="fas fa-times"></i>
       </button>
     </div>
-    
+
     <div class="block-content">
       <div class="map-search">
         <div class="search-container">
           <i class="fas fa-search search-icon"></i>
-          <input 
-            type="text" 
-            placeholder="Rechercher une agence..." 
-            (input)="searchAgences($event)" 
+          <input
+            type="text"
+            placeholder="Rechercher une agence..."
+            (input)="searchAgences($event)"
             class="search-input"
           />
         </div>
       </div>
-      
+
       <div class="map-container">
         <div class="agency-list">
-          <div 
-            *ngFor="let agence of filteredAgences" 
-            class="agency-item" 
+          <div
+            *ngFor="let agence of filteredAgences"
+            class="agency-item"
             [class.active]="selectedAgence === agence"
             (click)="focusOnAgence(agence)"
           >
@@ -216,13 +216,13 @@
             </div>
           </div>
         </div>
-        
+
         <div id="map" class="map-view"></div>
       </div>
     </div>
   </div>
-  
-  
+
+
   <div *ngIf="showChatbot" class="interactive-block chatbot-block">
     <div class="block-header">
       <div class="chatbot-info">
@@ -235,20 +235,20 @@
         <i class="fas fa-times"></i>
       </button>
     </div>
-    
+
     <div class="block-content">
       <div class="chat-messages">
-        <div *ngFor="let message of messages" 
+        <div *ngFor="let message of messages"
              [class.user-message]="message.sender === 'user'"
              [class.bot-message]="message.sender === 'bot'"
              class="message">
           {{ message.text }}
         </div>
       </div>
-      
+
       <div class="message-input">
-        <input type="text" 
-               [(ngModel)]="newMessage" 
+        <input type="text"
+               [(ngModel)]="newMessage"
                (keyup.enter)="sendMessage()"
                placeholder="Tapez votre message...">
         <button (click)="sendMessage()">
@@ -256,9 +256,9 @@
         </button>
       </div>
     </div>
-  </div>   
+  </div>
       <!-- Bloc chatbot -->
-     
+
  </div>
   </section>
   <section class="services-section">
@@ -272,24 +272,24 @@
           <div class="service-icon"><i class="fas fa-wallet"></i></div>
           <h3>Comptes</h3>
         </div>
-  
+
         <div class="service-card" (click)="showDetails('cartes')">
           <div class="service-icon"><i class="fas fa-credit-card"></i></div>
           <h3>Cartes</h3>
         </div>
-  
+
         <div class="service-card" (click)="showDetails('credits')">
           <div class="service-icon"><i class="fas fa-home"></i></div>
           <h3>Crédits</h3>
         </div>
-  
+
         <div class="service-card" (click)="showDetails('chequier')">
           <div class="service-icon"><i class="fas fa-book"></i></div>
           <h3>Chéquier</h3>
         </div>
       </div>
     </div>
-  
+
     <!-- Bloc central affiché au clic -->
     <div class="detail-block" *ngIf="selectedService">
       <div class="detail-content">
@@ -325,10 +325,10 @@
                 <ul class="digital-features">
                     <li><i class="fas fa-check-circle"></i> Consultez vos comptes 24h/24 et 7j/7</li>
                     <li><i class="fas fa-check-circle"></i> Effectuez vos virements en quelques clics</li>
-               
+
                     <li><i class="fas fa-check-circle"></i> Sécurisez vos transactions en ligne</li>
                 </ul>
-                
+
             </div>
             <div class="digital-image">
                 <img src="assets/img/carte.jpg" alt="STB Mobile Banking">
@@ -358,7 +358,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="testimonial-card">
           <div class="quote-icon"><i class="fas fa-quote-right"></i></div>
           <p class="testimonial-content">Le simulateur de crédit m'a permis de planifier mon projet immobilier avec précision. Le conseiller qui m'a ensuite accompagné était parfaitement informé de ma situation.</p>
@@ -373,7 +373,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="testimonial-card">
           <div class="quote-icon"><i class="fas fa-quote-right"></i></div>
           <p class="testimonial-content">En tant qu'entrepreneur, j'apprécie particulièrement la réactivité du service client et les solutions adaptées aux professionnels. STB comprend vraiment les enjeux de mon activité.</p>
@@ -391,7 +391,7 @@
       </div>
     </div>
   </section>
-  
+
   <!-- Section Actualités -->
   <section class="news-section">
     <div class="container">
@@ -408,10 +408,10 @@
             <span class="news-date">15 Mai 2023</span>
             <h3>Nouvelle offre d'épargne pour les jeunes</h3>
             <p>La STB lance une nouvelle offre d'épargne spécialement conçue pour les jeunes de 18 à 25 ans, avec des avantages exclusifs.</p>
-          
+
           </div>
         </div>
-        
+
         <div class="news-card">
           <div class="news-image">
             <img src="assets/img/news-2.jpg" alt="Ouverture d'agence">
@@ -420,10 +420,10 @@
             <span class="news-date">3 Avril 2023</span>
             <h3>Ouverture d'une nouvelle agence à Sousse</h3>
             <p>La STB poursuit son expansion avec l'ouverture d'une nouvelle agence moderne et digitalisée au centre-ville de Sousse.</p>
-     
+
           </div>
         </div>
-        
+
         <div class="news-card">
           <div class="news-image">
             <img src="assets/img/news-3.jpg" alt="Partenariat international">
@@ -432,13 +432,13 @@
             <span class="news-date">20 Mars 2023</span>
             <h3>Nouveau partenariat international</h3>
             <p>La STB signe un partenariat stratégique avec une banque européenne pour faciliter les transactions internationales.</p>
-           
+
           </div>
         </div>
       </div>
     </div>
   </section>
-  
+
   <!-- Section FAQ -->
   <section class="faq-section">
     <div class="container">
@@ -455,7 +455,7 @@
             <p>Pour ouvrir un compte à la STB, vous pouvez vous rendre dans l'agence la plus proche muni d'une pièce d'identité, d'un justificatif de domicile et d'un justificatif de revenus. Vous pouvez également initier votre demande en ligne via notre plateforme STBEverywhere et finaliser l'ouverture en agence.</p>
           </div>
         </div>
-        
+
         <div class="faq-item">
           <div class="faq-question">
             Comment accéder à mon espace client en ligne ? <i class="fas fa-chevron-down"></i>
@@ -464,7 +464,7 @@
             <p>Pour accéder à votre espace client en ligne, rendez-vous sur la page d'accueil de STBEverywhere et cliquez sur "Espace Client". Saisissez ensuite votre identifiant et votre mot de passe. Si vous n'avez pas encore activé votre compte en ligne, contactez votre conseiller ou appelez notre service client.</p>
           </div>
         </div>
-        
+
         <div class="faq-item">
           <div class="faq-question">
             Comment demander un crédit immobilier ? <i class="fas fa-chevron-down"></i>
@@ -473,7 +473,7 @@
             <p>Pour demander un crédit immobilier, vous pouvez utiliser notre simulateur en ligne pour estimer votre capacité d'emprunt, puis prendre rendez-vous avec un conseiller en agence ou via notre plateforme. Vous devrez fournir des documents justificatifs tels que bulletins de salaire, compromis de vente, etc.</p>
           </div>
         </div>
-        
+
         <div class="faq-item">
           <div class="faq-question">
             Comment signaler la perte ou le vol de ma carte bancaire ? <i class="fas fa-chevron-down"></i>
@@ -498,10 +498,14 @@
                 </div>
                 <p class="footer-about">La Société Tunisienne de Banque (STB) est l'une des principales banques en Tunisie, offrant une gamme complète de services financiers aux particuliers, professionnels et entreprises.</p>
                 <div class="social-links">
-                    <a ><i class="fab fa-facebook-f"></i></a>
+                  <a href="https://www.facebook.com/stbbank/" target="_blank">
+                    <i class="fab fa-facebook-f"></i>
+                  </a>
+
                     <a><i class="fab fa-twitter"></i></a>
                     <a ><i class="fab fa-linkedin-in"></i></a>
-                    <a ><i class="fab fa-instagram"></i></a>
+
+                    <a href=" https://www.instagram.com/stbbank/" target="_blank"><i class="fab fa-instagram"></i></a>
                     <a ><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
@@ -516,7 +520,7 @@
                     <li><a>Services Internationaux</a></li>
                 </ul>
             </div>
-           
+
             <div class="footer-col">
                 <h3>Contact</h3>
                 <ul class="contact-info">
@@ -525,14 +529,14 @@
                     <li><i class="fas fa-envelope"></i> contact@stb.com.tn</li>
                     <li><i class="fas fa-clock"></i> Lun-Ven: 8h00-16h00</li>
                 </ul>
-               
+
             </div>
         </div>
         <div class="footer-bottom">
             <div class="copyright">
-                <p>&copy; 2023 Société Tunisienne de Banque. Tous droits réservés.</p>
+                <p>&copy; 2025 Société Tunisienne de Banque. Tous droits réservés.</p>
             </div>
-           
+
         </div>
     </div>
 </footer>
@@ -550,7 +554,7 @@
       });
     });
   </script>
-  
+
 
 
 <script src="script.js"></script>

@@ -9,6 +9,7 @@
 
   <!-- Summary Cards -->
   <div class="summary-cards">
+    <!-- Chéquiers -->
     <div class="card card-chequier">
       <div class="card-icon">
         <i class="fas fa-book-open"></i>
@@ -31,6 +32,7 @@
       </div>
     </div>
 
+    <!-- Découverts -->
     <div class="card card-decouvert">
       <div class="card-icon">
         <i class="fas fa-money-check-alt"></i>
@@ -53,6 +55,7 @@
       </div>
     </div>
 
+    <!-- Réclamations -->
     <div class="card card-reclamation">
       <div class="card-icon">
         <i class="fas fa-comment-alt"></i>
@@ -74,17 +77,41 @@
         </div>
       </div>
     </div>
+
+    <!-- KYC -->
+    <div class="card card-kyc">
+      <div class="card-icon">
+        <i class="fas fa-id-card"></i>
+      </div>
+      <div class="card-content">
+        <h3>Modifications KYC</h3>
+        <div class="card-stats">
+          <div class="stat-item">
+            <span class="stat-value">{{ kycStats?.total || 0 }}</span>
+            <span class="stat-label">Total</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">{{ kycStats?.traitees || 0 }}</span>
+            <span class="stat-label">Traitées</span>
+          </div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress" [style.width.%]="getCompletionPercentage(kycStats?.traitees, kycStats?.total)"></div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Main Charts Section -->
   <div class="charts-container">
+    <!-- Global Summary -->
     <div class="chart-section main-chart">
       <div class="chart-header">
         <h2>Résumé Global des Demandes</h2>
         <div class="chart-actions">
-       <button class="btn-action" (click)="exporterDonnees()"><i class="fas fa-download"></i>Exporter</button>
-
-
+          <button class="btn-action" (click)="exporterDonnees()">
+            <i class="fas fa-download"></i>Exporter
+          </button>
         </div>
       </div>
       <div class="chart-body">
@@ -96,6 +123,7 @@
       </div>
     </div>
 
+    <!-- Détail Demandes (Ligne 1) -->
     <div class="charts-row">
       <div class="chart-section">
         <div class="chart-header">
@@ -130,6 +158,7 @@
       </div>
     </div>
 
+    <!-- Détail Demandes (Ligne 2) -->
     <div class="charts-row">
       <div class="chart-section">
         <div class="chart-header">
@@ -149,6 +178,25 @@
 
       <div class="chart-section">
         <div class="chart-header">
+          <h2>Modifications KYC</h2>
+          <div class="chart-badge" [ngClass]="getStatusClass(kycStats)">
+            {{ getStatusText(kycStats) }}
+          </div>
+        </div>
+        <div class="chart-body">
+          <canvas baseChart
+                  [data]="barChartDataKYC"
+                  [options]="singleChartOptions"
+                  [type]="'bar'">
+          </canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Répartition -->
+    <div class="charts-row">
+      <div class="chart-section full-width">
+        <div class="chart-header">
           <h2>Répartition des Demandes</h2>
         </div>
         <div class="chart-body">
@@ -161,4 +209,4 @@
       </div>
     </div>
   </div>
-
+</div>

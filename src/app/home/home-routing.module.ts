@@ -26,6 +26,7 @@ import { KycDownloadComponent } from '../kyc-download/kyc-download.component';
 
 import {ExtraitComponent} from '../extrait/extrait.component'
 import {DashbordAgentComponent} from '../dashbord-agent/dashbord-agent.component'
+import { ModificationRequestsComponent } from '../modification-requests/modification-requests.component';
 
 
 const routes: Routes = [
@@ -35,6 +36,7 @@ const routes: Routes = [
           { path: 'similateur', component: SimulateurCreditComponent, data: { breadcrumb: 'similateur' }},
           { path: 'RepondreDemandePlafond', component: DemandePlafondComponent },
           { path: 'RepondreDemandeCarte', component: DemandeCarteComponent },
+          { path: 'ModifReq', component: ModificationRequestsComponent },
 
           { path: 'Reclamationhsitorique', component:   HistoriqueReclamationsComponent, data: { breadcrumb: 'reclamation' }},
           { path: 'Reclamation', component: ReclamationComponent, data: { breadcrumb: 'reclamation' }},

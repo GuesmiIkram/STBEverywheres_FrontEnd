@@ -21,7 +21,16 @@ export class DashbordAgentComponent implements OnInit {
   chequierStats: StatData | null = null;
   decouvertStats: StatData | null = null;
   reclamationStats: StatData | null = null;
+  kycStats: StatData | null = null;
 
+
+
+
+
+  public barChartDataKYC: ChartConfiguration<'bar'>['data'] = {
+    labels: ['Total', 'En Cours', 'Traitées'],
+    datasets: []
+  };
   public barChartData: ChartConfiguration<'bar'>['data'] = {
     labels: ['Total', 'En Cours', 'Partiellement Traitées', 'Traitées'],
     datasets: []
@@ -43,23 +52,26 @@ export class DashbordAgentComponent implements OnInit {
   };
 
   public pieChartData: ChartConfiguration<'pie'>['data'] = {
-    labels: ['Chéquiers', 'Découverts', 'Réclamations'],
+    labels: ['Chéquiers', 'Découverts', 'Réclamations','kyc'],
     datasets: [{
-      data: [0, 0, 0],
+      data: [0, 0, 0,0],
       backgroundColor: [
         'rgba(54, 162, 235, 0.7)',
         'rgba(255, 206, 86, 0.7)',
-        '#28a745'
+        '#28a745',
+        'rgba(255, 99, 132, 1)'
       ],
       hoverBackgroundColor: [
         'rgba(54, 162, 235, 1)',
         'rgba(255, 206, 86, 1)',
-        '#28a745'
+        '#28a745',
+        'rgba(255, 99, 132, 0.7)'
       ],
       borderColor: [
         'rgba(54, 162, 235, 1)',
         'rgba(255, 206, 86, 1)',
-        '#28a745'
+        '#28a745',
+        'rgba(255, 99, 132, 1)'
       ],
       borderWidth: 1
     }]
@@ -143,34 +155,41 @@ export class DashbordAgentComponent implements OnInit {
     forkJoin({
       chequier: this.statsService.getStatistiquesDemandeChequier(),
       decouvert: this.statsService.getStatsDecouvert(),
-      reclamation: this.statsService.getStatsReclamation()
+      reclamation: this.statsService.getStatsReclamation(),
+      kyc: this.statsService.getStatsKYC()
     }).subscribe({
-      next: ({ chequier, decouvert, reclamation }) => {
+      next: ({ chequier, decouvert, reclamation ,kyc}) => {
         this.chequierStats = chequier;
         this.decouvertStats = decouvert;
         this.reclamationStats = reclamation;
+        this.kycStats = kyc;
 
         // helper
         const val = (n?: number) => n ?? 0;
 
         this.pieChartData = {
-          labels: ['Chéquiers', 'Découverts', 'Réclamations'],
+          labels: ['Chéquiers', 'Découverts', 'Réclamations','KYC'],
           datasets: [{
-            data: [ val(chequier?.total), val(decouvert?.total), val(reclamation?.total) ],
+            data: [ val(chequier?.total), val(decouvert?.total), val(reclamation?.total) , val(kyc?.total)],
             backgroundColor: [
               'rgba(54, 162, 235, 0.7)',
               'rgba(255, 206, 86, 0.7)',
-              '#28a745'
+              '#28a745',
+              'rgba(235, 45, 156, 0.7)'
             ],
             hoverBackgroundColor: [
               'rgba(54, 162, 235, 1)',
               'rgba(255, 206, 86, 1)',
-              '#28a745'
+              '#28a745',
+              'rgba(235, 45, 156, 1)'
+
             ],
             borderColor: [
               'rgba(54, 162, 235, 1)',
               'rgba(255, 206, 86, 1)',
-              '#28a745'
+              '#28a745',
+              'rgba(235, 45, 156, 1)'
+
             ],
             borderWidth: 1
           }]
@@ -202,10 +221,32 @@ export class DashbordAgentComponent implements OnInit {
               borderColor: '#28a745',
               borderWidth: 1,
               minBarLength: 3
+            },
+
+            {
+              label: 'Modifications KYC',
+              data: [
+                val(kyc?.total),
+                val(kyc?.enAttente),
+                0, // Partiellement Traitées (si non applicable)
+                val(kyc?.traitees)
+              ],
+              backgroundColor: 'rgba(153, 102, 255, 0.7)', // Violet pour KYC
+              borderColor: 'rgba(153, 102, 255, 1)',
+              borderWidth: 1,
+              minBarLength: 3
             }
           ]
         };
-
+        this.barChartDataKYC = {
+          labels: ['Total', 'En Cours', 'Traitées'],
+          datasets: [{
+            label: 'Modifications Fiche KYC',
+data: [this.kycStats?.total || 0, this.kycStats?.enCours || 0, this.kycStats?.traitees || 0],            backgroundColor: 'rgba(153, 102, 255, 0.7)',
+            borderColor: 'rgba(153, 102, 255, 1)',
+            borderWidth: 1
+          }]
+        };
         this.barChartDataChequier = {
           labels: ['Total', 'En Cours', 'Partiellement Traitées', 'Traitées'],
           datasets: [{
@@ -282,6 +323,7 @@ export class DashbordAgentComponent implements OnInit {
     lignes.push(['Chéquiers', ...fmt(this.chequierStats)]);
     lignes.push(['Découverts', ...fmt(this.decouvertStats)]);
     lignes.push(['Réclamations', ...fmt(this.reclamationStats)]);
+    lignes.push(['Modif. Fiche KYC', ...fmt(this.kycStats)]);
 
     const csv = lignes.map(r => r.join(';')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });

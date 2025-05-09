@@ -7,6 +7,7 @@ import { environnement } from '../environnement/environnement';
 import { StatDemandeChequier } from '../Models/StatDemandeChequier';
 import { StatDemandeDecouvert } from '../Models/StatDemandeDecouvert';
 import { StatReclamation } from '../Models/StatReclamation';
+import { StatKYC } from '../Models/StatKYC';
 
 
 @Injectable({
@@ -29,6 +30,9 @@ export class DemandeChequierStatService {
 
   getStatsReclamation(): Observable<StatReclamation> {
     return this.http.get<StatReclamation>('http://localhost:5117/api/agent/statistiques-reclamations');
+  }
+  getStatsKYC(): Observable<StatKYC> {
+    return this.http.get<StatKYC>('http://localhost:5117/api/agent/statistiques-KYC');
   }
 
 }

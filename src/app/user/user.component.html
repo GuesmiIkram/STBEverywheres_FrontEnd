@@ -1,435 +1,324 @@
 <div class="pagetitle">
-    <h1>Profile</h1>
-    <nav>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-            <li class="breadcrumb-item">Users</li>
-            <li class="breadcrumb-item active">Profile</li>
-        </ol>
-    </nav>
+  <h1>Profile</h1>
+  <nav>
+      <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item">Users</li>
+          <li class="breadcrumb-item active">Profile</li>
+      </ol>
+  </nav>
 </div><!-- End Page Title -->
 
 <section class="section profile">
-    <div class="row">
-        <div class="col-xl-4">
+  <div class="row">
+      <div class="col-xl-4">
 
-            <div class="card">
-                <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-                  <img [src]="client?.photoClient ? 'http://localhost:5260/Images/' + client.photoClient : 'assets/img/default.png'" alt="Profile"  class="rounded-circle">
-                    <h2>{{ client.nom }}{{ client.prenom }}</h2>
-                    <h3>{{ client.situationProfessionnelle }}</h3>
-                </div>
-            </div>
+          <div class="card">
+              <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+                <img [src]="client?.photoClient ? 'http://localhost:5260/Images/' + client.photoClient : 'assets/img/default.png'" alt="Profile"  class="rounded-circle">
+                  <h2>{{ client.nom }}{{ client.prenom }}</h2>
+                  <h3>{{ client.situationProfessionnelle }}</h3>
+              </div>
+          </div>
 
-        </div>
+      </div>
 
-        <div class="col-xl-8">
+      <div class="col-xl-8">
 
-            <div class="card">
-                <div class="card-body pt-3">
-                    <!-- Bordered Tabs -->
-                    <ul class="nav nav-tabs nav-tabs-bordered">
+          <div class="card">
+              <div class="card-body pt-3">
+                  <!-- Bordered Tabs -->
+                  <ul class="nav nav-tabs nav-tabs-bordered">
 
-                        <li class="nav-item">
-                            <button class="nav-link active" data-bs-toggle="tab"
-                                data-bs-target="#profile-overview">Overview</button>
-                        </li>
+                      <li class="nav-item">
+                          <button class="nav-link active" data-bs-toggle="tab"
+                              data-bs-target="#profile-overview">Overview</button>
+                      </li>
 
-                        <li class="nav-item">
-                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit
-                                Profile</button>
-                        </li>
-
-
-                        <li class="nav-item">
-                            <button class="nav-link" data-bs-toggle="tab"
-                                data-bs-target="#profile-change-password">Change Password</button>
-                        </li>
-
-                    </ul>
-                    <div class="tab-content pt-2">
-
-                        <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                      <li class="nav-item">
+                          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit
+                              Profile</button>
+                      </li>
 
 
-                                <h5 class="card-title">Détails Profile</h5>
+                      <li class="nav-item">
+                          <button class="nav-link" data-bs-toggle="tab"
+                              data-bs-target="#profile-change-password">Change Password</button>
+                      </li>
 
-                                <div class="row">
-                                  <div class="col-lg-3 col-md-4 label">Nom</div>
-                                  <div class="col-lg-9 col-md-8">{{ client.nom || 'Non spécifié' }}</div>
-                                </div>
+                  </ul>
+                  <div class="tab-content pt-2">
 
-                                <div class="row">
-                                  <div class="col-lg-3 col-md-4 label">Prénom</div>
-                                  <div class="col-lg-9 col-md-8">{{ client.prenom || 'Non spécifié' }}</div>
-                                </div>
+                      <div class="tab-pane fade show active profile-overview" id="profile-overview">
 
-                                <div class="row">
-                                  <div class="col-lg-3 col-md-4 label">Date de Naissance</div>
-                                  <div class="col-lg-9 col-md-8">{{ client.dateNaissance | date: 'dd/MM/yyyy' || 'Non spécifié' }}</div>
-                                </div>
 
-                                <div class="row">
-                                  <div class="col-lg-3 col-md-4 label">Téléphone</div>
-                                  <div class="col-lg-9 col-md-8">{{ client.telephone || 'Non spécifié' }}</div>
-                                </div>
+                              <h5 class="card-title">Détails Profile</h5>
 
-                                <div class="row">
-                                  <div class="col-lg-3 col-md-4 label">Email</div>
-                                  <div class="col-lg-9 col-md-8">{{ client.email || 'Non spécifié' }}</div>
-                                </div>
+                              <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Nom</div>
+                                <div class="col-lg-9 col-md-8">{{ client.nom || 'Non spécifié' }}</div>
+                              </div>
 
-                                <div class="row">
-                                  <div class="col-lg-3 col-md-4 label">Adresse</div>
-                                  <div class="col-lg-9 col-md-8">{{ client.adresse || 'Non spécifié' }}</div>
-                                </div>
+                              <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Prénom</div>
+                                <div class="col-lg-9 col-md-8">{{ client.prenom || 'Non spécifié' }}</div>
+                              </div>
 
-                                <div class="row">
-                                  <div class="col-lg-3 col-md-4 label">Civilité</div>
-                                  <div class="col-lg-9 col-md-8">{{ client.civilite || 'Non spécifié' }}</div>
-                                </div>
+                              <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Date de Naissance</div>
+                                <div class="col-lg-9 col-md-8">{{ client.dateNaissance | date: 'dd/MM/yyyy' || 'Non spécifié' }}</div>
+                              </div>
 
-                                <div class="row">
-                                  <div class="col-lg-3 col-md-4 label">Nationalité</div>
-                                  <div class="col-lg-9 col-md-8">{{ client.nationalite || 'Non spécifié' }}</div>
-                                </div>
+                              <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Téléphone</div>
+                                <div class="col-lg-9 col-md-8">{{ client.telephone || 'Non spécifié' }}</div>
+                              </div>
 
-                                <div class="row">
-                                  <div class="col-lg-3 col-md-4 label">État Civil</div>
-                                  <div class="col-lg-9 col-md-8">{{ client.etatCivil || 'Non spécifié' }}</div>
-                                </div>
+                              <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Email</div>
+                                <div class="col-lg-9 col-md-8">{{ client.email || 'Non spécifié' }}</div>
+                              </div>
 
-                                <div class="row">
-                                  <div class="col-lg-3 col-md-4 label">Résidence</div>
-                                  <div class="col-lg-9 col-md-8">{{ client.residence || 'Non spécifié' }}</div>
-                                </div>
+                              <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Adresse</div>
+                                <div class="col-lg-9 col-md-8">{{ client.adresse || 'Non spécifié' }}</div>
+                              </div>
 
-                                <div class="row">
-                                  <div class="col-lg-3 col-md-4 label">Numéro CIN</div>
-                                  <div class="col-lg-9 col-md-8">{{ client.numCIN || 'Non spécifié' }}</div>
-                                </div>
+                              <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Civilité</div>
+                                <div class="col-lg-9 col-md-8">{{ client.civilite || 'Non spécifié' }}</div>
+                              </div>
 
-                                <div class="row">
-                                  <div class="col-lg-3 col-md-4 label">Date de Délivrance CIN</div>
-                                  <div class="col-lg-9 col-md-8">{{ client.dateDelivranceCIN | date: 'dd/MM/yyyy' || 'Non spécifié' }}</div>
-                                </div>
+                              <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Nationalité</div>
+                                <div class="col-lg-9 col-md-8">{{ client.nationalite || 'Non spécifié' }}</div>
+                              </div>
 
-                                <div class="row">
-                                  <div class="col-lg-3 col-md-4 label">Date d'Expiration CIN</div>
-                                  <div class="col-lg-9 col-md-8">{{ client.dateExpirationCIN | date: 'dd/MM/yyyy' || 'Non spécifié' }}</div>
-                                </div>
+                              <div class="row">
+                                <div class="col-lg-3 col-md-4 label">État Civil</div>
+                                <div class="col-lg-9 col-md-8">{{ client.etatCivil || 'Non spécifié' }}</div>
+                              </div>
 
-                                <div class="row">
-                                  <div class="col-lg-3 col-md-4 label">Lieu de Délivrance CIN</div>
-                                  <div class="col-lg-9 col-md-8">{{ client.lieuDelivranceCIN || 'Non spécifié' }}</div>
-                                </div>
+                              <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Résidence</div>
+                                <div class="col-lg-9 col-md-8">{{ client.residence || 'Non spécifié' }}</div>
+                              </div>
 
-                                <div class="row">
-                                  <div class="col-lg-3 col-md-4 label">Sexe</div>
-                                  <div class="col-lg-9 col-md-8">{{ client.genre || 'Non spécifié' }}</div>
-                                </div>
+                              <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Numéro CIN</div>
+                                <div class="col-lg-9 col-md-8">{{ client.numCIN || 'Non spécifié' }}</div>
+                              </div>
 
-                                <div class="row">
-                                  <div class="col-lg-3 col-md-4 label">Profession</div>
-                                  <div class="col-lg-9 col-md-8">{{ client.profession || 'Non spécifié' }}</div>
-                                </div>
+                              <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Date de Délivrance CIN</div>
+                                <div class="col-lg-9 col-md-8">{{ client.dateDelivranceCIN | date: 'dd/MM/yyyy' || 'Non spécifié' }}</div>
+                              </div>
 
-                                <div class="row">
-                                  <div class="col-lg-3 col-md-4 label">Situation Professionnelle</div>
-                                  <div class="col-lg-9 col-md-8">{{ client.situationProfessionnelle || 'Non spécifié' }}</div>
-                                </div>
+                              <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Date d'Expiration CIN</div>
+                                <div class="col-lg-9 col-md-8">{{ client.dateExpirationCIN | date: 'dd/MM/yyyy' || 'Non spécifié' }}</div>
+                              </div>
 
-                                <div class="row">
-                                  <div class="col-lg-3 col-md-4 label">Niveau d'Éducation</div>
-                                  <div class="col-lg-9 col-md-8">{{ client.niveauEducation || 'Non spécifié' }}</div>
-                                </div>
+                              <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Lieu de Délivrance CIN</div>
+                                <div class="col-lg-9 col-md-8">{{ client.lieuDelivranceCIN || 'Non spécifié' }}</div>
+                              </div>
 
-                                <div class="row">
-                                  <div class="col-lg-3 col-md-4 label">Nombre d'Enfants</div>
-                                  <div class="col-lg-9 col-md-8">{{ client.nombreEnfants || 'Non spécifié' }}</div>
-                                </div>
+                              <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Sexe</div>
+                                <div class="col-lg-9 col-md-8">{{ client.genre || 'Non spécifié' }}</div>
+                              </div>
 
-                                <div class="row">
-                                  <div class="col-lg-3 col-md-4 label">Revenu Mensuel</div>
-                                  <div class="col-lg-9 col-md-8">{{ client.revenuMensuel || 'Non spécifié' }}</div>
-                                </div>
+                              <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Profession</div>
+                                <div class="col-lg-9 col-md-8">{{ client.profession || 'Non spécifié' }}</div>
+                              </div>
 
-                                <div class="row">
-                                  <div class="col-lg-3 col-md-4 label">Pays de Naissance</div>
-                                  <div class="col-lg-9 col-md-8">{{ client.paysNaissance || 'Non spécifié' }}</div>
-                                </div>
+                              <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Situation Professionnelle</div>
+                                <div class="col-lg-9 col-md-8">{{ client.situationProfessionnelle || 'Non spécifié' }}</div>
+                              </div>
 
-                                <div class="row">
-                                  <div class="col-lg-3 col-md-4 label">Nom de la Mère</div>
-                                  <div class="col-lg-9 col-md-8">{{ client.nomMere || 'Non spécifié' }}</div>
-                                </div>
+                              <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Niveau d'Éducation</div>
+                                <div class="col-lg-9 col-md-8">{{ client.niveauEducation || 'Non spécifié' }}</div>
+                              </div>
 
-                                <div class="row">
-                                  <div class="col-lg-3 col-md-4 label">Nom du Père</div>
-                                  <div class="col-lg-9 col-md-8">{{ client.nomPere || 'Non spécifié' }}</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Télécharger la fiche KYC</div>
-                                    <div class="col-lg-9 col-md-8">
-                                      <button class="btn btn-primary" (click)="downloadKYC()">Télécharger</button>
-                                    </div>
+                              <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Nombre d'Enfants</div>
+                                <div class="col-lg-9 col-md-8">{{ client.nombreEnfants || 'Non spécifié' }}</div>
+                              </div>
+
+                              <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Revenu Mensuel</div>
+                                <div class="col-lg-9 col-md-8">{{ client.revenuMensuel || 'Non spécifié' }}</div>
+                              </div>
+
+                              <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Pays de Naissance</div>
+                                <div class="col-lg-9 col-md-8">{{ client.paysNaissance || 'Non spécifié' }}</div>
+                              </div>
+
+                              <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Nom de la Mère</div>
+                                <div class="col-lg-9 col-md-8">{{ client.nomMere || 'Non spécifié' }}</div>
+                              </div>
+
+                              <div class="row">
+                                <div class="col-lg-3 col-md-4 label">Nom du Père</div>
+                                <div class="col-lg-9 col-md-8">{{ client.nomPere || 'Non spécifié' }}</div>
+                              </div>
+                              <div class="row">
+                                  <div class="col-lg-3 col-md-4 label">Télécharger la fiche KYC</div>
+                                  <div class="col-lg-9 col-md-8">
+                                    <button class="btn btn-primary" (click)="downloadKYC()">Télécharger</button>
                                   </div>
-                           </div>
+                                </div>
+                         </div>
 
-                        <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-
-                            <!-- Profile Edit Form -->
-
-
-
-                                <form (ngSubmit)="onSubmit()">
-                                    <div class="row mb-3">
-                                        <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Photo de profil</label>
-                                        <div class="col-md-8 col-lg-9">
-                                          <!-- Afficher la photo actuelle -->
-                                          <img [src]="client?.photoClient ? 'http://localhost:5260/Images/' + client.photoClient : 'assets/img/default.png'" alt="Profile"  style="width: 100px; height: 100px;">
-                                          <div class="pt-2">
-                                            <!-- Bouton pour télécharger une nouvelle photo -->
-                                            <input type="file" id="profileImage" (change)="onFileSelected($event)" style="display: none;">
-                                            <label for="profileImage" class="btn btn-primary btn-sm" title="Upload new profile image">
+                      <!-- Edit Profile Tab -->
+                      <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+                          <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+                              <!-- Photo de profil -->
+                              <div class="row mb-3">
+                                  <label class="col-md-4 col-lg-3 col-form-label">Photo de profil</label>
+                                  <div class="col-md-8 col-lg-9">
+                                      <img [src]="client?.photoClient ? 'http://localhost:5260/Images/' + client.photoClient : 'assets/img/default.png'" 
+                                           alt="Profile" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover;">
+                                      <div class="pt-2">
+                                          <input type="file" id="profileImage" (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+                                          <label for="profileImage" class="btn btn-primary btn-sm">
                                               <i class="bi bi-upload"></i> Changer la photo
-                                            </label>
-                                            <!-- Bouton pour supprimer la photo -->
-                                            <button class="btn btn-danger btn-sm" (click)="removeProfileImage()" title="Remove my profile image">
+                                          </label>
+                                          <button type="button" class="btn btn-danger btn-sm" (click)="removeProfileImage()">
                                               <i class="bi bi-trash"></i> Supprimer
-                                            </button>
-                                          </div>
-                                        </div>
+                                          </button>
                                       </div>
-                                    <!-- Téléphone -->
-                                    <div class="row mb-3">
-                                      <label for="phone" class="col-md-4 col-lg-3 col-form-label">Téléphone</label>
-                                      <div class="col-md-8 col-lg-9">
-                                        <input name="phone" type="text" class="form-control" id="phone" 
-                                               [(ngModel)]="client.telephone" 
-                                               #phone="ngModel"
-                                               pattern="[0-9]{8}"
-                                               required
-                                               maxlength="8"
-                                               minlength="8">
-                                        
-                                        <!-- Messages d'erreur -->
-                                        <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="text-danger">
-                                          <div *ngIf="phone.errors?.['required']">
-                                            Le numéro de téléphone est obligatoire
-                                          </div>
-                                          <div *ngIf="phone.errors?.['pattern'] || phone.errors?.['minlength'] || phone.errors?.['maxlength']">
-                                            Le numéro doit contenir exactement 8 chiffres
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                      <label for="email" class="col-md-4 col-lg-3 col-form-label">Email</label>
-                                      <div class="col-md-8 col-lg-9">
-                                        <input 
-                                          name="email" 
-                                          type="email" 
-                                          class="form-control" 
-                                          id="email" 
-                                          [(ngModel)]="client.email"
-                                          #email="ngModel"
-                                          required
-                                          pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}"
-                                          email
-                                        >
-                                        
-                                        <!-- Messages d'erreur -->
-                                        <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger">
-                                          <div *ngIf="email.errors?.['required']">
-                                            L'adresse email est obligatoire
-                                          </div>
-                                          <div *ngIf="email.errors?.['pattern'] || email.errors?.['email']">
-                                            Veuillez entrer une adresse email valide (ex: exemple@domaine.com)
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-
-                                    <!-- Adresse -->
-                                    <div class="row mb-3">
-                                      <label for="address" class="col-md-4 col-lg-3 col-form-label">Adresse</label>
-                                      <div class="col-md-8 col-lg-9">
-                                        <input name="address" type="text" class="form-control" id="address" [(ngModel)]="client.adresse">
-                                      </div>
-                                    </div>
-
-                                
-                                    <!-- État Civil -->
-                                    <div class="row mb-3">
-                                      <label for="etatCivil" class="col-md-4 col-lg-3 col-form-label">État Civil</label>
-                                      <div class="col-md-8 col-lg-9">
-                                        <input name="etatCivil" type="text" class="form-control" id="etatCivil" [(ngModel)]="client.etatCivil">
-                                      </div>
-                                    </div>
-
-                                    <!-- Résidence -->
-                                    <div class="row mb-3">
-                                      <label for="residence" class="col-md-4 col-lg-3 col-form-label">Résidence</label>
-                                      <div class="col-md-8 col-lg-9">
-                                        <input name="residence" type="text" class="form-control" id="residence" [(ngModel)]="client.residence">
-                                      </div>
-                                    </div>
-
-                                    <!-- Profession -->
-                                    <div class="row mb-3">
-                                      <label for="profession" class="col-md-4 col-lg-3 col-form-label">Profession</label>
-                                      <div class="col-md-8 col-lg-9">
-                                        <input name="profession" type="text" class="form-control" id="profession" [(ngModel)]="client.profession">
-                                      </div>
-                                    </div>
-
-                                    <!-- Situation Professionnelle -->
-                                    <div class="row mb-3">
-                                      <label for="situationProfessionnelle" class="col-md-4 col-lg-3 col-form-label">Situation Professionnelle</label>
-                                      <div class="col-md-8 col-lg-9">
-                                        <input name="situationProfessionnelle" type="text" class="form-control" id="situationProfessionnelle" [(ngModel)]="client.situationProfessionnelle">
-                                      </div>
-                                    </div>
-
-                                    <!-- Nombre d'Enfants -->
-                                  
-                                      <div class="row mb-3">
-                                        <label for="nombreEnfants" class="col-md-4 col-lg-3 col-form-label">Nombre d'Enfants</label>
-                                        <div class="col-md-8 col-lg-9">
-                                          <input 
-                                            name="nombreEnfants" 
-                                            type="number" 
-                                            class="form-control" 
-                                            id="nombreEnfants" 
-                                            [(ngModel)]="client.nombreEnfants"
-                                            #nombreEnfants="ngModel"
-                                            min="0"
-                                            max="20"
-                                            required
-                                          >
-                                          
-                                          <!-- Messages d'erreur -->
-                                          <div *ngIf="nombreEnfants.invalid && (nombreEnfants.dirty || nombreEnfants.touched)" class="text-danger">
-                                            <div *ngIf="nombreEnfants.errors?.['required']">
-                                              Ce champ est obligatoire
-                                            </div>
-                                            <div *ngIf="nombreEnfants.errors?.['min']">
-                                              Le nombre ne peut pas être négatif
-                                            </div>
-                                            <div *ngIf="nombreEnfants.errors?.['max']">
-                                              Le nombre d'enfants ne peut pas dépasser 20
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    
-
-                                    <!-- Revenu Mensuel -->
-                                    <div class="row mb-3">
-                                      <label for="revenuMensuel" class="col-md-4 col-lg-3 col-form-label">Revenu Mensuel</label>
-                                      <div class="col-md-8 col-lg-9">
-                                        <input 
-                                          name="revenuMensuel" 
-                                          type="number" 
-                                          class="form-control" 
-                                          id="revenuMensuel" 
-                                          [(ngModel)]="client.revenuMensuel"
-                                          #revenuMensuel="ngModel"
-                                          min="0"
-                                          [pattern]="positiveNumberPattern"
-                                        >
-                                        
-                                        <!-- Messages d'erreur -->
-                                        <div *ngIf="revenuMensuel.invalid && (revenuMensuel.dirty || revenuMensuel.touched)" class="text-danger">
-                                          <div *ngIf="revenuMensuel.errors?.['min'] || revenuMensuel.errors?.['pattern']">
-                                            Le revenu ne peut pas être négatif
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-
-                                    <!-- Bouton de soumission -->
-                                    <div class="text-center">
-                                      <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
-                                    </div>
-                                  </form>
-
-                        </div>
-
-                        <div class="tab-pane fade pt-3" id="profile-settings">
-
-
-
-                        </div>
-                        <div class="tab-pane fade pt-3" id="profile-change-password">
-                            <!-- Change Password Form -->
-                            <form (ngSubmit)="onChangePassword()">
-                              <div class="row mb-3">
-                                <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Mot de passe actuel</label>
-                                <div class="col-md-8 col-lg-9">
-                                  <input
-                                    name="currentPassword"
-                                    type="password"
-                                    class="form-control"
-                                    id="currentPassword"
-                                    [(ngModel)]="changePasswordData.currentPassword"
-                                    required
-                                    (blur)="validateField('currentPassword')"
-                                  />
-                                  <div *ngIf="currentPasswordError" class="error-message">Le champ mot de passe actuel est obligatoire.</div>
-                                </div>
+                                  </div>
                               </div>
 
+                              <!-- Informations personnelles -->
                               <div class="row mb-3">
-                                <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">Nouveau mot de passe</label>
-                                <div class="col-md-8 col-lg-9">
-                                  <input
-                                    name="newPassword"
-                                    type="password"
-                                    class="form-control"
-                                    id="newPassword"
-                                    [(ngModel)]="changePasswordData.newPassword"
-                                    required
-                                    (blur)="validateField('newPassword')"
-                                    (input)="checkPasswords()"
-                                  />
-                                  <div *ngIf="newPasswordError" class="error-message">Le champ nouveau mot de passe est obligatoire.</div>
-                                </div>
+                                  <label class="col-md-4 col-lg-3 col-form-label">Téléphone</label>
+                                  <div class="col-md-8 col-lg-9">
+                                      <input name="phone" type="text" class="form-control" 
+                                             [(ngModel)]="client.telephone" #phone="ngModel" required>
+                                      <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="text-danger">
+                                          Le téléphone est obligatoire
+                                      </div>
+                                  </div>
                               </div>
 
-                              <div class="row mb-3">
-                                <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Confirmer le mot de passe</label>
-                                <div class="col-md-8 col-lg-9">
-                                  <input
-                                    name="confirmNewPassword"
-                                    type="password"
-                                    class="form-control"
-                                    id="renewPassword"
-                                    [(ngModel)]="changePasswordData.confirmNewPassword"
-                                    required
-                                    (input)="checkPasswords()"
-                                    (blur)="validateField('confirmNewPassword')"
-                                    [ngClass]="{'input-error': passwordMismatch}"
-                                  />
-                                  <div *ngIf="passwordMismatch" class="error-message">Les mots de passe ne correspondent pas.</div>
-                                  <div *ngIf="confirmNewPasswordError" class="error-message">Le champ confirmer le mot de passe est obligatoire.</div>
-                                </div>
-                              </div>
+                              <!-- Ajoutez les autres champs éditables de la même manière -->
+                              <!-- ... -->
 
                               <div class="text-center">
-                                <button type="submit" class="btn btn-primary" [disabled]="passwordMismatch || isFormInvalid()">
-                                  Changer le mot de passe
-                                </button>
+                                  <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">
+                                      <i class="bi bi-save"></i> Sauvegarder les modifications
+                                  </button>
                               </div>
-                            </form><!-- End Change Password Form -->
+                          </form>
+
+                          <!-- Section demande de modification -->
+                          <div class="card mt-4">
+                              <div class="card-body">
+                                  <h5 class="card-title">Demander une modification</h5>
+                                  
+                                  <div class="mb-3">
+                                      <label class="form-label">Information à modifier</label>
+                                      <select class="form-select" [(ngModel)]="selectedField" name="selectedField">
+                                          <option value="adresse">Adresse</option>
+                                          <option value="profession">Profession</option>
+                                          <option value="residence">Résidence</option>
+                                      </select>
+                                  </div>
+                                  
+                                  <div class="mb-3">
+                                      <label class="form-label">Nouvelle valeur</label>
+                                      <input type="text" class="form-control" [(ngModel)]="newFieldValue" name="newFieldValue" required>
+                                  </div>
+                                  
+                                  <div class="mb-3">
+                                      <label class="form-label">Document justificatif</label>
+                                      <input type="file" class="form-control" (change)="onJustificationFileSelected($event)" required>
+                                      <small class="text-muted">Format PDF, JPG ou PNG (max 5MB)</small>
+                                  </div>
+                                  
+                                  <button class="btn btn-primary" (click)="submitModificationRequest()" 
+                                          [disabled]="!newFieldValue || !justificationFile">
+                                      <i class="bi bi-send"></i> Soumettre la demande
+                                  </button>
+                              </div>
                           </div>
-                    </div><!-- End Bordered Tabs -->
+                      </div>
 
-                </div>
+                      <div class="tab-pane fade pt-3" id="profile-change-password">
+                        <!-- Change Password Form -->
+                        <form (ngSubmit)="onChangePassword()">
+                          <div class="row mb-3">
+                            <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Mot de passe actuel</label>
+                            <div class="col-md-8 col-lg-9">
+                              <input
+                                name="currentPassword"
+                                type="password"
+                                class="form-control"
+                                id="currentPassword"
+                                [(ngModel)]="changePasswordData.currentPassword"
+                                required
+                                (blur)="validateField('currentPassword')"
+                              />
+                              <div *ngIf="currentPasswordError" class="error-message">Le champ mot de passe actuel est obligatoire.</div>
+                            </div>
+                          </div>
+
+                          <div class="row mb-3">
+                            <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">Nouveau mot de passe</label>
+                            <div class="col-md-8 col-lg-9">
+                              <input
+                                name="newPassword"
+                                type="password"
+                                class="form-control"
+                                id="newPassword"
+                                [(ngModel)]="changePasswordData.newPassword"
+                                required
+                                (blur)="validateField('newPassword')"
+                                (input)="checkPasswords()"
+                              />
+                              <div *ngIf="newPasswordError" class="error-message">Le champ nouveau mot de passe est obligatoire.</div>
+                            </div>
+                          </div>
+
+                          <div class="row mb-3">
+                            <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Confirmer le mot de passe</label>
+                            <div class="col-md-8 col-lg-9">
+                              <input
+                                name="confirmNewPassword"
+                                type="password"
+                                class="form-control"
+                                id="renewPassword"
+                                [(ngModel)]="changePasswordData.confirmNewPassword"
+                                required
+                                (input)="checkPasswords()"
+                                (blur)="validateField('confirmNewPassword')"
+                                [ngClass]="{'input-error': passwordMismatch}"
+                              />
+                              <div *ngIf="passwordMismatch" class="error-message">Les mots de passe ne correspondent pas.</div>
+                              <div *ngIf="confirmNewPasswordError" class="error-message">Le champ confirmer le mot de passe est obligatoire.</div>
+                            </div>
+                          </div>
+
+                          <div class="text-center">
+                            <button type="submit" class="btn btn-primary" [disabled]="passwordMismatch || isFormInvalid()">
+                              Changer le mot de passe
+                            </button>
+                          </div>
+                        </form><!-- End Change Password Form -->
+                      </div>
+                </div><!-- End Bordered Tabs -->
+
             </div>
-
         </div>
+
     </div>
+</div>
 </section>
