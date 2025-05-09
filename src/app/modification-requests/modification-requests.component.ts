@@ -5,6 +5,7 @@ import type { ModificationRequest } from "../Models/ModificationRequest"
 
 import Swal from "sweetalert2"
 import { AgentService } from "../services/AgentService "
+import { HttpResponse } from "@angular/common/http"
 
 @Component({
   selector: "app-modification-requests",
@@ -46,20 +47,33 @@ export class ModificationRequestsComponent implements OnInit {
   }
 
   downloadDocument(request: ModificationRequest): void {
-    this.processing = true
+    this.processing = true;
     this.agentService.downloadJustificationDocument(request.id).subscribe({
-      next: (blob) => {
-        saveAs(blob, `Justificatif_${request.client?.nom}_${request.fieldToModify}.pdf`)
-        this.processing = false
+      next: (response: HttpResponse<Blob>) => {
+        const blob = response.body;
+        if (!blob) {
+          throw new Error('No document found');
+        }
+  
+        // Déterminer le type de fichier
+        const contentType = response.headers.get('content-type') || 'application/octet-stream';
+        let extension = '.bin';
+        
+        if (contentType.includes('png')) extension = '.png';
+        else if (contentType.includes('jpeg') || contentType.includes('jpg')) extension = '.jpg';
+        else if (contentType.includes('pdf')) extension = '.pdf';
+  
+        const filename = `Justificatif_${request.client?.nom}_${request.fieldToModify}${extension}`;
+        saveAs(blob, filename);
+        this.processing = false;
       },
       error: (err) => {
-        console.error("Error downloading document:", err)
-        this.showError("Erreur lors du téléchargement du document")
-        this.processing = false
-      },
-    })
+        console.error("Error downloading document:", err);
+        this.showError("Erreur lors du téléchargement du document");
+        this.processing = false;
+      }
+    });
   }
-
   getFieldDisplayName(field: string): string {
     const fieldMap: { [key: string]: string } = {
       adresse: "Adresse",

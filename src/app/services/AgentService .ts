@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 import { environnement } from '../environnement/environnement';
@@ -19,13 +19,15 @@ export class AgentService {
     });
   }
 
-  downloadJustificationDocument(requestId: number): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/modification-requests/${requestId}/document`, {
-      headers: this.getHeaders(),
-      responseType: 'blob'
-    });
+  downloadJustificationDocument(requestId: number): Observable<HttpResponse<Blob>> {
+    return this.http.get(
+      `${this.apiUrl}/modification-requests/${requestId}/document`,
+      {
+        observe: 'response',
+        responseType: 'blob'
+      }
+    );
   }
-
   processModificationRequest(requestId: number, approve: boolean, comment?: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/modification-requests/${requestId}/process`, {
       approve,

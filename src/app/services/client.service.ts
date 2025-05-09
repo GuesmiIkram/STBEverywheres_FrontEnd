@@ -125,10 +125,9 @@ uploadElyssaDocuments(files: FormData): Observable<any> {
   );
 }
 
-  // Mettre à jour les infos du client
-  updateClientInfo(client: Client): Observable<Client> {
-    return this.http.put<Client>(`${this.apiUrl}/update`, client);
-  }
+updateClientInfo(client: Client): Observable<Client> {
+  return this.http.put<Client>(`${this.apiUrl}/update`, client);
+}
   downloadKYC(): Observable<Blob> {
     return this.http.get(`${this.apiUrl}/kyc/download`, { responseType: 'blob' });
   }

@@ -186,13 +186,20 @@
                                       <img [src]="client?.photoClient ? 'http://localhost:5260/Images/' + client.photoClient : 'assets/img/default.png'" 
                                            alt="Profile" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover;">
                                       <div class="pt-2">
-                                          <input type="file" id="profileImage" (change)="onFileSelected($event)" accept="image/*" style="display: none;">
-                                          <label for="profileImage" class="btn btn-primary btn-sm">
-                                              <i class="bi bi-upload"></i> Changer la photo
+                                        <div class="pt-2 d-flex gap-2">
+                                          <!-- Bouton de changement de photo (icône seulement) -->
+                                          <label for="profileImage" class="btn btn-icon" title="Changer la photo">
+                                            <i class="bi bi-camera-fill text-primary"></i> Modifier
                                           </label>
-                                          <button type="button" class="btn btn-danger btn-sm" (click)="removeProfileImage()">
-                                              <i class="bi bi-trash"></i> Supprimer
+                                          
+                                          <!-- Bouton de suppression (icône seulement) -->
+                                          <button type="button" class="btn btn-icon" (click)="removeProfileImage()" title="Supprimer la photo">
+                                            <i class="bi bi-trash-fill text-danger"></i>Supprimer
                                           </button>
+                                        </div>
+                                        
+                                        <!-- Le input file reste caché -->
+                                        <input type="file" id="profileImage" (change)="onFileSelected($event)" accept="image/*" style="display: none;">
                                       </div>
                                   </div>
                               </div>
@@ -209,11 +216,50 @@
                                   </div>
                               </div>
 
+
+
+                        
+                            
+                                <div class="row mb-3">
+                                  <label for="nombreEnfants" class="col-md-4 col-lg-3 col-form-label">Nombre d'Enfants</label>
+                                  <div class="col-md-8 col-lg-9">
+                                    <input 
+                                      name="nombreEnfants" 
+                                      type="number" 
+                                      class="form-control" 
+                                      id="nombreEnfants" 
+                                      [(ngModel)]="client.nombreEnfants"
+                                      #nombreEnfants="ngModel"
+                                      min="0"
+                                      max="20"
+                                      required
+                                    >
+                                    
+                                    <!-- Messages d'erreur -->
+                                    <div *ngIf="nombreEnfants.invalid && (nombreEnfants.dirty || nombreEnfants.touched)" class="text-danger">
+                                      <div *ngIf="nombreEnfants.errors?.['required']">
+                                        Ce champ est obligatoire
+                                      </div>
+                                      <div *ngIf="nombreEnfants.errors?.['min']">
+                                        Le nombre ne peut pas être négatif
+                                      </div>
+                                      <div *ngIf="nombreEnfants.errors?.['max']">
+                                        Le nombre d'enfants ne peut pas dépasser 20
+                                      </div>
+                                    </div>
+                                  </div>
+                              </div>
+                              <div class="row mb-3">
+                                <label for="etatCivil" class="col-md-4 col-lg-3 col-form-label">État Civil</label>
+                                <div class="col-md-8 col-lg-9">
+                                  <input name="etatCivil" type="text" class="form-control" id="etatCivil" [(ngModel)]="client.etatCivil">
+                                </div>
+                              </div>
                               <!-- Ajoutez les autres champs éditables de la même manière -->
                               <!-- ... -->
 
                               <div class="text-center">
-                                  <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">
+                                  <button type="submit"class="btn btn-primary" [disabled]="userForm.invalid">
                                       <i class="bi bi-save"></i> Sauvegarder les modifications
                                   </button>
                               </div>
@@ -250,7 +296,21 @@
                                   </button>
                               </div>
                           </div>
+                          <div class="alert alert-warning mt-3">
+                            <div class="d-flex">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                <div>
+                                    <strong>Important :</strong> Les demandes de modification nécessitent une vérification manuelle.
+                                    <ul class="mb-0 mt-1">
+                                        <li>Délai de traitement : 24 à 48 heures (jours ouvrables)</li>
+                                        <li>Vous recevrez une confirmation par email</li>
+                                        <li>Merci de ne pas soumettre plusieurs fois la même demande</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                       </div>
+                    
 
                       <div class="tab-pane fade pt-3" id="profile-change-password">
                         <!-- Change Password Form -->

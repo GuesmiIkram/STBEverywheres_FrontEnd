@@ -1,618 +1,249 @@
-// Variables pour un design bancaire premium LSTB
-$lstb-primary: #012970;       // Bleu profond
-$lstb-secondary: #5983f5;     // Vert-bleu
-$lstb-accent: #fbbf24;        // Or/Jaune pour accent
-$lstb-dark: #1e293b;          // Presque noir
-$lstb-light: #f8fafc;         // Blanc cassé
-$lstb-gray: #64748b;          // Gris neutre
-$lstb-light-gray: #e2e8f0;    // Gris clair
-$lstb-success: #10b981;       // Vert
-$lstb-danger: #ef4444;        // Rouge
-$lstb-gradient: linear-gradient(135deg, $lstb-primary, $lstb-secondary);
-$primary: #5983f5;
-$primary-dark: #4180f5;
-$secondary: #012970;
+// Variables
+$primary-color: #4154f1;
+$secondary-color: #717ff5;
+$success-color: #2eca6a;
+$info-color: #2ecadb;
+$warning-color: #ffce3a;
+$danger-color: #ff3e1d;
+$light-color: #f6f9ff;
+$dark-color: #444444;
+$gray-color: #6c757d;
+$border-color: #ebeef4;
+$text-color: #012970;
 $text-muted: #899bbd;
-$light-bg: #f6f9ff;
-$white: #ffffff;
-$border-color: #e0e0e0;
-// Typographie premium
-$font-primary: 'Montserrat', sans-serif;
-$font-secondary: 'Playfair Display', serif;
 
-// Mixins utiles
-@mixin card-shadow {
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05), 0 5px 10px rgba(0, 0, 0, 0.02);
-}
-
-@mixin premium-transition {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@mixin gold-accent {
-  background: linear-gradient(to right, $lstb-accent, darken($lstb-accent, 10%));
-}
-
-// Styles globaux
-body {
-  font-family: $font-primary;
-  background-color: $lstb-light;
-  color: $lstb-dark;
-  line-height: 1.6;
-}
-
-// En-tête de page
+// General Styles
 .pagetitle {
-  margin-bottom: 2.5rem;
-  position: relative;
+  margin-bottom: 20px;
   
   h1 {
-    font-family: $font-secondary;
-    color: $lstb-primary;
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 0.75rem;
-    letter-spacing: -0.5px;
-    
-    &:after {
-      content: '';
-      display: block;
-      width: 60px;
-      height: 4px;
-      margin-top: 0.5rem;
-      @include gold-accent;
-      border-radius: 2px;
-    }
+    font-size: 24px;
+    margin-bottom: 0;
+    font-weight: 600;
+    color: $text-color;
   }
-  
+
   .breadcrumb {
-    background: transparent;
+    font-size: 14px;
     padding: 0;
-    margin: 0;
-    font-size: 0.875rem;
+    margin-top: 8px;
+    background: transparent;
     
-    .breadcrumb-item {
-      color: $lstb-gray;
-      font-weight: 500;
+    a {
+      color: $primary-color;
+      text-decoration: none;
       
-      a {
-        color: $lstb-secondary;
-        text-decoration: none;
-        @include premium-transition;
-        position: relative;
-        
-        &:after {
-          content: '';
-          position: absolute;
-          bottom: -2px;
-          left: 0;
-          width: 0;
-          height: 2px;
-          @include gold-accent;
-          @include premium-transition;
-        }
-        
-        &:hover {
-          color: $lstb-primary;
-          
-          &:after {
-            width: 100%;
-          }
-        }
+      &:hover {
+        color: $secondary-color;
       }
-      
-      &.active {
-        color: $lstb-dark;
-        font-weight: 600;
-      }
+    }
+    
+    .breadcrumb-item.active {
+      color: $text-muted;
     }
   }
 }
 
-// Section profile
+// Profile Section
 .section.profile {
-  .row {
-    margin-bottom: 2rem;
-  }
+  padding: 20px 0;
   
-  // Cartes
   .card {
+    margin-bottom: 30px;
     border: none;
-    border-radius: 16px;
-    @include card-shadow;
-    @include premium-transition;
-    margin-bottom: 2rem;
-    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(1, 41, 112, 0.1);
     overflow: hidden;
-    position: relative;
-    
-    &:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 35px rgba($lstb-primary, 0.1), 0 5px 15px rgba(0, 0, 0, 0.05);
-    }
-    
-    &:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      @include gold-accent;
-      opacity: 0;
-      @include premium-transition;
-    }
-    
-    &:hover:before {
-      opacity: 1;
-    }
     
     .card-body {
-      padding: 2rem;
+      padding: 20px;
     }
-  }
-  
-  // Carte de profil
-  .profile-card {
-    text-align: center;
-    padding-top: 2.5rem !important;
-    
-    &:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 100px;
-      background: $lstb-gradient;
-      z-index: 0;
-    }
-    
-    img {
-      width: 140px;
-      height: 140px;
-      border-radius: 50%;
-      border: 5px solid white;
-      object-fit: cover;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      position: relative;
-      z-index: 1;
-    }
-    
-    h2 {
-      font-family: $font-secondary;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: $lstb-primary;
-      margin-bottom: 0.5rem;
-    }
-    
-    h3 {
-      font-size: 1rem;
-      color: $lstb-gray;
-      font-weight: 500;
-      margin-bottom: 1.5rem;
-    }
-  }
-  
-  // Onglets
-  .nav-tabs {
-    border: none;
-    background-color: $lstb-light;
-    border-radius: 12px;
-    padding: 0.5rem;
-    margin-bottom: 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    
-    .nav-item {
-      flex: 1;
-      text-align: center;
-      margin: 0 0.25rem;
-      
-      &:first-child {
-        margin-left: 0;
-      }
-      
-      &:last-child {
-        margin-right: 0;
-      }
-    }
-    
-    .nav-link {
-      border: none;
-      color: $lstb-gray;
-      font-weight: 600;
-      padding: 0.75rem 1rem;
-      border-radius: 8px;
-      @include premium-transition;
-      width: 100%;
-      
-      &:hover {
-        color: $lstb-primary;
-        background-color: rgba($lstb-primary, 0.05);
-      }
-      
-      &.active {
-        color: white;
-        background: $lstb-gradient;
-        box-shadow: 0 4px 10px rgba($lstb-primary, 0.3);
-      }
-    }
-  }
-  
-  // Contenu des onglets
-  .tab-content {
-    padding-top: 1rem;
     
     .card-title {
-      font-family: $font-secondary;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: $lstb-primary;
-      margin-bottom: 1.75rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid $lstb-light-gray;
+      padding: 20px 0 15px 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: $text-color;
       position: relative;
       
       &:after {
-        content: '';
+        content: "";
         position: absolute;
-        bottom: -1px;
+        width: 50px;
+        height: 2px;
+        background: $primary-color;
         left: 0;
-        width: 80px;
-        height: 3px;
-        @include gold-accent;
-        border-radius: 2px;
+        bottom: 0;
+      }
+    }
+  }
+  
+  // Profile Card
+  .profile-card {
+    text-align: center;
+    
+    img {
+      max-width: 120px;
+      border: 6px solid $light-color;
+      margin: 0 auto 15px auto;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: scale(1.05);
       }
     }
     
-    // Détails du profil
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: $text-color;
+      margin: 10px 0 5px 0;
+    }
+    
+    h3 {
+      font-size: 16px;
+      color: $text-muted;
+      margin: 0 0 10px 0;
+    }
+  }
+  
+  // Tabs
+  .nav-tabs-bordered {
+    border-bottom: 2px solid $border-color;
+    
+    .nav-link {
+      margin-bottom: -2px;
+      border: none;
+      color: $text-muted;
+      font-weight: 600;
+      font-size: 15px;
+      padding: 12px 15px;
+      transition: all 0.3s;
+      
+      &:hover {
+        color: $primary-color;
+      }
+      
+      &.active {
+        color: $primary-color;
+        border-bottom: 2px solid $primary-color;
+        background: transparent;
+      }
+    }
+  }
+  
+  // Tab Content
+  .tab-content {
+    padding-top: 20px;
+    
     .profile-overview {
       .row {
-        margin-bottom: 1.25rem;
-        padding-bottom: 1.25rem;
-        border-bottom: 1px solid rgba($lstb-light-gray, 0.7);
-        @include premium-transition;
-        
-        &:hover {
-          background-color: rgba($lstb-light, 0.5);
-        }
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid $border-color;
         
         &:last-child {
-          border-bottom: none;
+          border-bottom: 0;
+          margin-bottom: 0;
         }
       }
       
       .label {
         font-weight: 600;
-        color: $lstb-gray;
-        font-size: 0.875rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+        color: $text-color;
+      }
+    }
+    
+    // Forms
+    form {
+      .row {
+        margin-bottom: 20px;
       }
       
-      .col-lg-9 {
-        color: $lstb-dark;
+      .col-form-label {
+        font-weight: 600;
+        color: $text-color;
+      }
+      
+      .form-control {
+        padding: 10px 15px;
+        border-radius: 6px;
+        border: 1px solid $border-color;
+        transition: all 0.3s;
+        
+        &:focus {
+          border-color: $primary-color;
+          box-shadow: 0 0 0 0.25rem rgba(65, 84, 241, 0.25);
+        }
+        
+        &.input-error {
+          border-color: $danger-color;
+        }
+      }
+      
+      .error-message {
+        color: $danger-color;
+        font-size: 13px;
+        margin-top: 5px;
+      }
+      
+      .btn {
+        padding: 8px 20px;
+        border-radius: 6px;
         font-weight: 500;
-        font-size: 1rem;
-      }
-    }
-    
-    // Formulaire d'édition
-    .profile-edit {
-      form {
-        .row {
-          margin-bottom: 1.5rem;
-        }
+        transition: all 0.3s;
         
-        .col-form-label {
-          font-weight: 600;
-          color: $lstb-gray;
-          font-size: 0.875rem;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-        }
-        
-        .form-control {
-          border-radius: 10px;
-          border: 2px solid $lstb-light-gray;
-          padding: 0.75rem 1rem;
-          font-size: 0.95rem;
-          @include premium-transition;
-          background-color: $lstb-light;
+        &.btn-primary {
+          background-color: $primary-color;
+          border-color: $primary-color;
           
-          &:focus {
-            border-color: $lstb-secondary;
-            box-shadow: 0 0 0 3px rgba($lstb-secondary, 0.15);
-            background-color: white;
+          &:hover {
+            background-color: darken($primary-color, 10%);
+            border-color: darken($primary-color, 10%);
           }
           
-          &.is-invalid {
-            border-color: $lstb-danger;
-            background-color: rgba($lstb-danger, 0.02);
+          &:disabled {
+            background-color: lighten($primary-color, 20%);
+            border-color: lighten($primary-color, 20%);
           }
         }
         
-        .text-danger {
-          font-size: 0.8rem;
-          margin-top: 0.5rem;
-          font-weight: 500;
-        }
-        
-        // Section photo de profil
-        #profileImage {
-          & + div {
-            display: flex;
-            gap: 0.75rem;
-            margin-top: 1rem;
+        &.btn-danger {
+          background-color: $danger-color;
+          border-color: $danger-color;
+          
+          &:hover {
+            background-color: darken($danger-color, 10%);
+            border-color: darken($danger-color, 10%);
           }
         }
         
-        .btn {
-          border-radius: 10px;
-          font-weight: 600;
-          padding: 0.75rem 1.5rem;
-          @include premium-transition;
-          letter-spacing: 0.3px;
-          
-          &.btn-primary {
-            background: $lstb-gradient;
-            border: none;
-            box-shadow: 0 4px 10px rgba($lstb-primary, 0.2);
-            
-            &:hover {
-              transform: translateY(-2px);
-              box-shadow: 0 6px 15px rgba($lstb-primary, 0.3);
-            }
-            
-            &:active {
-              transform: translateY(0);
-            }
-          }
-          
-          &.btn-danger {
-            background-color: $lstb-danger;
-            border: none;
-            box-shadow: 0 4px 10px rgba($lstb-danger, 0.2);
-            
-            &:hover {
-              background-color: darken($lstb-danger, 5%);
-              transform: translateY(-2px);
-              box-shadow: 0 6px 15px rgba($lstb-danger, 0.3);
-            }
-          }
-          
-          &.btn-sm {
-            padding: 0.5rem 1rem;
-            font-size: 0.85rem;
-            border-radius: 8px;
-          }
-          
-          .bi {
-            margin-right: 0.5rem;
-          }
+        i {
+          margin-right: 5px;
         }
       }
     }
-    
-    // Changement de mot de passe
-    .profile-change-password {
-      form {
-        max-width: 550px;
-        margin: 0 auto;
-        padding: 1rem;
-        background-color: $lstb-light;
-        border-radius: 12px;
-      }
-    }
-  }
-  
-  // Bouton de téléchargement KYC
-  .btn-primary {
-    background: $lstb-gradient;
-    border: none;
-    box-shadow: 0 4px 10px rgba($lstb-primary, 0.2);
-    border-radius: 10px;
-    font-weight: 600;
-    padding: 0.75rem 1.5rem;
-    @include premium-transition;
-    
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 15px rgba($lstb-primary, 0.3);
-    }
-    
-    &:active {
-      transform: translateY(0);
-    }
   }
 }
 
-// Messages d'erreur
-.error-message {
-  color: $lstb-danger;
-  font-size: 0.8rem;
-  margin-top: 0.5rem;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  
-  &:before {
-    content: '⚠️';
-    margin-right: 0.5rem;
-    font-size: 0.9rem;
+// Responsive Adjustments
+@media (max-width: 1199px) {
+  .profile .col-xl-4 {
+    margin-bottom: 30px;
   }
 }
 
-// Champ invalide
-.input-error {
-  border-color: $lstb-danger !important;
-  background-color: rgba($lstb-danger, 0.02) !important;
-  
-  &:focus {
-    box-shadow: 0 0 0 3px rgba($lstb-danger, 0.15) !important;
-  }
-}
-
-// Animations
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slideIn {
-  from { opacity: 0; transform: translateX(20px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-.tab-pane {
-  animation: fadeIn 0.4s ease-out;
-}
-
-.profile-overview .row {
-  animation: slideIn 0.3s ease-out;
-  animation-fill-mode: both;
-  
-  @for $i from 1 through 20 {
-    &:nth-child(#{$i}) {
-      animation-delay: #{$i * 0.05}s;
-    }
-  }
-}
-
-// Responsive
-@media (max-width: 992px) {
-  .profile-card {
-    margin-bottom: 2rem;
+@media (max-width: 767px) {
+  .profile .label {
+    margin-bottom: 5px;
   }
   
-  .nav-tabs .nav-link {
-    padding: 0.6rem 0.75rem;
-    font-size: 0.9rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .pagetitle h1 {
-    font-size: 1.75rem;
+  .profile .row {
+    margin-bottom: 20px;
   }
   
-  .profile-card img {
-    width: 120px;
-    height: 120px;
-  }
-  
-  .card-body {
-    padding: 1.5rem !important;
-  }
-  
-  .nav-tabs {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding: 0.5rem;
-    
-    .nav-item {
-      flex: 0 0 auto;
-      width: auto;
-      margin: 0 0.25rem;
-    }
-    
-    .nav-link {
-      white-space: nowrap;
-      padding: 0.6rem 1rem;
-    }
-  }
-  
-  .profile-overview .row {
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
-  }
-  
-  .btn {
-    padding: 0.6rem 1.25rem !important;
-  }
-}
-
-// Effets spéciaux pour LSTB
-.lstb-brand {
-  position: relative;
-  display: inline-block;
-  font-family: $font-secondary;
-  font-weight: 700;
-  color: $lstb-primary;
-  
-  &:after {
-    content: '';
-    position: absolute;
-    bottom: -3px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    @include gold-accent;
-  }
-}
-
-// Ajout d'un badge premium pour les clients VIP
-.premium-badge {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: linear-gradient(135deg, #f59e0b, #b45309);
-  color: white;
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.35rem 0.75rem;
-  border-radius: 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  z-index: 10;
-  
-  &:before {
-    content: '★';
-    margin-right: 0.25rem;
-  }
-}
-
-// Ajout d'un effet de carte bancaire pour certains éléments
-.banking-card-effect {
-  background: linear-gradient(135deg, $lstb-primary, darken($lstb-primary, 15%));
-  border-radius: 16px;
-  padding: 1.5rem;
-  color: white;
-  position: relative;
-  overflow: hidden;
-  
-  &:before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
-    opacity: 0.5;
-  }
-  
-  h3 {
-    color: white !important;
-    font-weight: 600 !important;
-  }
-}
-
-// Ajout d'un style pour les informations importantes
-.important-info {
-  background-color: rgba($lstb-accent, 0.1);
-  border-left: 4px solid $lstb-accent;
-  padding: 1rem;
-  border-radius: 0 8px 8px 0;
-  margin: 1rem 0;
-  
-  strong {
-    color: darken($lstb-accent, 15%);
-    display: block;
-    margin-bottom: 0.5rem;
+  .nav-tabs-bordered .nav-link {
+    padding: 8px 12px;
+    font-size: 14px;
   }
 }

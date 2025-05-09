@@ -1,129 +1,170 @@
 // Variables
-$primary-color: #4a6bdf;
-$primary-light: rgba($primary-color, 0.1);
-$primary-dark: darken($primary-color, 10%);
-$success-color: #2ecc71;
-$success-light: rgba($success-color, 0.1);
-$danger-color: #e74c3c;
-$danger-light: rgba($danger-color, 0.1);
-$warning-color: #f39c12;
-$light-gray: #f8f9fa;
-$medium-gray: #e9ecef;
-$dark-gray: #6c757d;
-$card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-$hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-$border-radius: 0.5rem;
-$transition-time: 0.25s;
+$primary-color: #4154f1;
+$secondary-color: #717ff5;
+$success-color: #2eca6a;
+$danger-color: #ff3e1d;
+$warning-color: #ffce3a;
+$light-color: #f6f9ff;
+$dark-color: #444444;
+$gray-color: #6c757d;
+$border-color: #ebeef4;
+$text-color: #012970;
+$text-muted: #899bbd;
+$hover-bg: #f8f9fa;
+$selected-bg: rgba(65, 84, 241, 0.08);
 
-// Mixins
-@mixin card-style {
-  border: none;
-  border-radius: $border-radius;
-  box-shadow: $card-shadow;
-  transition: all $transition-time ease;
-  overflow: hidden;
-  
-  &:hover {
-    box-shadow: $hover-shadow;
-  }
-}
-
-@mixin button-hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-// Styles généraux
+// General Styles
 .modification-requests {
-  padding: 1rem;
+  padding: 15px;
+  width: 100%;
+  max-width: 100%;
   
-  .card {
-    @include card-style;
-    height: 100%;
-    
-    .card-header {
-      background: linear-gradient(135deg, $primary-color, $primary-dark);
-      color: white;
-      padding: 1rem 1.25rem;
-      border-bottom: none;
-      
-      h5 {
-        font-weight: 600;
-        letter-spacing: 0.5px;
-      }
-      
-      i {
-        font-size: 1.1rem;
-      }
-    }
+  .row {
+    width: 100%;
+    margin: 0;
   }
-}
-
-// Liste des demandes
-.request-list-card {
-  .card-body {
+  
+  // Make both columns full width
+  .col-lg-7, .col-lg-5 {
+    width: 100%;
+    max-width: 100%;
+    flex: 0 0 100%;
     padding: 0;
   }
   
-  table {
-    margin-bottom: 0;
+  .card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(1, 41, 112, 0.1);
+    overflow: hidden;
+    margin-bottom: 20px;
     
-    th {
-      background-color: $light-gray;
-      font-weight: 600;
-      padding: 1rem;
-      position: sticky;
-      top: 0;
-      z-index: 1;
-      border-bottom: 2px solid $medium-gray;
-    }
-    
-    td {
-      padding: 0.75rem 1rem;
-      vertical-align: middle;
-    }
-    
-    tr {
-      cursor: pointer;
-      transition: all $transition-time ease;
-      border-left: 4px solid transparent;
+    .card-header {
+      background-color: $light-color;
+      border-bottom: 1px solid $border-color;
+      padding: 15px 20px;
       
-      &:hover {
-        background-color: $primary-light;
+      .d-flex {
+        align-items: center;
       }
       
-      &.selected-row {
-        background-color: $primary-light;
-        border-left: 4px solid $primary-color;
+      i {
+        color: $primary-color;
+        font-size: 1.2rem;
+      }
+      
+      h5 {
+        color: $text-color;
+        font-weight: 600;
+        margin-bottom: 0;
+      }
+    }
+    
+    .card-body {
+      padding: 0;
+    }
+  }
+}
+
+// Request List Card - Full Width
+.request-list-card {
+  width: 100%;
+  
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+  }
+  
+  .table {
+    width: 100%;
+    margin-bottom: 0;
+    table-layout: fixed;
+    
+    thead {
+      background-color: $light-color;
+      
+      th {
+        color: $text-color;
+        font-weight: 600;
+        border-bottom: 2px solid $border-color;
+        padding: 15px;
+        font-size: 1rem;
+        white-space: nowrap;
+      }
+    }
+    
+    tbody {
+      tr {
+        cursor: pointer;
+        transition: all 0.2s ease;
         
-        td:first-child {
-          font-weight: 600;
+        &:hover {
+          background-color: $hover-bg;
         }
+        
+        &.selected-row {
+          background-color: $selected-bg;
+          border-left: 3px solid $primary-color;
+        }
+        
+        td {
+          padding: 15px;
+          vertical-align: middle;
+          color: $dark-color;
+          border-bottom: 1px solid $border-color;
+        }
+      }
+      
+      .empty-state {
+        padding: 50px 0;
+        text-align: center;
+        
+        i {
+          color: $text-muted;
+          opacity: 0.5;
+          font-size: 3rem;
+        }
+        
+        p {
+          color: $text-muted;
+          font-size: 1.2rem;
+          margin-top: 15px;
+        }
+      }
+    }
+    
+    // Column widths
+    th, td {
+      &:nth-child(1) { // Client
+        width: 25%;
+      }
+      &:nth-child(2) { // Champ à modifier
+        width: 20%;
+      }
+      &:nth-child(3) { // Nouvelle valeur
+        width: 25%;
+      }
+      &:nth-child(4) { // Date demande
+        width: 15%;
+      }
+      &:nth-child(5) { // Actions
+        width: 15%;
       }
     }
   }
   
   .action-buttons {
     display: flex;
-    gap: 0.5rem;
-    justify-content: flex-end;
+    gap: 10px;
+    justify-content: center;
     
     .btn {
-      width: 32px;
-      height: 32px;
-      padding: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      transition: all $transition-time ease;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: all 0.2s ease;
       
       i {
-        font-size: 0.8rem;
-      }
-      
-      &:hover {
-        @include button-hover;
+        font-size: 1rem;
       }
       
       &.document-btn {
@@ -157,69 +198,57 @@ $transition-time: 0.25s;
       }
     }
   }
-  
-  .empty-state {
-    padding: 3rem 1rem;
-    text-align: center;
-    color: $dark-gray;
-    
-    i {
-      color: $medium-gray;
-      margin-bottom: 1rem;
-      opacity: 0.7;
-    }
-    
-    p {
-      font-size: 1.1rem;
-      margin-bottom: 0;
-    }
-  }
 }
 
-// Détails de la demande
+// Details Card - Below Table
 .details-card {
+  width: 100%;
+  
   .card-body {
-    padding: 1.5rem;
+    padding: 20px;
   }
   
   .detail-item {
     display: flex;
-    margin-bottom: 1.25rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid $medium-gray;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid $border-color;
     
-    &:last-child {
+    &:last-of-type {
       border-bottom: none;
-      margin-bottom: 0;
-      padding-bottom: 0;
     }
     
     .detail-label {
+      width: 30%;
       font-weight: 600;
-      min-width: 150px;
-      color: $dark-gray;
+      color: $text-color;
+      padding-right: 15px;
     }
     
     .detail-value {
-      flex: 1;
-      color: #333;
+      width: 70%;
+      color: $dark-color;
     }
   }
   
   .action-zone {
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid $medium-gray;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid $border-color;
+    
+    .d-flex {
+      gap: 15px;
+    }
     
     .action-btn {
-      min-width: 130px;
+      padding: 10px 20px;
+      border-radius: 6px;
       font-weight: 500;
-      padding: 0.5rem 1rem;
-      border-radius: 50px;
-      transition: all $transition-time ease;
+      transition: all 0.3s;
+      min-width: 140px;
       
-      &:hover {
-        @include button-hover;
+      i {
+        margin-right: 8px;
       }
       
       &.btn-success {
@@ -227,8 +256,8 @@ $transition-time: 0.25s;
         border-color: $success-color;
         
         &:hover {
-          background-color: darken($success-color, 5%);
-          border-color: darken($success-color, 5%);
+          background-color: darken($success-color, 10%);
+          border-color: darken($success-color, 10%);
         }
       }
       
@@ -237,165 +266,129 @@ $transition-time: 0.25s;
         border-color: $danger-color;
         
         &:hover {
-          background-color: darken($danger-color, 5%);
-          border-color: darken($danger-color, 5%);
+          background-color: darken($danger-color, 10%);
+          border-color: darken($danger-color, 10%);
         }
       }
     }
     
     .refusal-input {
-      min-width: 250px;
-      border-radius: 50px;
-      padding: 0.5rem 1rem;
-      border: 1px solid $medium-gray;
-      transition: all $transition-time ease;
+      border-radius: 6px;
+      border: 1px solid $border-color;
+      padding: 10px 15px;
+      transition: all 0.3s;
+      flex-grow: 1;
       
       &:focus {
         border-color: $primary-color;
-        box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
+        box-shadow: 0 0 0 0.25rem rgba(65, 84, 241, 0.25);
       }
     }
   }
 }
 
-// Animation de chargement
+// Loading Spinner
 .spinner-border {
-  width: 3rem;
-  height: 3rem;
-  color: $primary-color;
-  animation-duration: 1s;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-bottom: 15px;
 }
 
-// Responsive
-@media (max-width: 992px) {
+// Responsive Adjustments
+@media (min-width: 992px) {
+  // Optional: For larger screens, you can create a side-by-side layout
+  // Uncomment this section if you want to keep the original layout on large screens
+  /*
   .modification-requests {
-    .row {
-      gap: 1.5rem;
-    }
-  }
-  
-  .details-card {
-    .detail-item {
-      flex-direction: column;
-      
-      .detail-label {
-        margin-bottom: 0.5rem;
-      }
+    .col-lg-7 {
+      width: 58.333333%;
+      max-width: 58.333333%;
+      flex: 0 0 58.333333%;
+      padding-right: 15px;
     }
     
-    .action-zone {
-      .d-flex {
-        gap: 1rem;
+    .col-lg-5 {
+      width: 41.666667%;
+      max-width: 41.666667%;
+      flex: 0 0 41.666667%;
+      padding-left: 15px;
+    }
+    
+    .details-card {
+      height: 100%;
+      margin-bottom: 0;
+    }
+  }
+  */
+}
+
+@media (max-width: 768px) {
+  .table {
+    th, td {
+      padding: 12px 10px !important;
+      font-size: 0.9rem;
+    }
+    
+    // Adjust column widths for mobile
+    th, td {
+      &:nth-child(1) { // Client
+        width: 30%;
+      }
+      &:nth-child(2) { // Champ à modifier
+        width: 25%;
+      }
+      &:nth-child(3) { // Nouvelle valeur
+        width: 25%;
+      }
+      &:nth-child(4) { // Date demande
+        width: 20%;
+      }
+      &:nth-child(5) { // Actions
+        width: auto;
       }
     }
   }
   
   .action-buttons {
+    flex-direction: column;
+    gap: 5px;
+    
     .btn {
-      width: 36px !important;
-      height: 36px !important;
-      
-      i {
-        font-size: 0.9rem !important;
-      }
+      padding: 6px 8px;
+      width: 100%;
+    }
+  }
+  
+  .detail-item {
+    flex-direction: column;
+    
+    .detail-label, .detail-value {
+      width: 100%;
+    }
+    
+    .detail-label {
+      margin-bottom: 5px;
+    }
+  }
+  
+  .action-zone {
+    .d-flex {
+      flex-direction: column;
+    }
+    
+    .action-btn {
+      width: 100%;
+      margin-bottom: 10px;
     }
   }
 }
 
-// Animations
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.details-card {
-  animation: fadeIn 0.3s ease-out;
-}
-
-// Personnalisation de la barre de défilement
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: $light-gray;
-}
-
-::-webkit-scrollbar-thumb {
-  background: $dark-gray;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: $primary-color;
-}
-
-// Effet de focus sur les éléments interactifs
-button:focus, input:focus {
-  outline: none;
-  box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
-}
-
-// Effet de pulsation pour les notifications
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba($primary-color, 0.7);
-  }
-  70% {
-    box-shadow: 0 0 0 10px rgba($primary-color, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba($primary-color, 0);
-  }
-}
-
-// Effet de transition pour les changements d'état
-.table-responsive {
-  transition: all 0.3s ease;
-}
-
-// Amélioration des états de survol pour les boutons
-.btn {
-  position: relative;
-  overflow: hidden;
-  
-  &::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 5px;
-    height: 5px;
-    background: rgba(255, 255, 255, 0.5);
-    opacity: 0;
-    border-radius: 100%;
-    transform: scale(1, 1) translate(-50%, -50%);
-    transform-origin: 50% 50%;
-  }
-  
-  &:focus:not(:active)::after {
-    animation: ripple 1s ease-out;
-  }
-}
-
-@keyframes ripple {
-  0% {
-    transform: scale(0, 0);
-    opacity: 0.5;
-  }
-  20% {
-    transform: scale(25, 25);
-    opacity: 0.3;
-  }
-  100% {
-    opacity: 0;
-    transform: scale(40, 40);
+// For very small screens
+@media (max-width: 576px) {
+  .table {
+    th, td {
+      padding: 10px 8px !important;
+      font-size: 0.8rem;
+    }
   }
 }
