@@ -150,8 +150,7 @@ checkPasswords(): void {
     this.markAllAsTouched();
 
     // Vérifier la validité des champs requis
-    if (this.phone?.invalid || this.email?.invalid || 
-        this.nombreEnfants?.invalid || this.revenuMensuel?.invalid) {
+    if (this.phone?.invalid ) {
       Swal.fire({
         icon: 'error',
         title: 'Formulaire invalide',
