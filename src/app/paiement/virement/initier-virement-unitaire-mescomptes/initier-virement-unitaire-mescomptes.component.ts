@@ -46,7 +46,7 @@ private swalFireConfig = {
   }
 
   ngOnInit(): void {
-    this.virementService.getComptesClient().subscribe(
+    this.virementService.getComptesVirementMesComptes().subscribe(
       (data: Compte[]) => { // Ajout du type `Compte[]`
         this.comptes = data;
         this.comptesBeneficiaires = data;

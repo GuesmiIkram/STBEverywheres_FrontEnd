@@ -19,35 +19,38 @@ export class VirementService {
 
   constructor(private http: HttpClient, private AuthService: AuthService) { }
 
-  // Récupérer la liste des comptes du client
+  // Récupérer la liste des comptes du client  sauf epargne
   public getComptesClient(): Observable<Compte[]> {
     return this.http.get<Compte[]>(`${this.apiCompteUrl}/listecompteVirement`);
   }
 
+  public getComptesVirementMesComptes(): Observable<Compte[]> {
+    return this.http.get<Compte[]>(`${this.apiCompteUrl}/listecompteVirementMesComptes`);
+  }
   // Effectuer un virement
   effectuerVirement(virementData: any): Observable<any> {
-    console.log('Envoi de la requête de virement avec les données :', virementData); 
+    console.log('Envoi de la requête de virement avec les données :', virementData);
 
     return this.http.post(`${this.apiUrl}/Virement`, virementData).pipe(
       tap(response => {
-        console.log('Réponse du backend pour le virement :', response); 
+        console.log('Réponse du backend pour le virement :', response);
       }),
       catchError(error => {
-        console.error('Erreur lors de l\'appel API pour le virement :', error); 
+        console.error('Erreur lors de l\'appel API pour le virement :', error);
         return throwError(error);
       })
     );
   }
- // Effectuer un virement de masse par formulaire 
+ // Effectuer un virement de masse par formulaire
   uploadVirementMasseForm(virementData: any): Observable<any> {
-    console.log('Envoi de la requête de virement avec les données :', virementData); 
+    console.log('Envoi de la requête de virement avec les données :', virementData);
 
     return this.http.post(`${this.apiUrl}/VirementDeMasseForm`, virementData).pipe(
       tap(response => {
-        console.log('Réponse du backend pour le virement :', response); 
+        console.log('Réponse du backend pour le virement :', response);
       }),
       catchError(error => {
-        console.error('Erreur lors de l\'appel API pour le virement :', error); 
+        console.error('Erreur lors de l\'appel API pour le virement :', error);
         return throwError(error);
       })
     );
