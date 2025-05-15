@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Compte } from 'src/app/Models/compte';
@@ -16,37 +15,44 @@ import Swal from 'sweetalert2';
 })
 export class InitierVirementMasseComponent implements OnInit {
   virementForm: FormGroup;
+  showOtpField = false;
   fichier: File | null = null;
-  methodeVirement: string = 'form'; // Valeur par défaut : formulaire
+  methodeVirement: string = 'form';
   soldeCompteSelectionne: number | null = null;
-  beneficiaires: Beneficiaire[] = []; // Liste des bénéficiaires récupérés
-  comptes: Compte[] = []; // Stocke les comptes récupérés
-
-  constructor(private fb: FormBuilder, private virementService: VirementService, private beneficiaireService: BeneficiaireService,private modalService: NgbModal
+  beneficiaires: Beneficiaire[] = [];
+  comptes: Compte[] = [];
+  isProcessing = false;
+  otpRequested = false;
+otpSaisi: string | null = null;
+  constructor(
+    private fb: FormBuilder,
+    private virementService: VirementService,
+    private beneficiaireService: BeneficiaireService,
+    private modalService: NgbModal
   ) {
     this.virementForm = this.fb.group({
-      fichier: [null],
       ribEmetteur: ['', Validators.required],
       motif: ['', Validators.required],
-      description: ['', Validators.required],
-      beneficiaires: this.fb.array([
-        this.fb.group({
-          idBeneficiaire: ['', Validators.required],
-          montant: ['', [Validators.required, Validators.min(1)]]
-        })
-      ])
+      description: [''],
+      otp: [''],
+      beneficiaires: this.fb.array([this.createBeneficiaireGroup()])
     });
   }
 
   ngOnInit(): void {
-    console.log('Component InitierVirementMasse initialisé');
     this.chargerComptes();
     this.chargerBeneficiaires();
 
-    // Écoute des changements dans le champ 'ribEmetteur'
     this.virementForm.get('ribEmetteur')?.valueChanges.subscribe((ribEmetteur: string) => {
       const compteSelectionne = this.comptes.find(compte => compte.rib === ribEmetteur);
       this.soldeCompteSelectionne = compteSelectionne ? compteSelectionne.solde : null;
+    });
+  }
+
+  createBeneficiaireGroup(): FormGroup {
+    return this.fb.group({
+      idBeneficiaire: ['', Validators.required],
+      montant: ['', [Validators.required, Validators.min(0.01)]]
     });
   }
 
@@ -58,10 +64,10 @@ export class InitierVirementMasseComponent implements OnInit {
     this.virementService.getComptesClient().subscribe(
       (data: Compte[]) => {
         this.comptes = data;
-        console.log('Comptes récupérés:', this.comptes);
       },
       (error: any) => {
         console.error('Erreur lors du chargement des comptes :', error);
+        Swal.fire('Erreur', 'Impossible de charger les comptes', 'error');
       }
     );
   }
@@ -69,29 +75,19 @@ export class InitierVirementMasseComponent implements OnInit {
   chargerBeneficiaires(): void {
     this.beneficiaireService.getBeneficiairesByClientId().subscribe({
       next: (data: Beneficiaire[]) => {
-        console.log('Données bénéficiaires reçues:', data);
         this.beneficiaires = data;
       },
       error: (error: any) => {
         console.error('Erreur lors du chargement des bénéficiaires:', error);
+        Swal.fire('Erreur', 'Impossible de charger les bénéficiaires', 'error');
       }
     });
   }
 
-  // Créer un nouvel objet bénéficiaire
-  nouveauBeneficiaire(): FormGroup {
-    return this.fb.group({
-      idBeneficiaire: ['', Validators.required],
-      montant: ['', [Validators.required, Validators.min(1)]]
-    });
-  }
-
-  // Ajouter un bénéficiaire dynamiquement
   ajouterBeneficiaire(): void {
-    this.beneficiairesFormArray.push(this.nouveauBeneficiaire());
+    this.beneficiairesFormArray.push(this.createBeneficiaireGroup());
   }
 
-  // Supprimer un bénéficiaire dynamiquement
   supprimerBeneficiaire(index: number): void {
     if (this.beneficiairesFormArray.length > 1) {
       this.beneficiairesFormArray.removeAt(index);
@@ -99,18 +95,18 @@ export class InitierVirementMasseComponent implements OnInit {
   }
 
   onMethodChange(methode: string): void {
-    console.log('Méthode de virement sélectionnée:', methode);
     this.methodeVirement = methode;
+    this.showOtpField = false;
+    this.otpRequested = false;
+    this.virementForm.reset();
+    this.beneficiairesFormArray.clear();
+    this.ajouterBeneficiaire();
   }
 
   onFileChange(event: any): void {
-    if (!event.target.files || event.target.files.length === 0) {
-      console.warn('Aucun fichier sélectionné');
-      return;
+    if (event.target.files && event.target.files.length > 0) {
+      this.fichier = event.target.files[0];
     }
-
-    this.fichier = event.target.files[0];
-    console.log('Fichier sélectionné:', this.fichier);
   }
 
   onSubmit(): void {
@@ -120,197 +116,225 @@ export class InitierVirementMasseComponent implements OnInit {
       this.submitForm();
     }
   }
-  //ne permet pas l'ecriture des lettres dans le champ montant
-  numericOnly(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    input.value = input.value.replace(/[^0-9.]/g, ''); // Autorise les chiffres et le point
+submitFile(): void {
+  if (!this.fichier) {
+    Swal.fire('Erreur', 'Veuillez sélectionner un fichier valide', 'error');
+    return;
   }
-  submitFile(): void {
-    if (!this.fichier) {
+
+  this.isProcessing = true;
+  const formData = new FormData();
+  formData.append('Fichier', this.fichier, this.fichier.name);
+
+  if (this.showOtpField) {
+    if (!this.otpSaisi || this.otpSaisi.length !== 6) {
+      this.isProcessing = false;
+      Swal.fire('Erreur', 'Veuillez saisir un code OTP valide (6 chiffres)', 'error');
+      return;
+    }
+    formData.append('OtpSaisi', this.otpSaisi);
+  }
+
+  this.virementService.uploadVirementMasseFile(formData).subscribe({
+    next: (response) => {
+      this.isProcessing = false;
+
+      // ✅ Mise à jour ici
+      if (response.besoinOtp && !this.showOtpField) {
+        this.showOtpField = true;
+        Swal.fire('Code OTP envoyé', response.message || 'Un code de vérification a été envoyé.', 'info');
+      } else {
+        Swal.fire({
+          title: 'Succès',
+          html: `Virement de masse effectué avec succès !<br>
+                Nombre de virements: ${response.nombreVirements || 'Non spécifié'}<br>
+                Montant total: ${response.totalDebite?.toFixed(2) || 'Non spécifié'} TND`,
+          icon: 'success'
+        });
+
+        // Reset
+        this.fichier = null;
+        this.otpSaisi = '';
+        this.showOtpField = false;
+      }
+    },
+    error: (error) => {
+      this.isProcessing = false;
+      console.error('Erreur', error);
+      Swal.fire('Erreur', error.error?.message || 'Erreur lors du traitement', 'error');
+    }
+  });
+}
+
+
+
+  submitForm(): void {
+    if (this.virementForm.invalid) {
+      Swal.fire('Erreur', 'Veuillez remplir tous les champs obligatoires', 'error');
+      return;
+    }
+
+    //const formValue = this.virementForm.value;
+    const formValue = {
+  ...this.virementForm.value,
+  description: this.virementForm.value.description ?? ''
+};
+
+    const totalMontant = this.calculateTotalAmount();
+    const compteEmetteur = this.comptes.find(c => c.rib === formValue.ribEmetteur);
+
+    if (!compteEmetteur) {
+      Swal.fire('Erreur', 'Compte émetteur introuvable', 'error');
+      return;
+    }
+
+    const frais = this.calculateFees();
+    const totalAvecFrais = totalMontant + frais;
+    const soldeDisponible = compteEmetteur.solde + (compteEmetteur.decouvertAutorise || 0);
+
+    if (soldeDisponible < totalAvecFrais) {
       Swal.fire({
-        title: 'Fichier manquant',
-        html: `
-          <div style="text-align: center;">
-            <i class="fas fa-exclamation-triangle" style="color: #ffc107; font-size: 48px; margin-bottom: 15px;"></i>
-            <p>Veuillez sélectionner un fichier valide.</p>
-          </div>
-        `,
-        confirmButtonText: 'OK',
-        confirmButtonColor: '#3366cc'
+        title: 'Solde insuffisant',
+        html: `Solde disponible: ${compteEmetteur.solde} TND<br>
+               Découvert autorisé: ${compteEmetteur.decouvertAutorise || 0} TND<br>
+               Total à débiter: ${totalAvecFrais.toFixed(2)} TND<br>
+               <span style="color: red;">Votre solde est insuffisant</span>`,
+        icon: 'warning'
       });
       return;
     }
 
-    const formData = new FormData();
-    formData.append('Fichier', this.fichier, this.fichier.name);
+    if (!this.otpRequested) {
+      this.requestOtp();
+    } else {
+      this.processVirement();
+    }
+  }
 
-    // Afficher un loader pendant l'upload
-    Swal.fire({
-      title: 'Traitement en cours',
-      html: `
-        <div style="text-align: center;">
-          <p>Veuillez patienter pendant le traitement du fichier...</p>
-        </div>
-      `,
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      }
-    });
-
-    this.virementService.uploadVirementMasseFile(formData).subscribe(
-      response => {
-        console.log('Virement par fichier réussi:', response);
-
-        // Fermer le loader
-        Swal.close();
-
-        // Afficher le succès
-        Swal.fire({
-          title: 'Succès',
-          html: `
-            <div style="text-align: center;">
-              <i class="fas fa-check-circle" style="color: #28a745; font-size: 48px; margin-bottom: 15px;"></i>
-              <p>Virement de masse effectué avec succès !</p>
-              <p><strong>Nombre de virements:</strong> ${response.nombreVirements || 'Non spécifié'}</p>
-              <p><strong>Montant total:</strong> ${response.totalDebite?.toFixed(2) || 'Non spécifié'} TND</p>
-              <p><strong>Frais appliqués:</strong> ${response.frais || 'Non spécifié'} TND</p>
-            </div>
-            <div style="font-size: 13px; color: #666; margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px;">
-              <p><i class="fas fa-file-alt" style="color: #3366cc; margin-right: 5px;"></i> Fichier traité: ${this.fichier?.name}</p>
-            </div>
-          `,
-          confirmButtonText: 'Fermer',
-          confirmButtonColor: '#3366cc'
-        });
-
-        // Réinitialiser le formulaire
-        this.fichier = null;
-        const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
-        if (fileInput) {
-          fileInput.value = '';
-        }
-      },
-      error => {
-        console.error('Erreur lors du virement par fichier:', error);
-
-        // Fermer le loader
-        Swal.close();
-
-        // Gérer différents types d'erreurs
-        if (error.status === 400) {
-          // Erreur de validation (fichier invalide, format incorrect, etc.)
-          Swal.fire({
-            title: 'Erreur dans le fichier',
-            html: `
-              <div style="text-align: center;">
-                <i class="fas fa-file-excel" style="color: #dc3545; font-size: 48px; margin-bottom: 15px;"></i>
-                <p>${error.error?.message || 'Le fichier contient des erreurs.'}</p>
-                ${error.error?.details ? `<p style="font-size: 13px; color: #666;">${error.error.details}</p>` : ''}
-              </div>
-            `,
-            confirmButtonText: 'Compris',
-            confirmButtonColor: '#3366cc'
-          });
-        } else if (error.status === 404) {
-          const message = error.error?.message || '';
-          const rib = error.error?.rib || null;
-        
-          if (message.includes('émetteur')) {
-            // Compte émetteur introuvable
-            Swal.fire({
-              title: 'Compte émetteur introuvable',
-              html: `
-                <div style="text-align: center;">
-                  <i class="fas fa-university" style="color: #dc3545; font-size: 48px; margin-bottom: 15px;"></i>
-                  <p>${message}</p>
-                  ${rib ? `<p style="font-size: 13px;"><strong>RIB:</strong> ${rib}</p>` : ''}
-                </div>
-              `,
-              confirmButtonText: 'Compris',
-              confirmButtonColor: '#3366cc'
-            });
-          } else if (message.includes('bénéficiaire')) {
-            // Compte bénéficiaire introuvable
-            Swal.fire({
-              title: 'Compte bénéficiaire introuvable',
-              html: `
-                <div style="text-align: center;">
-                  <i class="fas fa-user-slash" style="color: #dc3545; font-size: 48px; margin-bottom: 15px;"></i>
-                  <p>${message}</p>
-                  ${rib ? `<p style="font-size: 13px;"><strong>RIB:</strong> ${rib}</p>` : ''}
-                </div>
-              `,
-              confirmButtonText: 'Compris',
-              confirmButtonColor: '#3366cc'
-            });
-          } else {
-            // Cas générique 404
-            Swal.fire({
-              title: 'Compte introuvable',
-              html: `
-                <div style="text-align: center;">
-                  <i class="fas fa-university" style="color: #dc3545; font-size: 48px; margin-bottom: 15px;"></i>
-                  <p>${message || 'Compte émetteur ou bénéficiaire introuvable.'}</p>
-                  ${rib ? `<p style="font-size: 13px;"><strong>RIB:</strong> ${rib}</p>` : ''}
-                </div>
-              `,
-              confirmButtonText: 'Compris',
-              confirmButtonColor: '#3366cc'
-            });
-          }
-        }
-        
-        
-        
-      }
+  private calculateTotalAmount(): number {
+    return this.virementForm.value.beneficiaires.reduce(
+      (sum: number, benef: any) => sum + Number(benef.montant), 0
     );
   }
-openAddBeneficiaireModal(): void {
-    const modalRef = this.modalService.open(AddBeneficiaireComponent, {
-      size: 'lg',
-      centered: true
-    });
 
-    // Attendre que le modal soit rendu pour insérer le bouton de fermeture
-    setTimeout(() => {
-      const modalElement = document.querySelector('.modal-content');
-      if (modalElement) {
-        const closeButton = document.createElement('button');
-        closeButton.innerHTML = '&times;';
-        closeButton.classList.add('close-modal-btn');
+  private calculateFees(): number {
+    const nombreBeneficiaires = this.virementForm.value.beneficiaires.length;
+    let frais = 5.0;
+    if (nombreBeneficiaires > 5) frais += (nombreBeneficiaires - 5) * 0.5;
+    return frais;
+  }
 
-        // Style en ligne pour le bouton de fermeture
-        closeButton.style.position = 'absolute';
-        closeButton.style.top = '5px';  // Moins d'espacement par rapport au haut
-        closeButton.style.right = '5px';  // Moins d'espacement à droite
-        closeButton.style.border = 'none';
-        closeButton.style.backgroundColor = '#dc3545';  // Fond rouge
-        closeButton.style.color = 'white';             // Texte blanc
-        closeButton.style.fontSize = '18px';           // Plus petit pour un bouton plus discret
-        closeButton.style.cursor = 'pointer';
-        closeButton.style.padding = '5px';             // Moins de padding
-        closeButton.style.borderRadius = '0';          // Forme carrée
-        closeButton.style.transition = 'background-color 0.3s ease, color 0.3s ease, transform 0.2s ease';
-        closeButton.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';  // Ombre discrète
+  private requestOtp(): void {
+    this.isProcessing = true;
 
-        // Effet au survol
-        closeButton.addEventListener('mouseover', () => {
-          closeButton.style.backgroundColor = '#c82333';  // Changer la couleur au survol
-          closeButton.style.transform = 'scale(1.1)';     // Agrandir légèrement
-        });
-
-        closeButton.addEventListener('mouseout', () => {
-          closeButton.style.backgroundColor = '#dc3545';  // Rétablir la couleur
-          closeButton.style.transform = 'scale(1)';       // Rétablir la taille normale
-        });
-
-        // Fonction de fermeture
-        closeButton.addEventListener('click', () => modalRef.dismiss());
-
-        modalElement.appendChild(closeButton);
+    Swal.fire({
+      title: 'Confirmez le virement',
+      html: `Vous êtes sur le point d'effectuer un virement de masse.<br>
+             Montant total: ${this.calculateTotalAmount().toFixed(2)} TND<br>
+             Frais: ${this.calculateFees().toFixed(2)} TND`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Confirmer',
+      cancelButtonText: 'Annuler'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.sendOtpRequest();
+      } else {
+        this.isProcessing = false;
       }
-    }, 100); // Petite attente pour que le modal soit chargé
+    });
+  }
+
+ private sendOtpRequest(): void {
+    this.isProcessing = true;
+
+    // Préparation des données dans le format attendu par l'API
+    const formData = {
+      ribEmetteur: this.virementForm.value.ribEmetteur,
+      motif: this.virementForm.value.motif,
+      description: this.virementForm.value.description,
+      beneficiaires: this.virementForm.value.beneficiaires.map((b: any) => ({
+        idBeneficiaire: Number(b.idBeneficiaire),
+        montant: Number(b.montant)
+      })),
+      otp: ""
+    };
+
+    console.log('Envoi des données au backend:', formData);
+
+    this.virementService.uploadVirementMasseForm(formData).subscribe({
+      next: (response: any) => {
+        this.isProcessing = false;
+        this.otpRequested = true;
+        this.showOtpField = true;
+        Swal.fire('Code envoyé', response.message || 'Un code OTP a été envoyé à votre mobile', 'success');
+      },
+      error: (error) => {
+        this.isProcessing = false;
+        console.error('Erreur détaillée:', error);
+        Swal.fire('Erreur', error.error?.message || 'Échec de l\'envoi du code OTP', 'error');
+      }
+    });
+}
+
+private processVirement(): void {
+    if (!this.virementForm.get('otp')?.valid) {
+      Swal.fire('Erreur', 'Veuillez saisir le code OTP reçu par SMS', 'error');
+      return;
+    }
+
+    this.isProcessing = true;
+
+    // Préparation des données dans le format attendu par l'API
+    const formData = {
+      ribEmetteur: this.virementForm.value.ribEmetteur,
+      motif: this.virementForm.value.motif,
+      description: this.virementForm.value.description,
+      beneficiaires: this.virementForm.value.beneficiaires.map((b: any) => ({
+        idBeneficiaire: Number(b.idBeneficiaire),
+        montant: Number(b.montant)
+      })),
+      otp: this.virementForm.value.otp
+    };
+
+    console.log('Envoi des données OTP au backend:', formData);
+
+    this.virementService.uploadVirementMasseForm(formData).subscribe({
+      next: (response: any) => {
+        this.isProcessing = false;
+        Swal.fire({
+          title: 'Virement effectué',
+          html: `Virement de masse réussi !<br>
+                 ${response.message || ''}<br>
+                 ${response.reference ? 'Référence: ' + response.reference : ''}<br>
+                 ${response.montantTotal ? 'Montant total: ' + response.montantTotal.toFixed(2) + ' TND' : ''}`,
+          icon: 'success'
+        });
+        this.resetForm();
+      },
+      error: (error) => {
+        this.isProcessing = false;
+        console.error('Erreur détaillée:', error);
+        if (error.status === 400 && error.error.requiresOtp) {
+          Swal.fire('Erreur', error.error?.message || 'Code OTP incorrect ou expiré', 'error');
+        } else {
+          Swal.fire('Erreur', error.error?.message || 'Erreur lors du traitement du virement', 'error');
+        }
+      }
+    });
+}
+
+
+  private resetForm(): void {
+    this.virementForm.reset();
+    this.showOtpField = false;
+    this.otpRequested = false;
+    this.beneficiairesFormArray.clear();
+    this.ajouterBeneficiaire();
+  }
+
+  openAddBeneficiaireModal(): void {
+    const modalRef = this.modalService.open(AddBeneficiaireComponent, { size: 'lg', centered: true });
 
     modalRef.result.then(
       (result) => {
@@ -319,167 +343,7 @@ openAddBeneficiaireModal(): void {
           Swal.fire('Succès', 'Bénéficiaire ajouté avec succès!', 'success');
         }
       },
-      (dismissed) => {
-        console.log('Modal fermé sans ajout');
-      }
+      () => console.log('Modal fermé sans ajout')
     );
   }
-
-
-  submitForm(): void {
-    if (!this.virementForm.get('ribEmetteur')?.valid ||
-      !this.virementForm.get('motif')?.valid ||
-      !this.virementForm.get('beneficiaires')?.valid) {
-    //if (this.virementForm.invalid) {
-      Swal.fire({
-        title: 'Formulaire incomplet',
-        html: `
-          <div style="text-align: center;">
-            <i class="fas fa-exclamation-circle" style="color: #dc3545; font-size: 48px; margin-bottom: 15px;"></i>
-            <p>Veuillez remplir tous les champs obligatoires correctement.</p>
-          </div>
-        `,
-        confirmButtonText: 'Fermer',
-        confirmButtonColor: '#3366cc',
-        customClass: {
-          container: 'swal-bank-container',
-          popup: 'swal-bank-popup',
-          title: 'swal-bank-title',
-          htmlContainer: 'swal-bank-html',
-          confirmButton: 'swal-bank-confirm-btn'
-        }
-      });
-      return;
-    }
-
-    const formValue = this.virementForm.value;
-    const totalMontant = formValue.beneficiaires.reduce((sum: number, benef: any) => sum + Number(benef.montant), 0);
-    const compteEmetteur = this.comptes.find(c => c.rib === formValue.ribEmetteur);
-
-    if (!compteEmetteur) {
-      return;
-    }
-
-    // Calcul des frais
-    const nombreBeneficiaires = formValue.beneficiaires.length;
-    let frais = 5.0; // Frais de base pour les 5 premiers bénéficiaires
-    if (nombreBeneficiaires > 5) {
-      frais += (nombreBeneficiaires - 5) * 0.5;
-    }
-
-    const totalAvecFrais = Number(totalMontant) + frais;
-    const soldeDisponible = compteEmetteur.solde + compteEmetteur.decouvertAutorise;
-
-    // Vérification du solde
-    if (soldeDisponible < totalAvecFrais) {
-      const legalText = `
-        <div style="font-size: 12px; color: #666; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
-          <p>Veuillez approvisionner votre compte ou réduire le montant du virement.</p>
-        </div>
-      `;
-
-      Swal.fire({
-        title: 'Solde insuffisant',
-        html: `
-          <div style="text-align: left; margin: 10px 0;">
-            <p><strong>Solde disponible:</strong> ${compteEmetteur.solde} TND</p>
-            <p><strong>Découvert autorisé:</strong> ${compteEmetteur.decouvertAutorise} TND</p>
-            <p><strong>Total à débiter:</strong> ${totalAvecFrais.toFixed(2)} TND</p>
-            <p style="color: #dc3545; font-weight: 500;">Votre solde est insuffisant pour effectuer cette opération.</p>
-          </div>
-          ${legalText}
-        `,
-        icon: 'warning',
-        confirmButtonText: 'Compris',
-        confirmButtonColor: '#3366cc',
-        customClass: {
-          container: 'swal-bank-container',
-          popup: 'swal-bank-popup',
-          title: 'swal-bank-title',
-          htmlContainer: 'swal-bank-html',
-          confirmButton: 'swal-bank-confirm-btn'
-        }
-      });
-      return;
-    }
-
-    // Confirmation avant envoi
-    const legalText = `
-      <div style="font-size: 12px; color: #666; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
-        <p>En confirmant, vous autorisez le débit immédiat de votre compte.</p>
-      </div>
-    `;
-
-    Swal.fire({
-      title: 'Confirmez le virement en masse',
-      html: `
-        <div style="text-align: left; margin: 10px 0;">
-          <p><strong>RIB Émetteur:</strong> ${formValue.ribEmetteur}</p>
-          <p><strong>Nombre de bénéficiaires:</strong> ${nombreBeneficiaires}</p>
-          <p><strong>Montant total:</strong> ${totalMontant} TND</p>
-          <p><strong>Frais:</strong> ${frais} TND</p>
-          <p><strong>Total à débiter:</strong> ${totalAvecFrais} TND</p>
-        </div>
-        ${legalText}
-      `,
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonColor: '#3366cc',
-      cancelButtonColor: '#6c757d',
-      confirmButtonText: 'Confirmer le virement',
-      cancelButtonText: 'Annuler',
-      focusCancel: true,
-      customClass: {
-        container: 'swal-bank-container',
-        popup: 'swal-bank-popup',
-        title: 'swal-bank-title',
-        htmlContainer: 'swal-bank-html',
-        confirmButton: 'swal-bank-confirm-btn',
-        cancelButton: 'swal-bank-cancel-btn'
-      }
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.virementService.uploadVirementMasseForm(this.virementForm.value).subscribe(
-          (response) => {
-            Swal.fire({
-              title: 'Virement effectué',
-              html: `
-                <div style="text-align: center;">
-                  <i class="fas fa-check-circle" style="color: #28a745; font-size: 48px; margin-bottom: 15px;"></i>
-                  <p>Votre virement de masse a été effectué avec succès.</p>
-                  <p><strong>Motif:</strong> ${formValue.motif}</p>
-                </div>
-                <div style="font-size: 13px; color: #666; margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px;">
-                  <p><i class="fas fa-mobile-alt" style="color: #3366cc; margin-right: 5px;"></i> Une notification SMS a été envoyée.</p>
-                  <p><i class="fas fa-exchange-alt" style="color: #3366cc; margin-right: 5px;"></i> Les fonds ont été transférés immédiatement.</p>
-                </div>
-              `,
-              confirmButtonText: 'Fermer',
-              confirmButtonColor: '#3366cc',
-              customClass: {
-                popup: 'swal-bank-popup-success'
-              }
-            });
-            this.virementForm.reset();
-          },
-          (error) => {
-            Swal.fire({
-              title: 'Erreur',
-              html: `
-                <div style="text-align: center;">
-                  <i class="fas fa-exclamation-circle" style="color: #dc3545; font-size: 48px; margin-bottom: 15px;"></i>
-                  <p>${error.error.message || 'Une erreur est survenue lors du virement.'}</p>
-                  ${error.error.details ? `<p style="font-size: 13px; color: #666;">${error.error.details}</p>` : ''}
-                </div>
-              `,
-              confirmButtonText: 'Fermer',
-              confirmButtonColor: '#3366cc',
-              customClass: {
-                popup: 'swal-bank-popup'
-              }
-            });
-          }
-        );
-      }
-    });
-  }}
+}

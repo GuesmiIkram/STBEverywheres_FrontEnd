@@ -18,48 +18,41 @@ $selected-bg: rgba(65, 84, 241, 0.08);
   padding: 15px;
   width: 100%;
   max-width: 100%;
-  
+
   .row {
     width: 100%;
     margin: 0;
   }
-  
-  // Make both columns full width
-  .col-lg-7, .col-lg-5 {
-    width: 100%;
-    max-width: 100%;
-    flex: 0 0 100%;
-    padding: 0;
-  }
-  
+
+
   .card {
     border: none;
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(1, 41, 112, 0.1);
     overflow: hidden;
     margin-bottom: 20px;
-    
+
     .card-header {
       background-color: $light-color;
       border-bottom: 1px solid $border-color;
       padding: 15px 20px;
-      
+
       .d-flex {
         align-items: center;
       }
-      
+
       i {
         color: $primary-color;
         font-size: 1.2rem;
       }
-      
+
       h5 {
         color: $text-color;
         font-weight: 600;
         margin-bottom: 0;
       }
     }
-    
+
     .card-body {
       padding: 0;
     }
@@ -69,20 +62,20 @@ $selected-bg: rgba(65, 84, 241, 0.08);
 // Request List Card - Full Width
 .request-list-card {
   width: 100%;
-  
+
   .table-responsive {
     width: 100%;
     overflow-x: auto;
   }
-  
+
   .table {
     width: 100%;
     margin-bottom: 0;
     table-layout: fixed;
-    
+
     thead {
       background-color: $light-color;
-      
+
       th {
         color: $text-color;
         font-weight: 600;
@@ -92,21 +85,21 @@ $selected-bg: rgba(65, 84, 241, 0.08);
         white-space: nowrap;
       }
     }
-    
+
     tbody {
       tr {
         cursor: pointer;
         transition: all 0.2s ease;
-        
+
         &:hover {
           background-color: $hover-bg;
         }
-        
+
         &.selected-row {
           background-color: $selected-bg;
           border-left: 3px solid $primary-color;
         }
-        
+
         td {
           padding: 15px;
           vertical-align: middle;
@@ -114,17 +107,17 @@ $selected-bg: rgba(65, 84, 241, 0.08);
           border-bottom: 1px solid $border-color;
         }
       }
-      
+
       .empty-state {
         padding: 50px 0;
         text-align: center;
-        
+
         i {
           color: $text-muted;
           opacity: 0.5;
           font-size: 3rem;
         }
-        
+
         p {
           color: $text-muted;
           font-size: 1.2rem;
@@ -132,7 +125,7 @@ $selected-bg: rgba(65, 84, 241, 0.08);
         }
       }
     }
-    
+
     // Column widths
     th, td {
       &:nth-child(1) { // Client
@@ -152,45 +145,45 @@ $selected-bg: rgba(65, 84, 241, 0.08);
       }
     }
   }
-  
+
   .action-buttons {
     display: flex;
     gap: 10px;
     justify-content: center;
-    
+
     .btn {
       padding: 8px 12px;
       border-radius: 6px;
       transition: all 0.2s ease;
-      
+
       i {
         font-size: 1rem;
       }
-      
+
       &.document-btn {
         color: $primary-color;
         border-color: $primary-color;
-        
+
         &:hover {
           background-color: $primary-color;
           color: white;
         }
       }
-      
+
       &.approve-btn {
         color: $success-color;
         border-color: $success-color;
-        
+
         &:hover {
           background-color: $success-color;
           color: white;
         }
       }
-      
+
       &.refuse-btn {
         color: $danger-color;
         border-color: $danger-color;
-        
+
         &:hover {
           background-color: $danger-color;
           color: white;
@@ -203,82 +196,82 @@ $selected-bg: rgba(65, 84, 241, 0.08);
 // Details Card - Below Table
 .details-card {
   width: 100%;
-  
+
   .card-body {
     padding: 20px;
   }
-  
+
   .detail-item {
     display: flex;
     margin-bottom: 15px;
     padding-bottom: 15px;
     border-bottom: 1px solid $border-color;
-    
+
     &:last-of-type {
       border-bottom: none;
     }
-    
+
     .detail-label {
       width: 30%;
       font-weight: 600;
       color: $text-color;
       padding-right: 15px;
     }
-    
+
     .detail-value {
       width: 70%;
       color: $dark-color;
     }
   }
-  
+
   .action-zone {
     margin-top: 25px;
     padding-top: 20px;
     border-top: 1px solid $border-color;
-    
+
     .d-flex {
       gap: 15px;
     }
-    
+
     .action-btn {
       padding: 10px 20px;
       border-radius: 6px;
       font-weight: 500;
       transition: all 0.3s;
       min-width: 140px;
-      
+
       i {
         margin-right: 8px;
       }
-      
+
       &.btn-success {
         background-color: $success-color;
         border-color: $success-color;
-        
+
         &:hover {
           background-color: darken($success-color, 10%);
           border-color: darken($success-color, 10%);
         }
       }
-      
+
       &.btn-danger {
         background-color: $danger-color;
         border-color: $danger-color;
-        
+
         &:hover {
           background-color: darken($danger-color, 10%);
           border-color: darken($danger-color, 10%);
         }
       }
     }
-    
+
     .refusal-input {
       border-radius: 6px;
       border: 1px solid $border-color;
       padding: 10px 15px;
       transition: all 0.3s;
       flex-grow: 1;
-      
+
       &:focus {
         border-color: $primary-color;
         box-shadow: 0 0 0 0.25rem rgba(65, 84, 241, 0.25);
@@ -306,14 +299,14 @@ $selected-bg: rgba(65, 84, 241, 0.08);
       flex: 0 0 58.333333%;
       padding-right: 15px;
     }
-    
+
     .col-lg-5 {
       width: 41.666667%;
       max-width: 41.666667%;
       flex: 0 0 41.666667%;
       padding-left: 15px;
     }
-    
+
     .details-card {
       height: 100%;
       margin-bottom: 0;
@@ -328,7 +321,7 @@ $selected-bg: rgba(65, 84, 241, 0.08);
       padding: 12px 10px !important;
       font-size: 0.9rem;
     }
-    
+
     // Adjust column widths for mobile
     th, td {
       &:nth-child(1) { // Client
@@ -348,34 +341,34 @@ $selected-bg: rgba(65, 84, 241, 0.08);
       }
     }
   }
-  
+
   .action-buttons {
     flex-direction: column;
     gap: 5px;
-    
+
     .btn {
       padding: 6px 8px;
       width: 100%;
     }
   }
-  
+
   .detail-item {
     flex-direction: column;
-    
+
     .detail-label, .detail-value {
       width: 100%;
     }
-    
+
     .detail-label {
       margin-bottom: 5px;
     }
   }
-  
+
   .action-zone {
     .d-flex {
       flex-direction: column;
     }
-    
+
     .action-btn {
       width: 100%;
       margin-bottom: 10px;

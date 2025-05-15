@@ -29,6 +29,10 @@ import { ReponseReclamationComponent } from './reponse-reclamation/reponse-recla
 import { RibIbanComponent } from './rib-iban/rib-iban.component';
 import { HistoriqueReclamationsComponent } from './historique-reclamations/historique-reclamations.component';
 import { KycDownloadComponent } from './kyc-download/kyc-download.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+
+
 
 
 import { ExtraitComponent } from './extrait/extrait.component';
@@ -64,8 +68,8 @@ import { ModificationRequestsComponent } from './modification-requests/modificat
       //DashbordAgentComponent,
      ],
 
-     
-      
+
+
 
 
   imports: [
@@ -78,6 +82,10 @@ import { ModificationRequestsComponent } from './modification-requests/modificat
     AppRoutingModule,
     ReactiveFormsModule,
     NgChartsModule,
+
+
+     MatFormFieldModule,
+    MatSelectModule
 
 
   ],
