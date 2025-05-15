@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Page dédiée à la gestion des virements unitaires vers d'autres b&neficiaires.">
-
+    <meta name="description" content="Page dédiée à la gestion des virements unitaires vers d'autres bénéficiaires.">
     <title>Initiation Virement Unitaire</title>
 </head>
 <body>
     <div class="container">
         <div class="content">
-            <div class="breadcrumb">
+           <!--  <div class="breadcrumb">
                 <a href="#">Home</a> /
                 <a href="#">Initiation Virement</a> /
                 <span>virement-unitaire</span>
             </div>
+            -->
 
             <div class="form-container">
                 <h2 class="form-title">Initiation virement unitaire</h2>
 
                 <form [formGroup]="virementForm" class="transfer-form">
-                    <!-- Donneur d'ordre section -->
+                    <!-- Section donneur d'ordre -->
                     <div class="form-section">
                         <h3 class="section-title">(Donneur d'ordre)</h3>
 
@@ -34,28 +34,19 @@
                                     </option>
                                 </select>
 
-
-
-
-
- <!-- Afficher le solde du compte sélectionné-->
-
- <div *ngIf="soldeCompteSelectionne !== null" class="solde-compte"
- [class.solde-negatif]="soldeCompteSelectionne < 0">
-<strong>Solde disponible :</strong>
-<span [class.text-danger]="soldeCompteSelectionne < 0">
-    {{ soldeCompteSelectionne | number:'1.2-2' }} TND
-</span>
-</div>
-
-
-
+                                <!-- Affichage du solde -->
+                                <div *ngIf="soldeCompteSelectionne !== null" class="solde-compte"
+                                    [class.solde-negatif]="soldeCompteSelectionne < 0">
+                                    <strong>Solde disponible :</strong>
+                                    <span [class.text-danger]="soldeCompteSelectionne < 0">
+                                        {{ soldeCompteSelectionne | number:'1.2-2' }} TND
+                                    </span>
+                                </div>
                             </div>
                         </div>
 
                         <div class="form-row">
                             <div class="form-group">
-
                                 <label for="montant">Montant <span class="required">*</span></label>
                                 <input type="number" id="montant" formControlName="montant" class="form-control" required>
                             </div>
@@ -65,13 +56,13 @@
                             </div>
                         </div>
 
-                        <div>
+                        <div class="form-group">
                             <label for="description">Description </label>
-                            <input type="text" id="description" formControlName="description" class="form-control" >
+                            <input type="text" id="description" formControlName="description" class="form-control">
                         </div>
                     </div>
 
-                    <!-- Bénéficiaire section -->
+                    <!-- Section bénéficiaire -->
                     <div class="form-section">
                         <h3 class="section-title">(Bénéficiaire)</h3>
 
@@ -85,12 +76,10 @@
                                     </option>
                                 </select>
                                 <div class="ajouter-beneficiaire-container">
-                                  <button type="button" class="ajouter-beneficiaire" (click)="openAddBeneficiaireModal()">
-                                      <span class="plus-icon"></span> Ajouter un bénéficiaire
-                                  </button>
-                              </div>
-
-
+                                    <button type="button" class="ajouter-beneficiaire" (click)="openAddBeneficiaireModal()">
+                                        <span class="plus-icon"></span> Ajouter un bénéficiaire
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -99,6 +88,37 @@
                         <button type="button" (click)="effectuerVirement()" class="btn btn-submit">Enregistrer</button>
                     </div>
                 </form>
+
+                <!-- Section OTP (apparaît après confirmation) -->
+                <div *ngIf="showOtpInput" class="otp-section">
+                    <h3 class="section-title">Validation sécurisée</h3>
+                    <form [formGroup]="otpForm" class="transfer-form">
+                        <div class="form-group">
+                            <label for="otpCode">Code de vérification <span class="required">*</span></label>
+                            <input type="text"
+                                   id="otpCode"
+                                   formControlName="otpCode"
+                                   class="form-control"
+                                   placeholder="Saisissez les 6 chiffres reçus"
+                                   maxlength="6"
+                                   minlength="6"
+                                   required>
+                            <div *ngIf="otpForm.get('otpCode')?.errors && (otpForm.get('otpCode')?.dirty || otpForm.get('otpCode')?.touched)"
+                                 class="error-message">
+                                Le code OTP doit contenir exactement 6 chiffres
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button"
+                                    (click)="validerVirementAvecOtp(otpForm.value.otpCode)"
+                                    class="btn btn-submit"
+                                    [disabled]="otpForm.invalid">
+                                Confirmer le virement
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

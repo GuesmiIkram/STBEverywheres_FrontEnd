@@ -29,6 +29,7 @@ export class ModificationRequestsComponent implements OnInit {
     this.processing = true
     this.agentService.getPendingModificationRequests().subscribe({
       next: (requests) => {
+        console.log("dm rtournee de back",requests)
         this.requests = requests
         this.processing = false
       },
@@ -54,15 +55,15 @@ export class ModificationRequestsComponent implements OnInit {
         if (!blob) {
           throw new Error('No document found');
         }
-  
+
         // Déterminer le type de fichier
         const contentType = response.headers.get('content-type') || 'application/octet-stream';
         let extension = '.bin';
-        
+
         if (contentType.includes('png')) extension = '.png';
         else if (contentType.includes('jpeg') || contentType.includes('jpg')) extension = '.jpg';
         else if (contentType.includes('pdf')) extension = '.pdf';
-  
+
         const filename = `Justificatif_${request.client?.nom}_${request.fieldToModify}${extension}`;
         saveAs(blob, filename);
         this.processing = false;
