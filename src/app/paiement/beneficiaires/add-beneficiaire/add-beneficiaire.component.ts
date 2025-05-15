@@ -71,14 +71,19 @@ export class AddBeneficiaireComponent implements OnInit {
         this.resetForm();
       },
       error: (error) => {
-        let errorMessage = 'Une erreur est survenue lors de l\'ajout du bénéficiaire.';
-        if (error.error?.errors) {
-          errorMessage = Object.values(error.error.errors).join('\n');
-        } else if (error.error?.title) {
-          errorMessage = error.error.title;
-        }
-        Swal.fire('Erreur', errorMessage, 'error');
-      }
+  let errorMessage = 'Une erreur est survenue lors de l\'ajout du bénéficiaire.';
+
+  if (error.status === 400 && error.error === "RIB introuvable") {
+    errorMessage = "Le RIB saisi est introuvable. Veuillez vérifier le numéro.";
+  } else if (error.error?.errors) {
+    errorMessage = Object.values(error.error.errors).join('\n');
+  } else if (error.error?.title) {
+    errorMessage = error.error.title;
+  }
+
+  Swal.fire('Erreur', errorMessage, 'error');
+}
+
     });
   }
 

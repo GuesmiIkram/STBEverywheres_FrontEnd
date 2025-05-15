@@ -4,7 +4,7 @@
     <h2 class="form-title">Initiation virement de masse</h2>
 
     <!-- Choix de la méthode -->
-    <div>
+    <div class="method-selection">
       <label>
         <input type="radio" name="methodeVirement" value="form" [(ngModel)]="methodeVirement" (change)="onMethodChange('form')" />
         Virement par formulaire
@@ -16,41 +16,38 @@
       </label>
     </div>
 
-    <div>
+    <div class="form-group">
       <label for="ribEmetteur">RIB Émetteur: <span class="required">*</span></label>
-      <select formControlName="ribEmetteur" required>
+      <select formControlName="ribEmetteur" class="form-control" required>
+        <option value="">Sélectionner un compte</option>
         <option *ngFor="let compte of comptes" [value]="compte.rib">
-          {{ compte.rib }} - {{ compte.type }}
+          {{ compte.rib }} - {{ compte.type }} ({{ compte.solde | number:'1.2-2' }} TND)
         </option>
       </select>
 
-      <!-- Afficher le solde du compte sélectionné -->
-
- <div *ngIf="soldeCompteSelectionne !== null" class="solde-compte"
- [class.solde-negatif]="soldeCompteSelectionne < 0">
-<strong>Solde disponible :</strong>
-<span [class.text-danger]="soldeCompteSelectionne < 0">
-    {{ soldeCompteSelectionne | number:'1.2-2' }} TND
-</span>
-</div>
-
+      <div *ngIf="soldeCompteSelectionne !== null" class="solde-compte" [class.solde-negatif]="soldeCompteSelectionne < 0">
+        <strong>Solde disponible :</strong>
+        <span [class.text-danger]="soldeCompteSelectionne < 0">
+          {{ soldeCompteSelectionne | number:'1.2-2' }} TND
+        </span>
+      </div>
     </div>
 
-    <div>
+    <div class="form-group">
       <label for="motif">Motif: <span class="required">*</span></label>
-      <input type="text" formControlName="motif" required />
+      <input type="text" formControlName="motif" class="form-control" required />
     </div>
 
-    <div>
+    <div class="form-group">
       <label for="description">Description:</label>
-      <input type="text" formControlName="description" />
+      <input type="text" formControlName="description" class="form-control" />
     </div>
 
     <div formArrayName="beneficiaires">
-      <div *ngFor="let benef of beneficiairesFormArray.controls; let i = index" [formGroupName]="i">
-        <label>Bénéficiaire {{ i + 1 }}</label>
+      <div *ngFor="let benef of beneficiairesFormArray.controls; let i = index" [formGroupName]="i" class="beneficiary-group">
+        <h4>Bénéficiaire {{ i + 1 }}</h4>
         <div class="form-row">
-          <div class="form-group">
+          <div class="form-group col-md-6">
             <label for="beneficiaire">Choisir un bénéficiaire <span class="required">*</span></label>
             <select formControlName="idBeneficiaire" class="form-control" required>
               <option value="">Sélectionner un bénéficiaire</option>
@@ -58,39 +55,60 @@
                 {{ beneficiaire.nom }} {{ beneficiaire.prenom }} - {{ beneficiaire.ribCompte }}
               </option>
             </select>
+          </div>
 
-            <div class="nouveau-beneficiaire-option">
-              <div class="option-container">
-                <span class="info-text">Pas dans la liste ?Ajoute le bénéficiaire à votre carnet d'adresses</span>
-                <button type="button" class="btn-lien" (click)="openAddBeneficiaireModal()">
-                  <span class="plus-icon"></span> Enregistrer un nouveau bénéficiaire
-                </button>
+          <div class="form-group col-md-4">
+            <label for="montant">Montant (TND) <span class="required">*</span></label>
+            <input type="number"
+                   formControlName="montant"
+                   class="form-control"
+                   placeholder="0.00"
+                   step="0.01"
+                   min="0.01"
+                   required>
+          </div>
 
-              </div>
-            </div>
+          <div class="form-group col-md-2" *ngIf="beneficiairesFormArray.length > 1">
+            <label>&nbsp;</label>
+            <button type="button" class="btn btn-danger btn-block" (click)="supprimerBeneficiaire(i)">
+              <i class="fas fa-trash"></i> Supprimer
+            </button>
           </div>
         </div>
 
-        <input type="text"
-        formControlName="montant"
-        placeholder="Montant"
-        required
-        (input)="numericOnly($event)">
-
-        <!-- Bouton "− Supprimer" (Désactivé si un seul bénéficiaire) -->
-        <button type="button" (click)="supprimerBeneficiaire(i)" *ngIf="beneficiairesFormArray.length > 1">− Supprimer</button>
+        <div class="nouveau-beneficiaire-option">
+          <div class="option-container">
+            <span class="info-text">Pas dans la liste ?</span>
+            <button type="button" class="btn btn-link" (click)="openAddBeneficiaireModal()">
+              <i class="fas fa-plus-circle"></i> Enregistrer un nouveau bénéficiaire
+            </button>
+          </div>
+        </div>
       </div>
 
-
-
-      <div class="aide-section">
-        <div class="aide-text">(Ajoute un nouveau destinataire à ce virement)</div>
-        <button type="button" class="btn-ajouter" (click)="ajouterBeneficiaire()">
-          <span class="plus-icon"></span> Ajouter un bénéficiaire
+      <div class="form-group">
+        <button type="button" class="btn btn-secondary" (click)="ajouterBeneficiaire()">
+          <i class="fas fa-plus"></i> Ajouter un bénéficiaire
         </button>
       </div>
+    </div>
 
-      <button type="submit">Envoyer le virement</button>
+    <div class="form-group" *ngIf="showOtpField">
+      <label for="otp">Code de vérification OTP <span class="required">*</span></label>
+      <input type="text"
+             formControlName="otp"
+             class="form-control"
+             placeholder="Entrez les 6 chiffres reçus par SMS"
+             maxlength="6"
+             required>
+      <small class="form-text text-muted">Code valable 5 minutes</small>
+    </div>
+
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary btn-lg btn-block" [disabled]="isProcessing">
+        <i class="fas fa-paper-plane"></i>
+        {{ isProcessing ? 'Traitement en cours...' : (showOtpField ? 'Confirmer avec OTP' : 'Envoyer le virement') }}
+      </button>
     </div>
   </form>
 </div>
@@ -101,7 +119,7 @@
     <h2 class="form-title">Initiation virement de masse</h2>
 
     <!-- Choix de la méthode -->
-    <div>
+    <div class="method-selection">
       <label>
         <input type="radio" name="methodeVirement" value="form" [(ngModel)]="methodeVirement" (change)="onMethodChange('form')" />
         Virement par formulaire
@@ -113,9 +131,21 @@
       </label>
     </div>
 
-    <label for="file">Sélectionner un fichier : <span class="required">*</span></label>
-    <input type="file" (change)="onFileChange($event)" required />
+    <div class="form-group">
+      <label for="file">Sélectionner un fichier : <span class="required">*</span></label>
+      <input type="file" class="form-control-file" (change)="onFileChange($event)" required />
+    </div>
 
-    <button type="submit">Envoyer le fichier</button>
+    <div class="form-group" *ngIf="showOtpField">
+      <label for="otp">Code OTP :</label>
+      <input type="text" class="form-control" [(ngModel)]="otpSaisi" name="otpSaisi" maxlength="6" placeholder="Entrez le code reçu par SMS" />
+    </div>
+
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary btn-lg btn-block" [disabled]="isProcessing">
+        <i class="fas fa-upload"></i>
+        {{ isProcessing ? 'Traitement...' : (showOtpField ? 'Confirmer avec OTP' : 'Envoyer le fichier') }}
+      </button>
+    </div>
   </form>
 </div>

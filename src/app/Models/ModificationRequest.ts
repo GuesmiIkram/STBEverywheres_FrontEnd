@@ -9,12 +9,13 @@ export interface ModificationRequest {
     processedByAgentId?: number;
     processedDate?: Date;
     responseComment?: string;
-    
+
 
     client?: {
       id: number;
       nom: string;
       prenom: string;
-   
+      numCIN: string;
+
     };
   }

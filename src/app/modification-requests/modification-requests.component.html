@@ -14,34 +14,36 @@
               <table class="table table-hover mb-0">
                 <thead>
                   <tr>
-                    <th>Client</th>
-                    <th>Champ à modifier</th>
+                    <th> nom et prenom</th>
+                   <!--  <th> CIN</th> -->
+                    <th>Information à modifier</th>
                     <th>Nouvelle valeur</th>
                     <th>Date demande</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let request of requests" 
+                  <tr *ngFor="let request of requests"
                       [class.selected-row]="selectedRequest?.id === request.id"
                       (click)="selectRequest(request)">
                     <td>{{ request.client?.nom }} {{ request.client?.prenom }}</td>
+                   <!--  <td>{{ request.client?.numCIN }}</td> -->
                     <td>{{ getFieldDisplayName(request.fieldToModify) }}</td>
                     <td>{{ request.newValue }}</td>
                     <td>{{ request.requestDate | date:'dd/MM/yyyy HH:mm' }}</td>
                     <td>
                       <div class="action-buttons">
-                        <button class="btn btn-sm btn-outline-primary document-btn" 
+                        <button class="btn btn-sm btn-outline-primary document-btn"
                                 (click)="downloadDocument(request); $event.stopPropagation()"
                                 title="Télécharger le document">
                           <i class="fas fa-download"></i>
                         </button>
-                        <button class="btn btn-sm btn-outline-success approve-btn" 
+                        <button class="btn btn-sm btn-outline-success approve-btn"
                                 (click)="confirmApproveRequest(request); $event.stopPropagation()"
                                 title="Accepter la demande">
                           <i class="fas fa-check"></i>
                         </button>
-                        <button class="btn btn-sm btn-outline-danger refuse-btn" 
+                        <button class="btn btn-sm btn-outline-danger refuse-btn"
                                 (click)="showRefusalDialog(request); $event.stopPropagation()"
                                 title="Refuser la demande">
                           <i class="fas fa-times"></i>
@@ -50,7 +52,7 @@
                     </td>
                   </tr>
                   <tr *ngIf="requests.length === 0">
-                    <td colspan="5" class="text-center py-4">
+                    <td colspan="6" class="text-center py-4">
                       <div class="empty-state">
                         <i class="fas fa-inbox fa-3x mb-3"></i>
                         <p>Aucune demande en attente</p>
@@ -63,7 +65,7 @@
           </div>
         </div>
       </div>
-      
+
       <!-- Détails de la demande sélectionnée -->
       <div class="col-lg-5">
         <div *ngIf="selectedRequest" class="card details-card">
@@ -90,17 +92,17 @@
               <div class="detail-label">Date demande:</div>
               <div class="detail-value">{{ selectedRequest.requestDate | date:'dd/MM/yyyy HH:mm' }}</div>
             </div>
-    
+
             <!-- Zone de commentaire pour le refus -->
             <div *ngIf="!processing" class="action-zone mt-4">
               <div class="d-flex flex-column flex-md-row justify-content-between gap-3">
                 <button class="btn btn-success action-btn" (click)="confirmApproveRequest(selectedRequest)">
                   <i class="fas fa-check me-2"></i>Accepter
                 </button>
-                
+
                 <div class="d-flex flex-column flex-md-row align-items-md-center gap-2">
-                  <input type="text" class="form-control refusal-input" 
-                         [(ngModel)]="refusalComment" 
+                  <input type="text" class="form-control refusal-input"
+                         [(ngModel)]="refusalComment"
                          placeholder="Motif de refus (obligatoire)"
                          *ngIf="showRefusalInput || refusalComment">
                   <button class="btn btn-danger action-btn" (click)="showRefusalInput = true; refusalComment = ''" *ngIf="!showRefusalInput && !refusalComment">
@@ -112,7 +114,7 @@
                 </div>
               </div>
             </div>
-    
+
             <!-- Indicateur de chargement -->
             <div *ngIf="processing" class="text-center mt-3">
               <div class="spinner-border text-primary" role="status">
@@ -122,9 +124,8 @@
             </div>
           </div>
         </div>
-        
-       
+
+
       </div>
     </div>
   </div>
-  

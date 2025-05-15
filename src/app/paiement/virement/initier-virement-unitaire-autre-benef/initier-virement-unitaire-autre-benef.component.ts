@@ -13,12 +13,18 @@ import { AddBeneficiaireComponent } from 'src/app/paiement/beneficiaires/add-ben
   styleUrls: ['./initier-virement-unitaire-autre-benef.component.scss']
 })
 export class InitierVirementUnitaireAutreBenefComponent implements OnInit {
+
+
   comptes: Compte[] = [];
   beneficiaires: Beneficiaire[] = [];
   virementForm: FormGroup;
   soldeCompteSelectionne: number | null = null;
   private static readonly FRAIS_VIREMENT = 0.5;
-
+  showOtpInput: boolean = false;
+  virementId: number | null = null;
+  otpForm: FormGroup;
+private beneficiaireSelectionnePourOtp: Beneficiaire | null = null;
+currentBeneficiaire: Beneficiaire | null = null;
 
   constructor(
     private virementService: VirementService,
@@ -32,6 +38,10 @@ export class InitierVirementUnitaireAutreBenefComponent implements OnInit {
       motif: ['', Validators.required],
       description: [''],
       idBeneficiaire: [null, Validators.required]
+    });
+
+    this.otpForm = this.fb.group({
+      otpCode: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]]
     });
   }
 
@@ -59,7 +69,6 @@ export class InitierVirementUnitaireAutreBenefComponent implements OnInit {
   chargerBeneficiaires(): void {
     this.beneficiaireService.getBeneficiairesByClientId().subscribe({
       next: (data: Beneficiaire[]) => {
-        console.log('Données reçues:', JSON.stringify(data, null, 2));
         this.beneficiaires = data;
       },
       error: (error: any) => {
@@ -68,7 +77,7 @@ export class InitierVirementUnitaireAutreBenefComponent implements OnInit {
     });
   }
 
-  openAddBeneficiaireModal(): void {
+openAddBeneficiaireModal(): void {
     const modalRef = this.modalService.open(AddBeneficiaireComponent, {
       size: 'lg',
       centered: true
@@ -127,33 +136,17 @@ export class InitierVirementUnitaireAutreBenefComponent implements OnInit {
     );
   }
 
-  effectuerVirement(): void {
-    // Marquer tous les champs comme touchés pour afficher les erreurs
-    this.markFormGroupTouched(this.virementForm);
 
-    // Debug: Afficher l'état de validation dans la console
-    console.log('État du formulaire:', {
-      valid: this.virementForm.valid,
-      errors: this.getFormValidationErrors(),
-      values: this.virementForm.value
-    });
+  effectuerVirement(): void {
+    this.markFormGroupTouched(this.virementForm);
 
     if (this.virementForm.invalid) {
       const invalidFields = this.getInvalidFields();
-
       Swal.fire({
         icon: 'error',
         title: 'Champs requis manquants',
         html: this.generateErrorMessage(invalidFields),
-        confirmButtonText: 'OK',
-        confirmButtonColor: '#3366cc',
-        customClass: {
-          container: 'swal-container',
-          popup: 'swal-popup',
-          title: 'swal-title',
-          htmlContainer: 'swal-html',
-          confirmButton: 'swal-confirm-btn'
-        }
+        confirmButtonText: 'OK'
       });
       return;
     }
@@ -161,6 +154,10 @@ export class InitierVirementUnitaireAutreBenefComponent implements OnInit {
     const beneficiaireSelectionne = this.beneficiaires.find(b =>
       b.id?.toString() === this.virementForm.value.idBeneficiaire.toString()
     );
+
+  const beneficiaireSelectionneRIB = this.beneficiaires.find(b =>
+      b.id?.toString() === this.virementForm.value.idBeneficiaire.toString().RIB);
+
 
     if (!beneficiaireSelectionne) {
       Swal.fire({
@@ -176,16 +173,16 @@ export class InitierVirementUnitaireAutreBenefComponent implements OnInit {
       RIB_Emetteur: this.virementForm.value.compteEmetteur,
       Montant: this.virementForm.value.montant,
       Motif: this.virementForm.value.motif,
-      Description: this.virementForm.value.description || '', // Garantir une string vide si null/undefined
+      Description: this.virementForm.value.description || '',
       TypeVirement: 'VirementUnitaireVersAutreBenef',
-      IdBeneficiaire: Number(this.virementForm.value.idBeneficiaire) // Conversion explicite
+      IdBeneficiaire: Number(this.virementForm.value.idBeneficiaire),
+      OtpCode: ''
     };
 
-    // Vérification du solde
     const compteEmetteur = this.comptes.find(c => c.rib === virementData.RIB_Emetteur);
     if (compteEmetteur && (compteEmetteur.solde < virementData.Montant)) {
       Swal.fire({
-        icon: 'warning',
+         icon: 'warning',
         title: 'Solde insuffisant',
         html: `
           <p>Votre solde actuel: ${compteEmetteur.solde} TND</p>
@@ -197,8 +194,7 @@ export class InitierVirementUnitaireAutreBenefComponent implements OnInit {
       return;
     }
 
-    // Confirmation
-    Swal.fire({
+     Swal.fire({
       title: 'Confirmez le virement unitaire',
       html: `
         <div style="text-align: left; margin: 10px 0;">
@@ -211,7 +207,8 @@ export class InitierVirementUnitaireAutreBenefComponent implements OnInit {
           ${virementData.Description ? `<p><strong>Description:</strong> ${virementData.Description}</p>` : ''}
         </div>
         <div style="font-size: 12px; color: #666; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
-          <p>En confirmant, vous autorisez le débit immédiat de votre compte.</p>
+
+           <p><i class="fas fa-exchange-alt" style="color: #3366cc; margin-right: 5px;"></i> En confirmant, vous autorisez le débit immédiat de votre compte.</p>
         </div>
       `,
       icon: 'question',
@@ -231,17 +228,69 @@ export class InitierVirementUnitaireAutreBenefComponent implements OnInit {
       }
     }).then((result) => {
       if (result.isConfirmed) {
-        this.virementService.effectuerVirement(virementData).subscribe({
-          next: (response) => {
+        this.envoyerDemandeVirement(virementData, beneficiaireSelectionne);
+      }
+    });
+  }
+
+   envoyerDemandeVirement(virementData: any, beneficiaireSelectionne: Beneficiaire): void {
+    this.virementService.effectuerVirement(virementData).subscribe({
+      next: (response: any) => {
+        if (response.message.includes("OTP envoyé")) {
+          this.virementId = response.virementId;
+          this.demanderOtp(beneficiaireSelectionne);
+        }
+      },
+      error: (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Échec du virement',
+          html: `<p>${error.error?.message || 'Une erreur est survenue lors du virement.'}</p>`,
+          confirmButtonText: 'Compris'
+        });
+      }
+    });
+  }
+
+
+ demanderOtp(beneficiaire: Beneficiaire): void {
+  this.currentBeneficiaire = beneficiaire;
+  this.showOtpInput = true;
+}
+
+
+
+
+// Modifiez la signature de la méthode
+
+
+validerVirementAvecOtp(otpCode: string): void {
+    const payload = {
+        riB_Emetteur: this.virementForm.value.compteEmetteur,
+        montant: this.virementForm.value.montant,
+        motif: this.virementForm.value.motif,
+        description: this.virementForm.value.description || '',
+        typeVirement: 'VirementUnitaireVersAutreBenef',
+        idBeneficiaire: Number(this.virementForm.value.idBeneficiaire),
+        otpCode: otpCode,
+        id: this.virementId
+    };
+
+    console.log('Envoi du payload:', payload); // Debug
+
+    this.virementService.effectuerVirement(payload).subscribe({
+        next: (response) => {
             Swal.fire({
-              title: 'Virement effectué',
+
+
+                title: 'Virement effectué',
               html: `
                 <div style="text-align: center;">
                   <i class="fas fa-check-circle" style="color: #28a745; font-size: 48px; margin-bottom: 15px;"></i>
                   <p>Votre virement a été effectué avec succès.</p>
-                   <p><strong>Bénéficiaire:</strong> ${beneficiaireSelectionne.nom}  ${beneficiaireSelectionne.prenom} ${beneficiaireSelectionne.ribCompte}</p>
-                  <p><strong>Motif:</strong> ${virementData.Motif}</p>
-                  <p><strong>Montant:</strong> ${virementData.Montant} TND</p>
+                   <p><strong>Bénéficiaire:</strong> ${this.currentBeneficiaire?.nom}  ${this.currentBeneficiaire?.prenom} ${this.currentBeneficiaire?.ribCompte}</p>
+                  <p><strong>Motif:</strong> ${this.virementForm.value.motif}</p>
+                  <p><strong>Montant:</strong> ${this.virementForm.value.montant} TND</p>
 
                 </div>
                 <div style="font-size: 13px; color: #666; margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px;">
@@ -253,29 +302,30 @@ export class InitierVirementUnitaireAutreBenefComponent implements OnInit {
               confirmButtonColor: '#3366cc',
               customClass: {
                 popup: 'swal-bank-popup-success'
-              }
+            }
             });
             this.virementForm.reset();
-          },
-          error: (error) => {
-            console.error('Erreur virement:', error);
+            this.showOtpInput = false;
+            this.virementId = null;
+            this.currentBeneficiaire = null;
+        },
+        error: (error) => {
+            console.error('Erreur détaillée:', error); // Debug
+            let errorMessage = error.error?.message || 'Le code OTP est invalide ou a expiré.';
+            if (error.error?.errors) {
+                errorMessage += `<br><pre>${JSON.stringify(error.error.errors, null, 2)}</pre>`;
+            }
             Swal.fire({
-              icon: 'error',
-              title: 'Échec du virement',
-              html: `
-                <p>${error.error?.message || 'Une erreur est survenue lors du virement.'}</p>
-                ${error.error?.details ? `<p class="error-detail">${error.error.details}</p>` : ''}
-              `,
-              confirmButtonText: 'Compris'
+                icon: 'error',
+                title: 'Échec de la validation',
+                html: errorMessage,
+                confirmButtonText: 'Réessayer'
             });
-          }
-        });
-      }
+        }
     });
-  }
-
+}
   // Méthodes helper
-  private markFormGroupTouched(formGroup: FormGroup) {
+   markFormGroupTouched(formGroup: FormGroup): void {
     Object.values(formGroup.controls).forEach(control => {
       control.markAsTouched();
       if (control instanceof FormGroup) {
@@ -284,7 +334,7 @@ export class InitierVirementUnitaireAutreBenefComponent implements OnInit {
     });
   }
 
-  private getInvalidFields(): string[] {
+ getInvalidFields(): string[] {
     return Object.keys(this.virementForm.controls)
       .filter(key => {
         const control = this.virementForm.get(key);
@@ -301,9 +351,7 @@ export class InitierVirementUnitaireAutreBenefComponent implements OnInit {
       });
   }
 
-  private generateErrorMessage(fields: string[]): string {
-    if (fields.length === 0) return 'Veuillez vérifier les informations saisies';
-
+   generateErrorMessage(fields: string[]): string {
     return `
       <div class="error-list">
         <p>Veuillez remplir correctement les champs suivants :</p>
@@ -314,11 +362,24 @@ export class InitierVirementUnitaireAutreBenefComponent implements OnInit {
     `;
   }
 
-  private getFormValidationErrors() {
+getFormValidationErrors(): any[] {
     return Object.keys(this.virementForm.controls)
       .filter(key => this.virementForm.get(key)?.errors)
       .map(key => ({
         field: key,
         errors: this.virementForm.get(key)?.errors
       }));
-  }}
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+

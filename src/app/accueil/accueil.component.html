@@ -63,10 +63,171 @@
             <i class="fas fa-headset"></i>
             <span>Assistance</span>
           </a>
-          <a href="#" class="quick-access-item">
-            <i class="fas fa-exchange-alt"></i>
-            <span>Taux de change</span>
-          </a>
+        <!-- Trigger button -->
+<a (click)="getExchangeRates()" class="quick-access-item" [class.active]="showexchangeModal">
+  <i class="fas fa-exchange-alt"></i>
+  <span>Taux de change</span>
+</a>
+
+<!-- MODAL EXCHANGE -->
+<div class="modal exchange-modal" *ngIf="showExchangeModal">
+  <div class="modal-content">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h2>
+        <i class="fas fa-exchange-alt"></i>
+        Taux de change
+      </h2>
+      <span class="close" (click)="showExchangeModal = false">&times;</span>
+      <p class="modal-subtitle">Consultez les taux de change et effectuez vos conversions en temps réel</p>
+    </div>
+
+    <div class="modal-body">
+      <!-- Main content grid -->
+      <div class="modal-grid">
+        <!-- Conversion form -->
+        <div class="conversion-card">
+          <div class="card-header">
+            <h3>Convertisseur</h3>
+            <p class="card-description">Convertissez vos devises instantanément</p>
+          </div>
+
+          <div class="conversion-form">
+            <div class="form-group">
+              <label for="amount">Montant en TND :</label>
+              <input type="number" id="amount" [(ngModel)]="Montant" placeholder="Entrez le montant" />
+            </div>
+<div class="operation-toggle">
+  <label>
+    <input type="radio" name="typeOperation" value="vente" [(ngModel)]="typeOperation" />
+    <span>VENTE</span>
+  </label>
+  <label>
+    <input type="radio" name="typeOperation" value="achat" [(ngModel)]="typeOperation" />
+    <span>ACHAT</span>
+  </label>
+</div>
+
+            <!-- Devise source -->
+<div class="form-group">
+  <label>Devise source :</label>
+  <select [(ngModel)]="sourceDevise" [disabled]="typeOperation === 'vente'">
+    <option *ngIf="typeOperation === 'vente'" value="TND">TND</option>
+    <ng-container *ngIf="typeOperation !== 'vente'">
+      <option *ngFor="let rate of exchangeRates" [value]="rate.Devise.split('/')[0]">
+        {{ rate.Devise.split('/')[0] }}
+      </option>
+    </ng-container>
+  </select>
+</div>
+
+<!-- Devise cible -->
+<div class="form-group">
+  <label>Devise cible :</label>
+  <select [(ngModel)]="targetDevise" [disabled]="typeOperation === 'achat'">
+    <option *ngIf="typeOperation === 'achat'" value="TND">TND</option>
+    <ng-container *ngIf="typeOperation !== 'achat'">
+      <option *ngFor="let rate of exchangeRates" [value]="rate.Devise.split('/')[0]">
+        {{ rate.Devise.split('/')[0] }}
+      </option>
+    </ng-container>
+  </select>
+</div>
+
+
+
+      <!--     <div class="form-group">
+              <label for="currency">Devise :</label>
+              <select id="currency" [(ngModel)]="selectedDevise">
+                <option *ngFor="let rate of exchangeRates" [value]="rate.Devise.split('/')[0]">
+                  <div class="currency-option">
+                    <img *ngIf="getCurrencyCountryCode(rate.Devise)"
+                         [src]="'https://flagcdn.com/24x18/' + getCurrencyCountryCode(rate.Devise) + '.png'"
+                         [alt]="rate.Devise.split('/')[0]"
+                         class="currency-flag" />
+                    {{ rate.Devise.split('/')[0] }}
+                  </div>
+                </option>
+              </select>
+            </div> -->
+
+
+
+
+            <button class="convert-btn" (click)="convertir()">Convertir</button>
+
+            <!-- Conversion result -->
+            <div class="conversion-result" *ngIf="resultatConversion !== null">
+              <p class="result-label">Résultat</p>
+              <p class="result-source">
+  {{ Montant | number:'1.2-2' }} {{ typeOperation === 'vente' ? 'TND' : sourceDevise }} =
+</p>
+<p class="result-value">
+  {{ resultatConversion | number:'1.2-2' }} {{ typeOperation === 'vente' ? targetDevise : 'TND' }}
+</p>
+
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Exchange rates table section -->
+        <div class="rates-table-section">
+          <div class="table-header">
+            <h3>Tableau des taux</h3>
+            <!--<div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+              <input type="text" placeholder="Rechercher une devise..." [(ngModel)]="searchQuery" class="search-input" />
+            </div> -->
+          </div>
+
+          <div class="table-container">
+            <table class="rates-table">
+              <thead>
+                <tr>
+                  <th>Code Devise</th>
+                  <th>Unité monétaire</th>
+                  <th class="text-right">Coût de vente</th>
+                  <th class="text-right">Coût d'achat</th>
+                  <th>Date Prix</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let rate of exchangeRates let i = index" [ngClass]="{'even-row': i % 2 === 0}">
+
+                  <td class="currency-cell">
+  <div class="currency-with-flag">
+    <img *ngIf="getCurrencyCountryCode(rate.Devise)"
+         [src]="'https://flagcdn.com/24x18/' + getCurrencyCountryCode(rate.Devise) + '.png'"
+         [alt]="rate.Devise.split('/')[0]"
+         class="currency-flag" />
+    <span>{{ rate.Devise.split('/')[0] }}</span>
+  </div>
+</td>
+
+                  <td>{{ rate.QUOTITY }}</td>
+
+
+                  <td class="text-right rate-value">{{ convertToNumber(rate.PriceSellValue) | number:'1.2-4' }}</td>
+<td class="text-right rate-value">{{ convertToNumber(rate.PriceBuyValue) | number:'1.2-4' }}</td>
+
+                  <td>{{ rate.Date | date:'dd/MM/yyyy' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="info-box">
+            <h4>Information</h4>
+            <p>Les taux de change sont mis à jour quotidiennement. Les valeurs affichées sont à titre indicatif et peuvent varier légèrement au moment de la transaction.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
         </div>
       </div>
     </div>
@@ -242,7 +403,8 @@
              [class.user-message]="message.sender === 'user'"
              [class.bot-message]="message.sender === 'bot'"
              class="message">
-          {{ message.text }}
+<div [innerHTML]="formatChatbotText(message.text)"></div>
+
         </div>
       </div>
 

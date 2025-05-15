@@ -2,7 +2,10 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from "@angula
 import * as L from "leaflet";
 import { ChatbotService } from "../services/ChatbotService";
 import { HttpClient } from "@angular/common/http";
-
+import {  ExchangeRate} from 'src/app/Models/ExchangeRate';
+import { ExchangeService } from '../services/Exchange.service';
+import {AgenceService} from '../services/AgenceService';
+import Swal from "sweetalert2";
 @Component({
   selector: "app-accueil",
   templateUrl: "./accueil.component.html",
@@ -23,6 +26,7 @@ export class AccueilComponent implements OnInit, AfterViewInit {
   showSimulator = false;
   showChatbot = false;
   showMap = false;
+  showexchangeModal=false;
   private map!: L.Map;
   private markersLayer!: L.LayerGroup;
   filteredAgences: any[] = [];
@@ -32,8 +36,39 @@ export class AccueilComponent implements OnInit, AfterViewInit {
   selectedService: string | null = null;
   isLoadingAgences = false;
   mapInitialized = false;
-
+  exchangeRates: ExchangeRate[] = []
+  filteredExchangeRates: ExchangeRate[] = []
+  showExchangeModal = false
+  searchQuery = ""
   agences: any[] = [];
+sourceDevise= "e";
+targetDevise="";
+currencyToCountry: Record<string, string> = {
+    USD: "us",
+    EUR: "eu",
+    GBP: "gb",
+    JPY: "jp",
+    CAD: "ca",
+    AUD: "au",
+    CHF: "ch",
+    CNY: "cn",
+    AED: "ae",
+    SAR: "sa",
+    KWD: "kw",
+    QAR: "qa",
+    MAD: "ma",
+    DZD: "dz",
+    LYD: "ly",
+    EGP: "eg",
+    BHD: 'bh',   // ✅ ajouté
+  NOK: 'no',   // ✅ ajouté
+  SEK: 'se',   // ✅ ajouté
+  DKK: 'dk'
+  }
+Montant: number = 0;
+typeOperation: string = 'vente';  // Par défaut
+selectedDevise: string = '';
+resultatConversion: number | null = null;
 
   private defaultAgences = [
     {
@@ -85,6 +120,8 @@ export class AccueilComponent implements OnInit, AfterViewInit {
 
   constructor(
     private chatbotService: ChatbotService,
+    private exchangeService:ExchangeService,
+    private agenceService:AgenceService,
     private http: HttpClient
   ) {
     this.filteredAgences = [...this.defaultAgences];
@@ -93,6 +130,8 @@ export class AccueilComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.preloadLeafletResources();
     this.loadAgences();
+    this.typeOperation = 'vente';
+  this.sourceDevise = 'TND';
   }
 
   ngAfterViewInit(): void {
@@ -107,23 +146,27 @@ export class AccueilComponent implements OnInit, AfterViewInit {
 
   private safeParseCoordinate(coord: any): number {
     if (coord === null || coord === undefined) return 0;
-    
+
     const str = coord.toString().trim();
     const normalized = str.replace(',', '.');
     const cleaned = normalized.replace(/[^\d.-]/g, '');
     const num = parseFloat(cleaned);
-    
+
     return isNaN(num) ? 0 : num;
   }
 
   loadAgences(): void {
     this.isLoadingAgences = true;
-    this.http.get<any[]>('http://localhost:5036/api/AgenceApi').subscribe({
+     console.log("appel service agence ");
+  this.agenceService.getAgences().subscribe({
+
+    //this.http.get<any[]>('http://localhost:5036/api/AgenceApi').subscribe({
       next: (agences) => {
+        console.log("agences rtournes",agences);
         this.agences = agences.map(agence => {
           const lat = this.safeParseCoordinate(agence.latitude);
           const lng = this.safeParseCoordinate(agence.longitude);
-          
+
           return {
             name: agence.libelle,
             lat: lat,
@@ -138,7 +181,7 @@ export class AccueilComponent implements OnInit, AfterViewInit {
 
         this.filteredAgences = [...this.agences];
         this.isLoadingAgences = false;
-        
+
         if (this.showMap) {
           if (this.mapInitialized) {
             this.updateMapMarkers();
@@ -157,9 +200,9 @@ export class AccueilComponent implements OnInit, AfterViewInit {
 
   private updateMapMarkers(): void {
     if (!this.map || !this.markersLayer) return;
-    
+
     this.markersLayer.clearLayers();
-    
+
     this.agences.forEach(agence => {
       this.addMarkerToMap(agence);
     });
@@ -200,7 +243,7 @@ export class AccueilComponent implements OnInit, AfterViewInit {
     this.agences = [...this.defaultAgences];
     this.filteredAgences = [...this.agences];
     this.isLoadingAgences = false;
-    
+
     if (this.showMap) {
       if (this.mapInitialized) {
         this.updateMapMarkers();
@@ -213,7 +256,7 @@ export class AccueilComponent implements OnInit, AfterViewInit {
 
   private initMap(): void {
     console.log("Initialisation de la carte avec", this.agences.length, "agences");
-    
+
     const mapElement = document.getElementById("map");
     if (!mapElement) {
       console.error("Élément map non trouvé");
@@ -243,7 +286,7 @@ export class AccueilComponent implements OnInit, AfterViewInit {
       this.markersLayer = L.layerGroup().addTo(this.map);
       this.updateMapMarkers();
       this.forceMapResize();
-      
+
       console.log("Carte initialisée avec succès");
     } catch (error) {
       console.error("Erreur d'initialisation de la carte:", error);
@@ -258,19 +301,19 @@ export class AccueilComponent implements OnInit, AfterViewInit {
     const validAgences = this.agences.filter(a => !isNaN(a.lat) && !isNaN(a.lng));
     const lats = validAgences.map(a => a.lat);
     const lngs = validAgences.map(a => a.lng);
-    
+
     const centerLat = lats.length > 0 ? lats.reduce((a, b) => a + b, 0) / lats.length : 36.8065;
     const centerLng = lngs.length > 0 ? lngs.reduce((a, b) => a + b, 0) / lngs.length : 10.1815;
 
     mapElement.innerHTML = `
-      <iframe 
-        width="100%" 
-        height="100%" 
-        frameborder="0" 
-        scrolling="no" 
-        marginheight="0" 
-        marginwidth="0" 
-        src="https://www.openstreetmap.org/export/embed.html?bbox=${centerLng - 0.05}%2C${centerLat - 0.05}%2C${centerLng + 0.05}%2C${centerLat + 0.05}&amp;layer=mapnik&amp;marker=${centerLat}%2C${centerLng}" 
+      <iframe
+        width="100%"
+        height="100%"
+        frameborder="0"
+        scrolling="no"
+        marginheight="0"
+        marginwidth="0"
+        src="https://www.openstreetmap.org/export/embed.html?bbox=${centerLng - 0.05}%2C${centerLat - 0.05}%2C${centerLng + 0.05}%2C${centerLat + 0.05}&amp;layer=mapnik&amp;marker=${centerLat}%2C${centerLng}"
         style="border: 1px solid #ccc">
       </iframe>
     `;
@@ -296,13 +339,12 @@ export class AccueilComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.map.invalidateSize(true);
     }, 0);
-    
+
     setTimeout(() => {
       if (this.map) this.map.invalidateSize(true);
     }, 300);
   }
 
-  // ... (les autres méthodes restent inchangées)
   toggleblock() {
     this.showChatbot = !this.showChatbot;
   }
@@ -310,6 +352,7 @@ export class AccueilComponent implements OnInit, AfterViewInit {
   toggleBlock(block: string): void {
     this.showSimulator = block === "simulator";
     this.showChatbot = block === "chatbot";
+    this.showexchangeModal=block==="exchange";
 
     if (block === "map") {
       this.showMap = true;
@@ -322,6 +365,7 @@ export class AccueilComponent implements OnInit, AfterViewInit {
       this.showMap = false;
     }
   }
+
 
   focusOnAgence(agence: any): void {
     if (!this.map) return;
@@ -341,7 +385,7 @@ export class AccueilComponent implements OnInit, AfterViewInit {
     const searchTerm = event.target.value.toLowerCase();
 
     this.filteredAgences = this.agences.filter(
-      (agence) => agence.name.toLowerCase().includes(searchTerm) || 
+      (agence) => agence.name.toLowerCase().includes(searchTerm) ||
                  agence.address.toLowerCase().includes(searchTerm),
     );
 
@@ -364,7 +408,7 @@ export class AccueilComponent implements OnInit, AfterViewInit {
   showDetails(service: string): void {
     this.selectedService = service;
   }
-  
+
   closeDetails(): void {
     this.selectedService = null;
   }
@@ -419,6 +463,134 @@ export class AccueilComponent implements OnInit, AfterViewInit {
     }, 500);
   }
 
+
+convertToNumber(value: string): number {
+  if (!value) return 0;
+  return parseFloat(value.replace(',', '.'));
+}
+
+// accueil.component.ts
+
+getExchangeRates() {
+
+  //this.http.get<ExchangeRate[]>("http://localhost:5203/api/Exchange/ExchangerRates").subscribe({
+   this.exchangeService.GetExchangeRates().subscribe({
+    next: (data) => {
+      this.exchangeRates = data.map(rate => ({
+        ...rate,
+        Date: this.convertToDate(rate.Date as string)  // ✅ cast forcé ici
+      }));
+
+      console.log("Taux de change reçus :", this.exchangeRates);
+
+      this.filteredExchangeRates = [...this.exchangeRates];
+      this.showExchangeModal = true;
+
+      if (this.exchangeRates.length > 0) {
+        this.selectedDevise = this.exchangeRates[0].Devise.split("/")[0];
+      }
+    },
+    error: (error) => {
+      console.error("Erreur lors de la récupération des taux de change", error);
+    },
+  });
+}
+
+
+convertToDate(dateString: string): Date {
+  // Format reçu : '13/05/2025 09:04:09'
+  const [day, month, yearAndTime] = dateString.split('/');
+  const [year, time] = yearAndTime.split(' ');
+  return new Date(`${year}-${month}-${day}T${time}`);
+}
+
+
+
+
+  getCurrencyCountryCode(devise: string): string {
+    const currencyCode = devise.split("/")[0]
+    return this.currencyToCountry[currencyCode] || ""
+  }
+
+  // This method should be called when searchQuery changes
+  filterRates(): void {
+    if (!this.searchQuery) {
+      this.filteredExchangeRates = [...this.exchangeRates]
+      return
+    }
+
+    const query = this.searchQuery.toLowerCase()
+    this.filteredExchangeRates = this.exchangeRates.filter((rate) => rate.Devise.toLowerCase().includes(query))
+  }
+
+/*
+convertir() {
+  const montant = this.Montant;
+  if (montant <= 0 || (!this.sourceDevise && this.typeOperation === 'achat') || (!this.targetDevise && this.typeOperation === 'vente')) {
+    alert('Veuillez remplir tous les champs correctement.');
+    return;
+  }
+
+  const requestBody = {
+    Montant: montant,
+    Operation: this.typeOperation,
+    SourceDevise: this.typeOperation === 'vente' ? 'TND' : this.sourceDevise,
+    CibleDevise: this.typeOperation === 'vente' ? this.targetDevise : 'TND'
+  };
+
+  this.http.post<any>('http://localhost:5203/api/Exchange/Convertir', requestBody)
+    .subscribe({
+      next: (data) => {
+        this.resultatConversion = data.montantConverti;
+      },
+      error: (error) => {
+        alert('Erreur lors de la conversion : ' + (error.error || error.message));
+      }
+    });
+}*/
+
+
+convertir() {
+  const montant = this.Montant;
+  if (
+    montant <= 0 ||
+    (!this.sourceDevise && this.typeOperation === 'achat') ||
+    (!this.targetDevise && this.typeOperation === 'vente')
+  ) {
+    Swal.fire('Erreur', 'Veuillez remplir tous les champs correctement.', 'warning');
+    return;
+  }
+
+  const requestBody = {
+    Montant: montant,
+    Operation: this.typeOperation,
+    SourceDevise: this.typeOperation === 'vente' ? 'TND' : this.sourceDevise,
+    CibleDevise: this.typeOperation === 'vente' ? this.targetDevise : 'TND'
+  };
+
+ // this.http.post<any>('http://localhost:5203/api/Exchange/Convertir', requestBody)
+ this.exchangeService.convertir(requestBody).subscribe({
+
+      next: (data) => {
+        this.resultatConversion = data.montantConverti;
+      },
+      error: (error) => {
+        const message = error?.error;
+
+        if (message === 'Taux indisponible, conversion impossible.') {
+          Swal.fire('Taux Indisponible', message, 'info');
+        } else if (message === 'Devise non trouvée') {
+          Swal.fire('Erreur', 'La devise sélectionnée est introuvable.', 'error');
+        } else {
+          Swal.fire('Erreur', 'Une erreur est survenue lors de la conversion.', 'error');
+        }
+
+        this.resultatConversion = null;
+      }
+    });
+
+  }
+
   sendMessage() {
     if (!this.newMessage.trim()) return;
 
@@ -432,11 +604,30 @@ export class AccueilComponent implements OnInit, AfterViewInit {
       },
       (error) => {
         console.error('Erreur du chatbot:', error);
-        this.messages.push({ 
-          text: "Désolé, je rencontre un problème technique. Veuillez réessayer plus tard.", 
-          sender: 'bot' 
+        this.messages.push({
+          text: "Désolé, je rencontre un problème technique. Veuillez réessayer plus tard.",
+          sender: 'bot'
         });
       }
     );
   }
+
+
+
+
+formatChatbotText(message: string): string {
+  const formatted = message
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')                     // gras
+    .replace(/^- (.*?)(?=\n|$)/gm, '<li>$1</li>')                         // - élément => <li>
+    .replace(/\n+/g, '<br>')                                             // sauts de ligne
+    .replace(/(http[s]?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank">$1</a>'); // liens
+
+  // Ajouter <ul> autour des <li>
+  const listWrapped = formatted.replace(/(<li>.*?<\/li>)/gs, '<ul>$1</ul>');
+
+  // Fusionner les listes consécutives
+  return listWrapped.replace(/<\/ul><ul>/g, '');
+}
+
+
 }
