@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  apiurl: ""  // URL relative pour Docker/Nginx
 };

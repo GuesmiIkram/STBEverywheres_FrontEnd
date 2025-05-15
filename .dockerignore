@@ -1,0 +1,57 @@
+# Angular
+**/node_modules/
+**/dist/
+**/.angular/
+
+yarn-error.log
+npm-debug.log
+coverage/
+
+# .NET
+**/bin/
+**/obj/
+**/out/
+**/Debug/
+**/Release/
+
+# IDE
+.vs/
+.idea/
+.vscode/
+*.user
+*.suo
+*.iml
+
+# Système & temporaire
+.DS_Store
+*.swp
+*.tmp
+*.log
+*.lock
+
+# NuGet
+*.nupkg
+packages/
+.nuget/
+project.lock.json
+project.fragment.lock.json
+
+# Fichiers sensibles
+.env
+secrets.json
+
+# Git
+.git/
+.gitignore
+
+# Docker (si non nécessaires)
+Dockerfile
+docker-compose.yml
+docker-compose.override.yml
+
+# Bases de données locales (optionnel)
+*.db
+*.sqlite
+# Exclure les appsettings.json pour éviter les doublons
+**/appsettings.Development.json
+**/global.json
