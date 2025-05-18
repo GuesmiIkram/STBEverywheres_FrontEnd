@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -289,12 +288,12 @@ updatePasswordRequirements(password: string): void {
   this.registerEmailError = this.registerForm.email === '';
   this.registerPasswordError = this.registerForm.password === '';
   this.confirmPasswordError = this.registerForm.confirmPassword === '';
-  
+
   // Vérification des règles de mot de passe
   if (this.registerForm.password) {
     this.updatePasswordRequirements(this.registerForm.password);
     const isPasswordValid = Object.values(this.passwordRequirements).every(v => v);
-    
+
     if (!isPasswordValid) {
       Swal.fire({
         icon: 'error',
@@ -315,7 +314,9 @@ updatePasswordRequirements(password: string): void {
     }
   }
 
+
   if (this.ribError || this.registerEmailError || this.registerPasswordError || 
+
       this.confirmPasswordError || this.passwordMismatch) {
     return;
   }
@@ -341,7 +342,7 @@ updatePasswordRequirements(password: string): void {
       let errorMessage = 'Erreur lors de l\'inscription';
       if (err.error?.message) errorMessage = err.error.message;
       else if (err.message) errorMessage = err.message;
-      
+
       Swal.fire({
         icon: 'error',
         title: 'Erreur',
@@ -349,4 +350,6 @@ updatePasswordRequirements(password: string): void {
       });
     }
   });
+
   }}
+

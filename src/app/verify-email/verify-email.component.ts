@@ -1,4 +1,6 @@
+
 import { Component, OnInit } from '@angular/core';
+
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { ClientService } from '../services/client.service';
@@ -8,8 +10,10 @@ import { ClientService } from '../services/client.service';
   templateUrl: './verify-email.component.html',
   styleUrls: ['./verify-email.component.scss']
 })
+
 export class VerifyEmailComponent implements OnInit {
   verificationStatus: 'pending' | 'success' | 'error' = 'pending';
+
   errorMessage: string = '';
 
   constructor(
@@ -20,7 +24,7 @@ export class VerifyEmailComponent implements OnInit {
 
   ngOnInit(): void {
     const token = this.route.snapshot.queryParamMap.get('token');
-    
+
     if (token) {
       this.verifyToken(token);
     } else {
@@ -74,4 +78,6 @@ export class VerifyEmailComponent implements OnInit {
   navigateToLogin(): void {
     this.router.navigate(['/login']);
   }
+
 }
+

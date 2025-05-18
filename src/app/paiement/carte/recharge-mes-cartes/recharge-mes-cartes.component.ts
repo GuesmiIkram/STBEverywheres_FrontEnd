@@ -42,7 +42,7 @@ export class RechargeMesCartesComponent implements OnInit {
       next: (cartes) => {
         this.mesCartes = cartes.filter(c => c.statut === 'Active');
         this.cartesRecepteur = [...this.mesCartes];
-        
+
         if (this.mesCartes.length >= 2) {
           this.rechargeForm.patchValue({
             carteEmetteurNum: this.mesCartes[0].numCarte,
@@ -70,7 +70,7 @@ export class RechargeMesCartesComponent implements OnInit {
   private updateCartesRecepteur(): void {
     const currentEmetteur = this.rechargeForm.get('carteEmetteurNum')?.value;
     this.cartesRecepteur = this.mesCartes.filter(c => c.numCarte !== currentEmetteur);
-    
+
     if (this.rechargeForm.get('carteRecepteurNum')?.value === currentEmetteur) {
       this.rechargeForm.patchValue({ carteRecepteurNum: '' });
     }
@@ -120,7 +120,7 @@ export class RechargeMesCartesComponent implements OnInit {
         if (typeof value === 'string') {
           return value; // Renvoie le message d'erreur existant
         }
-        
+
         if (!value?.cvv || !value?.expiry) {
           return 'Tous les champs sont obligatoires';
         }
@@ -135,7 +135,15 @@ export class RechargeMesCartesComponent implements OnInit {
     });
 
     if (!securityData) return;
+Swal.fire({
+  title: 'Traitement en cours...',
+html: 'Veuillez patienter pendant le traitement de votre recharge. Cette opération peut prendre quelques instants. Merci de ne pas fermer cette fenêtre.',  allowOutsideClick: false,
+  didOpen: () => {
+    Swal.showLoading();
+  }
+});
 
+this.isLoading = true;
     this.isLoading = true;
     this.carteService.rechargerCarte({
       carteEmetteurNum: formData.carteEmetteurNum.replace(/\s/g, ''),

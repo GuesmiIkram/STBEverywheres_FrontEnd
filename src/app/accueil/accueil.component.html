@@ -1,73 +1,83 @@
 <!-- Top Bar -->
+<!-- Top Bar -->
 <div class="top-bar">
-    <div class="container">
-      <div class="contact-info">
-        <a href="tel:+21671782463"><i class="fas fa-phone"></i> +216 71 782 463</a>
-        <a href="mailto:contact@stb.com.tn"><i class="fas fa-envelope"></i> contact@stb.com.tn</a>
-      </div>
+  <div class="container">
+    <div class="logo-container">
+      <img src="assets/img/logo_stb.png" alt="STB Banque Logo" class="logo-image">
+      <span class="app-name">STBEverywhere</span>
+    </div>
+
+    <div class="auth-buttons">
+      <a href="#" class="btn btn-primary">
+        <i class="fas fa-user-circle"></i> Espace client
+      </a>
+      <a href="#" class="btn btn-secondary">
+        Devenir client <i class="fas fa-arrow-right"></i>
+      </a>
     </div>
   </div>
+</div>
 
-  <!-- Header -->
-  <header class="main-header">
-    <div class="container">
-      <div class="logo">
-        <a href="index.html">
-          <img src="assets/img/STBlogo.jpg" alt="STB Banque Logo">
-          <span class="app-name">STBEverywhere</span>
-        </a>
-      </div>
 
-      <div class="auth-buttons">
-        <a href="" class="btn btn-outline">Espace Client</a>
-        <a  class="btn btn-primary">Devenir Client <i class="fas fa-lock"></i></a>
-      </div>
-      <div class="mobile-menu-toggle">
-        <i class="fas fa-bars"></i>
-      </div>
+<!-- Header -->
+
+
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="container">
+    <div class="hero-content">
+      <h1>Bienvenue dans la plateforme STBEverywhere</h1>
+      <p>Ce portail vous permet de rester connecté avec votre banque en permanence où que vous soyez
+         en toute sécurité, </p>
+        <p>Une expérience digitale simple, rapide et fiable, pensée pour vous.</p>
+
     </div>
-  </header>
+    <div class="hero-image">
+      <img src="assets/img/digiopa.png" alt="STB Banking Services">
+    </div>
+  </div>
+</section>
 
-  <section class="hero-section">
-    <div class="container">
-        <div class="hero-content">
-          <h1>Bienvenue dans la platforme STBEverywhere</h1>
-          <p>Découvrez nos solutions bancaires adaptées à vos besoins et ambitions</p>
-          <div class="hero-buttons">
-              <a href="" class="btn btn-primary">
-                  <i class="fas fa-user-circle"></i> Espace client
-              </a>
-              <a  class="btn btn-secondary">
-                  Devenir client <i class="fas fa-arrow-right"></i>
-              </a>
-          </div>
-      </div>
-          <div class="hero-image">
-              <img src="assets/img/digiopa.png" alt="STB Banking Services">
-          </div>
-      </div>
+<!-- Quick Access Section -->
+<section class="quick-access-section">
+  <div class="container">
 
-    <!-- Quick Access Section -->
-    <div class="quick-access">
-      <div class="container">
-        <div class="quick-access-items">
-          <a (click)="toggleBlock('map')" class="quick-access-item">
+
+    <div class="quick-access-items">
+
+         <a (click)="toggleBlock('map')" class="quick-access-item">
+          <div class="icon-wrapper">
             <i class="fas fa-university"></i>
-            <span>Trouver une agence</span>
-          </a>
-          <a (click)="toggleBlock('simulator')" class="quick-access-item" [class.active]="showSimulator">
-            <i class="fas fa-calculator"></i>
-            <span>Simulateur de crédit</span>
-          </a>
-          <a (click)="toggleBlock('chatbot')" class="quick-access-item" [class.active]="showChatbot">
-            <i class="fas fa-headset"></i>
-            <span>Assistance</span>
-          </a>
-        <!-- Trigger button -->
-<a (click)="getExchangeRates()" class="quick-access-item" [class.active]="showexchangeModal">
-  <i class="fas fa-exchange-alt"></i>
-  <span>Taux de change</span>
-</a>
+          </div>
+       <span>Trouver une agence</span>
+      </a>
+
+
+      <a (click)="toggleBlock('simulator')" class="quick-access-item" [class.active]="showSimulator">
+        <div class="icon-wrapper">
+          <i class="fas fa-calculator"></i>
+        </div>
+        <span>Simulateur de crédit</span>
+       </a>
+
+
+  <a (click)="toggleBlock('chatbot')" class="quick-access-item" [class.active]="showChatbot">
+            <div class="icon-wrapper">
+          <i class="fas fa-headset"></i>
+        </div>
+        <span>Assistance</span>
+      </a>
+      <a (click)="getExchangeRates()" class="quick-access-item" [class.active]="showexchangeModal">
+        <div class="icon-wrapper">
+          <i class="fas fa-exchange-alt"></i>
+        </div>
+        <span>Taux de change</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+
 
 <!-- MODAL EXCHANGE -->
 <div class="modal exchange-modal" *ngIf="showExchangeModal">
@@ -228,20 +238,19 @@
 </div>
 
 
-        </div>
-      </div>
-    </div>
 
     <!-- Interactive Blocks Container -->
     <div class="interactive-blocks-container">
       <!-- Bloc simulateur -->
-      <div *ngIf="showSimulator" class="interactive-block simulator-block">
+      <div *ngIf="showSimulator" class="interactive-block simulator-block" id="simulator">
         <div class="block-header">
           <h2><i class="fas fa-calculator"></i> Simulateur de crédit</h2>
+
           <button class="close-button" (click)="toggleBlock('simulator')">
             <i class="fas fa-times"></i>
           </button>
         </div>
+          <!--  <p>obtenez une réponse gratuite en quelques minutes </p> -->
 
         <div class="block-content">
           <form (ngSubmit)="calculerCredit()">
@@ -321,6 +330,7 @@
                       <th>Mois</th>
                       <th>Mensualité</th>
                       <th>Intérêt</th>
+                       <th>Principal</th>
                       <th>Capital Restant</th>
                     </tr>
                   </thead>
@@ -329,8 +339,16 @@
                       <td>{{ detail.mois }}</td>
                       <td>{{ detail.mensualite }} TND</td>
                       <td>{{ detail.interet }} TND</td>
+                       <td>{{ detail.principal }} TND</td>
                       <td>{{ detail.capitalRestant }} TND</td>
                     </tr>
+                    <tr class="total-row">
+    <td><strong>Total</strong></td>
+    <td><strong>{{ result.totalMensualite }} TND</strong></td>
+    <td><strong>{{ result.totalInteret }} TND</strong></td>
+    <td><strong>{{ result.totalPrincipal }} TND</strong></td>
+    <td></td>
+  </tr>
                   </tbody>
                 </table>
               </div>
@@ -383,8 +401,7 @@
     </div>
   </div>
 
-
-  <div *ngIf="showChatbot" class="interactive-block chatbot-block">
+  <div *ngIf="showChatbot" class="interactive-block chatbot-block" id="chatbot">
     <div class="block-header">
       <div class="chatbot-info">
         <div class="chatbot-avatar">
@@ -421,8 +438,6 @@
   </div>
       <!-- Bloc chatbot -->
 
- </div>
-  </section>
   <section class="services-section">
     <div class="container">
       <div class="section-header">
@@ -600,53 +615,105 @@
       </div>
     </div>
   </section>
+ <style>
+        /* SCSS */
+        .faq-section {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
 
+            .faq-item {
+                border-bottom: 1px solid #ddd;
+                padding: 1rem 0;
+                cursor: pointer;
+
+                &:last-child {
+                    border-bottom: none;
+                }
+
+                .faq-question {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    font-weight: 500;
+                    color: #333;
+                    transition: color 0.3s ease;
+
+                    &::after {
+                        content: '▼';
+                        font-size: 0.8em;
+                        transition: transform 0.3s ease;
+                    }
+
+                    &:hover {
+                        color: #0066cc;
+                    }
+                }
+
+                .answer {
+                    max-height: 0;
+                    overflow: hidden;
+                    color: #666;
+                    transition: max-height 0.3s ease-out;
+                    padding-left: 1rem;
+
+                    p {
+                        margin-top: 0.5rem;
+                        padding: 0.5rem 0;
+                    }
+                }
+
+                &.active {
+                    .faq-question::after {
+                        transform: rotate(180deg);
+                    }
+
+                    .answer {
+                        max-height: 500px; /* Ajuster selon le contenu */
+                    }
+                }
+            }
+        }
+    </style>
   <!-- Section FAQ -->
-  <section class="faq-section">
-    <div class="container">
-      <div class="section-header">
-        <h2>Questions fréquentes</h2>
-        <p>Trouvez rapidement des réponses à vos questions</p>
-      </div>
-      <div class="faq-container">
+   <section class="faq-section">
+        <h1>Questions Fréquentes</h1>
+
         <div class="faq-item">
-          <div class="faq-question">
-            Comment ouvrir un compte à la STB ? <i class="fas fa-chevron-down"></i>
-          </div>
-          <div class="faq-answer">
-            <p>Pour ouvrir un compte à la STB, vous pouvez vous rendre dans l'agence la plus proche muni d'une pièce d'identité, d'un justificatif de domicile et d'un justificatif de revenus. Vous pouvez également initier votre demande en ligne via notre plateforme STBEverywhere et finaliser l'ouverture en agence.</p>
-          </div>
+            <div class="faq-question">Je suis un nouvel abonné à STBNet. Comment recevoir mon identifiant et mon mot de passe ?</div>
+            <div class="answer">
+                <p>Votre identifiant et mot de passe vous sont remis par SMS et par email dès l’activation de votre abonnement STBNet.</p>
+            </div>
         </div>
 
         <div class="faq-item">
-          <div class="faq-question">
-            Comment accéder à mon espace client en ligne ? <i class="fas fa-chevron-down"></i>
-          </div>
-          <div class="faq-answer">
-            <p>Pour accéder à votre espace client en ligne, rendez-vous sur la page d'accueil de STBEverywhere et cliquez sur "Espace Client". Saisissez ensuite votre identifiant et votre mot de passe. Si vous n'avez pas encore activé votre compte en ligne, contactez votre conseiller ou appelez notre service client.</p>
-          </div>
+            <div class="faq-question">Est-ce qu’il y a des règles particulières dans la saisie d’un nouveau mot de passe ?</div>
+            <div class="answer">
+                <p>(Réponse exemple) Oui, le mot de passe doit contenir au moins 8 caractères avec des majuscules, minuscules et chiffres.</p>
+            </div>
         </div>
 
-        <div class="faq-item">
-          <div class="faq-question">
-            Comment demander un crédit immobilier ? <i class="fas fa-chevron-down"></i>
-          </div>
-          <div class="faq-answer">
-            <p>Pour demander un crédit immobilier, vous pouvez utiliser notre simulateur en ligne pour estimer votre capacité d'emprunt, puis prendre rendez-vous avec un conseiller en agence ou via notre plateforme. Vous devrez fournir des documents justificatifs tels que bulletins de salaire, compromis de vente, etc.</p>
-          </div>
-        </div>
+        <!-- Ajoutez les autres questions/réponses de la même manière -->
+        <!-- ... (autres éléments FAQ) ... -->
 
-        <div class="faq-item">
-          <div class="faq-question">
-            Comment signaler la perte ou le vol de ma carte bancaire ? <i class="fas fa-chevron-down"></i>
-          </div>
-          <div class="faq-answer">
-            <p>En cas de perte ou de vol de votre carte bancaire, vous devez immédiatement faire opposition en appelant le centre d'opposition au +216 71 123 456 (disponible 24h/24 et 7j/7). Vous pouvez également faire opposition via votre espace client STBEverywhere ou l'application mobile.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
+
+    <script>
+        // JavaScript pour le dépliage
+        document.querySelectorAll('.faq-question').forEach(item => {
+            item.addEventListener('click', event => {
+                const parent = item.parentElement;
+                parent.classList.toggle('active');
+
+                // Fermer les autres éléments ouverts
+                document.querySelectorAll('.faq-item').forEach(otherItem => {
+                    if (otherItem !== parent) {
+                        otherItem.classList.remove('active');
+                    }
+                });
+            });
+        });
+    </script>
 
 
 
@@ -656,7 +723,7 @@
         <div class="footer-top">
             <div class="footer-col">
                 <div class="footer-logo">
-                    <img src="assets/img/STBlogo.jpg" alt="STB Banque">
+                    <img src="assets/img/logo_stb.png" alt="STB Banque">
                 </div>
                 <p class="footer-about">La Société Tunisienne de Banque (STB) est l'une des principales banques en Tunisie, offrant une gamme complète de services financiers aux particuliers, professionnels et entreprises.</p>
                 <div class="social-links">
@@ -708,15 +775,29 @@
     <i class="fas fa-chevron-up"></i>
 </a>
 
-<script>
-    document.querySelectorAll('.faq-question').forEach(question => {
-      question.addEventListener('click', () => {
-        const parent = question.parentElement;
-        parent.classList.toggle('active');
-      });
-    });
-  </script>
-
-
-
 <script src="script.js"></script>
+<div class="floating-quick-access">
+  <a (click)=" getExchangeRates()" class="item" [class.active]="showexchangeModal">
+  <i class="fas fa-exchange-alt"></i>
+  <span>Taux de change</span>
+</a>
+
+<a (click)="scrollToSection('simulator'); toggleBlock('simulator')" class="item">
+  <i class="fas fa-calculator"></i>
+  <span>Simulateurs</span>
+</a>
+
+<a (click)="scrollToSection('map'); toggleBlock('map')" class="item">
+  <i class="fas fa-university"></i>
+  <span>Agences</span>
+</a>
+
+<a (click)="scrollToSection('chatbot'); toggleBlock('chatbot')" class="item" [class.active]="showChatbot">
+  <i class="fas fa-headset"></i>
+  <span>Assistance</span>
+</a>
+
+</div>
+
+
+

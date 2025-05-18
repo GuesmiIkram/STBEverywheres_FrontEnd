@@ -12,6 +12,28 @@ div {
   margin-bottom: 20px;
   font-family: 'Roboto', Arial, sans-serif;
 }
+.custom-info-alert {
+  background-color: #f0f5ff;
+  border-left: 4px solid #3366cc;
+  color: #333;
+  padding: 15px;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.custom-info-alert h5 {
+  color: #3366cc;
+  font-weight: 600;
+}
+
+.custom-info-alert i {
+  color: #3366cc;
+  margin-right: 5px;
+}
+
+.custom-info-alert strong {
+  color: #3366cc;
+}
 
 form {
   max-width: 1000px;

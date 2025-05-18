@@ -10,7 +10,7 @@ import { Client } from '../Models/Client';
 export class SimulateurCreditComponent implements OnInit {
   montant: number = 50000;
   duree: number = 36;
-  tauxBase: number = 7;
+  TMM: number = 7.5;//TMM
   taux: number = 7;
 
   typeAmortissement: string = 'constant';
@@ -43,7 +43,7 @@ export class SimulateurCreditComponent implements OnInit {
 
               this.nomConvention = convention.nom_convention;
               // Mettre à jour le taux
-              this.taux = this.tauxBase + this.margeBancaire;
+              this.taux = this.TMM+ this.margeBancaire;
             },
             error: (err) => {
               console.error('Erreur chargement convention', err);
@@ -53,8 +53,8 @@ export class SimulateurCreditComponent implements OnInit {
           // Pas de convention
           this.clientConventionne = false;
           this.nomConvention = null;
-          this.margeBancaire = 0;
-          this.taux = this.tauxBase;
+          this.margeBancaire = 5.0;
+          this.taux = this.TMM+this.margeBancaire;
         }
       },
       error: (err) => {
@@ -73,20 +73,29 @@ export class SimulateurCreditComponent implements OnInit {
     } else if (this.typeAmortissement === 'variable') {
       let capitalFixe = this.montant / nombreMensualites;
       let capitalRestant = this.montant;
-      this.details = [];
 
+      this.details = [];
+let totalMensualite = 0;
+    let totalInteret = 0;
       for (let i = 1; i <= nombreMensualites; i++) {
         let interet = capitalRestant * tauxMensuel;
         let mensualite = capitalFixe + interet;
+        const principal = mensualite - interet;
+
         this.details.push({
           mois: i,
           mensualite: mensualite.toFixed(2),
           interet: interet.toFixed(2),
+           principal: principal.toFixed(2),
           capitalRestant: capitalRestant.toFixed(2)
         });
+         totalMensualite += mensualite;
+      totalInteret += interet;
         capitalRestant -= capitalFixe;
       }
-      this.result = { type: 'Amortissement variable', details: this.details };
+      this.result = { type: 'Amortissement variable', details: this.details ,totalMensualite: totalMensualite.toFixed(2),
+      totalInteret: totalInteret.toFixed(2),
+      totalPrincipal: this.montant.toFixed(2) };
     }
   }
 }

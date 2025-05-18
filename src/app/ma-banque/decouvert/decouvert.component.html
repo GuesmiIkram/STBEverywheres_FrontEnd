@@ -31,10 +31,12 @@
       <!-- Affichage du découvert actuel -->
       <div class="current-overdraft form-group">
         <h3 *ngIf="decouvertAutorise !== null">
-          Découvert autorisé actuel : {{ decouvertAutorise }} TND
+          Découvert autorisé actuel : {{ decouvertAutorise | currency:'TND':'symbol':'1.2-2':'fr-TN'  }}
+
+
         </h3>
         <h3 *ngIf="decouvertMaxAutorise !== null" class="max-overdraft">
-          Découvert maximum autorisé : {{ decouvertMaxAutorise }} TND
+          Découvert maximum autorisé : {{ decouvertMaxAutorise | currency:'TND':'symbol':'1.2-2':'fr-TN' }}
         </h3>
       </div>
 
@@ -51,7 +53,7 @@
           required>
             <div *ngIf="demandeForm.get('montantDemande')?.errors?.['max']" class="error-message">
 
-            Le montant ne peut pas dépasser {{ decouvertMaxAutorise }} TND
+            Le montant ne peut pas dépasser {{ decouvertMaxAutorise | currency:'TND':'symbol':'1.2-2':'fr-TN' }}
           </div>
       </div>
 
@@ -67,7 +69,8 @@
           [step]="50"
           [value]="demandeForm.get('montantDemande')?.value || 0"
           (input)="onSliderChange($event)">
-        <span>{{ demandeForm.get('montantDemande')?.value || 0 }} TND</span>
+        <span>{{ demandeForm.get('montantDemande')?.value | currency:'TND':'symbol':'1.2-2':'fr-TN' }}</span>
+
       </div>
 
       <!-- Message d'alerte si le montant choisi est égal au découvert actuel -->
@@ -109,7 +112,7 @@
             </div>
             <div class="demande-content">
               <h4>RIB : {{ demande.ribCompte }}</h4>
-              <p class="montant">Découvert demandé : {{ demande.decouvertDemande }} TND</p>
+              <p class="montant">Découvert demandé : {{ demande.decouvertDemande | currency:'TND':'symbol':'1.2-2':'fr-TN' }} </p>
               <!-- <p class="demande-date">Date de demande : {{ demande.dateDemande | date:'dd/MM/yyyy' }}</p> -->
             </div>
             <span class="statut {{getStatusClass(demande.statutDemande)}}">

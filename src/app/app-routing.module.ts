@@ -39,7 +39,11 @@ const routes: Routes = [
   { path: 'demandes', loadChildren: () => import('./demandes/demandes.module').then(m => m.DemandesModule) , canActivate: [AuthGuard]},
 
   {path:'**', redirectTo:'not-found', pathMatch: 'full'},
-
+{
+    path: 'verify-email',
+    component: VerifyEmailComponent,
+    data: { title: 'Vérification Email' }
+  },
 
    //{ path: 'user',component:UserComponent, loadChildren: () => import('./user/user.module').then(mod => mod.UserModule), data: { breadcrumb: 'User'} },
 ];

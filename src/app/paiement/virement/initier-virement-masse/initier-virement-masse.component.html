@@ -21,17 +21,20 @@
       <select formControlName="ribEmetteur" class="form-control" required>
         <option value="">Sélectionner un compte</option>
         <option *ngFor="let compte of comptes" [value]="compte.rib">
-          {{ compte.rib }} - {{ compte.type }} ({{ compte.solde | number:'1.2-2' }} TND)
+          {{ compte.rib }} - {{ compte.type }} ({{ compte.solde | currency:'TND':'symbol':'1.2-2':'fr-TN' }} TND)
         </option>
       </select>
 
       <div *ngIf="soldeCompteSelectionne !== null" class="solde-compte" [class.solde-negatif]="soldeCompteSelectionne < 0">
         <strong>Solde disponible :</strong>
         <span [class.text-danger]="soldeCompteSelectionne < 0">
-          {{ soldeCompteSelectionne | number:'1.2-2' }} TND
-        </span>
+  {{ soldeCompteSelectionne | currency:'TND':'symbol':'1.2-2':'fr-TN' }}
+</span>
       </div>
     </div>
+
+
+
 
     <div class="form-group">
       <label for="motif">Motif: <span class="required">*</span></label>
@@ -101,7 +104,7 @@
              placeholder="Entrez les 6 chiffres reçus par SMS"
              maxlength="6"
              required>
-      <small class="form-text text-muted">Code valable 5 minutes</small>
+
     </div>
 
     <div class="form-group">
@@ -124,23 +127,45 @@
         <input type="radio" name="methodeVirement" value="form" [(ngModel)]="methodeVirement" (change)="onMethodChange('form')" />
         Virement par formulaire
       </label>
-
       <label>
         <input type="radio" name="methodeVirement" value="file" [(ngModel)]="methodeVirement" (change)="onMethodChange('file')" />
         Virement par fichier
       </label>
     </div>
 
+    <!-- Informations -->
     <div class="form-group">
-      <label for="file">Sélectionner un fichier : <span class="required">*</span></label>
-      <input type="file" class="form-control-file" (change)="onFileChange($event)" required />
+      <div class="alert custom-info-alert mb-4">
+        <h5 class="mb-2"><i class="fas fa-info-circle"></i> Information sur le virement de masse</h5>
+        <p>Ce service sécurisé vous permet d'effectuer plusieurs virements simultanément via un fichier structuré, conformément aux normes bancaires en vigueur.</p>
+        <p class="mb-0"><strong>Important :</strong> Le fichier doit respecter strictement le format spécifié.</p>
+      </div>
     </div>
 
+    <!-- Zone sélection fichier + bouton de téléchargement -->
+    <div class="form-group">
+      <div class="d-flex align-items-center justify-content-between">
+        <label for="file">Sélectionner un fichier : <span class="required">*</span></label>
+        <a href="assets/exmplaireFichierVirementMasse/TypeFichierVirementMasse.txt"
+           download="TypeFichierVirementMasse.txt"
+           class="btn btn-outline-primary btn-sm">
+          <i class="fas fa-download"></i> Télécharger le fichier type
+        </a>
+      </div>
+      <div class="file-selection-area mt-2">
+        <input type="file" class="form-control-file" (change)="onFileChange($event)" required />
+      </div>
+    </div>
+
+
+
+    <!-- OTP -->
     <div class="form-group" *ngIf="showOtpField">
       <label for="otp">Code OTP :</label>
       <input type="text" class="form-control" [(ngModel)]="otpSaisi" name="otpSaisi" maxlength="6" placeholder="Entrez le code reçu par SMS" />
     </div>
 
+    <!-- Bouton de soumission -->
     <div class="form-group">
       <button type="submit" class="btn btn-primary btn-lg btn-block" [disabled]="isProcessing">
         <i class="fas fa-upload"></i>

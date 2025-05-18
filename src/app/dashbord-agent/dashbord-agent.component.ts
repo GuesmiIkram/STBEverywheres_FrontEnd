@@ -59,19 +59,19 @@ export class DashbordAgentComponent implements OnInit {
         'rgba(54, 162, 235, 0.7)',
         'rgba(255, 206, 86, 0.7)',
         '#28a745',
-        'rgba(255, 99, 132, 1)'
+        '#6c757d'
       ],
       hoverBackgroundColor: [
         'rgba(54, 162, 235, 1)',
         'rgba(255, 206, 86, 1)',
         '#28a745',
-        'rgba(255, 99, 132, 0.7)'
+        '#6c757d'
       ],
       borderColor: [
         'rgba(54, 162, 235, 1)',
         'rgba(255, 206, 86, 1)',
         '#28a745',
-        'rgba(255, 99, 132, 1)'
+        '#6c757d'
       ],
       borderWidth: 1
     }]
@@ -175,20 +175,20 @@ export class DashbordAgentComponent implements OnInit {
               'rgba(54, 162, 235, 0.7)',
               'rgba(255, 206, 86, 0.7)',
               '#28a745',
-              'rgba(235, 45, 156, 0.7)'
+              '#6c757d'
             ],
             hoverBackgroundColor: [
               'rgba(54, 162, 235, 1)',
               'rgba(255, 206, 86, 1)',
               '#28a745',
-              'rgba(235, 45, 156, 1)'
+              '#6c757d'
 
             ],
             borderColor: [
               'rgba(54, 162, 235, 1)',
               'rgba(255, 206, 86, 1)',
               '#28a745',
-              'rgba(235, 45, 156, 1)'
+              '#6c757d'
 
             ],
             borderWidth: 1
@@ -228,11 +228,11 @@ export class DashbordAgentComponent implements OnInit {
               data: [
                 val(kyc?.total),
                 val(kyc?.enAttente),
-                0, // Partiellement Traitées (si non applicable)
+                0, // Partiellement Traitées
                 val(kyc?.traitees)
               ],
-              backgroundColor: 'rgba(153, 102, 255, 0.7)', // Violet pour KYC
-              borderColor: 'rgba(153, 102, 255, 1)',
+              backgroundColor: '#6c757d',
+              borderColor: '#6c757d',
               borderWidth: 1,
               minBarLength: 3
             }
@@ -243,7 +243,7 @@ export class DashbordAgentComponent implements OnInit {
           datasets: [{
             label: 'Modifications Fiche KYC',
 data: [this.kycStats?.total || 0, this.kycStats?.enCours || 0, this.kycStats?.traitees || 0],            backgroundColor: 'rgba(153, 102, 255, 0.7)',
-            borderColor: 'rgba(153, 102, 255, 1)',
+            borderColor: '#6c757d',
             borderWidth: 1
           }]
         };

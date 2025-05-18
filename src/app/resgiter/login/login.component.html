@@ -1,7 +1,7 @@
 <div class="auth-container">
   <div class="auth-card">
 
-   
+
     <!-- Onglets pour basculer entre connexion et inscription -->
     <div class="auth-tabs">
       <button class="tab-btn" [class.active]="activeTab === 'login'" (click)="activeTab = 'login'">Se connecter</button>
@@ -49,7 +49,7 @@
       <div class="forgot-password-link">
         <a (click)="openForgotPasswordDialog()">Mot de passe oublié ?</a>
       </div>
-  
+
     </div>
 
     <div *ngIf="activeTab === 'register'" class="auth-form">
