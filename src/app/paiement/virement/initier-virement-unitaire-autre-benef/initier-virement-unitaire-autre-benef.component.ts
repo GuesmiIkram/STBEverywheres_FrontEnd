@@ -19,7 +19,8 @@ export class InitierVirementUnitaireAutreBenefComponent implements OnInit {
   beneficiaires: Beneficiaire[] = [];
   virementForm: FormGroup;
   soldeCompteSelectionne: number | null = null;
-  private static readonly FRAIS_VIREMENT = 0.5;
+  private static readonly FRAIS_VIREMENT = 1.500;
+  private static readonly TVAS_VIREMENT = 0.285;
   showOtpInput: boolean = false;
   virementId: number | null = null;
   otpForm: FormGroup;
@@ -44,6 +45,16 @@ currentBeneficiaire: Beneficiaire | null = null;
       otpCode: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]]
     });
   }
+
+formatTND(valeur: number): string {
+  return new Intl.NumberFormat('fr-TN', {
+    style: 'decimal',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(valeur) + ' TND';
+}
+
+
 
   ngOnInit(): void {
     this.chargerComptes();
@@ -200,13 +211,14 @@ openAddBeneficiaireModal(): void {
         <div style="text-align: left; margin: 10px 0;">
           <p><strong>Compte Émetteur :</strong> ${virementData.RIB_Emetteur}</p>
           <p><strong>Bénéficiaire:</strong> ${beneficiaireSelectionne.nom} ${beneficiaireSelectionne.prenom} ${beneficiaireSelectionne.ribCompte}</p>
-          <p><strong>Montant:</strong> ${virementData.Montant} TND</p>
-          <p><strong>Frais:</strong>${InitierVirementUnitaireAutreBenefComponent.FRAIS_VIREMENT.toFixed(2)} TND</p>
-          <p><strong>Total à débiter:</strong> ${virementData.Montant + InitierVirementUnitaireAutreBenefComponent.FRAIS_VIREMENT} TND</p>
+          <p><strong>Montant:</strong> ${this.formatTND(virementData.Montant)} </p>
+          <p><strong>Frais:</strong>${this.formatTND(InitierVirementUnitaireAutreBenefComponent.FRAIS_VIREMENT)}</p>
+          <p><strong>Total à débiter:</strong>  ${this.formatTND(virementData.Montant + InitierVirementUnitaireAutreBenefComponent.FRAIS_VIREMENT + InitierVirementUnitaireAutreBenefComponent.TVAS_VIREMENT)} </p>
           <p><strong>Motif:</strong> ${virementData.Motif}</p>
           ${virementData.Description ? `<p><strong>Description:</strong> ${virementData.Description}</p>` : ''}
         </div>
         <div style="font-size: 12px; color: #666; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
+      <p><i class="fas fa-shield-alt" style="color: #3366cc; margin-right: 5px;"></i> Un code OTP vous sera envoyé par SMS pour valider cette opération.</p>
 
            <p><i class="fas fa-exchange-alt" style="color: #3366cc; margin-right: 5px;"></i> En confirmant, vous autorisez le débit immédiat de votre compte.</p>
         </div>
@@ -239,6 +251,8 @@ openAddBeneficiaireModal(): void {
         if (response.message.includes("OTP envoyé")) {
           this.virementId = response.virementId;
           this.demanderOtp(beneficiaireSelectionne);
+                  Swal.fire('Code envoyé', response.message || 'Un code OTP a été envoyé à votre mobile', 'success');
+
         }
       },
       error: (error) => {

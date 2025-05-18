@@ -76,11 +76,11 @@ submitModificationRequest(
   formData.append('justificationFile', justificationFile);
 
   return this.http.post(
-    `${this.apiUrl}/submit-modification-request`, 
+    `${this.apiUrl}/submit-modification-request`,
     formData,
     {
       headers: new HttpHeaders({
-        // 'Content-Type' n'est pas nécessaire ici, 
+        // 'Content-Type' n'est pas nécessaire ici,
         // il sera automatiquement défini comme 'multipart/form-data'
         'Authorization': `Bearer ${localStorage.getItem('token')}`
       }),
@@ -124,7 +124,9 @@ uploadElyssaDocuments(files: FormData): Observable<any> {
     })
   );
 }
-
+verifyEmail(token: string): Observable<any> {
+  return this.http.post(`${this.apiUrl}/verify-email`, { token });
+}
 updateClientInfo(client: Client): Observable<Client> {
   return this.http.put<Client>(`${this.apiUrl}/update`, client);
 }

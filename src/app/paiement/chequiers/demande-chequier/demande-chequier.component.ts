@@ -108,9 +108,11 @@ export class DemandeChequierComponent {
     const typeChequier = formValue.typeChequier === "barre" ? "barré" : "non barré";
     const modeLivraison = formValue.modeLivraison === "LivraisonAgence" ? "en agence" : "par envoi recommandé";
     // Calcul des frais
-    const fraisChequier = 5.000; // Frais fixe pour chéquier barré
+   // const fraisChequier = 5.000; // Frais fixe pour chéquier barré
     const fraisEnvoi = formValue.modeLivraison === "EnvoiRecommande" ? 1.200 : 0;
-    const totalFrais = fraisChequier + fraisEnvoi;
+    //const totalFrais = fraisChequier + fraisEnvoi;
+    const totalFrais = fraisEnvoi;
+
     Swal.fire({
       title: "Confirmation de demande",
       html: `
@@ -123,10 +125,7 @@ export class DemandeChequierComponent {
            <div style="text-align: left; margin-bottom: 20px;">
 <h4 style="color: #2c3e50; margin: 25px 0 15px 0;">Détails des frais :</h4>
 
-        <div style="margin-bottom: 8px;">
-          <span style="display: inline-block; width: 200px;">Frais de production du chéquier:</span>
-          <span style="float: right;">${fraisChequier.toFixed(3)} TND</span>
-        </div>
+
 
         ${formValue.modeLivraison === "EnvoiRecommande" ? `
         <div style="margin-bottom: 8px;">

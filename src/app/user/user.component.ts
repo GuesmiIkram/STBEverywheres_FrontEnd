@@ -61,16 +61,28 @@ export class UserComponent implements OnInit {
   selectedField: string = 'adresse';
     newFieldValue: string = '';
     justificationFile: File | null = null;
-    
-   
+
+
   constructor(
     private clientService: ClientService,
-    private authService: AuthService,  private router: Router 
+    private authService: AuthService,  private router: Router
   ) {}
 
   ngOnInit(): void {
     this.getClientInfo();
   }
+getJustificatifLabel(): string {
+  switch (this.selectedField) {
+    case 'adresse':
+      return 'Copie de facture STEG / SONEDE';
+    case 'profession':
+      return 'Contrat de travail';
+    case 'Situation Professionnelle':
+      return 'contrat de travail ';
+    default:
+      return 'Document justificatif';
+  }
+}
 
   getClientInfo(): void {
     this.clientService.getClientInfo().subscribe(
@@ -105,9 +117,9 @@ validatePassword(password: string): boolean {
 
 // Modifiez la méthode checkPasswords()
 checkPasswords(): void {
-  this.passwordMismatch = 
+  this.passwordMismatch =
     this.changePasswordData.newPassword !== this.changePasswordData.confirmNewPassword;
-  
+
   // Ajoutez la validation du format
   if (this.changePasswordData.newPassword) {
     this.passwordFormatValid = this.validatePassword(this.changePasswordData.newPassword);
@@ -122,7 +134,7 @@ checkPasswords(): void {
       this.passwordMismatch
     );
   }
-  
+
   downloadKYC(): void {
     this.clientService.downloadKYC().subscribe(
       (blob: Blob) => {
@@ -205,7 +217,9 @@ submitModificationRequest(): void {
     },
     error: (err) => {
       console.error('Request error:', err);
-      Swal.fire('Erreur', 'Échec de la soumission de la demande', 'error');
+      // Utiliser le message d'erreur du backend s'il existe, sinon un message par défaut
+      const errorMessage = err.error?.message || 'Échec de la soumission de la demande';
+      Swal.fire('Erreur', errorMessage, 'error');
     }
   });
 }
@@ -238,7 +252,7 @@ submitModificationRequest(): void {
     error: (error) => {
       console.error('Erreur détaillée:', error);
       let errorMsg = 'Échec de l\'upload';
-      
+
       if (error.error?.errors) {
         errorMsg = Object.values(error.error.errors).join('\n');
       } else if (error.error?.title) {
@@ -322,17 +336,17 @@ submitModificationRequest(): void {
                     <p style="color: #64748b; font-size: 14px; text-align: center; margin-bottom: 20px; font-weight: 400; line-height: 1.5;">
                         Un code de vérification à 6 chiffres a été envoyé à votre adresse email
                     </p>
-                    <input 
-                        type="text" 
-                        id="swal-otp" 
-                        class="swal2-input" 
+                    <input
+                        type="text"
+                        id="swal-otp"
+                        class="swal2-input"
                         placeholder="Code OTP"
                         maxlength="6"
                         style="height: 40px; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0 12px; font-size: 14px; width: 100%; margin: 0; box-shadow: none; letter-spacing: 5px; text-align: center;"
                     >
-                    <div 
-                        id="swal-error" 
-                        class="text-danger" 
+                    <div
+                        id="swal-error"
+                        class="text-danger"
                         style="color: #ef4444; font-size: 12px; text-align: left; font-weight: 500; min-height: 20px; margin-top: 5px; margin-bottom: 10px;"
                     ></div>
                 </div>
@@ -357,17 +371,17 @@ submitModificationRequest(): void {
             preConfirm: () => {
                 const otpInput = Swal.getPopup()?.querySelector('#swal-otp') as HTMLInputElement;
                 const errorEl = Swal.getPopup()?.querySelector('#swal-error');
-                
+
                 if (!otpInput?.value) {
                     if (errorEl) errorEl.innerHTML = 'Le code OTP est requis';
                     return false;
                 }
-                
+
                 if (!/^\d{6}$/.test(otpInput.value)) {
                     if (errorEl) errorEl.innerHTML = 'Le code doit contenir 6 chiffres';
                     return false;
                 }
-                
+
                 return otpInput.value;
             },
             allowOutsideClick: () => !Swal.isLoading(),
@@ -419,7 +433,7 @@ submitModificationRequest(): void {
                     }
                 `;
                 document.head.appendChild(style);
-                
+
                 // Focus automatique sur le champ OTP
                 setTimeout(() => {
                     const input = Swal.getPopup()?.querySelector('#swal-otp') as HTMLInputElement;
@@ -454,14 +468,14 @@ submitModificationRequest(): void {
             }
         });
 
-            this.authService.logout(); 
+            this.authService.logout();
              this.router.navigate(['']);
 
 
     } catch (error: any) {
         console.error('Erreur:', error);
         let errorMessage = 'Une erreur est survenue';
-        
+
         if (error.status === 400) {
             errorMessage = error.error?.message || 'Requête invalide';
         } else if (error.status === 401) {
@@ -483,7 +497,7 @@ submitModificationRequest(): void {
         });
     }
 }
-  
+
   private resetForm(): void {
     this.changePasswordData = {
       currentPassword: '',

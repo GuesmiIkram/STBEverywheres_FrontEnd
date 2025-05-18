@@ -44,6 +44,7 @@ registerLocaleData(localeFr)
 import { BreadcrumbModule } from 'xng-breadcrumb';
 import { NgChartsModule } from 'ng2-charts';
 import { ModificationRequestsComponent } from './modification-requests/modification-requests.component';
+import { VerifyEmailComponent } from './verify-email/verify-email.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { ModificationRequestsComponent } from './modification-requests/modificat
        KycDownloadComponent,
       ExtraitComponent,
       ModificationRequestsComponent,
+      VerifyEmailComponent,
       //DashbordAgentComponent,
      ],
 

@@ -38,9 +38,10 @@
                                 <div *ngIf="soldeCompteSelectionne !== null" class="solde-compte"
                                     [class.solde-negatif]="soldeCompteSelectionne < 0">
                                     <strong>Solde disponible :</strong>
-                                    <span [class.text-danger]="soldeCompteSelectionne < 0">
-                                        {{ soldeCompteSelectionne | number:'1.2-2' }} TND
-                                    </span>
+                                   <span [class.text-danger]="soldeCompteSelectionne < 0">
+  {{ soldeCompteSelectionne | currency:'TND':'symbol':'1.2-2':'fr-TN' }}
+</span>
+
                                 </div>
                             </div>
                         </div>

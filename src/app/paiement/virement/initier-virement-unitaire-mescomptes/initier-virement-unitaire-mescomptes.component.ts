@@ -13,61 +13,63 @@ import Swal from 'sweetalert2';
 })
 export class InitierVirementUnitaireMesComptesComponent implements OnInit {
 
-comptes: Compte[] = [];
+  comptes: Compte[] = [];
   virementForm: FormGroup;
   comptesBeneficiaires: Compte[] = [];
-  soldeCompteSelectionne: number | null = null; // stocker le solde de compte emetteur
-  // Ajoutez cette propriété dans votre composant
-private swalFireConfig = {
-  customClass: {
-    container: 'swal-container',
-    popup: 'swal-popup',
-    title: 'swal-title',
-    htmlContainer: 'swal-html',
-    confirmButton: 'swal-confirm-btn',
-    cancelButton: 'swal-cancel-btn'
-  },
-  confirmButtonColor: '#3366cc',
-  cancelButtonColor: '#6c757d',
-  buttonsStyling: true,
-  showCloseButton: true,
-  showCancelButton: true,
-  focusCancel: true
-};
+  soldeCompteSelectionne: number | null = null;
+
+  private swalFireConfig = {
+    customClass: {
+      container: 'swal-container',
+      popup: 'swal-popup',
+      title: 'swal-title',
+      htmlContainer: 'swal-html',
+      confirmButton: 'swal-confirm-btn',
+      cancelButton: 'swal-cancel-btn'
+    },
+    confirmButtonColor: '#3366cc',
+    cancelButtonColor: '#6c757d',
+    buttonsStyling: true,
+    showCloseButton: true,
+    showCancelButton: true,
+    focusCancel: true
+  };
 
   constructor(private virementService: VirementService, private fb: FormBuilder) {
     this.virementForm = this.fb.group({
       compteEmetteur: ['', Validators.required],
       montant: ['', [Validators.required, Validators.min(1)]],
       motif: ['', Validators.required],
-
       ribBeneficiaire: ['', Validators.required],
       description: ['']
-
     });
     console.log('Formulaire initialisé :', this.virementForm.value);
   }
+formatTND(valeur: number): string {
+  return new Intl.NumberFormat('fr-TN', {
+    style: 'decimal',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(valeur) + ' TND';
+}
 
   ngOnInit(): void {
     this.virementService.getComptesVirementMesComptes().subscribe(
-      (data: Compte[]) => { // Ajout du type `Compte[]`
+      (data: Compte[]) => {
         this.comptes = data;
         this.comptesBeneficiaires = data;
       },
       (error) => { console.error('Erreur lors du chargement des comptes :', error); }
     );
 
-// Mettre à jour la liste des bénéficiaires lorsque le compte émetteur change
-this.virementForm.get('compteEmetteur')?.valueChanges.subscribe((selectedCompteEmetteur) => {
-  this.comptesBeneficiaires = this.comptes.filter(compte => compte.rib !== selectedCompteEmetteur);
-  // Trouver le compte sélectionné pour extraire le solde de compte emetteur
-  const compteSelectionne = this.comptes.find(compte => compte.rib === selectedCompteEmetteur);
-  this.soldeCompteSelectionne = compteSelectionne ? compteSelectionne.solde : null;
-});
-
+    this.virementForm.get('compteEmetteur')?.valueChanges.subscribe((selectedCompteEmetteur) => {
+      this.comptesBeneficiaires = this.comptes.filter(compte => compte.rib !== selectedCompteEmetteur);
+      const compteSelectionne = this.comptes.find(compte => compte.rib === selectedCompteEmetteur);
+      this.soldeCompteSelectionne = compteSelectionne ? compteSelectionne.solde : null;
+    });
   }
-//envoi de virement
-effectuerVirement(): void {
+
+ effectuerVirement(): void {
   // Validation du formulaire
   if (!this.virementForm.valid) {
     Swal.fire({
@@ -100,7 +102,7 @@ effectuerVirement(): void {
       <div style="text-align: left; margin: 15px 0; font-size: 15px;">
         <p><strong>Compte émetteur:</strong> ${virementData.RIB_Emetteur}</p>
         <p><strong>Compte bénéficiaire:</strong> ${virementData.RIB_Recepteur}</p>
-        <p><strong>Montant:</strong> ${virementData.Montant.toFixed(2)} TND</p>
+        <p><strong>Montant:</strong> ${this.formatTND(virementData.Montant)} </p>
         <p><strong>Motif:</strong> ${virementData.Motif}</p>
       </div>
       <div style="font-size: 13px; color: #666; margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px;">
@@ -113,6 +115,22 @@ effectuerVirement(): void {
     ...this.swalFireConfig
   }).then((result) => {
     if (result.isConfirmed) {
+      // Afficher une alerte de chargement sans bouton
+      Swal.fire({
+        title: 'Traitement en cours...',
+        html: `
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
+            <p style="margin-top: 15px; font-size: 14px;">Veuillez patienter pendant le traitement de votre virement.</p>
+          </div>
+        `,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        ...this.swalFireConfig,
+        showCancelButton: false
+      });
+
       this.virementService.effectuerVirement(virementData).subscribe({
         next: (response) => {
           Swal.fire({
@@ -163,203 +181,5 @@ effectuerVirement(): void {
       });
     }
   });
-}}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Compte } from 'src/app/Models/compte';
-import { VirementService } from 'src/app/services/virement.service';
-import Swal from 'sweetalert2';
-@Component({
-  selector: 'app-initier-virement-unitaire-mescomptes',
-  templateUrl: './initier-virement-unitaire-mescomptes.component.html',
-  styleUrls: ['./initier-virement-unitaire-mescomptes.component.scss']
-})
-export class InitierVirementUnitaireMesComptesComponent implements OnInit {
-  comptes: Compte[] = [];
-  comptesBeneficiaires: Compte[] = [];
-  virementForm: FormGroup;
-  soldeCompteSelectionne: number | null = null;
-
-  otpEnvoye = false;
-  otpCode = '';
-  virementId: number | null = null;
-  virementData: any;
-
-  constructor(private virementService: VirementService, private fb: FormBuilder) {
-    this.virementForm = this.fb.group({
-      compteEmetteur: ['', Validators.required],
-      montant: ['', [Validators.required, Validators.min(1)]],
-      motif: ['', Validators.required],
-      ribBeneficiaire: ['', Validators.required],
-      description: [''],
-       otpCode: ['']
-    });
-  }
-
-  ngOnInit(): void {
-    this.virementService.getComptesVirementMesComptes().subscribe(
-      (data: Compte[]) => {
-        this.comptes = data;
-        this.comptesBeneficiaires = data;
-      },
-      (error) => { console.error('Erreur lors du chargement des comptes :', error); }
-    );
-
-    this.virementForm.get('compteEmetteur')?.valueChanges.subscribe((selectedCompteEmetteur) => {
-      this.comptesBeneficiaires = this.comptes.filter(compte => compte.rib !== selectedCompteEmetteur);
-      const compteSelectionne = this.comptes.find(compte => compte.rib === selectedCompteEmetteur);
-      this.soldeCompteSelectionne = compteSelectionne ? compteSelectionne.solde : null;
-    });
-  }
-
-  effectuerVirement(): void {
-    if (!this.virementForm.valid) {
-      Swal.fire({
-        title: 'Formulaire incomplet',
-        html: `<p>Veuillez remplir tous les champs obligatoires.</p>`,
-        ...this.swalFireConfig,
-        showCancelButton: false
-      });
-      return;
-    }
-
-    this.virementData = {
-      RIB_Emetteur: this.virementForm.value.compteEmetteur,
-      RIB_Recepteur: this.virementForm.value.ribBeneficiaire,
-      Montant: this.virementForm.value.montant,
-      Motif: this.virementForm.value.motif,
-      Description: this.virementForm.value.description,
-      TypeVirement: 'VirementUnitaireVersMescomptes',
-       OtpCode: ''
-    };
-
-
-
-
-
-    Swal.fire({
-      title: 'Confirmer le virement',
-      html: `<p>Montant: ${this.virementData.Montant.toFixed(2)} TND<br>Motif: ${this.virementData.Motif}</p>`,
-      icon: 'question',
-      confirmButtonText: 'Confirmer',
-      cancelButtonText: 'Annuler',
-      ...this.swalFireConfig
-    }).then(result => {
-      if (result.isConfirmed) {
-        this.virementService.effectuerVirement(this.virementData).subscribe({
-          next: (res: any) => {
-            if (res.message?.includes('OTP envoyé')) {
-              this.otpEnvoye = true;
-              this.virementId = res.virementId;
-              Swal.fire('Code OTP envoyé', 'Veuillez vérifier votre SMS', 'info');
-            } else {
-              Swal.fire('Succès', 'Virement effectué sans OTP.', 'success');
-              this.virementForm.reset();
-            }
-          },
-          error: (err) => {
-            Swal.fire('Erreur', err.error?.message || 'Erreur lors du virement', 'error');
-          }
-        });
-      }
-    });
-  }
-
-  validerOtp(): void {
-    const otpCode = this.virementForm.value.otpCode;
-
-if (!otpCode || !this.virementId) {
-  Swal.fire('OTP requis', 'Veuillez saisir le code OTP.', 'warning');
-  return;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-    const virementAvecOtp = {
-       RIB_Emetteur: this.virementForm.value.compteEmetteur,
-      RIB_Recepteur: this.virementForm.value.ribBeneficiaire,
-      Montant: this.virementForm.value.montant,
-      Motif: this.virementForm.value.motif,
-      Description: this.virementForm.value.description,
-      TypeVirement: 'VirementUnitaireVersMescomptes',
-       OtpCode: ''
-
-    };
-
-
-
-
-
-
-
-
-
-
-
-    this.virementService.effectuerVirement(virementAvecOtp).subscribe({
-      next: () => {
-        Swal.fire('Virement validé', 'Votre virement a été exécuté avec succès.', 'success');
-        this.virementForm.reset();
-        this.otpEnvoye = false;
-        this.otpCode = '';
-        this.virementId = null;
-      },
-      error: (err) => {
-        Swal.fire('Échec de l\'OTP', err.error?.message || 'Code OTP invalide.', 'error');
-      }
-    });
-  }
-
-  private swalFireConfig = {
-    customClass: {
-      container: 'swal-container',
-      popup: 'swal-popup',
-      title: 'swal-title',
-      htmlContainer: 'swal-html',
-      confirmButton: 'swal-confirm-btn',
-      cancelButton: 'swal-cancel-btn'
-    },
-    confirmButtonColor: '#3366cc',
-    cancelButtonColor: '#6c757d',
-    buttonsStyling: true,
-    showCloseButton: true,
-    showCancelButton: true,
-    focusCancel: true
-  };
 }
-*/
