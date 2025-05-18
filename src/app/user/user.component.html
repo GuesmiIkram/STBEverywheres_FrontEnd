@@ -183,7 +183,7 @@
                               <div class="row mb-3">
                                   <label class="col-md-4 col-lg-3 col-form-label">Photo de profil</label>
                                   <div class="col-md-8 col-lg-9">
-                                      <img [src]="client?.photoClient ? 'http://localhost:5260/Images/' + client.photoClient : 'assets/img/default.png'" 
+                                      <img [src]="client?.photoClient ? 'http://localhost:5260/Images/' + client.photoClient : 'assets/img/default.png'"
                                            alt="Profile" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover;">
                                       <div class="pt-2">
                                         <div class="pt-2 d-flex gap-2">
@@ -191,13 +191,13 @@
                                           <label for="profileImage" class="btn btn-icon" title="Changer la photo">
                                             <i class="bi bi-camera-fill text-primary"></i> Modifier
                                           </label>
-                                          
+
                                           <!-- Bouton de suppression (icône seulement) -->
                                           <button type="button" class="btn btn-icon" (click)="removeProfileImage()" title="Supprimer la photo">
                                             <i class="bi bi-trash-fill text-danger"></i>Supprimer
                                           </button>
                                         </div>
-                                        
+
                                         <!-- Le input file reste caché -->
                                         <input type="file" id="profileImage" (change)="onFileSelected($event)" accept="image/*" style="display: none;">
                                       </div>
@@ -208,7 +208,7 @@
                               <div class="row mb-3">
                                   <label class="col-md-4 col-lg-3 col-form-label">Téléphone</label>
                                   <div class="col-md-8 col-lg-9">
-                                      <input name="phone" type="text" class="form-control" 
+                                      <input name="phone" type="text" class="form-control"
                                              [(ngModel)]="client.telephone" #phone="ngModel" required>
                                       <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="text-danger">
                                           Le téléphone est obligatoire
@@ -218,23 +218,23 @@
 
 
 
-                        
-                            
+
+
                                 <div class="row mb-3">
                                   <label for="nombreEnfants" class="col-md-4 col-lg-3 col-form-label">Nombre d'Enfants</label>
                                   <div class="col-md-8 col-lg-9">
-                                    <input 
-                                      name="nombreEnfants" 
-                                      type="number" 
-                                      class="form-control" 
-                                      id="nombreEnfants" 
+                                    <input
+                                      name="nombreEnfants"
+                                      type="number"
+                                      class="form-control"
+                                      id="nombreEnfants"
                                       [(ngModel)]="client.nombreEnfants"
                                       #nombreEnfants="ngModel"
                                       min="0"
                                       max="20"
                                       required
                                     >
-                                    
+
                                     <!-- Messages d'erreur -->
                                     <div *ngIf="nombreEnfants.invalid && (nombreEnfants.dirty || nombreEnfants.touched)" class="text-danger">
                                       <div *ngIf="nombreEnfants.errors?.['required']">
@@ -249,12 +249,21 @@
                                     </div>
                                   </div>
                               </div>
-                              <div class="row mb-3">
-                                <label for="etatCivil" class="col-md-4 col-lg-3 col-form-label">État Civil</label>
-                                <div class="col-md-8 col-lg-9">
-                                  <input name="etatCivil" type="text" class="form-control" id="etatCivil" [(ngModel)]="client.etatCivil">
-                                </div>
-                              </div>
+                            <div class="row mb-3">
+  <label for="etatCivil" class="col-md-4 col-lg-3 col-form-label">État Civil</label>
+  <div class="col-md-8 col-lg-9">
+    <select name="etatCivil" class="form-select" id="etatCivil" [(ngModel)]="client.etatCivil">
+      <option value="" disabled selected>-- Sélectionner l'état civil --</option>
+      <option value="Célibataire">Célibataire</option>
+      <option value="Marié(e)">Marié(e)</option>
+      <option value="Divorcé(e)">Divorcé(e)</option>
+      <option value="Veuf/Veuve">Veuf / Veuve</option>
+      <option value="Pacsé(e)">Pacsé(e)</option>
+    </select>
+  </div>
+</div>
+
+
                               <!-- Ajoutez les autres champs éditables de la même manière -->
                               <!-- ... -->
 
@@ -269,28 +278,27 @@
                           <div class="card mt-4">
                               <div class="card-body">
                                   <h5 class="card-title">Demander une modification</h5>
-                                  
+
                                   <div class="mb-3">
                                       <label class="form-label">Information à modifier</label>
                                       <select class="form-select" [(ngModel)]="selectedField" name="selectedField">
                                           <option value="adresse">Adresse</option>
                                           <option value="profession">Profession</option>
-                                          <option value="residence">Résidence</option>
+                                          <option value="residence">Revenu Mensuel
+</option>
                                       </select>
                                   </div>
-                                  
+
                                   <div class="mb-3">
                                       <label class="form-label">Nouvelle valeur</label>
                                       <input type="text" class="form-control" [(ngModel)]="newFieldValue" name="newFieldValue" required>
                                   </div>
-                                  
-                                  <div class="mb-3">
-                                      <label class="form-label">Document justificatif</label>
-                                      <input type="file" class="form-control" (change)="onJustificationFileSelected($event)" required>
-                                      <small class="text-muted">Format PDF, JPG ou PNG (max 5MB)</small>
-                                  </div>
-                                  
-                                  <button class="btn btn-primary" (click)="submitModificationRequest()" 
+
+<label class="form-label">{{ getJustificatifLabel() }}</label>
+<input type="file" class="form-control" (change)="onJustificationFileSelected($event)" required>
+<small class="text-muted">Format PDF, JPG ou PNG (max 5MB)</small>
+
+                                  <button class="btn btn-primary" (click)="submitModificationRequest()"
                                           [disabled]="!newFieldValue || !justificationFile">
                                       <i class="bi bi-send"></i> Soumettre la demande
                                   </button>
@@ -310,7 +318,7 @@
                             </div>
                         </div>
                       </div>
-                    
+
 
                       <div class="tab-pane fade pt-3" id="profile-change-password">
                         <!-- Change Password Form -->

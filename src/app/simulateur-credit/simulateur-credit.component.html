@@ -1,67 +1,141 @@
-<div class="simulateur-credit">
-  <h2>Simulateur de Crédit</h2>
+<div class="credit-simulator">
+  <div class="simulator-header">
+    <h2>Simulateur de Crédit</h2>
 
-  <!-- Affichage convention -->
-  <div *ngIf="clientConventionne; else pasConvention">
-    <p><strong>Convention :</strong> {{ nomConvention }}</p>
-    <p><strong>Marge bancaire :</strong> {{ margeBancaire }}%</p>
   </div>
-  <ng-template #pasConvention>
-    <p><strong>Client non conventionné</strong></p>
-  </ng-template>
 
-  <!-- Taux affiché -->
-  <p><strong>Taux appliqué :</strong> {{ taux }} %</p>
+  <div class="simulator-card convention-card">
+    <div class="card-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>
+    </div>
+    <div class="card-content" *ngIf="clientConventionne; else pasConvention">
+      <div class="convention-info">
+        <div class="info-item">
+          <span class="info-label">Convention</span>
+          <span class="info-value">{{ nomConvention }}</span>
 
-  <form (ngSubmit)="calculerCredit()">
-    <div>
-      <label for="montant">Montant du crédit :</label>
-      <input type="number" [(ngModel)]="montant" name="montant" required />
+        </div>
+
+
+
+        <div class="info-item">
+          <span class="info-label">Marge bancaire</span>
+          <span class="info-value">{{ margeBancaire }}%</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Taux appliqué</span>
+          <span class="info-value highlight">{{ taux }}%</span>
+        </div>
+      </div>
+    </div>
+    <ng-template #pasConvention>
+      <div class="card-content">
+        <div class="convention-info">
+          <div class="info-item">
+            <span class="info-label">Statut</span>
+            <span class="info-value">Client non conventionné</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Taux appliqué</span>
+            <span class="info-value highlight">{{ taux }}%</span>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+
+  <div class="simulator-card">
+    <form (ngSubmit)="calculerCredit()" class="simulator-form">
+      <div class="form-group">
+        <label for="montant">Montant du crédit</label>
+        <div class="input-wrapper">
+          <input type="number" id="montant" [(ngModel)]="montant" name="montant" required />
+          <span class="currency">TND</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="duree">Durée</label>
+        <div class="input-wrapper">
+          <input type="number" id="duree" [(ngModel)]="duree" name="duree" required />
+          <span class="currency">mois</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="typeAmortissement">Type d'amortissement</label>
+        <div class="select-wrapper">
+          <select id="typeAmortissement" [(ngModel)]="typeAmortissement" name="typeAmortissement" required>
+            <option value="constant">Mensualité constante</option>
+            <option value="variable">Amortissement variable</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-calculate">
+  <i class="fas fa-calculator"></i>
+  Calculer
+</button>
+
+    </form>
+  </div>
+
+  <div class="simulator-card result-card" *ngIf="result">
+    <div class="result-header">
+      <h3>Résultat de la simulation</h3>
+
     </div>
 
-    <div>
-      <label for="duree">Durée (en mois) :</label>
-      <input type="number" [(ngModel)]="duree" name="duree" required />
+    <div class="result-content" *ngIf="result.type === 'Mensualité constante'">
+      <div class="result-summary">
+        <div class="summary-item">
+          <span class="summary-label">Type</span>
+          <span class="summary-value">{{ result.type }}</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Mensualité</span>
+          <span class="summary-value highlight">{{ result.mensualite }} TND</span>
+        </div>
+      </div>
     </div>
 
-    <div>
-      <label for="typeAmortissement">Type d'amortissement :</label>
-      <select [(ngModel)]="typeAmortissement" name="typeAmortissement" required>
-        <option value="constant">Mensualité constante</option>
-        <option value="variable">Amortissement variable</option>
-      </select>
-    </div>
+    <div class="result-content" *ngIf="result.type === 'Amortissement variable'">
+      <div class="result-summary">
+        <div class="summary-item">
+          <span class="summary-label">Type</span>
+          <span class="summary-value">{{ result.type }}</span>
+        </div>
+      </div>
 
-    <button type="submit">Calculer</button>
-  </form>
-
-  <div *ngIf="result">
-    <h3>Résultat :</h3>
-    <div *ngIf="result.type === 'Mensualité constante'">
-      <p>Type : {{ result.type }}</p>
-      <p>Mensualité : {{ result.mensualite }} TND</p>
-    </div>
-
-    <div *ngIf="result.type === 'Amortissement variable'">
-      <p>Type : {{ result.type }}</p>
-      <table>
-        <thead>
-          <tr>
-            <th>Mois</th>
-            <th>Mensualité</th>
-            <th>Intérêt</th>
-            <th>Capital Restant</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let detail of result.details">
-            <td>{{ detail.mois }}</td>
-            <td>{{ detail.mensualite }} TND</td>
-            <td>{{ detail.interet }} TND</td>
-            <td>{{ detail.capitalRestant }} TND</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-container">
+        <table class="amortization-table">
+          <thead>
+            <tr>
+              <th>Mois</th>
+              <th>Mensualité</th>
+              <th>Intérêt</th>
+              <th>Principal</th>
+              <th>Capital Restant</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let detail of result.details">
+              <td>{{ detail.mois }}</td>
+              <td>{{ detail.mensualite }} TND</td>
+              <td>{{ detail.interet }} TND</td>
+              <td>{{ detail.principal }} TND</td>
+              <td>{{ detail.capitalRestant }} TND</td>
+            </tr>
+            <tr class="total-row">
+              <td><strong>Total</strong></td>
+              <td><strong>{{ result.totalMensualite }} TND</strong></td>
+              <td><strong>{{ result.totalInteret }} TND</strong></td>
+              <td><strong>{{ result.totalPrincipal }} TND</strong></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

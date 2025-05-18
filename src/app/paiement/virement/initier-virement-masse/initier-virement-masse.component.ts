@@ -24,6 +24,7 @@ export class InitierVirementMasseComponent implements OnInit {
   isProcessing = false;
   otpRequested = false;
 otpSaisi: string | null = null;
+  private static readonly TVA = 0.885;
   constructor(
     private fb: FormBuilder,
     private virementService: VirementService,
@@ -38,6 +39,13 @@ otpSaisi: string | null = null;
       beneficiaires: this.fb.array([this.createBeneficiaireGroup()])
     });
   }
+formatTND(valeur: number): string {
+  return new Intl.NumberFormat('fr-TN', {
+    style: 'decimal',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(valeur) + ' TND';
+}
 
   ngOnInit(): void {
     this.chargerComptes();
@@ -72,7 +80,7 @@ otpSaisi: string | null = null;
     );
   }
 
-  chargerBeneficiaires(): void {
+  /*chargerBeneficiaires(): void {
     this.beneficiaireService.getBeneficiairesByClientId().subscribe({
       next: (data: Beneficiaire[]) => {
         this.beneficiaires = data;
@@ -82,7 +90,30 @@ otpSaisi: string | null = null;
         Swal.fire('Erreur', 'Impossible de charger les bénéficiaires', 'error');
       }
     });
-  }
+  }*/
+chargerBeneficiaires(): void {
+  this.beneficiaireService.getBeneficiairesByClientId().subscribe({
+    next: (data: Beneficiaire[]) => {
+      this.beneficiaires = data;
+    },
+    error: (error: any) => {
+      // Si c’est un 404 "Aucun bénéficiaire trouvé", ne rien faire
+      if (
+        error.status === 404 &&
+        error.error &&
+        typeof error.error === 'string' &&
+        error.error.includes('Aucun bénéficiaire')
+      ) {
+        this.beneficiaires = []; // Juste initialiser à vide
+        return;
+      }
+
+      // Sinon, afficher une vraie erreur
+      console.error('Erreur lors du chargement des bénéficiaires:', error);
+      Swal.fire('Erreur', 'Impossible de charger les bénéficiaires', 'error');
+    }
+  });
+}
 
   ajouterBeneficiaire(): void {
     this.beneficiairesFormArray.push(this.createBeneficiaireGroup());
@@ -146,12 +177,22 @@ submitFile(): void {
       } else {
         Swal.fire({
           title: 'Succès',
-          html: `Virement de masse effectué avec succès !<br>
-                Nombre de virements: ${response.nombreVirements || 'Non spécifié'}<br>
-                Montant total: ${response.totalDebite?.toFixed(2) || 'Non spécifié'} TND`,
-          icon: 'success'
-        });
+          html: `
 
+            <div style="text-align: center;">
+              <i class="fas fa-check-circle" style="color: #28a745; font-size: 48px; margin-bottom: 15px;"></i>
+              <p>Virement de masse effectué avec succès !</p>
+              <p><strong>Nombre de virements:</strong> ${response.nombreVirements}</p>
+              <p><strong>Montant total:</strong> ${this.formatTND(response.totalDebite)|| 'Non spécifié'} </p>
+              <p><strong>Frais appliqués:</strong>  ${this.formatTND(response.frais)|| 'Non spécifié'}</p>
+            </div>
+            <div style="font-size: 13px; color: #666; margin-top: 20px; border-top: 1px solid #eee; padding-top: 10px;">
+              <p><i class="fas fa-file-alt" style="color: #3366cc; margin-right: 5px;"></i> Fichier traité: ${this.fichier?.name}</p>
+            </div>
+          `,
+          confirmButtonText: 'Fermer',
+          confirmButtonColor: '#3366cc'
+        });
         // Reset
         this.fichier = null;
         this.otpSaisi = '';
@@ -224,27 +265,57 @@ submitFile(): void {
     return frais;
   }
 
-  private requestOtp(): void {
-    this.isProcessing = true;
+ private requestOtp(): void {
+  this.isProcessing = true;
+const montant = this.calculateTotalAmount();
+const frais = this.calculateFees();
+const tva = InitierVirementMasseComponent.TVA;
+const totalAvecTVA = montant + frais + tva;
+ Swal.fire({
+  title: 'Confirmez le virement de masse',
+  html: ` <p><strong>Vous êtes sur le point d'effectuer un virement de masse </p>
+    <div style="text-align: left; margin: 10px 0;">
+      <p><strong>Nombre de bénéficiaires :</strong> ${this.virementForm.value.beneficiaires.length}</p>
+      <p><strong>Motif de virement :</strong> ${this.virementForm.value.motif}</p>
 
-    Swal.fire({
-      title: 'Confirmez le virement',
-      html: `Vous êtes sur le point d'effectuer un virement de masse.<br>
-             Montant total: ${this.calculateTotalAmount().toFixed(2)} TND<br>
-             Frais: ${this.calculateFees().toFixed(2)} TND`,
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Confirmer',
-      cancelButtonText: 'Annuler'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.sendOtpRequest();
-      } else {
-        this.isProcessing = false;
-      }
-    });
+
+
+ <p><strong>Montant :</strong> ${this.formatTND(montant)} </p>
+      <p><strong>Frais appliqués :</strong> ${this.formatTND(frais)} </p>
+      <p><strong>Total à débiter :</strong> ${this.formatTND(totalAvecTVA)} </p>
+
+
+
+
+
+    </div>
+    <div style="font-size: 12px; color: #666; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
+      <p><i class="fas fa-shield-alt" style="color: #3366cc; margin-right: 5px;"></i> Un code OTP vous sera envoyé par SMS pour valider cette opération.</p>
+      <p><i class="fas fa-exchange-alt" style="color: #3366cc; margin-right: 5px;"></i> En confirmant, vous autorisez le débit immédiat de votre compte.</p>
+    </div>
+  `,
+  icon: 'question',
+  showCancelButton: true,
+  confirmButtonColor: '#3366cc',
+  cancelButtonColor: '#6c757d',
+  confirmButtonText: 'Confirmer',
+  cancelButtonText: 'Annuler',
+  focusCancel: true,
+  customClass: {
+    container: 'swal-bank-container',
+    popup: 'swal-bank-popup',
+    title: 'swal-bank-title',
+    htmlContainer: 'swal-bank-html',
+    confirmButton: 'swal-bank-confirm-btn',
+    cancelButton: 'swal-bank-cancel-btn'
   }
-
+}).then((result) => {
+  if (result.isConfirmed) {
+    this.sendOtpRequest();
+  } else {
+    this.isProcessing = false;
+  }
+});}
  private sendOtpRequest(): void {
     this.isProcessing = true;
 

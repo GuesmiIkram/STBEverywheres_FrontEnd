@@ -1,7 +1,7 @@
 <div class="auth-container">
   <div class="auth-card">
 
-   
+
     <!-- Onglets pour basculer entre connexion et inscription -->
     <div class="auth-tabs">
       <button class="tab-btn" [class.active]="activeTab === 'login'" (click)="activeTab = 'login'">Se connecter</button>
@@ -49,7 +49,7 @@
       <div class="forgot-password-link">
         <a (click)="openForgotPasswordDialog()">Mot de passe oublié ?</a>
       </div>
-  
+
     </div>
 
     <div *ngIf="activeTab === 'register'" class="auth-form">
@@ -99,6 +99,16 @@
             (input)="checkPasswords()"
           />
           <div *ngIf="registerPasswordError" class="error-message">Le champ mot de passe est obligatoire.</div>
+          <div class="password-requirements" *ngIf="registerForm.password" class="error-message">
+      <p>Le mot de passe doit contenir :</p>
+    <ul>
+      <li [class.valid]="passwordRequirements.minLength">Minimum 8 caractères</li>
+      <li [class.valid]="passwordRequirements.hasUpper">Une lettre majuscule</li>
+      <li [class.valid]="passwordRequirements.hasLower">Une lettre minuscule</li>
+      <li [class.valid]="passwordRequirements.hasNumber">Un chiffre</li>
+      <li [class.valid]="passwordRequirements.hasSpecial">Un caractère spécial (@$!%*?&)</li>
+    </ul>
+  </div>
         </div>
 
         <div class="form-group">

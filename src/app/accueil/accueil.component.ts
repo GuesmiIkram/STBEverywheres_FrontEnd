@@ -19,7 +19,8 @@ export class AccueilComponent implements OnInit, AfterViewInit {
   epargneResultat: number | null = null;
   montant = 50000;
   duree = 36;
-  taux = 7;
+  taux = 7.5;
+  margebancaire=5.0;
   typeAmortissement = "constant";
   result: any = null;
   details: any[] = [];
@@ -414,31 +415,48 @@ resultatConversion: number | null = null;
   }
 
   calculerCredit() {
-    const tauxMensuel = this.taux / 12 / 100;
-    const nombreMensualites = this.duree;
+  const tauxMensuel = (this.taux + this.margebancaire) / 12 / 100;
+  const nombreMensualites = this.duree;
 
-    if (this.typeAmortissement === "constant") {
-      const mensualite = (this.montant * tauxMensuel) / (1 - Math.pow(1 + tauxMensuel, -nombreMensualites));
-      this.result = { type: "Mensualité constante", mensualite: mensualite.toFixed(2) };
-    } else if (this.typeAmortissement === "variable") {
-      const capitalFixe = this.montant / nombreMensualites;
-      let capitalRestant = this.montant;
-      this.details = [];
+  if (this.typeAmortissement === "constant") {
+    const mensualite = (this.montant * tauxMensuel) / (1 - Math.pow(1 + tauxMensuel, -nombreMensualites));
+    this.result = { type: "Mensualité constante", mensualite: mensualite.toFixed(2) };
+  } else if (this.typeAmortissement === "variable") {
+    const capitalFixe = this.montant / nombreMensualites;
+    let capitalRestant = this.montant;
+    this.details = [];
 
-      for (let i = 1; i <= nombreMensualites; i++) {
-        const interet = capitalRestant * tauxMensuel;
-        const mensualite = capitalFixe + interet;
-        this.details.push({
-          mois: i,
-          mensualite: mensualite.toFixed(2),
-          interet: interet.toFixed(2),
-          capitalRestant: capitalRestant.toFixed(2),
-        });
-        capitalRestant -= capitalFixe;
-      }
-      this.result = { type: "Amortissement variable", details: this.details };
+    let totalMensualite = 0;
+    let totalInteret = 0;
+
+    for (let i = 1; i <= nombreMensualites; i++) {
+      const interet = capitalRestant * tauxMensuel;
+      const mensualite = capitalFixe + interet;
+      const principal = mensualite - interet;
+
+      this.details.push({
+        mois: i,
+        mensualite: mensualite.toFixed(2),
+        interet: interet.toFixed(2),
+        principal: principal.toFixed(2),
+        capitalRestant: capitalRestant.toFixed(2),
+      });
+
+      totalMensualite += mensualite;
+      totalInteret += interet;
+      capitalRestant -= capitalFixe;
     }
+
+    this.result = {
+      type: "Amortissement variable",
+      details: this.details,
+      totalMensualite: totalMensualite.toFixed(2),
+      totalInteret: totalInteret.toFixed(2),
+      totalPrincipal: this.montant.toFixed(2)
+    };
   }
+}
+
 
   toggleService(service: string) {
     this.expandedService = this.expandedService === service ? null : service;
@@ -612,6 +630,14 @@ convertir() {
     );
   }
 
+scrollToSection(id: string): void {
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, 200); // attendre que le bloc soit affiché
+}
 
 
 

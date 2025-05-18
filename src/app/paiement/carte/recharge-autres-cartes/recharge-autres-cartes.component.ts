@@ -19,6 +19,15 @@ export class RechargeAutresCartesComponent implements OnInit {
   mesCartes: CarteDTO[] = [];
   isLoading = false;
 
+formatTND(valeur: number): string {
+  return new Intl.NumberFormat('fr-TN', {
+    style: 'decimal',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(valeur) + ' TND';
+}
+
+
   constructor(
     private fb: FormBuilder,
     private carteService: CarteService
@@ -77,8 +86,8 @@ export class RechargeAutresCartesComponent implements OnInit {
 
     const confirmResult = await Swal.fire({
       title: 'Confirmation de transfert',
-      html: `Voulez-vous vraiment transférer <b>TND ${formData.montant}</b> depuis votre carte 
-             <b>${carteEmetteur?.typeCarte || ''} (${formData.carteEmetteurNum})</b> 
+      html: `Voulez-vous vraiment transférer <b> ${this.formatTND(formData.montant)}</b> depuis votre carte
+             <b>${carteEmetteur?.typeCarte || ''} (${formData.carteEmetteurNum})</b>
              vers la carte <b>${formData.carteRecepteurNum}</b> ?`,
       icon: 'question',
       showCancelButton: true,
@@ -134,6 +143,16 @@ export class RechargeAutresCartesComponent implements OnInit {
     if (!securityData) return;
 
     this.isLoading = true;
+    Swal.fire({
+  title: 'Traitement en cours...',
+  html: 'Veuillez patienter pendant le traitement de votre recharge. Cette opération peut prendre quelques instants.<br><br><b>Merci de ne pas fermer cette fenêtre.</b>',
+  allowOutsideClick: false,
+  allowEscapeKey: false,
+  didOpen: () => {
+    Swal.showLoading();
+  }
+});
+
     this.carteService.rechargerCarte({
       ...formData,
       cvv: securityData.cvv,
@@ -174,14 +193,14 @@ export class RechargeAutresCartesComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     const cursorPosition = input.selectionStart;
     const initialValue = input.value;
-    
+
     const newValue = initialValue.replace(/\s/g, '');
     input.value = newValue;
-    
+
     const spacesRemoved = initialValue.length - newValue.length;
     const newCursorPosition = cursorPosition ? Math.max(0, cursorPosition - spacesRemoved) : 0;
     input.setSelectionRange(newCursorPosition, newCursorPosition);
-    
+
     this.rechargeForm.get('carteRecepteurNum')?.setValue(newValue, { emitEvent: false });
   }
 }

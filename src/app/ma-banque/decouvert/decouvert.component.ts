@@ -28,7 +28,13 @@ demandesParMois: { mois: string, annee: number, demandes: DemandeModificationDec
   // Messages d'erreur/succès
   errorMessage: string | null = null;
   successMessage: string | null = null;
-
+formatTND(valeur: number): string {
+  return new Intl.NumberFormat('fr-TN', {
+    style: 'decimal',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(valeur) + ' TND';
+}
   constructor(
     private decouvertService: DecouvertService,
     private fb: FormBuilder,
@@ -165,7 +171,7 @@ demandesParMois: { mois: string, annee: number, demandes: DemandeModificationDec
             <div style="text-align: left; margin: 10px 0;">
               <p><strong>Type de compte:</strong> ${typeCompte}</p>
               <p><strong>RIB:</strong> ${rib}</p>
-              <p><strong>Montant demandé:</strong> ${montant} TND</p>
+              <p><strong>Montant demandé:</strong> ${this.formatTND(montant)} </p>
             </div>
             ${legalText}
           `,

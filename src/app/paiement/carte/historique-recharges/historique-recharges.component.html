@@ -23,7 +23,7 @@
       <div class="stb-filters-row">
         <div class="stb-search-input">
           <i class="fas fa-credit-card stb-icon"></i>
-          <input type="text" placeholder="Rechercher par numéro de carte..." 
+          <input type="text" placeholder="Rechercher par numéro de carte..."
                  [(ngModel)]="searchTerm" (input)="applyFilters()">
         </div>
 
@@ -32,9 +32,9 @@
             <i class="fas fa-calendar-alt stb-icon"></i>
             <input type="date" [(ngModel)]="dateRange.start" (change)="applyFilters()">
           </div>
-          
+
           <span class="stb-date-separator">à</span>
-          
+
           <div class="stb-date-input">
             <input type="date" [(ngModel)]="dateRange.end" (change)="applyFilters()">
           </div>
@@ -111,7 +111,7 @@
             </td>
             <td>{{ hist.carteEmetteurNum }}</td>
             <td>{{ hist.carteRecepteurNum }}</td>
-            <td class="text-end">{{ hist.montant | number:'1.2-2' }}</td>
+            <td class="text-end">{{ hist.montant| number:'1.2-2'  }}</td>
             <td class="text-end">
               <span *ngIf="isDebit(hist)">{{ hist.frais | number:'1.2-2' }}</span>
               <span *ngIf="!isDebit(hist)" class="text-muted">-</span>
@@ -123,7 +123,7 @@
         </tbody>
       </table>
     </div>
-  
+
     <!-- No Results -->
     <div *ngIf="filteredHistoriques.length === 0" class="stb-no-results">
       <i class="fas fa-info-circle"></i> Aucune transaction ne correspond à vos critères de recherche
@@ -134,24 +134,24 @@
       <button class="stb-page-nav" [disabled]="currentPage === 1" (click)="pageChanged(currentPage - 1)">
         <i class="fas fa-chevron-left"></i>
       </button>
-      
+
       <button *ngIf="currentPage > 3" class="stb-page-num" (click)="pageChanged(1)">1</button>
-      
+
       <span *ngIf="currentPage > 4" class="stb-page-ellipsis">...</span>
-      
-      <button *ngFor="let page of getVisiblePages()" class="stb-page-num" 
+
+      <button *ngFor="let page of getVisiblePages()" class="stb-page-num"
               [class.active]="page === currentPage" (click)="pageChanged(page)">
         {{ page }}
       </button>
-      
+
       <span *ngIf="currentPage < getTotalPages() - 3" class="stb-page-ellipsis">...</span>
-      
-      <button *ngIf="currentPage < getTotalPages() - 2" class="stb-page-num" 
+
+      <button *ngIf="currentPage < getTotalPages() - 2" class="stb-page-num"
               (click)="pageChanged(getTotalPages())">
         {{ getTotalPages() }}
       </button>
-      
-      <button class="stb-page-nav" [disabled]="currentPage === getTotalPages()" 
+
+      <button class="stb-page-nav" [disabled]="currentPage === getTotalPages()"
               (click)="pageChanged(currentPage + 1)">
         <i class="fas fa-chevron-right"></i>
       </button>

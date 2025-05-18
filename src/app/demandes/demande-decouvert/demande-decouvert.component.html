@@ -172,7 +172,7 @@
             <div class="mb-3">
               <label class="form-label small text-muted">Montant demandé</label>
               <p class="fw-semibold mb-0" [ngClass]="selectedDemandDetails?.montant > selectedDemandDetails?.decouvertactuel ? 'text-success' : 'text-danger'">
-                {{ selectedDemandDetails?.montant | currency:'TND':'symbol':'1.2-2' || '--' }}
+                {{ selectedDemandDetails?.montant | currency:'TND':'symbol':'1.2-2':'fr-TN'  || '--' }}
               </p>
             </div>
           </div>
