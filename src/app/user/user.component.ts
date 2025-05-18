@@ -205,7 +205,9 @@ submitModificationRequest(): void {
     },
     error: (err) => {
       console.error('Request error:', err);
-      Swal.fire('Erreur', 'Échec de la soumission de la demande', 'error');
+      // Utiliser le message d'erreur du backend s'il existe, sinon un message par défaut
+      const errorMessage = err.error?.message || 'Échec de la soumission de la demande';
+      Swal.fire('Erreur', errorMessage, 'error');
     }
   });
 }

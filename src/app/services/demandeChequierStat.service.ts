@@ -20,19 +20,20 @@ export class DemandeChequierStatService {
 
 
   getStatistiquesDemandeChequier(): Observable<StatDemandeChequier> {
-    return this.http.get<StatDemandeChequier>('http://localhost:5117/api/agent/statistiques-agent');
+    return this.http.get<StatDemandeChequier>(`${this.api}/statistiques-agent`);
+     
   }
 
   getStatsDecouvert(): Observable<StatDemandeDecouvert> {
-    return this.http.get<StatDemandeDecouvert>('http://localhost:5117/api/agent/statistiques-demandes-decouvert');
+    return this.http.get<StatDemandeDecouvert>(`${this.api}/statistiques-demandes-decouvert`);
   }
 
 
   getStatsReclamation(): Observable<StatReclamation> {
-    return this.http.get<StatReclamation>('http://localhost:5117/api/agent/statistiques-reclamations');
+    return this.http.get<StatReclamation>(`${this.api}/statistiques-reclamations`);
   }
   getStatsKYC(): Observable<StatKYC> {
-    return this.http.get<StatKYC>('http://localhost:5117/api/agent/statistiques-KYC');
+    return this.http.get<StatKYC>(`${this.api}/statistiques-KYC`);
   }
 
 }

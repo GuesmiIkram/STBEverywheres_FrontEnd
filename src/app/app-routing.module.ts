@@ -11,13 +11,18 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './AuthGuard';
+import { VerifyEmailComponent } from './verify-email/verify-email.component';
 
 const routes: Routes = [
   {path:'', component: LoginComponent, data: {breadcrumb: 'Login'}},
 
  {path:'accueil', component: AccueilComponent },
  { path: 'reset-password', component: ResetPasswordComponent },
-
+ { 
+    path: 'verify-email', 
+    component: VerifyEmailComponent,
+    data: { title: 'Vérification Email' } 
+  },
   {path:'home', loadChildren:()=> import('./home/home.module').then(mod => mod.HomeModule), data: {breadcrumb: 'Home'}, canActivate: [AuthGuard] },
 
   // {path:'test-error', component: TestErrorComponent, data: {breadcrumb: 'Test  Errors'}},

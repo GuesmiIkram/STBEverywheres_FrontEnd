@@ -34,6 +34,15 @@ export class LoginComponent implements OnInit {
   registerEmailError: boolean = false;
   registerPasswordError: boolean = false;
   confirmPasswordError: boolean = false;
+// Dans votre classe LoginComponent
+passwordRequirements = {
+  minLength: false,
+  hasUpper: false,
+  hasLower: false,
+  hasNumber: false,
+  hasSpecial: false
+};
+
 
   constructor(
     private authService: AuthService,
@@ -214,7 +223,20 @@ export class LoginComponent implements OnInit {
         break;
     }
   }
+validatePassword(password: string): boolean {
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  return regex.test(password);
+}
 
+updatePasswordRequirements(password: string): void {
+  this.passwordRequirements = {
+    minLength: password.length >= 8,
+    hasUpper: /[A-Z]/.test(password),
+    hasLower: /[a-z]/.test(password),
+    hasNumber: /\d/.test(password),
+    hasSpecial: /[@$!%*?&]/.test(password)
+  };
+}
   // Méthode pour vérifier si les mots de passe correspondent
   checkPasswords(): void {
     this.passwordMismatch = this.registerForm.password !== this.registerForm.confirmPassword;
@@ -262,58 +284,69 @@ export class LoginComponent implements OnInit {
 
   // Méthode pour soumettre le formulaire d'inscription
   onRegister(): void {
-    // Réinitialiser les messages d'erreur
-    this.ribError = this.registerForm.rib === '';
-    this.registerEmailError = this.registerForm.email === '';
-    this.registerPasswordError = this.registerForm.password === '';
-    this.confirmPasswordError = this.registerForm.confirmPassword === '';
-
-    if (this.ribError || this.registerEmailError || this.registerPasswordError || this.confirmPasswordError || this.passwordMismatch) {
-      return; // Ne pas soumettre le formulaire si des champs sont vides ou si les mots de passe ne correspondent pas
+  // Validation des champs
+  this.ribError = this.registerForm.rib === '';
+  this.registerEmailError = this.registerForm.email === '';
+  this.registerPasswordError = this.registerForm.password === '';
+  this.confirmPasswordError = this.registerForm.confirmPassword === '';
+  
+  // Vérification des règles de mot de passe
+  if (this.registerForm.password) {
+    this.updatePasswordRequirements(this.registerForm.password);
+    const isPasswordValid = Object.values(this.passwordRequirements).every(v => v);
+    
+    if (!isPasswordValid) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Mot de passe invalide',
+        html: `
+          <p>Votre mot de passe doit contenir:</p>
+          <ul style="text-align: left; padding-left: 20px;">
+            <li>Minimum 8 caractères</li>
+            <li>Au moins une majuscule</li>
+            <li>Au moins une minuscule</li>
+            <li>Au moins un chiffre</li>
+            <li>Au moins un caractère spécial (@$!%*?&)</li>
+          </ul>
+        `,
+        confirmButtonText: 'OK'
+      });
+      return;
     }
-
-    // Préparer les données pour l'inscription
-    const registerData = {
-      rib: this.registerForm.rib,
-      email: this.registerForm.email,
-      password: this.registerForm.password
-    };
-
-    // Appeler la méthode d'inscription du service AuthService
-    this.clientService.register(registerData).subscribe({
-      next: () => {
-        console.log('Inscription réussie.');
-        Swal.fire({
-          icon: 'success',
-          title: 'Inscription réussie',
-          text: 'Vous pouvez maintenant vous connecter.',
-          timer: 2000,
-          showConfirmButton: false
-        }).then(() => {
-          this.router.navigate(['']);
-        });
-      },
-      error: (err) => {
-        console.error('Erreur lors de l\'inscription :', err);
-
-        // Extraire le message d'erreur en fonction de la structure de l'erreur
-        let errorMessage = 'Erreur lors de l\'inscription';
-        if (err.error && err.error.message) {
-          errorMessage = err.error.message; // Si l'erreur contient un message
-        } else if (err.message) {
-          errorMessage = err.message; // Si l'erreur est une chaîne de caractères
-        } else if (err.error && typeof err.error === 'string') {
-          errorMessage = err.error; // Si l'erreur est une chaîne de caractères dans err.error
-        }
-
-        // Afficher l'alerte avec le message d'erreur
-        Swal.fire({
-          icon: 'error',
-          title: 'Erreur',
-          text: errorMessage,
-        });
-      }
-    });
   }
 
-}
+  if (this.ribError || this.registerEmailError || this.registerPasswordError || 
+      this.confirmPasswordError || this.passwordMismatch) {
+    return;
+  }
+
+  // Appel au service
+  this.clientService.register({
+    rib: this.registerForm.rib,
+    email: this.registerForm.email,
+    password: this.registerForm.password
+  }).subscribe({
+    next: () => {
+      Swal.fire({
+         icon: 'info',
+        title: 'Email de vérification envoyé',
+        text: 'Veuillez vérifier votre boîte mail pour compléter votre inscription',
+        timer: 3000,
+        showConfirmButton: false
+      }).then(() => {
+        this.activeTab = 'login';
+      });
+    },
+    error: (err) => {
+      let errorMessage = 'Erreur lors de l\'inscription';
+      if (err.error?.message) errorMessage = err.error.message;
+      else if (err.message) errorMessage = err.message;
+      
+      Swal.fire({
+        icon: 'error',
+        title: 'Erreur',
+        text: errorMessage,
+      });
+    }
+  });
+  }}
