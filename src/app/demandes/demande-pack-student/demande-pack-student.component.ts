@@ -41,14 +41,6 @@ export class DemandePackStudentComponent implements OnInit {
   }
 
   loadStudentDemands(): void {
-    Swal.fire({
-      title: 'Chargement...',
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      }
-    });
-
     this.packService.getStudentDemandsByAgency().subscribe({
       next: (data: Demand[]) => {
         Swal.close();

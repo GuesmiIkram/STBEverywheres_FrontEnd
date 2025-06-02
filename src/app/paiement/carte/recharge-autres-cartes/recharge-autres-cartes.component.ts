@@ -63,42 +63,53 @@ formatTND(valeur: number): string {
     });
   }
 
-  async onSubmit(): Promise<void> {
+ async onSubmit(): Promise<void> {
+    // Validation du formulaire
     if (this.rechargeForm.invalid) {
       this.markFormGroupTouched(this.rechargeForm);
       Swal.fire('Erreur', 'Veuillez vérifier les informations saisies', 'error');
       return;
     }
 
+    // Préparation des données
     const formData = {
       ...this.rechargeForm.value,
       carteEmetteurNum: this.rechargeForm.value.carteEmetteurNum.replace(/\s/g, ''),
       carteRecepteurNum: this.rechargeForm.value.carteRecepteurNum.replace(/\s/g, '')
     };
 
+    // Vérification qu'on ne recharge pas la même carte
     if (formData.carteEmetteurNum === formData.carteRecepteurNum) {
       Swal.fire('Erreur', 'Vous ne pouvez pas recharger la même carte', 'error');
       return;
     }
 
-    // Trouver la carte émettrice pour afficher son type dans la confirmation
+    // Récupération des infos de la carte émettrice
     const carteEmetteur = this.mesCartes.find(c => c.numCarte === formData.carteEmetteurNum);
+    if (!carteEmetteur) {
+      Swal.fire('Erreur', 'Carte émettrice introuvable', 'error');
+      return;
+    }
 
+    // Confirmation de l'opération
     const confirmResult = await Swal.fire({
       title: 'Confirmation de transfert',
-      html: `Voulez-vous vraiment transférer <b> ${this.formatTND(formData.montant)}</b> depuis votre carte
-             <b>${carteEmetteur?.typeCarte || ''} (${formData.carteEmetteurNum})</b>
+      html: `Voulez-vous vraiment transférer <b>${this.formatTND(formData.montant)}</b> depuis votre carte
+             <b>${carteEmetteur.typeCarte} (${formData.carteEmetteurNum})</b>
              vers la carte <b>${formData.carteRecepteurNum}</b> ?`,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Oui, continuer',
-      cancelButtonText: 'Annuler'
+      cancelButtonText: 'Annuler',
+      backdrop: true,
+      allowOutsideClick: false
     });
 
     if (!confirmResult.isConfirmed) return;
 
+    // Saisie des informations de sécurité
     const { value: securityData } = await Swal.fire<SecurityFormData>({
       title: 'Validation de sécurité',
       html: `
@@ -107,11 +118,13 @@ formatTND(valeur: number): string {
         </div>
         <div class="form-group text-left">
           <label for="swal-cvv">Code CVV (3 chiffres)</label>
-          <input id="swal-cvv" class="swal2-input" type="password" maxlength="3" placeholder="•••">
+          <input id="swal-cvv" class="swal2-input" type="password" maxlength="3" placeholder="•••"
+                 pattern="\\d{3}" inputmode="numeric">
         </div>
         <div class="form-group text-left mt-3">
           <label for="swal-expiry">Date d'expiration (MM/AA)</label>
-          <input id="swal-expiry" class="swal2-input" maxlength="5" placeholder="MM/AA">
+          <input id="swal-expiry" class="swal2-input" maxlength="5" placeholder="MM/AA"
+                 pattern="(0[1-9]|1[0-2])\\/([0-9]{2})">
         </div>
       `,
       focusConfirm: false,
@@ -124,9 +137,8 @@ formatTND(valeur: number): string {
         return { cvv, expiry };
       },
       inputValidator: (value: SecurityFormData | string) => {
-        if (typeof value === 'string') {
-          return value;
-        }
+        if (typeof value === 'string') return value;
+        
         if (!value?.cvv || !value?.expiry) {
           return 'Tous les champs sont obligatoires';
         }
@@ -137,22 +149,26 @@ formatTND(valeur: number): string {
           return 'Format de date invalide (MM/AA)';
         }
         return null;
-      }
+      },
+      backdrop: true,
+      allowOutsideClick: false
     });
 
     if (!securityData) return;
 
+    // Affichage du loader
     this.isLoading = true;
     Swal.fire({
-  title: 'Traitement en cours...',
-  html: 'Veuillez patienter pendant le traitement de votre recharge. Cette opération peut prendre quelques instants.<br><br><b>Merci de ne pas fermer cette fenêtre.</b>',
-  allowOutsideClick: false,
-  allowEscapeKey: false,
-  didOpen: () => {
-    Swal.showLoading();
-  }
-});
+      title: 'Traitement en cours...',
+      html: 'Veuillez patienter pendant le traitement de votre recharge. Cette opération peut prendre quelques instants.<br><br><b>Merci de ne pas fermer cette fenêtre.</b>',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
 
+    // Appel au service
     this.carteService.rechargerCarte({
       ...formData,
       cvv: securityData.cvv,
@@ -164,15 +180,39 @@ formatTND(valeur: number): string {
           text: 'Recharge effectuée avec succès',
           icon: 'success',
           timer: 2000,
-          showConfirmButton: false
+          showConfirmButton: false,
+          willClose: () => {
+            this.rechargeForm.reset();
+            this.loadMesCartes();
+          }
         });
-        this.rechargeForm.reset();
-        this.loadMesCartes();
       },
       error: (err) => {
         console.error('Erreur lors de la recharge:', err);
-        const errorMsg = err.error?.message || 'Une erreur est survenue lors de la recharge';
-        Swal.fire('Erreur', errorMsg, 'error');
+        
+        let errorMsg = 'Une erreur est survenue lors de la recharge';
+        
+        if (err.error) {
+          // Gestion des différents formats d'erreur
+          if (err.error.message) {
+            errorMsg = err.error.message;
+          } else if (err.error.error) {
+            errorMsg = err.error.error;
+          } else if (err.error.errors) {
+            errorMsg = Object.values(err.error.errors).join('\n');
+          } else if (typeof err.error === 'string') {
+            errorMsg = err.error;
+          }
+        } else if (err.message) {
+          errorMsg = err.message;
+        }
+
+        Swal.fire({
+          title: 'Erreur',
+          text: errorMsg,
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
       },
       complete: () => {
         this.isLoading = false;

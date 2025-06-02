@@ -49,6 +49,10 @@
       <div class="forgot-password-link">
         <a (click)="openForgotPasswordDialog()">Mot de passe oublié ?</a>
       </div>
+ <div *ngIf="isLockedOut" class="alert alert-warning mt-3">
+  Compte temporairement bloqué. Réessayez dans <strong>{{ lockoutSeconds }}</strong> secondes.
+</div>
+
 
     </div>
 

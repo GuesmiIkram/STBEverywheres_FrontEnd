@@ -35,7 +35,7 @@
               </div>
               <div class="info-item">
                 <span class="info-label">Plafond</span>
-                <span class="info-value">{{ chequier.plafondChequier | number:'1.3-3' }} TND</span>
+                <span class="info-value">{{ chequier.plafondChequier | currency:'TND':'symbol':'1.2-2':'fr-TN'  }} </span>
               </div>
               <div class="info-item">
                 <span class="info-label">Date Livraison</span>
@@ -90,7 +90,7 @@
                 </div>
                 <div class="info-row">
                   <div class="info-label">Plafond total</div>
-                  <div class="info-value">{{ selectedChequier?.plafondChequier | currency:'TND':'symbol':'1.2-2' }}</div>
+                  <div class="info-value">{{ selectedChequier?.plafondChequier | currency:'TND':'symbol':'1.2-2':'fr-TN' }}</div>
                 </div>
               </div>
             </div>

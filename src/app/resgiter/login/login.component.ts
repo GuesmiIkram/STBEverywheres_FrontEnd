@@ -25,6 +25,9 @@ export class LoginComponent implements OnInit {
     confirmPassword: ''
   };
   passwordMismatch: boolean = false;
+  isLockedOut = false;
+  lockoutSeconds: number = 0;
+  lockoutInterval: any;
 
   // Variables pour les messages d'erreur
   emailError: boolean = false;
@@ -260,26 +263,58 @@ updatePasswordRequirements(password: string): void {
     });
   }*/
 
-    onSubmit(): void {
-      this.authService.login(this.loginForm.email, this.loginForm.password).subscribe({
-        next: (response) => {
-          console.log('Connexion réussie, données:', {
-            role: this.authService.getUserRole(),
-            userId: this.authService.getUserId()
-          });
-          //sessionStorage.setItem("",document.cookie);
-          //console.log(document.cookie);
-          this.router.navigate(['/home']).then(() => {
-            // Rechargez le composant pour actualiser le sidebar
-            window.location.reload();
-          });
-        },
-        error: (err) => {
-          console.error('Erreur de connexion:', err);
-          Swal.fire('Erreur', err.message || 'Échec de la connexion', 'error');
-        }
-      });
+onSubmit(): void {
+  if (this.isLockedOut) return;
+
+  this.authService.login(this.loginForm.email, this.loginForm.password).subscribe({
+    next: (response) => {
+      this.router.navigate(['/home']).then(() => window.location.reload());
+    },
+    error: (err) => {
+      console.log('Structure complète de l\'erreur:', err); // Debug crucial
+      
+      // Extraction robuste de remainingSeconds
+      const remainingSeconds = err?.error?.remainingSeconds 
+                           || err?.originalError?.remainingSeconds 
+                           || null;
+
+      console.log('Temps restant extrait:', remainingSeconds); // Debug
+
+      if (remainingSeconds !== null && remainingSeconds > 0) {
+        this.startLockoutTimer(remainingSeconds);
+        
+        // Affiche le compte à rebours
+        Swal.fire({
+          icon: 'warning',
+          title: 'Compte bloqué',
+          html: `Trop de tentatives. Réessayez dans <b>${remainingSeconds}</b> secondes.`,
+          timer: remainingSeconds * 1000,
+          timerProgressBar: true,
+          showConfirmButton: false
+        });
+      } else {
+        const errorMessage = err?.error?.message 
+                          || err?.originalError?.message 
+                          || 'Erreur de connexion';
+        Swal.fire('Erreur', errorMessage, 'error');
+      }
     }
+  });
+}
+startLockoutTimer(seconds: number) {
+  console.log('Chrono démarré pour', seconds, 'secondes');
+  this.isLockedOut = true;
+  this.lockoutSeconds = seconds;
+
+  this.lockoutInterval = setInterval(() => {
+    this.lockoutSeconds--;
+    if (this.lockoutSeconds <= 0) {
+      clearInterval(this.lockoutInterval);
+      this.isLockedOut = false;
+    }
+  }, 1000);
+}
+
 
   // Méthode pour soumettre le formulaire d'inscription
   onRegister(): void {

@@ -45,7 +45,7 @@ export class UserComponent implements OnInit {
     nomMere: '',
     nomPere: '',
   };
-
+pendingRequests: any[] = [];
   selectedFile: File | null = null;
   changePasswordData = {
     currentPassword: '',
@@ -262,6 +262,10 @@ submitModificationRequest(): void {
       Swal.fire('Erreur', errorMsg, 'error');
     }
   });
+}
+hasPendingRequest(field: string): boolean {
+    return this.pendingRequests.some(r => r.fieldToModify.toLowerCase() === field.toLowerCase()
+    );
 }
   removeProfileImage(): void {
     if (this.client) {

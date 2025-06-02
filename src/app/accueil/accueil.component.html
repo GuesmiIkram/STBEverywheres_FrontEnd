@@ -8,7 +8,8 @@
     </div>
 
     <div class="auth-buttons">
-      <a href="#" class="btn btn-primary">
+      <a routerLink="/login" class="btn btn-primary">
+
         <i class="fas fa-user-circle"></i> Espace client
       </a>
       <a href="#" class="btn btn-secondary">
@@ -615,106 +616,62 @@
       </div>
     </div>
   </section>
- <style>
-        /* SCSS */
-        .faq-section {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-
-            .faq-item {
-                border-bottom: 1px solid #ddd;
-                padding: 1rem 0;
-                cursor: pointer;
-
-                &:last-child {
-                    border-bottom: none;
-                }
-
-                .faq-question {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    font-weight: 500;
-                    color: #333;
-                    transition: color 0.3s ease;
-
-                    &::after {
-                        content: '▼';
-                        font-size: 0.8em;
-                        transition: transform 0.3s ease;
-                    }
-
-                    &:hover {
-                        color: #0066cc;
-                    }
-                }
-
-                .answer {
-                    max-height: 0;
-                    overflow: hidden;
-                    color: #666;
-                    transition: max-height 0.3s ease-out;
-                    padding-left: 1rem;
-
-                    p {
-                        margin-top: 0.5rem;
-                        padding: 0.5rem 0;
-                    }
-                }
-
-                &.active {
-                    .faq-question::after {
-                        transform: rotate(180deg);
-                    }
-
-                    .answer {
-                        max-height: 500px; /* Ajuster selon le contenu */
-                    }
-                }
-            }
-        }
-    </style>
-  <!-- Section FAQ -->
-   <section class="faq-section">
-        <h1>Questions Fréquentes</h1>
-
-        <div class="faq-item">
-            <div class="faq-question">Je suis un nouvel abonné à STBNet. Comment recevoir mon identifiant et mon mot de passe ?</div>
-            <div class="answer">
-                <p>Votre identifiant et mot de passe vous sont remis par SMS et par email dès l’activation de votre abonnement STBNet.</p>
+ <section class="security-section">
+  <div class="container">
+    <div class="security-grid">
+      <div class="security-content">
+        <h2>Sécurité et confidentialité</h2>
+        <p>Chez STB, votre sécurité est notre priorité absolue. Nous utilisons les technologies les plus avancées pour protéger vos données et transactions bancaires.</p>
+        
+        <div class="security-features">
+          <div class="security-feature">
+            <div class="feature-icon">
+              <i class="fas fa-shield-alt"></i>
             </div>
-        </div>
-
-        <div class="faq-item">
-            <div class="faq-question">Est-ce qu’il y a des règles particulières dans la saisie d’un nouveau mot de passe ?</div>
-            <div class="answer">
-                <p>(Réponse exemple) Oui, le mot de passe doit contenir au moins 8 caractères avec des majuscules, minuscules et chiffres.</p>
+            <h3>Protection avancée</h3>
+            <p>La sécurité de vos virements est notre priorité. Vos données sont chiffrées et protégées contre tout accès non autorisé.</p>
+          </div>
+          
+          <div class="security-feature">
+            <div class="feature-icon">
+              <i class="fas fa-lock"></i>
             </div>
+             <h3>Double authentification</h3>
+            <p>Nous avons implémenté la validation par code OTP envoyé sur votre mobile pour chaque opération sensible.</p>
+          </div>
+          
+          <div class="security-feature">
+            <div class="feature-icon">
+              <i class="fas fa-user-shield"></i>
+            </div>
+            <h3>Confidentialité garantie</h3>
+            <p>Vos informations personnelles sont strictement confidentielles et jamais partagées avec des tiers.</p>
+          </div>
         </div>
-
-        <!-- Ajoutez les autres questions/réponses de la même manière -->
-        <!-- ... (autres éléments FAQ) ... -->
-
-    </section>
-
-    <script>
-        // JavaScript pour le dépliage
-        document.querySelectorAll('.faq-question').forEach(item => {
-            item.addEventListener('click', event => {
-                const parent = item.parentElement;
-                parent.classList.toggle('active');
-
-                // Fermer les autres éléments ouverts
-                document.querySelectorAll('.faq-item').forEach(otherItem => {
-                    if (otherItem !== parent) {
-                        otherItem.classList.remove('active');
-                    }
-                });
-            });
-        });
-    </script>
-
+      </div>
+      
+      <div class="security-badge">
+        <div class="badge-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <h3>100% Sécurisé</h3>
+        <p>Toutes vos transactions sont protégées par nos systèmes de sécurité avancés</p>
+        
+        <div class="security-certifications">
+          <div class="certification">
+            <i class="fas fa-check-circle"></i> ISO 27001
+          </div>
+          <div class="certification">
+            <i class="fas fa-check-circle"></i> PCI DSS
+          </div>
+          <div class="certification">
+            <i class="fas fa-check-circle"></i> Vérification OTP systématique
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 
   <!-- Footer -->

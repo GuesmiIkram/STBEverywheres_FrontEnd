@@ -1,7 +1,8 @@
 // Variables
 $primary-blue: #1e3a8a;
 $secondary-teal: #0f766e;
-$accent-yellow: #f59e0b;
+$primary-color: #3366cc;
+
 $text-dark: #1e293b;
 $text-gray: #64748b;
 $background-color: #f1f5f9;
@@ -43,7 +44,7 @@ body {
   background: $gradient;
   padding: 20px;
   text-align: center;
-  
+
   img {
     height: 80px;
     width: auto;
@@ -66,13 +67,13 @@ body {
   color: $text-gray;
   cursor: pointer;
   transition: color 0.3s ease;
-  
+
   &.active {
     color: $text-dark;
     font-weight: 600;
-    border-bottom: 3px solid $accent-yellow;
+    border-bottom: 3px solid $primary-color;
   }
-  
+
   &:hover:not(.active) {
     color: darken($text-gray, 15%);
   }
@@ -81,7 +82,7 @@ body {
 // Formulaire
 .auth-form {
   padding: 20px 30px 30px;
-  
+
   form {
     display: flex;
     flex-direction: column;
@@ -110,27 +111,27 @@ body {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  
+
   label {
     font-size: 14px;
     font-weight: 500;
     color: $text-dark;
     display: flex;
     align-items: center;
-    
+
     &:after {
       content: '*';
-      color: $accent-yellow;
+      color: $error-color;
       margin-left: 4px;
     }
   }
-  
+
   .error-message {
     color: $error-color;
     font-size: 12px;
     margin-top: 5px;
   }
-  
+
   .input-error {
     border-color: $error-color;
   }
@@ -140,7 +141,7 @@ body {
 .input-container {
   display: flex;
   width: 100%;
-  
+
   .input-icon {
     display: flex;
     align-items: center;
@@ -153,7 +154,7 @@ body {
     border-radius: 4px 0 0 4px;
     color: $text-gray;
   }
-  
+
   input {
     flex: 1;
     border-radius: 0 4px 4px 0;
@@ -168,7 +169,7 @@ input {
   border-radius: 4px;
   font-size: 14px;
   transition: border-color 0.3s ease;
-  
+
   &:focus {
     outline: none;
     border-color: $secondary-teal;
@@ -187,11 +188,11 @@ input {
   cursor: pointer;
   transition: opacity 0.3s ease;
   margin-top: 10px;
-  
+
   &:hover {
     opacity: 0.9;
   }
-  
+
   &:disabled {
     opacity: 0.7;
     cursor: not-allowed;
@@ -202,14 +203,14 @@ input {
 .forgot-password-link {
   text-align: center;
   margin-top: 15px;
-  
+
   a {
     color: $secondary-teal;
     font-size: 14px;
     text-decoration: none;
     transition: color 0.3s ease;
     cursor: pointer;
-    
+
     &:hover {
       color: $primary-blue;
     }
@@ -221,7 +222,7 @@ input {
   .auth-card {
     max-width: 100%;
   }
-  
+
   .auth-form {
     padding: 20px;
   }

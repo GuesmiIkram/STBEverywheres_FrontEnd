@@ -15,7 +15,7 @@
 
           <div class="card">
               <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-                <img [src]="client?.photoClient ? 'http://localhost:5260/Images/' + client.photoClient : 'assets/img/default.png'" alt="Profile"  class="rounded-circle">
+                <img [src]="client?.photoClient ? 'http://localhost:8083/images/' + client.photoClient : 'assets/img/default.png'" alt="Profile"  class="rounded-circle">
                   <h2>{{ client.nom }}{{ client.prenom }}</h2>
                   <h3>{{ client.situationProfessionnelle }}</h3>
               </div>
@@ -183,7 +183,7 @@
                               <div class="row mb-3">
                                   <label class="col-md-4 col-lg-3 col-form-label">Photo de profil</label>
                                   <div class="col-md-8 col-lg-9">
-                                      <img [src]="client?.photoClient ? 'http://localhost:5260/Images/' + client.photoClient : 'assets/img/default.png'"
+                                      <img [src]="client?.photoClient ? 'http://localhost:8083/images/' + client.photoClient : 'assets/img/default.png'"
                                            alt="Profile" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover;">
                                       <div class="pt-2">
                                         <div class="pt-2 d-flex gap-2">
@@ -297,7 +297,9 @@
 <label class="form-label">{{ getJustificatifLabel() }}</label>
 <input type="file" class="form-control" (change)="onJustificationFileSelected($event)" required>
 <small class="text-muted">Format PDF, JPG ou PNG (max 5MB)</small>
-
+  <small *ngIf="hasPendingRequest(selectedField)" class="text-danger">
+        Vous avez déjà une demande en cours pour ce champ
+    </small>
                                   <button class="btn btn-primary" (click)="submitModificationRequest()"
                                           [disabled]="!newFieldValue || !justificationFile">
                                       <i class="bi bi-send"></i> Soumettre la demande

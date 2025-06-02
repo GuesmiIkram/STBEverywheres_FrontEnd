@@ -25,7 +25,7 @@ export class DemandeCarteComponent implements OnInit {
   filteredDemandes: DemandeCarte[] = [];
   pagedDemandes: DemandeCarte[] = [];
   isLoading = false;
-  selectedStatus: string = '';
+ selectedStatus: string = 'DisponibleEnAgence';
   selectedDemandeId: number | null = null;
   accountFilter: string = '';
   showStatusModal: boolean = false;
@@ -60,6 +60,7 @@ export class DemandeCarteComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadDemandes();
+  
   }
 
   loadDemandes(): void {
@@ -116,12 +117,15 @@ export class DemandeCarteComponent implements OnInit {
     this.selectedDemandeId = demandeId;
     this.selectedDemande = this.demandes.find(d => d.iddemande === demandeId) || null;
     
-    if (!isNaN(Number(currentStatus))) {
-      const statusNum = parseInt(currentStatus, 10);
-      this.selectedStatus = this.numberToStatusMap[statusNum] || 'EnCours';
-    } else {
-      this.selectedStatus = currentStatus;
-    }
+  /*
+if (!isNaN(Number(currentStatus))) {
+  const statusNum = parseInt(currentStatus, 10);
+  this.selectedStatus = this.numberToStatusMap[statusNum] || 'EnCours';
+} else {
+  this.selectedStatus = currentStatus;
+}
+*/
+   this.selectedStatus = 'DisponibleEnAgence';
     
     this.showStatusModal = true;
   }

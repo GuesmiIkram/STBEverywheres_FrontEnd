@@ -45,7 +45,8 @@ export class CarteComponent implements OnInit {
         case NomCarte.Mastercard:
           return 'assets/img/CARTE-MASTERCARD-GOLD-INTERNATIONALE-350x238-1.webp';
       case NomCarte.VisaPlatinum:
-        return 'assets/img/visa-platinum.jpg';
+        return 'assets/img/CARTE_VISA_PLATINUM_BUSINESS_NATIONALE.png';
+     
         case  NomCarte.C_cash:
           return 'assets/img/Ccash.png';
       case NomCarte.C_pay:

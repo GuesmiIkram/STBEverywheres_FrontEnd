@@ -14,15 +14,16 @@ import { AuthGuard } from './AuthGuard';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 
 const routes: Routes = [
-  {path:'', component: LoginComponent, data: {breadcrumb: 'Login'}},
+  //{path:'', component: LoginComponent, data: {breadcrumb: 'Login'}},
 
- {path:'accueil', component: AccueilComponent },
+  { path: '', redirectTo: '/accueil', pathMatch: 'full' },
+  { path: 'accueil', component: AccueilComponent },
+
+ //{path:'accueil', component: AccueilComponent },
+  {path:'login', component: LoginComponent },
+
  { path: 'reset-password', component: ResetPasswordComponent },
- { 
-    path: 'verify-email', 
-    component: VerifyEmailComponent,
-    data: { title: 'Vérification Email' } 
-  },
+
   {path:'home', loadChildren:()=> import('./home/home.module').then(mod => mod.HomeModule), data: {breadcrumb: 'Home'}, canActivate: [AuthGuard] },
 
   // {path:'test-error', component: TestErrorComponent, data: {breadcrumb: 'Test  Errors'}},
@@ -38,11 +39,10 @@ const routes: Routes = [
   { path: 'ma-banque', loadChildren: () => import('./ma-banque/ma-banque.module').then(m => m.MaBanqueModule), canActivate: [AuthGuard] },
   { path: 'demandes', loadChildren: () => import('./demandes/demandes.module').then(m => m.DemandesModule) , canActivate: [AuthGuard]},
 
-  {path:'**', redirectTo:'not-found', pathMatch: 'full'},
 {
     path: 'verify-email',
     component: VerifyEmailComponent,
-    data: { title: 'Vérification Email' }
+    data: { title: 'VÃ©rification Email' }
   },
 
    //{ path: 'user',component:UserComponent, loadChildren: () => import('./user/user.module').then(mod => mod.UserModule), data: { breadcrumb: 'User'} },

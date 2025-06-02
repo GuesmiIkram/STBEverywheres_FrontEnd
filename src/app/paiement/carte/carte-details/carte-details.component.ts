@@ -51,7 +51,7 @@ export class CarteDetailsComponent implements OnInit {
   getCarteImage(nomCarte: string): string {
     switch (nomCarte) {
       case  NomCarte.CIB:
-        return 'assets/img/CARTE-MASTERCARD-GOLD-INTERNATIONALE-350x238-1.webp';
+        return 'assets/img/PFBB01.png';
 
       case  NomCarte.Epargne:
           return 'assets/img/Carte_STB_Epargne.png';
@@ -62,13 +62,14 @@ export class CarteDetailsComponent implements OnInit {
         case NomCarte.Mastercard:
           return 'assets/img/CARTE-MASTERCARD-GOLD-INTERNATIONALE-350x238-1.webp';
       case NomCarte.VisaPlatinum:
-        return 'assets/images/visa-platinum.jpg';
+        return 'assets/img/CARTE_VISA_PLATINUM_BUSINESS_NATIONALE.png';
         case  NomCarte.C_cash:
           return 'assets/img/Ccash.png';
       case NomCarte.C_pay:
         return 'assets/img/Cpay.png';
-      
-     
+        case NomCarte.Tecno:
+          return 'assets/img/PFBBSC.png';
+
       default:
         return 'assets/images/default-card.jpg';
     }

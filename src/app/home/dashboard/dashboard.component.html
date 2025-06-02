@@ -104,9 +104,15 @@
 
 
 
-              <div class="solde-container">
-                <span class="solde-value">{{ getNombreFormate(compte.solde) }}</span>
-              </div>
+             
+
+<div class="solde-container">
+  <span
+    class="solde-value"
+    [ngClass]="{ 'negatif': compte.solde < 0 }">
+    {{ getNombreFormate(compte.solde) }}
+  </span>
+</div>
 
 
             </div>
@@ -157,7 +163,7 @@
               <i class="bi bi-arrow-up-right"></i>
             </div>
             <div class="historique-modal__transaction-details">
-              <div class="historique-modal__transaction-title">Paiement</div>
+              <div class="historique-modal__transaction-title">{{ virement.motif || 'Paiement' }}</div>
               <div class="historique-modal__transaction-subtitle">RIB Récepteur: {{ virement.riB_Recepteur }}</div>
               <div class="historique-modal__transaction-date">{{ virement.date | date:'d MMMM yyyy' }}</div>
             </div>
