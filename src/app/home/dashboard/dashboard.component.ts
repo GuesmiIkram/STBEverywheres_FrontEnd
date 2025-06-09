@@ -127,6 +127,7 @@ export class DashboardComponent implements OnInit {
   }
 
 // Créer un compte
+// Créer un compte
 createCompte(): void {
   // Vérifier si le type de compte est sélectionné
   if (!this.compteDto.type) {
@@ -166,17 +167,31 @@ createCompte(): void {
         error: (err) => {
           console.error('Erreur lors de la création du compte:', err);
 
-          // Afficher un message d'erreur avec Swal
-          const errorMessage = err.error?.message || 'Une erreur est survenue lors de la création du compte.';
+          const rawMessage = err.error?.message || 'Une erreur est survenue lors de la création du compte.';
+
+ const formattedMessage = rawMessage.includes("STBEverywhere")
+            ? rawMessage
+              .replace(
+  /Conformément à la politique d’ouverture de comptes sur la plateforme STBEverywhere,/gi,
+  '<i class="fas fa-university" style="color: #004080;"></i> <strong>Politique STBEverywhere :</strong><br/><br/>'
+)
+
+                .replace(/(un maximum de .*? est autorisé en ligne)/i, '<u>$1</u>')
+                .replace(/(Vous détenez actuellement .*?\.)/i, '<br/><br/>$1')
+                .replace(/(Pour toute ouverture supplémentaire.*?)$/, '<br/><br/>$1')
+            : rawMessage;
+
           Swal.fire({
-            icon: 'error',
-            title: 'Erreur',
-            text: errorMessage,
-            confirmButtonText: 'OK',
+            icon: rawMessage.includes("STBEverywhere") ? 'warning' : 'error',
+            title: rawMessage.includes("STBEverywhere") ? 'Limite atteinte' : 'Erreur',
+            html: `<div style="text-align: left;">${formattedMessage}</div>`,
+            confirmButtonText: 'Compris',
+            confirmButtonColor: '#3085d6',
           });
 
-          // Afficher l'erreur dans le formulaire (optionnel)
-          this.errorMessage = errorMessage;
+
+
+
         }
       });
     }
