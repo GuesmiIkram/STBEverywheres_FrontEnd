@@ -49,7 +49,7 @@ verificationStatus: 'pending' | 'success' | 'error' = 'pending';
 }
 
 
-  showSuccessAlert(message: string): void {
+ /* showSuccessAlert(message: string): void {
     Swal.fire({
       icon: 'success',
       title: 'Email vérifié!',
@@ -62,6 +62,30 @@ verificationStatus: 'pending' | 'success' | 'error' = 'pending';
       }
     });
   }
+*/
+
+showSuccessAlert(message: any): void {
+  // Extraire le vrai message s’il est dans un objet
+  const textMessage =
+    typeof message === 'string'
+      ? message
+      : message?.message || 'Votre email a été vérifié avec succès.';
+
+  Swal.fire({
+    icon: 'success',
+    title: 'Email vérifié!',
+    text: textMessage,
+    confirmButtonText: 'Se connecter',
+    allowOutsideClick: false
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.router.navigate(['/login']);
+    }
+  });
+}
+
+
+
 
   showErrorAlert(): void {
     Swal.fire({

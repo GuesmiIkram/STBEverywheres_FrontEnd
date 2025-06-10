@@ -538,11 +538,15 @@ body {
 }
 
 .solde-value {
-
-
-  font-size: 20px; font-weight: bold; color:
-#4154f1;
+  font-size: 20px;
+  font-weight: bold;
+  color: #4154f1; /* bleu par défaut */
 }
+
+.negatif {
+  color: red; /* rouge si solde négatif */
+}
+
 
 .currency {
   font-size: 14px;
@@ -1374,4 +1378,11 @@ $historique-transition: all 0.2s ease;
   border: none;
   padding: 8px 20px;
   border-radius: 5px;
+}
+
+
+
+
+.swal2-icon.swal2-warning {
+  color: #cc0000 !important; /* rouge professionnel */
 }

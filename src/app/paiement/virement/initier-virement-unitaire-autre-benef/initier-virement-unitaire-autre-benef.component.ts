@@ -190,8 +190,8 @@ openAddBeneficiaireModal(): void {
       OtpCode: ''
     };
 
-    const compteEmetteur = this.comptes.find(c => c.rib === virementData.RIB_Emetteur);
-    if (compteEmetteur && (compteEmetteur.solde < virementData.Montant)) {
+    /*const compteEmetteur = this.comptes.find(c => c.rib === virementData.RIB_Emetteur);
+    if (compteEmetteur && ((compteEmetteur.solde+compteEmetteur.decouvertAutorise) < virementData.Montant)) {
       Swal.fire({
          icon: 'warning',
         title: 'Solde insuffisant',
@@ -203,7 +203,43 @@ openAddBeneficiaireModal(): void {
         confirmButtonText: 'Compris'
       });
       return;
+    }*/
+
+
+
+
+
+      const compteEmetteur = this.comptes.find(c => c.rib === virementData.RIB_Emetteur);
+if (compteEmetteur && ((compteEmetteur.solde + compteEmetteur.decouvertAutorise) < virementData.Montant)) {
+  Swal.fire({
+    title: 'Solde insuffisant',
+    icon: 'warning',
+    html: `
+      <div style="text-align: left; margin: 10px 0;">
+        <p><strong>Votre solde actuel :</strong> ${this.formatTND(compteEmetteur.solde)} TND</p>
+        <p><strong>Montant du virement :</strong> ${this.formatTND(virementData.Montant)} TND</p>
+        <p style="color: #dc3545; font-weight: bold; margin-top: 10px;">
+          Solde insuffisant pour effectuer cette opération.
+        </p>
+      </div>
+      <div style="font-size: 12px; color: #666; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
+        <p><i class="fas fa-exclamation-triangle" style="color: #dc3545; margin-right: 5px;"></i>
+        Veuillez vérifier votre solde ou choisir un montant inférieur.</p>
+      </div>
+    `,
+    confirmButtonText: 'Compris',
+    confirmButtonColor: '#3366cc',
+    customClass: {
+      container: 'swal-bank-container',
+      popup: 'swal-bank-popup',
+      title: 'swal-bank-title',
+      htmlContainer: 'swal-bank-html',
+      confirmButton: 'swal-bank-confirm-btn'
     }
+  });
+  return;
+}
+
 
      Swal.fire({
       title: 'Confirmez le virement unitaire',

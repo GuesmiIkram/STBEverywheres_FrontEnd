@@ -130,7 +130,7 @@
             <td class="date-cell">
               <div class="date-content">
                 <span class="date-value">{{ rec.dateCreation | date:'dd/MM/yyyy' }}</span>
-                <span class="time-value">{{ rec.dateCreation | date:'HH:mm' }}</span>
+
               </div>
             </td>
             <td class="actions-cell">
@@ -244,7 +244,8 @@ class="pagination-btn"
           <h4>Détails de la réclamation</h4>
           <span class="reclamation-date">
             <i class="fas fa-calendar-alt"></i>
-            {{ selectedReclamation.dateCreation | date:'dd MMMM yyyy à HH:mm':'':'fr' }}
+         {{ selectedReclamation.dateCreation | date:'dd MMMM yyyy':'':'fr' }}
+
           </span>
         </div>
 

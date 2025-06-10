@@ -21,7 +21,7 @@
       <select formControlName="ribEmetteur" class="form-control" required>
         <option value="">Sélectionner un compte</option>
         <option *ngFor="let compte of comptes" [value]="compte.rib">
-          {{ compte.rib }} - {{ compte.type }} ({{ compte.solde | currency:'TND':'symbol':'1.2-2':'fr-TN' }} TND)
+          {{ compte.rib }} - {{ compte.type }} ({{ compte.solde | currency:'TND':'symbol':'1.2-2':'fr-TN' }})
         </option>
       </select>
 

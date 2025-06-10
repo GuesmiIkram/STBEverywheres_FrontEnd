@@ -37,36 +37,27 @@ export class AuthService {
     );
   }
   // Login method
-  login(email: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, { email, password }).pipe(
-      tap((response: any) => {
-        console.log('Réponse de login du backend', response);
+ login(email: string, password: string): Observable<any> {
+  return this.http.post(`${this.apiUrl}/login`, { email, password }).pipe(
+    tap((response: any) => {
+      console.log('Réponse de login du backend', response);
+      this.setTokens(response.token, response.refreshToken);
 
-        // Utilisez les mêmes noms de propriétés que la réponse (minuscules)
-        this.setTokens(response.token, response.refreshToken); // minuscules
-
-        console.log('userRole:', response.role); // minuscule
-        console.log('userId:', response.userId); // minuscule
-
-        if (response.role) {
-          localStorage.setItem('userRole', response.role);
-        }
-        if (response.userId) {
-          localStorage.setItem('userId', response.userId.toString());
-        }
-        if (response.clientId) {
-          localStorage.setItem('clientId', response.clientId.toString());
-        }
-        if (response.agentId) {
-          localStorage.setItem('agentId', response.agentId.toString());
-        }
-      }),
-      catchError((error) => {
-        console.error('Login error:', error);
-        return throwError(() => new Error(error.error?.message || 'Identifiants incorrects'));
-      })
-    );
-  }
+      if (response.role) localStorage.setItem('userRole', response.role);
+      if (response.userId) localStorage.setItem('userId', response.userId.toString());
+      if (response.clientId) localStorage.setItem('clientId', response.clientId.toString());
+      if (response.agentId) localStorage.setItem('agentId', response.agentId.toString());
+    }),
+    catchError((error) => {
+      console.error('Erreur complète de login:', error); // Debug important
+      // Transmet TOUTE l'erreur au lieu de créer une nouvelle erreur
+      return throwError(() => ({
+        ...error,
+        originalError: error.error // Conservation de la structure originale
+      }));
+    })
+  );
+}
 
 getUserRole(): string {
   return localStorage.getItem('userRole') || '';
@@ -129,18 +120,19 @@ refreshToken(): Observable<any> {
 
   // Logout method
   logout(): void {
-  
+
     this.http.post(`${this.apiUrl}/logout`, {}, { withCredentials: true }).subscribe({
         next: () => {
-     
+
             localStorage.removeItem('AccessToken');
             localStorage.removeItem('RefreshToken');
             localStorage.clear();
             this.router.navigate(['']);
+
         },
         error: (err) => {
             console.error('Logout error:', err);
-         
+
             localStorage.removeItem('AccessToken');
             localStorage.removeItem('RefreshToken');
             localStorage.clear();

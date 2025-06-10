@@ -404,8 +404,56 @@ private processVirement(): void {
     this.ajouterBeneficiaire();
   }
 
-  openAddBeneficiaireModal(): void {
-    const modalRef = this.modalService.open(AddBeneficiaireComponent, { size: 'lg', centered: true });
+
+
+
+
+
+openAddBeneficiaireModal(): void {
+    const modalRef = this.modalService.open(AddBeneficiaireComponent, {
+      size: 'lg',
+      centered: true
+    });
+
+    // Attendre que le modal soit rendu pour insérer le bouton de fermeture
+    setTimeout(() => {
+      const modalElement = document.querySelector('.modal-content');
+      if (modalElement) {
+        const closeButton = document.createElement('button');
+        closeButton.innerHTML = '&times;';
+        closeButton.classList.add('close-modal-btn');
+
+        // Style en ligne pour le bouton de fermeture
+        closeButton.style.position = 'absolute';
+        closeButton.style.top = '5px';  // Moins d'espacement par rapport au haut
+        closeButton.style.right = '5px';  // Moins d'espacement à droite
+        closeButton.style.border = 'none';
+        closeButton.style.backgroundColor = '#dc3545';  // Fond rouge
+        closeButton.style.color = 'white';             // Texte blanc
+        closeButton.style.fontSize = '18px';           // Plus petit pour un bouton plus discret
+        closeButton.style.cursor = 'pointer';
+        closeButton.style.padding = '5px';             // Moins de padding
+        closeButton.style.borderRadius = '0';          // Forme carrée
+        closeButton.style.transition = 'background-color 0.3s ease, color 0.3s ease, transform 0.2s ease';
+        closeButton.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';  // Ombre discrète
+
+        // Effet au survol
+        closeButton.addEventListener('mouseover', () => {
+          closeButton.style.backgroundColor = '#c82333';  // Changer la couleur au survol
+          closeButton.style.transform = 'scale(1.1)';     // Agrandir légèrement
+        });
+
+        closeButton.addEventListener('mouseout', () => {
+          closeButton.style.backgroundColor = '#dc3545';  // Rétablir la couleur
+          closeButton.style.transform = 'scale(1)';       // Rétablir la taille normale
+        });
+
+        // Fonction de fermeture
+        closeButton.addEventListener('click', () => modalRef.dismiss());
+
+        modalElement.appendChild(closeButton);
+      }
+    }, 100); // Petite attente pour que le modal soit chargé
 
     modalRef.result.then(
       (result) => {
@@ -414,7 +462,10 @@ private processVirement(): void {
           Swal.fire('Succès', 'Bénéficiaire ajouté avec succès!', 'success');
         }
       },
-      () => console.log('Modal fermé sans ajout')
+      (dismissed) => {
+        console.log('Modal fermé sans ajout');
+      }
     );
   }
+
 }

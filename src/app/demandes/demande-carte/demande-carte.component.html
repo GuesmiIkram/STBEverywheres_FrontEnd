@@ -4,7 +4,7 @@
   <div class="filters">
       <div class="filter-group">
           <label for="accountFilter">Filtrer par numéro de compte:</label>
-          <input type="text" id="accountFilter" [(ngModel)]="accountFilter" 
+          <input type="text" id="accountFilter" [(ngModel)]="accountFilter"
                  (input)="applyFilter()" placeholder="Entrez le numéro de compte">
       </div>
   </div>
@@ -42,7 +42,7 @@
               </span>
             </td>
             <td>
-              <button class="btn-edit" 
+              <button class="btn-edit"
                       (click)="prepareUpdate(demande.iddemande, demande.statut)"
                       [disabled]="demande.statut === 'Recuperee' || getStatusNumber(demande.statut) === 3">
                 Modifier statut
@@ -74,18 +74,18 @@
         <h3>Modifier le statut de la demande</h3>
         <p><strong>Client:</strong> {{selectedDemande?.clientNom}} {{selectedDemande?.clientPrenom}}</p>
         <p><strong>Carte:</strong> {{selectedDemande?.nomCarte}} ({{selectedDemande?.typeCarte}})</p>
-        
+
         <div class="form-group">
             <label for="statusSelect">Nouveau statut:</label>
             <select id="statusSelect" [(ngModel)]="selectedStatus" class="form-control">
-               
+
                 <option value="DisponibleEnAgence">Disponible en agence</option>
-               
+
                 <option value="Recuperee">Récupérée</option>
-                
+
             </select>
         </div>
-        
+
         <div class="modal-actions">
             <button class="btn btn-primary" (click)="updateDemandeStatus()">Enregistrer</button>
             <button class="btn btn-secondary" (click)="closeStatusModal()">Annuler</button>

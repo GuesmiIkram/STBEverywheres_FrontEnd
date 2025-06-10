@@ -29,7 +29,7 @@ export class CarteDetailsComponent implements OnInit {
         (data: CarteDTO) => {
           this.carte = data;
           console.log('Stored carte:', this.carte); // Debugging
-      
+
         },
         (error) => {
           console.error('Erreur lors de la récupération des détails de la carte', error);
@@ -47,11 +47,11 @@ export class CarteDetailsComponent implements OnInit {
       }
     );
   }
- 
+
   getCarteImage(nomCarte: string): string {
     switch (nomCarte) {
-      case  NomCarte.CIB:
-        return 'assets/img/CARTE-MASTERCARD-GOLD-INTERNATIONALE-350x238-1.webp';
+     case  NomCarte.CIB:
+        return 'assets/img/PFBB01.png';
 
       case  NomCarte.Epargne:
           return 'assets/img/Carte_STB_Epargne.png';
@@ -62,23 +62,25 @@ export class CarteDetailsComponent implements OnInit {
         case NomCarte.Mastercard:
           return 'assets/img/CARTE-MASTERCARD-GOLD-INTERNATIONALE-350x238-1.webp';
       case NomCarte.VisaPlatinum:
-        return 'assets/images/visa-platinum.jpg';
+        return 'assets/img/visa-platinum.jpg';
         case  NomCarte.C_cash:
           return 'assets/img/Ccash.png';
       case NomCarte.C_pay:
         return 'assets/img/Cpay.png';
-      
-     
+        case NomCarte.Tecno:
+          return 'assets/img/PFBBSC.png';
+
+
       default:
         return 'assets/images/default-card.jpg';
     }
   }
    shouldShowOverlay(statut: StatutCarte): boolean {
-    return statut === StatutCarte.Inactive || 
-           statut === StatutCarte.Blocked || 
+    return statut === StatutCarte.Inactive ||
+           statut === StatutCarte.Blocked ||
            statut === StatutCarte.Expired;
   }
-  
+
     formatNumeroCarte(numCarte: string): string {
       if (!numCarte|| numCarte.length < 4) {
         return '****'; // Retourne une valeur par défaut si le numéro est invalide
@@ -126,7 +128,7 @@ export class CarteDetailsComponent implements OnInit {
         }
       });
     }
-  
+
     deblockCarte(numCarte: string): void {
       Swal.fire({
         title: 'Confirmation',
@@ -164,7 +166,7 @@ export class CarteDetailsComponent implements OnInit {
         }
       });
     }
-  
+
     // Méthode pour recharger la page
     private reloadPage(): void {
       const currentUrl = this.router.url;
@@ -176,7 +178,7 @@ export class CarteDetailsComponent implements OnInit {
       shouldShowBlockButton(statut: StatutCarte): boolean {
         return statut === StatutCarte.Active;
       }
-    
+
       // Méthode pour déterminer si le bouton "Débloquer" doit être affiché
       shouldShowDeblockButton(statut: StatutCarte): boolean {
         return statut === StatutCarte.Inactive;
