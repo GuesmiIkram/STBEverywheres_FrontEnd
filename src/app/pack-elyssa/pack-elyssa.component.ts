@@ -113,7 +113,7 @@ export class PackElyssaComponent implements AfterViewInit {
 
   onAgencyChange(): void {
     if (!this.map) return;
-    
+
     // Trouver l'agence sélectionnée
     const selected = this.agencies.find(a => a.name === this.selectedAgency);
     if (selected) {
@@ -129,7 +129,7 @@ export class PackElyssaComponent implements AfterViewInit {
 
   async submitDocuments(form: NgForm): Promise<void> {
     if (this.isSubmitting) return;
-    
+
     this.isSubmitting = true;
 
     // Vérification des champs obligatoires
@@ -160,7 +160,7 @@ export class PackElyssaComponent implements AfterViewInit {
     }
 
     const formData = new FormData();
-    
+
     // Ajout des fichiers
     this.selectedFiles.forEach((file, index) => {
       if (file) {
@@ -187,7 +187,7 @@ export class PackElyssaComponent implements AfterViewInit {
       },
       error: async (err) => {
         console.error('Erreur lors de l\'envoi', err);
-        
+
         if (err.error === "Vous avez déjà une demande en cours. Vous ne pouvez pas soumettre une nouvelle demande tant que la précédente n'est pas traitée.") {
           await Swal.fire({
             icon: 'warning',
@@ -203,7 +203,7 @@ export class PackElyssaComponent implements AfterViewInit {
             confirmButtonColor: '#3085d6',
           });
         }
-        
+
         this.isSubmitting = false;
       }
     });
@@ -221,7 +221,7 @@ export class PackElyssaComponent implements AfterViewInit {
     setTimeout(() => {
       this.map.invalidateSize(true);
     }, 0);
-    
+
     setTimeout(() => {
       if (this.map) this.map.invalidateSize(true);
     }, 300);

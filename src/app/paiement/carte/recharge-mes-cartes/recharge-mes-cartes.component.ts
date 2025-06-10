@@ -163,16 +163,39 @@ this.isLoading = true;
         this.rechargeForm.reset();
         this.loadMesCartes();
       },
-      error: (err) => {
-        console.error('Erreur lors de la recharge:', err);
-        const errorMsg = err.error?.message || 'Une erreur est survenue lors de la recharge';
-        Swal.fire('Erreur', errorMsg, 'error');
-      },
-      complete: () => {
-        this.isLoading = false;
-      }
-    });
-  }
+     error: (err) => {
+             console.error('Erreur lors de la recharge:', err);
+
+             let errorMsg = 'Une erreur est survenue lors de la recharge';
+
+             if (err.error) {
+               // Gestion des différents formats d'erreur
+               if (err.error.message) {
+                 errorMsg = err.error.message;
+               } else if (err.error.error) {
+                 errorMsg = err.error.error;
+               } else if (err.error.errors) {
+                 errorMsg = Object.values(err.error.errors).join('\n');
+               } else if (typeof err.error === 'string') {
+                 errorMsg = err.error;
+               }
+             } else if (err.message) {
+               errorMsg = err.message;
+             }
+
+             Swal.fire({
+               title: 'Erreur',
+               text: errorMsg,
+               icon: 'error',
+               confirmButtonText: 'OK'
+             });
+           },
+           complete: () => {
+             this.isLoading = false;
+           }
+         });
+       }
+
 
   private markFormGroupTouched(formGroup: FormGroup): void {
     Object.values(formGroup.controls).forEach(control => {

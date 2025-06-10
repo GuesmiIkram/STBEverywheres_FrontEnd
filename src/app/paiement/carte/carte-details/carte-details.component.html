@@ -1,9 +1,9 @@
 <main class="container">
-  <div class="breadcrumb">
+  <!-- <div class="breadcrumb">
     <a href="#">Accueil</a> &gt;
     <a href="#">Mes Cartes</a> &gt;
     <span>Détails de la Carte</span>
-  </div>
+  </div>  -->
 
   <h1>Détails de la Carte</h1>
 
@@ -76,10 +76,7 @@
             <span class="info-label">RIB associé</span>
             <span class="info-value">{{ carte.rib }}</span>
           </div>
-          <div class="info-item">
-            <span class="info-label">Solde disponible</span>
-            <span class="info-value">{{ carte.solde ||0 | currency:'TND':'symbol':'1.2-2':'fr-TN' }}</span>
-          </div>
+
           <div class="info-item">
             <span class="info-label">Plafond TPE</span>
             <span class="info-value">{{ carte.plafondTPE | currency:'TND':'symbol':'1.2-2':'fr-TN'}}</span>

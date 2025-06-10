@@ -22,7 +22,7 @@ export class UnreadNotificationsPipe implements PipeTransform {
   styleUrls: ['./nav-bar.component.scss']
 })
 export class NavBarComponent implements OnInit {
-  
+
   isAgent: boolean = false;
   isClient: boolean = false;
   userRole: string = '';
@@ -53,7 +53,7 @@ export class NavBarComponent implements OnInit {
     nomMere: '',
     nomPere: '',
   };
-  
+
   selectedFile: File | null = null;
   changePasswordData = {
     currentPassword: '',

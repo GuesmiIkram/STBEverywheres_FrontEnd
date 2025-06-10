@@ -113,7 +113,7 @@ export class PackStudentComponent implements AfterViewInit {
 
   onAgencyChange(): void {
     if (!this.map) return;
-    
+
     // Trouver l'agence sélectionnée
     const selected = this.agencies.find(a => a.name === this.selectedAgency);
     if (selected) {
@@ -129,7 +129,7 @@ export class PackStudentComponent implements AfterViewInit {
 
   async submitDocuments(form: NgForm): Promise<void> {
     if (this.isSubmitting) return;
-    
+
     this.isSubmitting = true;
 
     // Vérification des champs obligatoires
@@ -159,7 +159,7 @@ export class PackStudentComponent implements AfterViewInit {
     }
 
     const formData = new FormData();
-    
+
     // Ajout des fichiers
     this.selectedFiles.forEach((file, index) => {
       if (file) {
@@ -185,12 +185,12 @@ export class PackStudentComponent implements AfterViewInit {
       },
       error: async (err) => {
         console.error('Erreur lors de l\'envoi', err);
-        
-        const errorMessage = err.error?.message || 
-                            err.error || 
-                            err.message || 
+
+        const errorMessage = err.error?.message ||
+                            err.error ||
+                            err.message ||
                             'Erreur lors de l\'envoi des documents';
-    
+
         if (errorMessage.includes("Vous avez déjà une demande en cours")) {
           await Swal.fire({
             icon: 'warning',
@@ -206,7 +206,7 @@ export class PackStudentComponent implements AfterViewInit {
             confirmButtonColor: '#3085d6',
           });
         }
-        
+
         this.isSubmitting = false;
       }
     });
@@ -224,7 +224,7 @@ export class PackStudentComponent implements AfterViewInit {
     setTimeout(() => {
       this.map.invalidateSize(true);
     }, 0);
-    
+
     setTimeout(() => {
       if (this.map) this.map.invalidateSize(true);
     }, 300);

@@ -59,6 +59,7 @@ export class CompteService {
 
 
   public downloadExtrait(rib: string, datedebut: Date, dateFin: Date): Observable<Blob> {
+    //formter Date au format "YYYY-MM-DD"
     const dateDebutStr = datedebut.toISOString().split('T')[0];
     const dateFinStr = dateFin.toISOString().split('T')[0];
 

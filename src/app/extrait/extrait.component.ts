@@ -55,6 +55,7 @@ export class ExtraitComponent {
 
     this.isDownloading = true;
     this.errorMessage = '';
+    //telechargement encours true si reussi ou echoue false
     this.showPdfViewer = false;
 
     const debut = new Date(this.dateDebut);

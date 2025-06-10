@@ -25,12 +25,12 @@ export class DemandeCarteComponent implements OnInit {
   filteredDemandes: DemandeCarte[] = [];
   pagedDemandes: DemandeCarte[] = [];
   isLoading = false;
-  selectedStatus: string = '';
+ selectedStatus: string = 'DisponibleEnAgence';
   selectedDemandeId: number | null = null;
   accountFilter: string = '';
   showStatusModal: boolean = false;
   selectedDemande: DemandeCarte | null = null;
-  
+
   // Pagination
   currentPage: number = 1;
   itemsPerPage: number = 10;
@@ -60,6 +60,7 @@ export class DemandeCarteComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadDemandes();
+
   }
 
   loadDemandes(): void {
@@ -80,13 +81,13 @@ export class DemandeCarteComponent implements OnInit {
 
   applyFilter(): void {
     if (this.accountFilter) {
-      this.filteredDemandes = this.demandes.filter(demande => 
+      this.filteredDemandes = this.demandes.filter(demande =>
         demande.numCompte.toLowerCase().includes(this.accountFilter.toLowerCase())
       );
     } else {
       this.filteredDemandes = [...this.demandes];
     }
-    
+
     this.currentPage = 1;
     this.updatePagination();
   }
@@ -115,14 +116,17 @@ export class DemandeCarteComponent implements OnInit {
   prepareUpdate(demandeId: number, currentStatus: string): void {
     this.selectedDemandeId = demandeId;
     this.selectedDemande = this.demandes.find(d => d.iddemande === demandeId) || null;
-    
-    if (!isNaN(Number(currentStatus))) {
-      const statusNum = parseInt(currentStatus, 10);
-      this.selectedStatus = this.numberToStatusMap[statusNum] || 'EnCours';
-    } else {
-      this.selectedStatus = currentStatus;
-    }
-    
+
+  /*
+if (!isNaN(Number(currentStatus))) {
+  const statusNum = parseInt(currentStatus, 10);
+  this.selectedStatus = this.numberToStatusMap[statusNum] || 'EnCours';
+} else {
+  this.selectedStatus = currentStatus;
+}
+*/
+   this.selectedStatus = 'DisponibleEnAgence';
+
     this.showStatusModal = true;
   }
 
@@ -146,7 +150,7 @@ export class DemandeCarteComponent implements OnInit {
 
     const numericStatus = this.statusToNumberMap[this.selectedStatus] ?? 0;
 
-    const updateDto = { 
+    const updateDto = {
       nouveauStatut: numericStatus,
       commentaire: ''
     };
@@ -203,7 +207,7 @@ export class DemandeCarteComponent implements OnInit {
       'Recuperee': 'Récupérée',
       'Rejetee': 'Rejetée'
     };
-    
+
     if (!isNaN(Number(status))) {
       const statusNum = parseInt(status, 10);
       status = this.numberToStatusMap[statusNum] || 'EnCours';
